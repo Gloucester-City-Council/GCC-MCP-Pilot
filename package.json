@@ -1,24 +1,31 @@
 {
   "name": "gcc-committees-mcp",
   "version": "1.0.0",
-  "description": "MCP server for Gloucester City Council committees data using v4 functions",
+  "description": "MCP server for Gloucester City Council committees data using v4 functions - Azure Functions deployment",
   "type": "module",
   "main": "server.js",
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "func start",
+    "start:mcp": "node server.js",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "keywords": [
     "mcp",
     "gloucester",
     "council",
-    "committees"
+    "committees",
+    "azure-functions"
   ],
-  "author": "",
+  "author": "Gloucester City Council",
   "license": "MIT",
   "dependencies": {
+    "@azure/functions": "^4.0.0",
     "@modelcontextprotocol/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.0.0"
   }
 }

@@ -1,13 +1,19 @@
-# Gloucester City Council Committees MCP Server
+# Gloucester City Council Committees Server
 
-A Model Context Protocol (MCP) server providing access to Gloucester City Council committee information. Built with Node.js v24+ using v4 functions architecture with `context.api` initialization.
+A dual-mode server providing access to Gloucester City Council committee information:
+1. **Azure Functions** - HTTP REST API for web access
+2. **MCP Server** - Model Context Protocol for Claude Desktop integration
+
+Built with Node.js using v4 functions architecture with `context.api` initialization.
 
 ## Features
 
-- **No SSE**: Uses stdio transport for communication
+- **Azure Functions v4**: Production-ready HTTP API deployment
+- **MCP Support**: stdio transport for Claude Desktop (no SSE)
 - **V4 Functions Architecture**: All API functions initialized on `context.api`
 - **JavaScript**: Pure JavaScript (no TypeScript compilation needed)
 - **Committee Data Access**: Query council committees, members, and metadata
+- **Optimized Deployment**: Clean GitHub Actions workflow
 
 ## Architecture
 
@@ -25,24 +31,50 @@ context.api.getCommitteesSummary()
 
 ## Prerequisites
 
-- Node.js v24.0.0 or higher
+- Node.js v20.0.0 or higher
+- Azure Functions Core Tools v4 (for local development)
+- Azure subscription (for deployment)
 
 ## Installation
 
 ```bash
 # Install dependencies
 npm install
+
+# Install Azure Functions Core Tools (if not already installed)
+npm install -g azure-functions-core-tools@4 --unsafe-perm true
 ```
 
 ## Usage
 
-### Running the Server
+### Mode 1: Azure Functions (HTTP API)
+
+Run the server as an Azure Function for HTTP access:
 
 ```bash
+# Start locally
 npm start
+
+# API will be available at:
+# http://localhost:7071/api/committees
 ```
 
-### Integration with Claude Desktop
+See [API.md](./API.md) for complete API endpoint documentation.
+
+**Deployment to Azure:**
+
+1. Create an Azure Function App in the Azure Portal
+2. Get the Publish Profile and add it to GitHub Secrets as `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
+3. Update `AZURE_FUNCTIONAPP_NAME` in `.github/workflows/deploy-azure-functions.yml`
+4. Push to `main` branch - deployment happens automatically
+
+### Mode 2: MCP Server (Claude Desktop)
+
+Run as an MCP server for Claude Desktop integration:
+
+```bash
+npm run start:mcp
+```
 
 Add to your Claude Desktop config file:
 
@@ -60,16 +92,30 @@ Add to your Claude Desktop config file:
 }
 ```
 
-## Available Resources
+## API Endpoints (Azure Functions Mode)
 
-The server exposes the following MCP resources:
+When running as Azure Functions, the following HTTP endpoints are available:
+
+- `GET /api/committees/all` - Get all committees
+- `GET /api/committees/search?query={q}&category={cat}` - Search committees
+- `GET /api/committees/get/{id}` - Get committee by ID
+- `GET /api/committees/members/{id}` - Get committee members
+- `GET /api/committees/categories` - List all categories
+- `GET /api/committees/summary` - Get committees summary
+- `GET /api/committees/metadata` - Get dataset metadata
+
+See [API.md](./API.md) for detailed endpoint documentation and examples.
+
+## MCP Resources (MCP Server Mode)
+
+The MCP server exposes the following resources:
 
 - `gcc://committees/all` - All committees list
 - `gcc://committees/metadata` - Dataset metadata and statistics
 - `gcc://committees/categories` - Unique committee categories
 - `gcc://committees/{id}` - Individual committee details by ID
 
-## Available Tools
+## MCP Tools (MCP Server Mode)
 
 ### search_committees
 
@@ -138,12 +184,39 @@ Available categories include:
 
 ## Development
 
-The server architecture:
+### Architecture
 
+The server uses a v4 functions pattern with dual-mode operation:
+
+**Core (Shared)**:
 1. **Data Loading**: Loads `json/committees.json` on startup
 2. **API Initialization**: Creates v4 functions on `context.api`
-3. **MCP Server**: Configures request handlers using `context.api` functions
-4. **Transport**: Connects via stdio (no SSE)
+3. **Function Library**: All business logic in reusable context.api functions
+
+**Azure Functions Mode**:
+- HTTP-triggered function in `src/functions/committees.js`
+- Routes requests to `context.api` functions
+- Returns JSON responses
+
+**MCP Server Mode**:
+- stdio transport (no SSE)
+- MCP request handlers call `context.api` functions
+- Returns MCP-formatted responses
+
+### Azure Functions Configuration
+
+- **host.json**: Azure Functions v4 host configuration
+- **local.settings.json**: Local development settings (git-ignored)
+- **.funcignore**: Excludes unnecessary files from deployment
+- **.github/workflows/deploy-azure-functions.yml**: Optimized deployment workflow
+
+### Why This Architecture?
+
+The `context.api` pattern provides:
+- ✅ Single source of truth for all business logic
+- ✅ Easy to test (functions are pure and isolated)
+- ✅ Reusable across different interfaces (HTTP, MCP, CLI, etc.)
+- ✅ Simple to maintain and extend
 
 ## Data Source
 
