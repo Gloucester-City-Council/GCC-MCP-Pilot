@@ -4,30 +4,16 @@ A dual-mode server providing access to Gloucester City Council committee informa
 1. **Azure Functions** - HTTP REST API for web access
 2. **MCP Server** - Model Context Protocol for Claude Desktop integration
 
-Built with Node.js using v4 functions architecture with `context.api` initialization.
+Built with Node.js using Azure Functions v4 programming model.
 
 ## Features
 
 - **Azure Functions v4**: Production-ready HTTP API deployment
 - **MCP Support**: stdio transport for Claude Desktop (no SSE)
-- **V4 Functions Architecture**: All API functions initialized on `context.api`
+- **Simple Architecture**: Self-contained functions using CommonJS
 - **JavaScript**: Pure JavaScript (no TypeScript compilation needed)
 - **Committee Data Access**: Query council committees, members, and metadata
 - **Optimized Deployment**: Clean GitHub Actions workflow
-
-## Architecture
-
-This MCP server uses a v4 functions pattern where all API operations are initialized as functions on the `context.api` object:
-
-```javascript
-context.api.getAllCommittees()
-context.api.getCommitteeById(id)
-context.api.searchCommittees(query, category)
-context.api.getMetadata()
-context.api.getCategories()
-context.api.getCommitteeMembers(committeeId)
-context.api.getCommitteesSummary()
-```
 
 ## Prerequisites
 
@@ -186,61 +172,27 @@ Available categories include:
 
 ### Architecture
 
-The server uses a **centralized v4 functions pattern** with `context.api`:
-
-```
-┌─────────────────────────────────────────┐
-│     src/context-api.js (Core)           │
-│  ┌───────────────────────────────────┐  │
-│  │  context.api.getAllCommittees()   │  │
-│  │  context.api.getCommitteeById()   │  │
-│  │  context.api.searchCommittees()   │  │
-│  │  context.api.getCategories()      │  │
-│  │  context.api.getMetadata()        │  │
-│  │  context.api.handleHttpRequest()  │  │
-│  └───────────────────────────────────┘  │
-└─────────────────────────────────────────┘
-         ▲                    ▲
-         │                    │
-    ┌────┴────┐          ┌────┴────┐
-    │         │          │         │
-┌───▼─────────▼───┐  ┌───▼─────────▼───┐
-│  server.js      │  │  Azure Function │
-│  (MCP Server)   │  │  (HTTP API)     │
-│                 │  │                 │
-│ • stdio         │  │ • app.http()    │
-│ • no SSE        │  │ • REST routes   │
-│ • MCP protocol  │  │ • JSON          │
-└─────────────────┘  └─────────────────┘
-```
-
-**Core Module (`src/context-api.js`)**:
-- Single source of truth for ALL business logic
-- Data loading from `json/committees.json`
-- All API functions initialized on `context.api`
-- Lazy initialization pattern
-- Reusable across any interface
+Simple standalone function files using CommonJS:
 
 **Azure Functions (`src/functions/committees.js`)**:
-- Thin wrapper around `context.api`
-- Calls `context.api.handleHttpRequest()`
-- Returns JSON responses
+- Self-contained function using CommonJS (`require`)
+- Loads data from `json/committees.json` on cold start
+- Uses `app.http()` directly with inline handler
+- All logic in one file - no complex imports
 
 **MCP Server (`server.js`)**:
-- Thin wrapper around `context.api`
-- Calls individual `context.api` functions
-- Returns MCP-formatted responses
+- Separate MCP server for Claude Desktop integration
+- Uses ES modules (required by MCP SDK)
 - stdio transport (no SSE)
 
 ### File Structure
 
 ```
 ├── src/
-│   ├── context-api.js          # Core v4 API (single source of truth)
-│   ├── app.js                  # Azure Functions entry point
+│   ├── app.js                  # Azure Functions entry point (registers functions)
 │   └── functions/
-│       └── committees.js       # Azure HTTP function (thin wrapper)
-├── server.js                   # MCP server (thin wrapper)
+│       └── committees.js       # Self-contained HTTP function (CommonJS)
+├── server.js                   # MCP server (ES modules)
 ├── json/
 │   └── committees.json         # Committee data
 ├── host.json                   # Azure Functions v4 config
@@ -255,15 +207,31 @@ The server uses a **centralized v4 functions pattern** with `context.api`:
 - **.funcignore**: Excludes unnecessary files from deployment
 - **.github/workflows/deploy-azure-functions.yml**: Optimized deployment workflow
 
-### Why This Architecture?
+### Adding New Functions
 
-The centralized `context.api` pattern provides:
-- ✅ **Single source of truth** - All logic in one place (`src/context-api.js`)
-- ✅ **Zero duplication** - Both MCP and Azure Functions use the same code
-- ✅ **Easy to test** - Pure functions, isolated from frameworks
-- ✅ **Framework agnostic** - Add CLI, GraphQL, WebSocket, etc. easily
-- ✅ **Simple to maintain** - Change logic once, works everywhere
-- ✅ **Type-safe ready** - Easy to add TypeScript later if needed
+To add a new function, create a new file in `src/functions/`:
+
+```javascript
+const { app } = require("@azure/functions");
+
+app.http("yourfunction", {
+  methods: ["GET"],
+  authLevel: "anonymous",
+  route: "yourfunction",
+  handler: async (request, context) => {
+    return {
+      status: 200,
+      jsonBody: { message: "Hello!" }
+    };
+  }
+});
+```
+
+Then register it in `src/app.js`:
+
+```javascript
+require('./functions/yourfunction');
+```
 
 ## Data Source
 

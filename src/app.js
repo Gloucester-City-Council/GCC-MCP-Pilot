@@ -1,14 +1,12 @@
 /**
  * Azure Functions App Entry Point
- *
- * This file registers all Azure Functions for the application.
- * Azure Functions v4 programming model.
+ * Registers all function handlers
  */
 
-import { app } from '@azure/functions';
+const { app } = require('@azure/functions');
 
 // Import and register all function handlers
-import './functions/committees.js';
+require('./functions/committees');
 
 // Export the app for Azure Functions runtime
-export default app;
+module.exports = app;
