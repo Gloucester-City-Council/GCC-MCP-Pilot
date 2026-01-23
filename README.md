@@ -189,9 +189,8 @@ Simple standalone function files using CommonJS:
 
 ```
 ├── src/
-│   ├── app.js                  # Azure Functions entry point (registers functions)
 │   └── functions/
-│       └── committees.js       # Self-contained HTTP function (CommonJS)
+│       └── committees.js       # Self-contained HTTP function (auto-discovered)
 ├── server.js                   # MCP server (ES modules)
 ├── json/
 │   └── committees.json         # Committee data
@@ -209,7 +208,7 @@ Simple standalone function files using CommonJS:
 
 ### Adding New Functions
 
-To add a new function, create a new file in `src/functions/`:
+To add a new function, simply create a new file in `src/functions/`:
 
 ```javascript
 const { app } = require("@azure/functions");
@@ -227,11 +226,7 @@ app.http("yourfunction", {
 });
 ```
 
-Then register it in `src/app.js`:
-
-```javascript
-require('./functions/yourfunction');
-```
+Azure Functions v4 will automatically discover and register it - no imports needed!
 
 ## Data Source
 
