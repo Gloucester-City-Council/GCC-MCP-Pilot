@@ -186,22 +186,67 @@ Available categories include:
 
 ### Architecture
 
-The server uses a v4 functions pattern with dual-mode operation:
+The server uses a **centralized v4 functions pattern** with `context.api`:
 
-**Core (Shared)**:
-1. **Data Loading**: Loads `json/committees.json` on startup
-2. **API Initialization**: Creates v4 functions on `context.api`
-3. **Function Library**: All business logic in reusable context.api functions
+```
+┌─────────────────────────────────────────┐
+│     src/context-api.js (Core)           │
+│  ┌───────────────────────────────────┐  │
+│  │  context.api.getAllCommittees()   │  │
+│  │  context.api.getCommitteeById()   │  │
+│  │  context.api.searchCommittees()   │  │
+│  │  context.api.getCategories()      │  │
+│  │  context.api.getMetadata()        │  │
+│  │  context.api.handleHttpRequest()  │  │
+│  └───────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+         ▲                    ▲
+         │                    │
+    ┌────┴────┐          ┌────┴────┐
+    │         │          │         │
+┌───▼─────────▼───┐  ┌───▼─────────▼───┐
+│  server.js      │  │  Azure Function │
+│  (MCP Server)   │  │  (HTTP API)     │
+│                 │  │                 │
+│ • stdio         │  │ • app.http()    │
+│ • no SSE        │  │ • REST routes   │
+│ • MCP protocol  │  │ • JSON          │
+└─────────────────┘  └─────────────────┘
+```
 
-**Azure Functions Mode**:
-- HTTP-triggered function in `src/functions/committees.js`
-- Routes requests to `context.api` functions
+**Core Module (`src/context-api.js`)**:
+- Single source of truth for ALL business logic
+- Data loading from `json/committees.json`
+- All API functions initialized on `context.api`
+- Lazy initialization pattern
+- Reusable across any interface
+
+**Azure Functions (`src/functions/committees.js`)**:
+- Thin wrapper around `context.api`
+- Calls `context.api.handleHttpRequest()`
 - Returns JSON responses
 
-**MCP Server Mode**:
-- stdio transport (no SSE)
-- MCP request handlers call `context.api` functions
+**MCP Server (`server.js`)**:
+- Thin wrapper around `context.api`
+- Calls individual `context.api` functions
 - Returns MCP-formatted responses
+- stdio transport (no SSE)
+
+### File Structure
+
+```
+├── src/
+│   ├── context-api.js          # Core v4 API (single source of truth)
+│   ├── app.js                  # Azure Functions entry point
+│   └── functions/
+│       └── committees.js       # Azure HTTP function (thin wrapper)
+├── server.js                   # MCP server (thin wrapper)
+├── json/
+│   └── committees.json         # Committee data
+├── host.json                   # Azure Functions v4 config
+└── .github/workflows/
+    └── deploy-azure-functions.yml
+```
 
 ### Azure Functions Configuration
 
@@ -212,11 +257,13 @@ The server uses a v4 functions pattern with dual-mode operation:
 
 ### Why This Architecture?
 
-The `context.api` pattern provides:
-- ✅ Single source of truth for all business logic
-- ✅ Easy to test (functions are pure and isolated)
-- ✅ Reusable across different interfaces (HTTP, MCP, CLI, etc.)
-- ✅ Simple to maintain and extend
+The centralized `context.api` pattern provides:
+- ✅ **Single source of truth** - All logic in one place (`src/context-api.js`)
+- ✅ **Zero duplication** - Both MCP and Azure Functions use the same code
+- ✅ **Easy to test** - Pure functions, isolated from frameworks
+- ✅ **Framework agnostic** - Add CLI, GraphQL, WebSocket, etc. easily
+- ✅ **Simple to maintain** - Change logic once, works everywhere
+- ✅ **Type-safe ready** - Easy to add TypeScript later if needed
 
 ## Data Source
 
