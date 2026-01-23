@@ -8,6 +8,14 @@ package-lock.json
 .env
 .env.local
 
+# Azure Functions
+local.settings.json
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
+.python_packages/
+worker.config.json
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -21,3 +29,7 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
+# Azure deployment
+.deployment
+deploy.sh
