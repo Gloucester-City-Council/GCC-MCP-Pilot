@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "MCP server for Gloucester City Council committees data using v4 functions - Azure Functions deployment",
   "type": "module",
-  "main": "server.js",
+  "main": "src/app.js",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "func start",
     "start:mcp": "node server.js",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "echo \"No tests specified\" && exit 0",
+    "build": "echo 'No build step required' && exit 0"
   },
   "keywords": [
     "mcp",
