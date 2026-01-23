@@ -2,6 +2,7 @@
   "name": "gcc-committees-mcp",
   "version": "1.0.0",
   "description": "MCP server for Gloucester City Council committees data using v4 functions - Azure Functions deployment",
+  "main": "src/functions/**/*.js",
   "engines": {
     "node": ">=20.0.0"
   },
