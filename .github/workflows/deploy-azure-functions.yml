@@ -1,50 +1,36 @@
-name: Deploy to Azure Functions
+name: Deploy to Azure Function App - gcc-committees-mcp
 
 on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/**'
+      - '**.md'
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20.x'
-  AZURE_FUNCTIONAPP_NAME: 'gcc-committees-mcp'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  NODE_VERSION: '20.x'
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
-      - name: Checkout code
+      - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: |
-          npm ci --production
-          npm prune --production
-
-      - name: Run tests
-        run: npm test
-        continue-on-error: true
-
-      - name: Deploy to Azure Functions
+      - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          app-name: 'gcc-committees-mcp'
+          slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-          respect-funcignore: true
-
-      - name: Deployment summary
-        run: |
-          echo "✅ Deployment completed successfully"
-          echo "🔗 Function App: https://${{ env.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net"
-          echo "📊 API Endpoint: https://${{ env.AZURE_FUNCTIONAPP_NAME }}.azurewebsites.net/api/committees"
+          scm-do-build-during-deployment: true
