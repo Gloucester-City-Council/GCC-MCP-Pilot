@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8"?>
+<committees>
+  <committeescount> 131</committeescount>
+  <committee>
+    <committeeid>123</committeeid>
+    <committeetitle>Airport Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>124</committeeid>
+    <committeetitle>Appearance Of The City Working Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>487</committeeid>
+    <committeetitle>Audit and Governance Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>285</committeeid>
+    <committeetitle>Audit Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>125</committeeid>
+    <committeetitle>Backbench And Scrutiny Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>126</committeeid>
+    <committeetitle>Beaufort And Holmleigh Management Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>127</committeeid>
+    <committeetitle>Best Value And Cct Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>436</committeeid>
+    <committeetitle>Budget Consultation and Monitoring Process Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>462</committeeid>
+    <committeetitle>Budget Consultation Meeting</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>439</committeeid>
+    <committeetitle>Bulky Waste Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>128</committeeid>
+    <committeetitle>Business And Competitiveness Chief Officers Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>437</committeeid>
+    <committeetitle>CAA Action Plan Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>129</committeeid>
+    <committeetitle>Cabinet</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Cabinet</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>425</committeeid>
+    <committeetitle>Car Parking Enforcement Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>419</committeeid>
+    <committeetitle>Cemeteries &amp; Crematoria Task &amp; Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>132</committeeid>
+    <committeetitle>Chief Officers Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>133</committeeid>
+    <committeetitle>City Centre Management Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>134</committeeid>
+    <committeetitle>City Plan Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>135</committeeid>
+    <committeetitle>City Services Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>136</committeeid>
+    <committeetitle>Community And Economic Development Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>137</committeeid>
+    <committeetitle>Community Safety Strategy Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>138</committeeid>
+    <committeetitle>Community Services Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>139</committeeid>
+    <committeetitle>Compulsory Competitive Tendering Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>564</committeeid>
+    <committeetitle>Constitution</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Constitution</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>141</committeeid>
+    <committeetitle>Council</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Council</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>142</committeeid>
+    <committeetitle>Crime And Disorder Officers Team</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>438</committeeid>
+    <committeetitle>Crime and Disorder Task and Finish Group - completed</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>143</committeeid>
+    <committeetitle>Cultural Development Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>144</committeeid>
+    <committeetitle>Development Chief Officers Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>145</committeeid>
+    <committeetitle>Devolution And Community Participation Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>146</committeeid>
+    <committeetitle>Directors Board</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>148</committeeid>
+    <committeetitle>Directors Board Development Sub Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>149</committeeid>
+    <committeetitle>Directors Board Performance And Value Sub Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>150</committeeid>
+    <committeetitle>Directors Board Strategy Sub Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>151</committeeid>
+    <committeetitle>Directors Salaries And Contractual Arrangements Panel</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>152</committeeid>
+    <committeetitle>Disability Equality Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>403</committeeid>
+    <committeetitle>Disability Equality Forum Workshop</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>153</committeeid>
+    <committeetitle>District Plan Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>117</committeeid>
+    <committeetitle>Electoral Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>155</committeeid>
+    <committeetitle>Environment and Ecology Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>156</committeeid>
+    <committeetitle>Environment Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>423</committeeid>
+    <committeetitle>Eviction Review Panel Task &amp; Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>112</committeeid>
+    <committeetitle>Executive Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>374</committeeid>
+    <committeetitle>Flood Recovery Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>401</committeeid>
+    <committeetitle>Football Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>157</committeeid>
+    <committeetitle>Free Hospital Fund</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>544</committeeid>
+    <committeetitle>General Purposes Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>158</committeeid>
+    <committeetitle>Gloucester City Services Board</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>160</committeeid>
+    <committeetitle>Gloucester Housing Services Board</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>161</committeeid>
+    <committeetitle>Gloucester Royal Hospital Redevelopment Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>162</committeeid>
+    <committeetitle>Gloucester Unemployed Centre Trust</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>163</committeeid>
+    <committeetitle>Grants And Community Development Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>227</committeeid>
+    <committeetitle>Grants and Community Services Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>164</committeeid>
+    <committeetitle>Hackney Carriage Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>165</committeeid>
+    <committeetitle>Health Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>166</committeeid>
+    <committeetitle>Higher Education Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>167</committeeid>
+    <committeetitle>Highways And Planning Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>431</committeeid>
+    <committeetitle>Highways Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>168</committeeid>
+    <committeetitle>Housing And Regeneration Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>334</committeeid>
+    <committeetitle>Housing Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>481</committeeid>
+    <committeetitle>Joint meeting of Audit Committee and Standards Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>243</committeeid>
+    <committeetitle>Joint Meeting of Disability Equality and Race Equality Fora</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>396</committeeid>
+    <committeetitle>Joint Meeting of Disability Equality Forum and Race Equality Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>435</committeeid>
+    <committeetitle>Joint Meeting of the Overview and Scrutiny Committee and the Audit Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>603</committeeid>
+    <committeetitle>Joint Overview and Scrutiny Review Panel - Gloucestershire Airport</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>385</committeeid>
+    <committeetitle>Joint Scrutiny for the Built Environment and Scrutiny Committee 2</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>171</committeeid>
+    <committeetitle>Joint Transport Working Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>172</committeeid>
+    <committeetitle>Land And Property Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>173</committeeid>
+    <committeetitle>Leaders Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>174</committeeid>
+    <committeetitle>Leisure Centre Redevelopment Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>175</committeeid>
+    <committeetitle>Leisure Education And Tourism Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>391</committeeid>
+    <committeetitle>Leisure Management Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>115</committeeid>
+    <committeetitle>Licensing and Enforcement Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>482</committeeid>
+    <committeetitle>Licensing and Enforcement Sub-Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>222</committeeid>
+    <committeetitle>Licensing Sub-Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>176</committeeid>
+    <committeetitle>Local Government Association</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>177</committeeid>
+    <committeetitle>Members Allowances Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>178</committeeid>
+    <committeetitle>Members It Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>179</committeeid>
+    <committeetitle>Millennium Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>180</committeeid>
+    <committeetitle>New Political Structures Steering Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>181</committeeid>
+    <committeetitle>Nomination Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>182</committeeid>
+    <committeetitle>Options Appraisal Review Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>121</committeeid>
+    <committeetitle>Organisational Development Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>408</committeeid>
+    <committeetitle>Overview and Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>226</committeeid>
+    <committeetitle>Overview and Scrutiny Management Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>183</committeeid>
+    <committeetitle>Performance Review Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>184</committeeid>
+    <committeetitle>Personnel And Organisational Development Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>185</committeeid>
+    <committeetitle>Planning And Transportation Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>111</committeeid>
+    <committeetitle>Planning Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>238</committeeid>
+    <committeetitle>Planning Policy Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Regulatory and Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>187</committeeid>
+    <committeetitle>Planning Sub Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>188</committeeid>
+    <committeetitle>Policy And Resources Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>118</committeeid>
+    <committeetitle>Policy Development and Review Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>189</committeeid>
+    <committeetitle>Policy Development Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>190</committeeid>
+    <committeetitle>Post Office Advisory Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>406</committeeid>
+    <committeetitle>Pre Council Seminar On The Draft Revised Constitution</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>191</committeeid>
+    <committeetitle>Public Transportation Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>192</committeeid>
+    <committeetitle>Race Equality Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>405</committeeid>
+    <committeetitle>Race Equality Forum Workshop</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>193</committeeid>
+    <committeetitle>Regeneration Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>217</committeeid>
+    <committeetitle>Regeneration Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>195</committeeid>
+    <committeetitle>Resources And Contract Services Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>196</committeeid>
+    <committeetitle>Response Repairs Contract Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>197</committeeid>
+    <committeetitle>Rs6 Site Abbeymead</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>198</committeeid>
+    <committeetitle>Safer City Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>199</committeeid>
+    <committeetitle>Safer City Joint Steering Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>578</committeeid>
+    <committeetitle>Saintbridge Recreation Ground Management Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>577</committeeid>
+    <committeetitle>Saintbridge Trust</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>200</committeeid>
+    <committeetitle>Scrutiny Chairs Panel</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>201</committeeid>
+    <committeetitle>Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>224</committeeid>
+    <committeetitle>Scrutiny Committee for the Built Environment</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>202</committeeid>
+    <committeetitle>Scrutiny Committee No 1</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>203</committeeid>
+    <committeetitle>Scrutiny Committee No 1 &amp; 2 (joint)</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>204</committeeid>
+    <committeetitle>Scrutiny Committee No 2</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>225</committeeid>
+    <committeetitle>Scrutiny Committee No. 2 (Streetcare, Heritage &amp; Leisure)</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>546</committeeid>
+    <committeetitle>Senior Appointments Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>205</committeeid>
+    <committeetitle>Social And Economic Development Scrutiny Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>218</committeeid>
+    <committeetitle>Standards Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>598</committeeid>
+    <committeetitle>Standards Hearing Panel</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>False</committeeexpired>
+    <committeecategory>Other Committees</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>206</committeeid>
+    <committeetitle>Strategic Review Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>207</committeeid>
+    <committeetitle>Strategy And Performance Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>208</committeeid>
+    <committeetitle>Strategy Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>348</committeeid>
+    <committeetitle>Streetcare Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>337</committeeid>
+    <committeetitle>Streetcare Partnering Board</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>209</committeeid>
+    <committeetitle>Telecommunications Advisory Committee</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>210</committeeid>
+    <committeetitle>Tenants' Forum</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Forums and Working Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>211</committeeid>
+    <committeetitle>Town Twinning Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+  <committee>
+    <committeeid>392</committeeid>
+    <committeetitle>Tree Maintenance Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>444</committeeid>
+    <committeetitle>Voluntary Sector Service Provision Task and Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>418</committeeid>
+    <committeetitle>Waste and Recycling Task &amp; Finish Group</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+    <committeecategory>Overview and Scrutiny Task and Finish Groups</committeecategory>
+  </committee>
+  <committee>
+    <committeeid>212</committeeid>
+    <committeetitle>Youth Policy Working Party</committeetitle>
+    <committeedeleted>False</committeedeleted>
+    <committeeexpired>True</committeeexpired>
+  </committee>
+</committees>

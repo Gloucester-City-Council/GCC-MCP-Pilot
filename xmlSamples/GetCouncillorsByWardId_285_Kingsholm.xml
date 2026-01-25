@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<councillorsbywardid wardid="285">
+  <wards>
+    <ward>
+      <wardtitle>Kingsholm and Wotton</wardtitle>
+      <councillors>
+        <councillorcount> 2</councillorcount>
+        <councillor>
+          <councillorid>2018</councillorid>
+          <fullusername>Councillor Angela Conder</fullusername>
+          <photosmallurl>https://democracy.Gloucester.gov.uk/UserData/8/1/0/Info00002018/smallpic.jpg</photosmallurl>
+          <photobigurl>https://democracy.Gloucester.gov.uk/UserData/8/1/0/Info00002018/bigpic.jpg</photobigurl>
+          <politicalpartytitle>Liberal Democrat</politicalpartytitle>
+          <politicalgrouptitle>
+          </politicalgrouptitle>
+          <districttitle>
+          </districttitle>
+          <representing>
+          </representing>
+          <keyposts>Chair of Planning Committee</keyposts>
+          <additionalcontactinfo>
+          </additionalcontactinfo>
+          <workaddress>
+            <line1>Gloucester City Council</line1>
+            <line2>Eastgate Management Suite</line2>
+            <line3>Eastgate Street</line3>
+            <line4>Gloucester</line4>
+            <postcode>GL1 1PA</postcode>
+            <phone>07734975181</phone>
+            <email>angela.conder@gloucester.gov.uk</email>
+          </workaddress>
+          <homeaddress>
+          </homeaddress>
+          <termsofoffice>
+            <termofoffice>
+              <startdate>10/05/2021</startdate>
+              <enddate>05/05/2024</enddate>
+            </termofoffice>
+          </termsofoffice>
+        </councillor>
+        <councillor>
+          <councillorid>129</councillorid>
+          <fullusername>Councillor Jeremy Hilton</fullusername>
+          <photosmallurl>https://democracy.Gloucester.gov.uk/UserData/9/2/1/Info00000129/smallpic.jpg</photosmallurl>
+          <photobigurl>https://democracy.Gloucester.gov.uk/UserData/9/2/1/Info00000129/bigpic.jpg</photobigurl>
+          <politicalpartytitle>Liberal Democrat</politicalpartytitle>
+          <politicalgrouptitle>
+          </politicalgrouptitle>
+          <districttitle>
+          </districttitle>
+          <representing>
+          </representing>
+          <keyposts>Leader of the Council and Cabinet Member for Regeneration</keyposts>
+          <additionalcontactinfo>
+          </additionalcontactinfo>
+          <workaddress>
+            <email>jeremy.hilton@gloucestershire.gov.uk</email>
+          </workaddress>
+          <homeaddress>
+            <line1>47 St Mary&amp;#39;s Street</line1>
+            <line2>Gloucester</line2>
+            <postcode>GL1 2QS</postcode>
+            <phone>01452 501206</phone>
+          </homeaddress>
+          <termsofoffice>
+            <termofoffice>
+              <startdate>10/05/1982</startdate>
+              <enddate>04/05/1986</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>07/05/1990</startdate>
+              <enddate>09/05/1993</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>02/05/2002</startdate>
+              <enddate>04/05/2006</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>04/05/2006</startdate>
+              <enddate>09/05/2010</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>10/05/2010</startdate>
+              <enddate>25/05/2014</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>26/05/2014</startdate>
+              <enddate>08/05/2016</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>09/05/2016</startdate>
+              <enddate>09/05/2021</enddate>
+            </termofoffice>
+            <termofoffice>
+              <startdate>10/05/2021</startdate>
+              <enddate>05/05/2024</enddate>
+            </termofoffice>
+          </termsofoffice>
+        </councillor>
+      </councillors>
+    </ward>
+  </wards>
+</councillorsbywardid>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<getmeetings>
+  <meetingscount> 20</meetingscount>
+  <committeescount> 1</committeescount>
+  <committee>
+    <committeeid>129</committeeid>
+    <committeetitle>Cabinet</committeetitle>
+    <committeemeetingcount> 20</committeemeetingcount>
+    <committeemeetings>
+      <meeting>
+        <meetingid>7217</meetingid>
+        <meetingdate>10/01/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7218</meetingid>
+        <meetingdate>07/02/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7219</meetingid>
+        <meetingdate>06/03/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7506</meetingid>
+        <meetingdate>12/06/2024</meetingdate>
+        <meetingstatus>Cancelled</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7507</meetingid>
+        <meetingdate>17/07/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7508</meetingid>
+        <meetingdate>11/09/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7509</meetingid>
+        <meetingdate>16/10/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7510</meetingid>
+        <meetingdate>13/11/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7511</meetingid>
+        <meetingdate>11/12/2024</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7512</meetingid>
+        <meetingdate>15/01/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7513</meetingid>
+        <meetingdate>12/02/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7514</meetingid>
+        <meetingdate>12/03/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7515</meetingid>
+        <meetingdate>09/04/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7605</meetingid>
+        <meetingdate>11/06/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7606</meetingid>
+        <meetingdate>09/07/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7607</meetingid>
+        <meetingdate>10/09/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7608</meetingid>
+        <meetingdate>15/10/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7609</meetingid>
+        <meetingdate>12/11/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7837</meetingid>
+        <meetingdate>21/11/2025</meetingdate>
+        <meetingstatus>Confirmed; Special Meeting</meetingstatus>
+        <meetingtime>12.30 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+      <meeting>
+        <meetingid>7610</meetingid>
+        <meetingdate>10/12/2025</meetingdate>
+        <meetingstatus>Confirmed</meetingstatus>
+        <meetingtime>6.00 pm</meetingtime>
+        <iswebcast>False</iswebcast>
+      </meeting>
+    </committeemeetings>
+  </committee>
+</getmeetings>
