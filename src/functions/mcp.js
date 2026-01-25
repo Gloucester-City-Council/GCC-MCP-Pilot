@@ -14,6 +14,13 @@ app.http('mcp', {
 
             const response = await handleMcpRequest(requestBody, context);
 
+            // For notifications, return 204 No Content
+            if (response === null) {
+                return {
+                    status: 204
+                };
+            }
+
             return {
                 status: 200,
                 headers: {
