@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "council": "Gloucester City Council",
+    "last_updated": "2025-01-25",
+    "source": "https://democracy.gloucester.gov.uk",
+    "note": "moderngov_id values will be populated once we discover actual IDs from SOAP responses. Use /api/test-soap/GetCommittees to explore."
+  },
+  "committees": {
+    "cabinet": {
+      "moderngov_id": null,
+      "official_name": "Cabinet",
+      "description": "The executive decision-making body of the council. Makes key policy and budget decisions.",
+      "keywords": ["cabinet", "executive", "leader"],
+      "typical_topics": ["policy", "budget", "strategic decisions", "major projects", "partnerships"]
+    },
+    "council": {
+      "moderngov_id": null,
+      "official_name": "Council",
+      "description": "Full council meetings where all councillors come together to debate and decide major issues.",
+      "keywords": ["full council", "council meeting"],
+      "typical_topics": ["constitution", "budget approval", "major policies", "ceremonial"]
+    },
+    "planning": {
+      "moderngov_id": null,
+      "official_name": "Planning Committee",
+      "description": "Determines planning applications and related matters.",
+      "keywords": ["planning", "development", "applications", "building"],
+      "typical_topics": ["planning applications", "enforcement", "appeals", "development control"]
+    },
+    "licensing": {
+      "moderngov_id": null,
+      "official_name": "Licensing and Enforcement Committee",
+      "description": "Deals with licensing applications and enforcement matters.",
+      "keywords": ["licensing", "enforcement", "alcohol", "gambling", "taxi"],
+      "typical_topics": ["premises licenses", "taxi licenses", "gambling", "street trading"]
+    },
+    "overview_scrutiny": {
+      "moderngov_id": null,
+      "official_name": "Overview and Scrutiny Committee",
+      "description": "Reviews and scrutinises decisions made by the Cabinet and council services.",
+      "keywords": ["scrutiny", "overview", "review", "call-in"],
+      "typical_topics": ["policy review", "performance monitoring", "budget scrutiny", "service reviews"]
+    },
+    "audit": {
+      "moderngov_id": null,
+      "official_name": "Audit and Governance Committee",
+      "description": "Oversees the council's governance, risk management and audit functions.",
+      "keywords": ["audit", "governance", "risk", "accounts"],
+      "typical_topics": ["annual accounts", "internal audit", "risk management", "governance"]
+    },
+    "general_purposes": {
+      "moderngov_id": null,
+      "official_name": "General Purposes Committee",
+      "description": "Handles constitutional and staffing matters.",
+      "keywords": ["general purposes", "constitution", "staffing"],
+      "typical_topics": ["electoral matters", "constitution changes", "senior appointments"]
+    },
+    "standards": {
+      "moderngov_id": null,
+      "official_name": "Standards Committee",
+      "description": "Promotes and maintains high standards of conduct by councillors.",
+      "keywords": ["standards", "conduct", "ethics", "complaints"],
+      "typical_topics": ["councillor conduct", "code of conduct", "complaints", "training"]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "description": "Log of development sessions and token consumption",
+    "project": "moderngov-mcp"
+  },
+  "entries": [
+    {
+      "date": "2025-01-25",
+      "timestamp": "2025-01-25T09:00:00Z",
+      "branch": "claude/moderngov-mcp-server-kZ27G",
+      "commit": "cf22536",
+      "description": "Initial ModernGov MCP server implementation",
+      "tokens_consumed": "~15000",
+      "note": "Token count is approximate - includes project setup, 14 files created"
+    }
+  ]
+}
