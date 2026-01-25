@@ -1,31 +1,19 @@
 {
-  "name": "gcc-committees-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for Gloucester City Council committees data using v4 functions - Azure Functions deployment",
+  "name": "func-mpc-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Model context protocol proof of concapt funtion.",
   "main": "src/functions/**/*.js",
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "scripts": {
     "start": "func start",
-    "start:mcp": "node server.js",
-    "test": "echo \"No tests specified\" && exit 0",
-    "build": "echo 'No build step required' && exit 0"
+    "start:verbose": "func start --verbose"
   },
-  "keywords": [
-    "mcp",
-    "gloucester",
-    "council",
-    "committees",
-    "azure-functions"
-  ],
-  "author": "Gloucester City Council",
-  "license": "MIT",
   "dependencies": {
     "@azure/functions": "^4.0.0",
-    "@modelcontextprotocol/sdk": "^0.6.0"
+    "axios": "^1.6.0",
+    "xml2js": "^0.6.0"
   },
-  "devDependencies": {
-    "azure-functions-core-tools": "^4.0.0"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
