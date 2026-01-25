@@ -26,6 +26,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: 'Install dependencies'
+        run: npm ci --production
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         with:
@@ -33,4 +37,4 @@ jobs:
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6D602EA7A714F8A8B9A13B7DFD7BB4C }}
-          scm-do-build-during-deployment: true
+          scm-do-build-during-deployment: false

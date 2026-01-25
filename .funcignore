@@ -2,8 +2,8 @@
 .git*
 .github/
 
-# Node - exclude ALL node_modules (Azure will npm install during deployment)
-node_modules/
+# Node - node_modules is now deployed (built locally in GitHub Actions)
+# node_modules/
 
 # MCP Server (not needed for Azure Functions)
 server.js
