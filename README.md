@@ -39,9 +39,39 @@ moderngov-mcp/
 | Tool | Description |
 |------|-------------|
 | `list_committees` | List all Gloucester City Council committees |
-| `get_councillors` | Get councillors for a given postcode |
+| `get_councillors` | Get all councillors organized by ward |
+| `get_councillors_by_ward` | Get councillors for a specific ward |
 | `get_meetings` | Get scheduled meetings for a committee |
 | `get_meeting_details` | Get detailed meeting information (agenda, documents, etc.) |
+| `get_attachment` | Get metadata and URL for a specific document |
+| `analyze_meeting_document` | Extract structured content from committee papers (PDFs) |
+
+## Democratic Data Integrity
+
+**IMPORTANT:** This MCP server returns official statutory records of democratic decision-making. AI assistants using this data must follow special handling rules:
+
+- **Quote verbatim**: Committee recommendations, decisions, resolutions, and motions must be quoted exactly
+- **Always link sources**: Include the `source_url` or `web_page` link from responses
+- **Separate interpretation**: Clearly distinguish official record from explanations
+
+See [docs/DEMOCRATIC_DATA_INTEGRITY.md](docs/DEMOCRATIC_DATA_INTEGRITY.md) for complete guidelines.
+
+### Data Classification Fields
+
+Tool responses include metadata to identify official content:
+
+```json
+{
+  "data_classification": "official_record",
+  "is_official_record": true,
+  "official_sections": ["recommendations", "decisions", "legal_implications"],
+  "source": {
+    "system": "ModernGov",
+    "council": "Gloucester City Council",
+    "url": "https://democracy.gloucester.gov.uk/..."
+  }
+}
+```
 
 ## Local Development
 
