@@ -156,7 +156,7 @@ curl "http://localhost:7071/api/test-soap/GetMeeting?meetingId=456"
 
 1. **Explore SOAP responses** - Use `/api/test-soap/{operation}` to see actual XML structure
 2. **Implement XML parsing** - Based on actual response structure in `lib/moderngov-client.js`
-3. **Update committee IDs** - Populate `moderngov_id` values in `json/committees.json`
+3. **Update committee IDs** - Populate `id` values in `json/committees.json`
 4. **Test end-to-end** - Verify full flow with real data
 
 ## Environment Variables
