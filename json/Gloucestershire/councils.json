@@ -1,0 +1,32 @@
+{
+  "councils": [
+    {
+      "name": "Gloucestershire County Council",
+      "url": "https://glostext.gloucestershire.gov.uk"
+    },
+    {
+      "name": "Gloucester City Council",
+      "url": "https://democracy.gloucester.gov.uk"
+    },
+    {
+      "name": "Tewkesbury Borough Council",
+      "url": "https://minutes.tewkesbury.gov.uk"
+    },
+    {
+      "name": "Stroud District Council",
+      "url": "https://stroud.moderngov.co.uk"
+    },
+    {
+      "name": "Cheltenham Borough Council",
+      "url": "https://democracy.cheltenham.gov.uk"
+    },
+    {
+      "name": "Cotswold District Council",
+      "url": "https://meetings.cotswold.gov.uk"
+    },
+    {
+      "name": "Forest of Dean District Council",
+      "url": "https://meetings.fdean.gov.uk"
+    }
+  ]
+}

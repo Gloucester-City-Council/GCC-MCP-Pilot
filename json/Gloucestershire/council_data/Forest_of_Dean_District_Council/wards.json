@@ -1,0 +1,160 @@
+{
+    "council":  "Forest of Dean District Council",
+    "url":  "https://meetings.fdean.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "6370",
+                      "name":  "Beeston,  Councillor Jonathan"
+                  },
+                  {
+                      "id":  "108",
+                      "name":  "Bevan,  Councillor James Bevan"
+                  },
+                  {
+                      "id":  "5661",
+                      "name":  "Birch,  Councillor Adrian Birc"
+                  },
+                  {
+                      "id":  "5660",
+                      "name":  "Bruce,  Councillor Alison Bruc"
+                  },
+                  {
+                      "id":  "126",
+                      "name":  "Burford,  Councillor Philip Bu"
+                  },
+                  {
+                      "id":  "5683",
+                      "name":  "Burton,  Councillor Richard Bu"
+                  },
+                  {
+                      "id":  "5980",
+                      "name":  "Dale,  Councillor Jackie Dale"
+                  },
+                  {
+                      "id":  "816",
+                      "name":  "Elsmore,  Councillor Clive Els"
+                  },
+                  {
+                      "id":  "5473",
+                      "name":  "Elsmore,  Councillor Jamie Els"
+                  },
+                  {
+                      "id":  "4304",
+                      "name":  "Evans,  Councillor Nick Evans"
+                  },
+                  {
+                      "id":  "5643",
+                      "name":  "Francis,  Councillor John  Fra"
+                  },
+                  {
+                      "id":  "823",
+                      "name":  "Fraser,  Councillor Jackie Fra"
+                  },
+                  {
+                      "id":  "825",
+                      "name":  "Gooch,  Councillor Julia Gooch"
+                  },
+                  {
+                      "id":  "6371",
+                      "name":  "Graham,  Councillor Stuart Gra"
+                  },
+                  {
+                      "id":  "1523",
+                      "name":  "Gwilliam,  Councillor Tim Gwil"
+                  },
+                  {
+                      "id":  "4298",
+                      "name":  "Ives,  Councillor Harry Ives"
+                  },
+                  {
+                      "id":  "5723",
+                      "name":  "Kilmurray,  Councillor Gillian"
+                  },
+                  {
+                      "id":  "5684",
+                      "name":  "Kyne,  Councillor Patrick Kyne"
+                  },
+                  {
+                      "id":  "5658",
+                      "name":  "Lane,  Councillor Johnathan La"
+                  },
+                  {
+                      "id":  "5682",
+                      "name":  "Llewellyn,  Councillor Beth Ll"
+                  },
+                  {
+                      "id":  "140",
+                      "name":  "Martin,  Councillor Di Martin"
+                  },
+                  {
+                      "id":  "5676",
+                      "name":  "McDermid,  Councillor Andrew M"
+                  },
+                  {
+                      "id":  "2819",
+                      "name":  "McFarling,  Councillor Chris M"
+                  },
+                  {
+                      "id":  "4303",
+                      "name":  "Moore,  Councillor Andy Moore"
+                  },
+                  {
+                      "id":  "4373",
+                      "name":  "Moseley,  Councillor Gill Mose"
+                  },
+                  {
+                      "id":  "819",
+                      "name":  "O\u0026#39;Neill,  Councillor Bernie O\u0026#39;"
+                  },
+                  {
+                      "id":  "3003",
+                      "name":  "Phelps,  Councillor Sid Phelps"
+                  },
+                  {
+                      "id":  "2562",
+                      "name":  "Phelps,  Councillor Simon Phel"
+                  },
+                  {
+                      "id":  "143",
+                      "name":  "Preest,  Councillor Alan Prees"
+                  },
+                  {
+                      "id":  "5680",
+                      "name":  "Roach,  Councillor Trevor Roac"
+                  },
+                  {
+                      "id":  "5674",
+                      "name":  "Sanders,  Councillor Jacob San"
+                  },
+                  {
+                      "id":  "5472",
+                      "name":  "Stammers,  Councillor Shaun St"
+                  },
+                  {
+                      "id":  "4299",
+                      "name":  "Topping,  Councillor Mark Topp"
+                  },
+                  {
+                      "id":  "5657",
+                      "name":  "Tradgett,  Councillor Dave Tra"
+                  },
+                  {
+                      "id":  "4295",
+                      "name":  "Turner,  Councillor Mark Turne"
+                  },
+                  {
+                      "id":  "4301",
+                      "name":  "Wheeler,  Councillor David Whe"
+                  },
+                  {
+                      "id":  "824",
+                      "name":  "Whitburn,  Councillor Ian Whit"
+                  },
+                  {
+                      "id":  "4168",
+                      "name":  "Williams,  Councillor Clayton"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:21Z",
+    "ward_count":  38
+}

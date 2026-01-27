@@ -1,0 +1,1055 @@
+﻿{
+    "council":  "Cotswold District Council",
+    "generatedUtc":  "2026-01-27T08:24:51.0243256Z",
+    "source":  {
+                   "committeesUrl":  "https://meetings.cotswold.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://meetings.cotswold.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  60,
+                   "activeInOutput":  18,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  7,
+                   "withPurposeSuggested":  11
+               },
+    "committees":  [
+                       {
+                           "id":  1314,
+                           "title":  "Performance and Appointments Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1314",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1314",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1314",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1314",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1314",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1314"
+                                    },
+                           "purpose":  "The Committee will recommend the appointment of the Chief Executive, Chief Finance Officer and Monitoring Officer to Council and conduct grievance and disciplinary matters in respect of the Statutory Officers. The Committee may also be responsible for appointing an Appraisal Panel to conduct the Chief Executive’s appraisal.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  115,
+                                               "name":  "Mike Evemy",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  141,
+                                               "name":  "Juliet Layton",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  734,
+                                               "name":  "David Cunningham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  938,
+                                               "name":  "Angus Jenkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  135,
+                                               "name":  "Nikki Ind",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  791,
+                                               "name":  "Tom Stowe",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  962,
+                                               "name":  "Ian Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  null,
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623181",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1435,
+                           "title":  "Appeals Committee",
+                           "category":  "Appeals Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1435",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1435",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1435",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1435",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1435",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1435"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Hears appeals against officer decisions and reviews cases within the committee\u0027s delegated authority, ensuring fair and transparent decision-making.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  146,
+                                               "name":  "Tony Dale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  974,
+                                               "name":  "David Fowles",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  959,
+                                               "name":  "Helene Mansilla",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  984,
+                                               "name":  "Tony Slater",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1627,
+                                               "name":  "Tristan Wilkinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1167,
+                           "title":  "Audit and Governance Committee",
+                           "category":  "Audit Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1167",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1167",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1167",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1167",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1167",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1167"
+                                    },
+                           "purpose":  "The Audit and Governance Committee is a specialised forum, which supports and monitors the governance and accountability arrangements of the Council. The areas that the Committee looks at include internal controls, risk management, and counter fraud arrangements. The Committee helps the Council to fulfil responsibilities for accountability to the local community, and meet the expectations of partners, regulators, and other stakeholders. Audit committees do not have decision making powers but do have responsibility for approving the Council’s annual statement of accounts. Audit committees do not have powers to make recommendations like scrutiny committees but may “raise issues” with Cabinet or Council.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  130,
+                                               "name":  "Nigel Robbins",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  959,
+                                               "name":  "Helene Mansilla",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  951,
+                                               "name":  "Paul Hodgkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1010,
+                                               "name":  "Jeremy Theyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  937,
+                                               "name":  "Jon Wareing",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  976,
+                                               "name":  "Len Wilkins",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623226",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1386,
+                           "title":  "Standards Hearings Sub-Committee",
+                           "category":  "Audit Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1386",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1386",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1386",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1386",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1386",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1386"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Supports and determines matters relating to member conduct and standards, including hearings/panels where applicable.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  959,
+                                               "name":  "Helene Mansilla",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  130,
+                                               "name":  "Nigel Robbins",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  976,
+                                               "name":  "Len Wilkins",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  null,
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623553",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1136,
+                           "title":  "Cabinet",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1136",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1136",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1136",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1136",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1136",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1136"
+                                    },
+                           "purpose":  "Cabinet is the Council’s main executive decision-making body. Cabinet is responsible for taking key decisions and recommending the Budget and Policy Framework to Council. The work of the Cabinet falls into three main areas: advising the Council on future policy (in consultation with the Overview and Scrutiny Committees); taking decisions, providing they are in line with existing policy and not covered by the non-executive committees; and appointing representatives on outside bodies and organisations.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  115,
+                                               "name":  "Mike Evemy",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  141,
+                                               "name":  "Juliet Layton",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Patrick Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  146,
+                                               "name":  "Tony Dale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  942,
+                                               "name":  "Mike McKeown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1812,
+                                               "name":  "Andrea Pellegram",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1627,
+                                               "name":  "Tristan Wilkinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623181",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1430,
+                           "title":  "Cabinet Member for Climate Change and Digital Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1430",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1430",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1430",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1430",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1430",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1430"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  942,
+                                               "name":  "Mike McKeown",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1431,
+                           "title":  "Cabinet Member for Economy and Council Transformation",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1431",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1431",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1431",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1431",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1431",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1431"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1627,
+                                               "name":  "Tristan Wilkinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1432,
+                           "title":  "Cabinet Member for Environment and Regulatory Services Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1432",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1432",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1432",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1432",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1432",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1432"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1812,
+                                               "name":  "Andrea Pellegram",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1429,
+                           "title":  "Cabinet Member for Finance Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1429",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1429",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1429",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1429",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1429",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1429"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  129,
+                                               "name":  "Patrick Coleman",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1415,
+                           "title":  "Cabinet Member for Health, Culture and Visitor Experience Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1415",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1415",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1415",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1415",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1415",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1415"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  146,
+                                               "name":  "Tony Dale",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1428,
+                           "title":  "Deputy Leader and Cabinet Member for Housing and Planning Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1428",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1428",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1428",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1428",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1428",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1428"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Executive decision-making body responsible for day-to-day decisions within the Council\u0027s executive remit and making recommendations to full Council on major policies and budgets.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  141,
+                                               "name":  "Juliet Layton",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1170,
+                           "title":  "Leader of the Council Decision Meeting",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1170",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1170",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1170",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1170",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1170",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1170"
+                                    },
+                           "purpose":  "Some Cabinet Members have delegated authority under the Council’s Constitution to take certain decisions acting as individual Cabinet Members. Such decisions will be scheduled as required and agendas and reports will be published five clear working days in advance.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  115,
+                                               "name":  "Mike Evemy",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  null,
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1380,
+                           "title":  "Constitution",
+                           "category":  "Constitution",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1380",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1380",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1380",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1380",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1380",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1380"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Council\u0027s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1154,
+                           "title":  "Council",
+                           "category":  "Council",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1154",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1154",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1154",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1154",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1154",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1154"
+                                    },
+                           "purpose":  "The full Council meeting is a meeting of all councillors chaired by the Chair of the Council. The principal function of full Council is to approve, adopt and change the Council’s Budgetary and Policy Framework. Council is also responsible for appointing and setting the remits of (non-executive) committees and for appointing to statutory officer roles (Chief Executive, Chief Finance Officer and Monitoring Officer). Council meetings provide an opportunity for elected members and the public to ask questions of Cabinet members and committee chairs. Council will also consider and debate motions proposed by councillors.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  1973,
+                                               "name":  "Craig Thurling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Mark Harris",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  133,
+                                               "name":  "Ray Brassington",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  143,
+                                               "name":  "Gina Blomefield",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  140,
+                                               "name":  "Claire Bloomer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Patrick Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1013,
+                                               "name":  "Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  734,
+                                               "name":  "David Cunningham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  146,
+                                               "name":  "Tony Dale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  115,
+                                               "name":  "Mike Evemy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  974,
+                                               "name":  "David Fowles",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1859,
+                                               "name":  "Laura Hall-Wilson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  114,
+                                               "name":  "Joe Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  951,
+                                               "name":  "Paul Hodgkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  135,
+                                               "name":  "Nikki Ind",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  938,
+                                               "name":  "Angus Jenkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  138,
+                                               "name":  "Julia Judd",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  141,
+                                               "name":  "Juliet Layton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  959,
+                                               "name":  "Helene Mansilla",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  942,
+                                               "name":  "Mike McKeown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  121,
+                                               "name":  "Dilys Neill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1812,
+                                               "name":  "Andrea Pellegram",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  130,
+                                               "name":  "Nigel Robbins",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  984,
+                                               "name":  "Tony Slater",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  123,
+                                               "name":  "Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  791,
+                                               "name":  "Tom Stowe",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1010,
+                                               "name":  "Jeremy Theyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1001,
+                                               "name":  "Clare Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  952,
+                                               "name":  "Michael Vann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  937,
+                                               "name":  "Jon Wareing",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  962,
+                                               "name":  "Ian Watson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  976,
+                                               "name":  "Len Wilkins",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1627,
+                                               "name":  "Tristan Wilkinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623181",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1164,
+                           "title":  "Licensing Sub-Committee (Licensing Act 2003 Matters)",
+                           "category":  "Licensing Sub-Committee (Licensing Act 2003 Matters)",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1164",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1164",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1164",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1164",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1164",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1164"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Exercises the Council\u0027s licensing and related enforcement functions (and/or sub-committee hearings) within the relevant statutory framework.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  133,
+                                               "name":  "Ray Brassington",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Patrick Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  974,
+                                               "name":  "David Fowles",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1013,
+                                               "name":  "Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  138,
+                                               "name":  "Julia Judd",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  121,
+                                               "name":  "Dilys Neill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  952,
+                                               "name":  "Michael Vann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  962,
+                                               "name":  "Ian Watson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  114,
+                                               "name":  "Joe Harris",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623553",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1168,
+                           "title":  "Licensing Sub-Committee (Taxis, Private Hire, and Street Trading Consent Matters)",
+                           "category":  "Licensing Sub-Committee (Private Hire, Hackney Carriage and Street Trading Consent Matters)",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1168",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1168",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1168",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1168",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1168",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1168"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Exercises the Council\u0027s licensing and related enforcement functions (and/or sub-committee hearings) within the relevant statutory framework.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1013,
+                                               "name":  "Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  974,
+                                               "name":  "David Fowles",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Mark Harris",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  138,
+                                               "name":  "Julia Judd",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  952,
+                                               "name":  "Michael Vann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  962,
+                                               "name":  "Ian Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623553",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1165,
+                           "title":  "Overview and Scrutiny Committee",
+                           "category":  "Overview and Scrutiny Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1165",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1165",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1165",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1165",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1165",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1165"
+                                    },
+                           "purpose":  "Overview and Scrutiny Committee have the power to investigate Cabinet decisions and any other matters relevant to their remit, making recommendations to the Council, Cabinet or any other Committee or Sub-Committee of the Council. Scrutiny has an important role in holding the Cabinet to account and in contributing to policy development.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  143,
+                                               "name":  "Gina Blomefield",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  938,
+                                               "name":  "Angus Jenkinson",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  734,
+                                               "name":  "David Cunningham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  114,
+                                               "name":  "Joe Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  984,
+                                               "name":  "Tony Slater",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  123,
+                                               "name":  "Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1001,
+                                               "name":  "Clare Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  952,
+                                               "name":  "Michael Vann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  937,
+                                               "name":  "Jon Wareing",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623226",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1162,
+                           "title":  "Planning and Licensing Committee",
+                           "category":  "Planning and Licensing Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.cotswold.gov.uk/mgCommitteeDetails.aspx?ID=1162",
+                                        "meetings":  "https://meetings.cotswold.gov.uk/ieListMeetings.aspx?CommitteeId=1162",
+                                        "membersContact":  "https://meetings.cotswold.gov.uk/mgCommitteeMailingList.aspx?ID=1162",
+                                        "attendance":  "https://meetings.cotswold.gov.uk/mgAttendanceSummary.aspx?RPID=1162",
+                                        "interests":  "https://meetings.cotswold.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1162",
+                                        "rss":  "https://meetings.cotswold.gov.uk/mgRss.aspx?CID=1162"
+                                    },
+                           "purpose":  "Planning and Licensing Committee is responsible for all functions relating to development control aspects of Town and Country Planning, (including determination of planning applications, enforcement action, listed building consent, conservation area consent and control of advertisements) as well as all the functions of the Council under the Licensing Act 2003 and the Gambling Act 2005. The exception is functions that the aforementioned Acts require to be Council decisions.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  121,
+                                               "name":  "Dilys Neill",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  962,
+                                               "name":  "Ian Watson",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  133,
+                                               "name":  "Ray Brassington",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1860,
+                                               "name":  "Nick Bridges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Patrick Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1013,
+                                               "name":  "Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  974,
+                                               "name":  "David Fowles",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  114,
+                                               "name":  "Joe Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  138,
+                                               "name":  "Julia Judd",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  952,
+                                               "name":  "Michael Vann",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01285 623226",
+                                           "email":  null
+                                       }
+                       }
+                   ]
+}

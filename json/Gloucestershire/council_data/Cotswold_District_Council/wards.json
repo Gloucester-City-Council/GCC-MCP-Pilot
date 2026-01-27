@@ -1,0 +1,144 @@
+{
+    "council":  "Cotswold District Council",
+    "url":  "https://meetings.cotswold.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "143",
+                      "name":  "Blomefield,  Gina Blomefield"
+                  },
+                  {
+                      "id":  "140",
+                      "name":  "Bloomer,  Claire Bloomer"
+                  },
+                  {
+                      "id":  "133",
+                      "name":  "Brassington,  Ray Brassington"
+                  },
+                  {
+                      "id":  "1860",
+                      "name":  "Bridges,  Nick Bridges"
+                  },
+                  {
+                      "id":  "129",
+                      "name":  "Coleman,  Patrick Coleman"
+                  },
+                  {
+                      "id":  "1013",
+                      "name":  "Corps,  Daryl Corps"
+                  },
+                  {
+                      "id":  "734",
+                      "name":  "Cunningham,  David Cunningham"
+                  },
+                  {
+                      "id":  "146",
+                      "name":  "Dale,  Tony Dale"
+                  },
+                  {
+                      "id":  "115",
+                      "name":  "Evemy,  Mike Evemy"
+                  },
+                  {
+                      "id":  "974",
+                      "name":  "Fowles,  David Fowles"
+                  },
+                  {
+                      "id":  "1859",
+                      "name":  "Hall-Wilson,  Laura Hall-Wilson"
+                  },
+                  {
+                      "id":  "114",
+                      "name":  "Harris,  Joe Harris"
+                  },
+                  {
+                      "id":  "116",
+                      "name":  "Harris,  Mark Harris"
+                  },
+                  {
+                      "id":  "951",
+                      "name":  "Hodgkinson,  Paul Hodgkinson"
+                  },
+                  {
+                      "id":  "135",
+                      "name":  "Ind,  Nikki Ind"
+                  },
+                  {
+                      "id":  "938",
+                      "name":  "Jenkinson,  Angus Jenkinson"
+                  },
+                  {
+                      "id":  "138",
+                      "name":  "Judd,  Julia Judd"
+                  },
+                  {
+                      "id":  "141",
+                      "name":  "Layton,  Juliet Layton"
+                  },
+                  {
+                      "id":  "959",
+                      "name":  "Mansilla,  Helene Mansilla"
+                  },
+                  {
+                      "id":  "942",
+                      "name":  "McKeown,  Mike McKeown"
+                  },
+                  {
+                      "id":  "121",
+                      "name":  "Neill,  Dilys Neill"
+                  },
+                  {
+                      "id":  "1812",
+                      "name":  "Pellegram,  Andrea Pellegram"
+                  },
+                  {
+                      "id":  "130",
+                      "name":  "Robbins,  Nigel Robbins"
+                  },
+                  {
+                      "id":  "984",
+                      "name":  "Slater,  Tony Slater"
+                  },
+                  {
+                      "id":  "123",
+                      "name":  "Spivey,  Lisa Spivey"
+                  },
+                  {
+                      "id":  "791",
+                      "name":  "Stowe,  Tom Stowe"
+                  },
+                  {
+                      "id":  "1010",
+                      "name":  "Theyer,  Jeremy Theyer"
+                  },
+                  {
+                      "id":  "1973",
+                      "name":  "Thurling,  Craig Thurling"
+                  },
+                  {
+                      "id":  "1001",
+                      "name":  "Turner,  Clare Turner"
+                  },
+                  {
+                      "id":  "952",
+                      "name":  "Vann,  Michael Vann"
+                  },
+                  {
+                      "id":  "937",
+                      "name":  "Wareing,  Jon Wareing"
+                  },
+                  {
+                      "id":  "962",
+                      "name":  "Watson,  Ian Watson"
+                  },
+                  {
+                      "id":  "976",
+                      "name":  "Wilkins,  Len Wilkins"
+                  },
+                  {
+                      "id":  "1627",
+                      "name":  "Wilkinson,  Tristan Wilkinson"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:18Z",
+    "ward_count":  34
+}

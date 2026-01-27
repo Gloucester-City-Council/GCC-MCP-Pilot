@@ -1,0 +1,2331 @@
+﻿{
+    "council":  "Gloucestershire County Council",
+    "generatedUtc":  "2026-01-27T08:23:37.0567691Z",
+    "source":  {
+                   "committeesUrl":  "https://glostext.gloucestershire.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://glostext.gloucestershire.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  143,
+                   "activeInOutput":  32,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  28,
+                   "withPurposeSuggested":  4
+               },
+    "committees":  [
+                       {
+                           "id":  900,
+                           "title":  "Disciplinary Appeals Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=900",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=900",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=900",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=900",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=900",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=900"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Hears appeals against officer decisions and reviews cases within the committee\u0027s delegated authority, ensuring fair and transparent decision-making.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  901,
+                           "title":  "Fostering Panel",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=901",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=901",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=901",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=901",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=901",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=901"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Time-limited group examining specific issues or projects in detail, reporting findings and recommendations to the parent committee or council.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24521,
+                                               "name":  "Cllr Richard Stanley",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  754,
+                           "title":  "Gloucestershire Employment and Skills Board",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=754",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=754",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=754",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=754",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=754",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=754"
+                                    },
+                           "purpose":  "GFirst LEP, Gloucestershire County Council and the six other Gloucestershire local authorities established a Gloucestershire Employment and Skills Board (GESB) in the summer of 2017. The Board provides a link between the workforce and training needs of local employers with the provision of local education, training and skills providers in the county to ensure there are strong matches between them.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  881,
+                           "title":  "Gloucestershire Health and Wellbeing Partnership",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=881",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=881",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=881",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=881",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=881",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=881"
+                                    },
+                           "purpose":  "The Gloucestershire Health and Wellbeing Partnership is a statutory Committee of the One Gloucestershire Integrated Care System (ICS), established jointly between the NHS Gloucestershire Integrated Care Board (ICB) and Gloucestershire County Council as equal partners and statutory members. The Gloucestershire Integrated Care Partnership is a requirement of Section 26 of the Health and Care Act 2022. The Partnership is a key component of the governance architecture for the One Gloucestershire ICS. Alongside the ICB, its purpose is to deliver the four fundamental purposes of the One Gloucestershire Integrated Care System, including: - • Improving outcomes in population health and healthcare • Tackling inequalities in outcomes, experience, and access • Enhancing productivity and value for money • Helping the NHS support broader social and economic development The Partnership has a statutory duty to prepare an Integrated Care Strategy to set out how the assessed population needs of Gloucestershire and strategic priorities for health and wellbeing will be met by the Integrated Care Board, NHS England, or the responsible local authorities whose areas coincide with or fall wholly or partly within its area.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24530,
+                                               "name":  "Cllr Dr Kate Usmar",
+                                               "role":  "Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Moore. Email: jo.moore@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "jo.moore@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  382,
+                           "title":  "Gloucestershire Schools Forum",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=382",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=382",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=382",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=382",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=382",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=382"
+                                    },
+                           "purpose":  "The Gloucestershire Schools Forum is an important statutory body which makes decisions on certain school funding issues and, at times, must be consulted by the Local Authority on other funding decisions.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Bolton - 01452 324197.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  767,
+                           "title":  "Scrutiny Task Groups",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=767",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=767",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=767",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=767",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=767",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=767"
+                                    },
+                           "purpose":  "1. All Scrutiny Task Groups will undertake work in relation to key targets for service areas, the Council’s key priorities and issues of public interest or concern. 2. Before each Scrutiny Task Group begins its work, the terms of reference will be agreed by the relevant Scrutiny Committee or its lead members. 3. The final report of each Scrutiny Task Group will be presented to the relevant Scrutiny Committee, which may as a result, make recommendations to any Council body or any other public body or third party or, exceptionally, the full County Council. 4. Unless there are exceptional circumstances, there will be no more than six Scrutiny Task Groups in existence at any one time, in general limited to two Scrutiny Task Groups per Committee. 5. Each Scrutiny Task Group may adopt whatever means of operation it deems most effective, bearing in mind the resources available to it.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  491,
+                           "title":  "Appeals Board",
+                           "category":  "Appeals Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=491",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=491",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=491",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=491",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=491",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=491"
+                                    },
+                           "purpose":  "To consider appeals in respect of charges for assistance with home to school transport. Nine members are trained to hear appeals; only three sit at any one time.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24442,
+                                               "name":  "Cllr Angela Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24318,
+                                               "name":  "Cllr Leigh Challis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11289,
+                                               "name":  "Cllr Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24501,
+                                               "name":  "Cllr Dr Natalie Rothwell-Warn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24459,
+                                               "name":  "Cllr Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  261,
+                           "title":  "Appeals Committee",
+                           "category":  "Appeals Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=261",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=261",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=261",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=261",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=261",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=261"
+                                    },
+                           "purpose":  "The Appeals Committee acts as an umbrella committee for Appeals Panels that hear and determine appeals in respect of refusal to supply home to school transport, together with other areas where the right to appeal exists.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24442,
+                                               "name":  "Cllr Angela Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24318,
+                                               "name":  "Cllr Leigh Challis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11289,
+                                               "name":  "Cllr Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24501,
+                                               "name":  "Cllr Dr Natalie Rothwell-Warn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24459,
+                                               "name":  "Cllr Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  262,
+                           "title":  "Appointments Committee",
+                           "category":  "Appointments Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=262",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=262",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=262",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=262",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=262",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=262"
+                                    },
+                           "purpose":  "To be responsible for: 1. Recommending to the full Council the appointment (on a permanent or temporary or acting up basis) of the Chief Executive/Head of Paid Service. 2. Determining any disciplinary matters short of dismissal in relation to the Head of Paid Service, Monitoring Officer and Chief Financial Officer. 3. Making recommendations to full Council regarding dismissal of the Head of Paid Service, Monitoring Officer and Chief Financial Officer. 4. The appointment (on a permanent or temporary or acting up basis) of the Chief Finance Officer, Monitoring Officer, the Chief Fire Officer, the Director of Public Health, and all Executive Directors, including the statutory posts of Director of Childrens Services and Executive Director of Adult Social Care, Wellbeing and Communities. 5. The dismissal of the Chief Fire Officer, the Director of Public Health, the Executive Director of Children’s Services, the Executive Director of Adult Social Care, Wellbeing and Communities and the Executive Director of Economy, Environment and Infrastructure. 6. Determining the terms of employment and any variation to those terms of employees of the Council including terms of employment and exercising employer discretions in relation to pensions. 7. Subject to any other provisions of the Council\u0027s Constitution, determining any other matters affecting employees of the Council.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24478,
+                                               "name":  "Cllr Dr Ian Cameron",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24530,
+                                               "name":  "Cllr Dr Kate Usmar",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  723,
+                           "title":  "Appointments Sub-Committee",
+                           "category":  "Appointments Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=723",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=723",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=723",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=723",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=723",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=723"
+                                    },
+                           "purpose":  "In the following circumstances, the Appointments Committee will operate through a sub-committee arrangement: · For decisions relating the conduct and capability of those officers listed under items 2 and 3 in Table 3.02 in the Constitution, acting as an Investigating and Disciplinary panel. · For decisions on the appointment of those officers detailed at item 4 in Table 3.02 in the Constitution, acting as an interviewing panel. · For joint appointments with the NHS in Gloucestershire, which are within the remit of the Appointments Committee. Membership of the sub-committee will be established each time, compromising up to 5 members and will be politically balanced.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  655,
+                           "title":  "Audit and Governance Committee",
+                           "category":  "Audit and Governance Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=655",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=655",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=655",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=655",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=655",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=655"
+                                    },
+                           "purpose":  "The committee provides independent assurance of the adequacy of the risk management framework and the associated control environment. It assesses the Authority’s financial and non-financial performance to the extent that it affects the Authority’s exposure to risk and weakens the control environment. The committee also oversees the financial reporting process and ensures that Members maintain high standards of probity in their public life by carrying out investigations in respect to allegations of misconduct by a Member or co-opted Member.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24307,
+                                               "name":  "Cllr Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24480,
+                                               "name":  "Cllr Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Cllr Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18031,
+                                               "name":  "Cllr Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24408,
+                                               "name":  "Cllr John Patient",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24328,
+                                               "name":  "Cllr Michael Rees",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18081,
+                                               "name":  "Cllr Chloe Turner",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  18091,
+                                               "name":  "Cllr Dr David Willingham",
+                                               "role":  "Vice-Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  117,
+                           "title":  "Cabinet",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=117",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=117",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=117",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=117",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=117",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=117"
+                                    },
+                           "purpose":  "The Council’s Cabinet (which is sometimes known as the “executive”) is made up of the Leader of the Council and 9 other county councillors and has particularly wide-ranging responsibilities. Unlike other council bodies most of the Cabinet’s duties and powers are derived from Acts of Parliament and subordinate legislation (that is, orders and regulations laid before Parliament) rather than powers that have been delegated to it by full Council. Cabinet Portfolios A Cabinet’s role is principally to formulate detailed policies and proposals for delivery of services within the policy and budgetary framework that is set by full Council. Please contact Democratic Services on 01452 324204",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18120,
+                                               "name":  "Cllr Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  12019,
+                                               "name":  "Cllr Ben Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4574,
+                                               "name":  "Cllr Joe Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4551,
+                                               "name":  "Cllr Paul Hodgkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24511,
+                                               "name":  "Cllr Martin Horwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24459,
+                                               "name":  "Cllr Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24530,
+                                               "name":  "Cllr Dr Kate Usmar",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18043,
+                                               "name":  "Cllr Roger Whyborn",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Stephen Bace. Email: stephen.bace@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "stephen.bace@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  874,
+                           "title":  "City Region Board",
+                           "category":  "City Region Board",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=874",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=874",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=874",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=874",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=874",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=874"
+                                    },
+                           "purpose":  "The overall aims of the City Region Board are to develop and deliver a vision for future growth and economic success in Gloucestershire. The full terms of reference can be found here: https://www.gloucestershire.gov.uk/gcc-constitution/part-3-responsibility-for-functions/section-6-joint-arrangements/",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  4585,
+                                               "name":  "Mike Evemy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton (Gloucester City Council)",
+                                               "role":  "Gloucester City Council"
+                                           },
+                                           {
+                                               "uid":  24459,
+                                               "name":  "Cllr Julian Tooke",
+                                               "role":  "Chair"
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  266,
+                           "title":  "Commons and Rights of Way Committee",
+                           "category":  "Commons and Rights of Way Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=266",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=266",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=266",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=266",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=266",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=266"
+                                    },
+                           "purpose":  "To consider and decide on applications for the registration of land as a Town or Village Green, and applications made to amend the Definitive Map of Public Rights of Way. To be responsible for the production and review of the Definitive Map and Statement.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24442,
+                                               "name":  "Cllr Angela Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18009,
+                                               "name":  "Cllr Tom Bradley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24478,
+                                               "name":  "Cllr Dr Ian Cameron",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  24318,
+                                               "name":  "Cllr Leigh Challis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24364,
+                                               "name":  "Cllr Jason Preece",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18105,
+                                               "name":  "Cllr Dr Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18091,
+                                               "name":  "Cllr Dr David Willingham",
+                                               "role":  "Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Bolton. Email: joanne.bolton@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "joanne.bolton@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  265,
+                           "title":  "Constitution Committee",
+                           "category":  "Constitution Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=265",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=265",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=265",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=265",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=265",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=265"
+                                    },
+                           "purpose":  "The role of the Constitution Committee is primarily to keep the Constitution under review to ensure the structures and procedures that it contains continue to promote the effective and efficient administration of the authority and open, accountable decision-making.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  12019,
+                                               "name":  "Cllr Ben Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18031,
+                                               "name":  "Cllr Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24328,
+                                               "name":  "Cllr Michael Rees",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  176,
+                                               "name":  "Cllr Vernon Smith",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  333,
+                           "title":  "County Council",
+                           "category":  "County Council",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=333",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=333",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=333",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=333",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=333",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=333"
+                                    },
+                           "purpose":  "The County Council comprises of all 55 councillors and meets six times a year. Certain kinds of decisions, for example, changing the council’s constitution or setting the rate of council tax can only be taken at meetings of the full Council. The full Council has such wide powers it would be impractical for it to make every decision itself. It therefore concerns itself with setting the broad policy and budgetary framework of the authority. More detailed decisions are made by what are known as “council bodies”, for example, the Planning Committee and by the Council’s Cabinet. Please contact Democratic Services on 01452 324204",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24476,
+                                               "name":  "Cllr Dean Botterill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24307,
+                                               "name":  "Cllr Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24442,
+                                               "name":  "Cllr Angela Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18009,
+                                               "name":  "Cllr Tom Bradley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  361,
+                                               "name":  "Cllr Brian Calway",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24478,
+                                               "name":  "Cllr Dr Ian Cameron",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24336,
+                                               "name":  "Cllr Piers Camp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24318,
+                                               "name":  "Cllr Leigh Challis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18046,
+                                               "name":  "Cllr Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18120,
+                                               "name":  "Cllr Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  140,
+                                               "name":  "John Cordwell (Honorary Alderman)",
+                                               "role":  "Honorary Alderman"
+                                           },
+                                           {
+                                               "uid":  24362,
+                                               "name":  "Cllr Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24335,
+                                               "name":  "Cllr Dr Richard Dean",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24311,
+                                               "name":  "Cllr Ray Donaghue",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24480,
+                                               "name":  "Cllr Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  12019,
+                                               "name":  "Cllr Ben Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  139,
+                                               "name":  "Chas Fellows",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Cllr Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4574,
+                                               "name":  "Cllr Joe Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18031,
+                                               "name":  "Cllr Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4551,
+                                               "name":  "Cllr Paul Hodgkinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24511,
+                                               "name":  "Cllr Martin Horwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24420,
+                                               "name":  "Cllr Chris Mayo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4669,
+                                               "name":  "Cllr Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18102,
+                                               "name":  "Cllr Dom Morris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  171,
+                                               "name":  "Shaun Parsons (Honorary Alderman)",
+                                               "role":  "Honorary Alderman"
+                                           },
+                                           {
+                                               "uid":  4529,
+                                               "name":  "Cllr Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24408,
+                                               "name":  "Cllr John Patient",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24364,
+                                               "name":  "Cllr Jason Preece",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24328,
+                                               "name":  "Cllr Michael Rees",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11289,
+                                               "name":  "Cllr Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24501,
+                                               "name":  "Cllr Dr Natalie Rothwell-Warn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18135,
+                                               "name":  "Cllr Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  176,
+                                               "name":  "Cllr Vernon Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24521,
+                                               "name":  "Cllr Richard Stanley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Klara Sudbury (Honorary Alderman)",
+                                               "role":  "Honorary Alderman"
+                                           },
+                                           {
+                                               "uid":  24459,
+                                               "name":  "Cllr Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18105,
+                                               "name":  "Cllr Dr Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18081,
+                                               "name":  "Cllr Chloe Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24530,
+                                               "name":  "Cllr Dr Kate Usmar",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  148,
+                                               "name":  "Simon Wheeler (Honorary Alderman)",
+                                               "role":  "Honorary Alderman"
+                                           },
+                                           {
+                                               "uid":  18043,
+                                               "name":  "Cllr Roger Whyborn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  137,
+                                               "name":  "Lesley Williams MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18091,
+                                               "name":  "Cllr Dr David Willingham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  184,
+                                               "name":  "Will Windsor-Clive (Honorary Alderman)",
+                                               "role":  "Honorary Alderman"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Stephen Bace.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  653,
+                           "title":  "Gloucestershire Health \u0026 Wellbeing Board",
+                           "category":  "Health and Wellbeing Board",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=653",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=653",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=653",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=653",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=653",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=653"
+                                    },
+                           "purpose":  "In accordance with the requirements of the Health \u0026 Social Care Act 2012 (“the Act”) the Health and Wellbeing Board is a committee of the Council. The Health and Wellbeing Board: 1) Must for the purpose of advancing the health and wellbeing of the people in its area, encourage persons who arrange for the provision of any health or social care services in that area to work in an integrated manner 2) Must provide such advice, assistance or other support as it thinks appropriate for the purpose of encouraging the making of arrangements under section 75 of the National Health Service Act 2006 in connection with the provision of such services 3) May encourage persons who arrange for the provision of any health-related services in its area to work closely with the Health and Wellbeing Board 4) May encourage persons who arrange for the provision of any health or social care services in its area and persons who arrange for the provision of any health-related services in its area to work closely together 5) Must prepare and publish a joint strategic needs assessment for the county, pursuant to section 116 of the Local Government and Public Involvement in Health Act 2007 (as amended by the Health and Social Care Act 2012). 6) Must publish a joint local health and wellbeing strategy (JLHWS), which sets out the priorities for improving the health and wellbeing of its local population and how the identified needs will be addressed, pursuant to section 116 of the Local Government and Public Involvement in Health Act 2007 (as amended by the Health and Social Care Act 2012). 7) Discharge its separate statutory duty3 to develop a pharmaceutical needs assessment (PNA) for their area. 8) Under the Better Care Fund policy framework, Health and Wellbeing Boards must also sign off the Better Care Fund plan for the local area and provide governance for the pooled fund that must be set up in every area. Additional functions of the Health and Wellbeing Board Department of Health and Care guidance on Health and Wellbeing Board (published 2022) states that: 1) Integrated Care Boards (ICBs) must involve the Health and Wellbeing Board in preparing or revising their Joint Forward Plans; and the ICB must consult with the Board on whether the Joint Forward Plan takes proper account of the Joint Local Health and Wellbeing Strategy. 2) ICBs must consult the Health and Wellbeing Board in preparing their annual review and the annual review should review any steps the ICB has taken to implement the Joint Local Health and Wellbeing Strategy. 3) NHS England must consult the Health and Wellbeing Board for their views on the ICB’s contribution to the delivery of the Joint Local Health and Wellbeing Strategy as part of NHS England’s performance assessment of the ICB. 4) ICBs and their partner NHS trusts, and NHS foundation trusts are required to share their joint capital resource use plan and any revisions with the Health and Wellbeing Board. 5) Health and Wellbeing Board are expected to be involved in the preparation of the local Integrated Care Strategy.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24530,
+                                               "name":  "Cllr Dr Kate Usmar",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  18120,
+                                               "name":  "Cllr Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  12019,
+                                               "name":  "Cllr Ben Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4551,
+                                               "name":  "Cllr Paul Hodgkinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Moore. Email: jo.moore@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "jo.moore@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  739,
+                           "title":  "Pension Board",
+                           "category":  "Pension Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=739",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=739",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=739",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=739",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=739",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=739"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: A committee within the \u0027Pension Committee\u0027 area, overseeing decisions and governance relevant to \u0027Pension Board\u0027.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  24336,
+                                               "name":  "Cllr Piers Camp",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  270,
+                           "title":  "Pension Committee",
+                           "category":  "Pension Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=270",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=270",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=270",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=270",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=270",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=270"
+                                    },
+                           "purpose":  "The purpose of the Pension Committee is to give advice on the proper management of the Gloucestershire Pension Fund and carry out the function of the Council as the Administering Authority.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  12019,
+                                               "name":  "Cllr Ben Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18081,
+                                               "name":  "Cllr Chloe Turner",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  258,
+                           "title":  "Planning Committee",
+                           "category":  "Planning",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=258",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=258",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=258",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=258",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=258",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=258"
+                                    },
+                           "purpose":  "The Planning Committee is responsible for determining applications for permissions, approvals, licenses, consents and certificates under the Town and Country Planning Act 1990 and other related statues.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24362,
+                                               "name":  "Cllr Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24311,
+                                               "name":  "Cllr Ray Donaghue",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4669,
+                                               "name":  "Cllr Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18135,
+                                               "name":  "Cllr Sarah Sawyer",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  592,
+                           "title":  "Planning Committee Site Visits",
+                           "category":  "Planning",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=592",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=592",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=592",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=592",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=592",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=592"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Determines planning applications and related planning matters that are reserved to committee, following officer recommendations and relevant planning policy.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24362,
+                                               "name":  "Cllr Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24311,
+                                               "name":  "Cllr Ray Donaghue",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4595,
+                                               "name":  "Cllr Colin Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4669,
+                                               "name":  "Cllr Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18135,
+                                               "name":  "Cllr Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18109,
+                                               "name":  "Cllr Lisa Spivey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Andrea Griffiths. Email: andrea.griffiths@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "andrea.griffiths@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  267,
+                           "title":  "Safety and Licensing Committee",
+                           "category":  "Safety and Licensing Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=267",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=267",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=267",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=267",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=267",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=267"
+                                    },
+                           "purpose":  "Responsible for decisions made pursuant to a wide range of powers connected with the granting, revocation and variation of permissions, licenses, consents and certificates.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  774,
+                           "title":  "Adult Social Care and Communities Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=774",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=774",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=774",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=774",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=774",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=774"
+                                    },
+                           "purpose":  "The purpose of the Adult Social Care and Communities Scrutiny Committee is to carry out the scrutiny functions of the County Council in delivering the roles set out in Article 8 of the Constitution in the context of all matters relating to: - • Adult Social Care Transformation • Services for Vulnerable People including Adult Safeguarding • Public Health • Community Development (recognising that other committees cover aspects of this area) • Residential and nursing care • Libraries and Registration Service • Refugees and Asylum Seekers • Travellers Scrutinise the actions and decisions of the responsible authorities under Section 5 of the Crime and Disorder Act 1998 in relation to their crime and disorder functions.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  18105,
+                                               "name":  "Cllr Dr Rebecca Trimnell",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  24335,
+                                               "name":  "Cllr Dr Richard Dean",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  24311,
+                                               "name":  "Cllr Ray Donaghue",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24420,
+                                               "name":  "Cllr Chris Mayo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4529,
+                                               "name":  "Cllr Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18135,
+                                               "name":  "Cllr Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Moore. Email: jo.moore@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "jo.moore@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  670,
+                           "title":  "Children and Families Overview and Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=670",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=670",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=670",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=670",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=670",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=670"
+                                    },
+                           "purpose":  "To carry out the scrutiny functions of the County Council delivering the roles set out in Article 8 of the Constitution in the context of all matters relating to: children’s safeguarding looked after children and care leavers early help early years including children’s centres special educational needs and disability adoption and fostering children with disabilities school improvement, access and place planning school funding unaccompanied refugee and asylum-seeking children",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24442,
+                                               "name":  "Cllr Angela Boyes",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  11284,
+                                               "name":  "Cllr Stephen Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24434,
+                                               "name":  "Cllr Vernon Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11289,
+                                               "name":  "Cllr Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24501,
+                                               "name":  "Cllr Dr Natalie Rothwell-Warn",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  24521,
+                                               "name":  "Cllr Richard Stanley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Laura Powick. Email: laura.powick@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "laura.powick@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  771,
+                           "title":  "Corporate Overview and Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=771",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=771",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=771",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=771",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=771",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=771"
+                                    },
+                           "purpose":  "1. Carry out the scrutiny functions of the County Council delivering the roles set out in Article 8 of the Constitution by providing a corporate overview of performance, the budget, risk management and service improvement. 2. Strategic overview of Council services including cross-cutting scrutiny in consultation with the other Scrutiny Committees 3. Carry out the scrutiny functions of the County Council delivering the roles set out in Article 8 of the Constitution by scrutinising those County Council functions not covered by other Scrutiny Committees. These include support services included within the Corporate Resources Directorate. 4. To coordinate the work of the Scrutiny Committees as necessary including determining which committee should look at a particular issue if there is a dispute. 5. To oversee the rules relating to the operation of task groups as indicated in procedure rule 3.11.4 of the Constitution.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24453,
+                                               "name":  "Cllr Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24336,
+                                               "name":  "Cllr Piers Camp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Cllr Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  24420,
+                                               "name":  "Cllr Chris Mayo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24328,
+                                               "name":  "Cllr Michael Rees",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18105,
+                                               "name":  "Cllr Dr Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24411,
+                                               "name":  "Cllr Ian Watson",
+                                               "role":  "Vice-Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Laura Powick. Email: laura.powick@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "laura.powick@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  773,
+                           "title":  "Environment Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=773",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=773",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=773",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=773",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=773",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=773"
+                                    },
+                           "purpose":  "Carry out the scrutiny functions of the County Council delivering the roles set out in Article 8 of the Constitution in the context of matters relating to · Climate Change Mitigation – including Electric Vehicle Strategy, Carbon Reduction Strategy, and green energy. · Climate Change Adaptation · Highways – including Traffic Regulation Orders and Public Rights of Way · Flooding – including alleviation and resilience · Minerals and Waste – including disposal, reduction, and recycling · Major Infrastructure – including the Local Transport Plan · Air Quality · Public and Community Transport · Parking · Road Safety",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24522,
+                                               "name":  "Cllr Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24476,
+                                               "name":  "Cllr Dean Botterill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18009,
+                                               "name":  "Cllr Tom Bradley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  4669,
+                                               "name":  "Cllr Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24328,
+                                               "name":  "Cllr Michael Rees",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18091,
+                                               "name":  "Cllr Dr David Willingham",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  860,
+                           "title":  "Fire and Rescue Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=860",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=860",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=860",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=860",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=860",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=860"
+                                    },
+                           "purpose":  "To carry out the scrutiny functions of the County Council as set out in Article 8 of the Constitution in the context of matters relating to Gloucestershire Fire and Rescue Service, including: Response to fire and other emergencies; Fire regulation, prevention and promoting fire safety; Performance against Key and Local Performance Indicators; Progress against recommendations from inspections and delivery of the Improvement Plan; Co-operation and partnership working with other local responders to enhance coordination and efficiency and increase community resilience; Cross-boundary co-operation with other Fire and Rescue Authorities; Civil contingency planning; Leadership, culture and workforce development across the service; Trading standards; and Coroners.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24307,
+                                               "name":  "Cllr Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24362,
+                                               "name":  "Cllr Daryl Corps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24502,
+                                               "name":  "Cllr Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  18012,
+                                               "name":  "Cllr Beki Hoyland",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  24420,
+                                               "name":  "Cllr Chris Mayo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Laura Powick. Email: laura.powick@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "laura.powick@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  892,
+                           "title":  "Gloucestershire Economic Strategy Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=892",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=892",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=892",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=892",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=892",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=892"
+                                    },
+                           "purpose":  "To review the decisions, plans, and policies of the Gloucestershire City Region Board; To scrutinise the impact and delivery outcomes of successful Strategic Economic Development Fund (SEDF) bids; To identify future areas of economic growth for inclusion in the Gloucestershire Economic Strategy*; To provide a scrutiny function for any potential devolution deal in so far as it relates to the Gloucestershire City Region Board or the Gloucestershire Economic Strategy*. The Gloucestershire Economic Strategy Scrutiny Committee may not exercise any function other than those outlined above. *Note: The Gloucestershire’s Economic Strategy (2024-2034) outlines the county’s existing strengths, opportunities and challenges and provides a clear statement of intent for Gloucestershire – to achieve greener and inclusive economic growth that delivers a stronger, more sustainable, economy; and sets us on the journey to achieving a new Gloucestershire 2050 Vision",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24336,
+                                               "name":  "Cllr Piers Camp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18046,
+                                               "name":  "Cllr Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24480,
+                                               "name":  "Cllr Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24326,
+                                               "name":  "Cllr Mark Harris",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  19976,
+                                               "name":  "Cllr Angus Jenkinson (Cotswold District Council)",
+                                               "role":  "Cotswold District Council"
+                                           },
+                                           {
+                                               "uid":  18102,
+                                               "name":  "Cllr Dom Morris",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11370,
+                                               "name":  "Cllr Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24408,
+                                               "name":  "Cllr John Patient",
+                                               "role":  "Chair"
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  650,
+                           "title":  "Gloucestershire Police and Crime Panel",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=650",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=650",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=650",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=650",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=650",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=650"
+                                    },
+                           "purpose":  "The Police and Crime Panel is a joint body of the local authorities served by Gloucestershire Police (i.e. the area of Cheltenham Borough Council, Cotswold District Council, Forest of Dean District Council, Gloucester City Council, Gloucestershire County Council, Stroud District Council, and Tewkesbury Borough Council). The Panel is to maintain a regular check and balance on the performance of the Police and Crime Commissioner. The functions of the panel are to be exercised with a view to supporting the effective exercise of the functions of the Police and Crime Commissioner. The panel is under a duty to support, as well as challenge, the commissioner. The local authorities have agreed the formal arrangements for the Gloucestershire Police and Crime Panel and have appointed fourteen Councillors to be Panel members. The panel has also co-opted two independent members. Gloucestershire County Council is host local authority for the panel and will provide administrative and other support to the panel and its members.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24362,
+                                               "name":  "Cllr Daryl Corps Conservative Co-Opted Member",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24335,
+                                               "name":  "Cllr Dr Richard Dean Green Co-Opted Member",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24480,
+                                               "name":  "Cllr Stewart Dove Gloucestershire County Council",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  166,
+                                               "name":  "Cllr Jeremy Hilton Gloucestershire County Council",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24462,
+                                               "name":  "Cllr Craig Horrocks Gloucestershire County Council",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard Gloucestershire County Council",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4529,
+                                               "name":  "Cllr Sajid Patel Conservative Co-Opted Member",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  11289,
+                                               "name":  "Cllr Steve Robinson Labour Co-Opted Member",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Rosie Kenyon. Email: rosie.kenyon@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "rosie.kenyon@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  719,
+                           "title":  "Gloucestershire Police and Crime Panel Complaints Subcommittee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=719",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=719",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=719",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=719",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=719",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=719"
+                                    },
+                           "purpose":  "The Gloucestershire Police and Crime Panel protocol for complaints delegates the handling of non-criminal complaints regarding both quality of service and conduct to the monitoring officer of the Commissioner’s Office to broker local resolutions, resolve the complaints and restore relationships. If local resolutions can not be brokered and the complainant wished to take the matter further then this could be brought to the attention of the Panel. A sub-committee is then set up to consider the complaint. The Complaints Sub-Committee is made up of the lead members of the Panel as well as one of the available independent members. An agenda will be published 5 clear working days before the meeting and the items handling the complaint will be in exempt session. The Sub-Committee’s role is to facilitate informal resolution; this is about solving, explaining or clearing up, or settling a matter directly with the complainant without an investigation or formal proceedings. It is not a disciplinary process and does not involve any sanction.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sophie Benfield. Email: sophie.benfield@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "sophie.benfield@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  772,
+                           "title":  "Health Overview \u0026 Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=772",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=772",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=772",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=772",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=772",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=772"
+                                    },
+                           "purpose":  "The function of the Gloucestershire Health Overview and Scrutiny Committee is to carry out the scrutiny functions of the County Council in delivering the roles set out in Article 8 of the Constitution focussing on health issues from the public’s perspective, including the use of task groups to carry out its scrutiny functions. The committee to act as a lever to improve the health and services that impact on the health of local people, working in partnership with other agencies. To address issues of health inequalities between different groups in the community. To determine those matters referred to in Article 11.02.2 of the Constitution (joint committees concerning health service changes). Under the Local Authority (Public Health, Health and Wellbeing Boards and Health Scrutiny) Regulations 2013, to exercise the Council’s role: • In reviewing and scrutinising matters relating to the planning, provision and operation of health services in the area; and • In commenting on or making a recommendation in relation to proposals for a substantial development or variation to services save that ‘referral powers’ to the Secretary of State remain with full Council.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  4641,
+                                               "name":  "Cllr Iain Dobie",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  24478,
+                                               "name":  "Cllr Dr Ian Cameron",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  24318,
+                                               "name":  "Cllr Leigh Challis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24335,
+                                               "name":  "Cllr Dr Richard Dean",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24374,
+                                               "name":  "Cllr Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Cllr Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18135,
+                                               "name":  "Cllr Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18105,
+                                               "name":  "Cllr Dr Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Moore. Email: jo.moore@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "jo.moore@gloucestershire.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  268,
+                           "title":  "Traffic Regulation Committee",
+                           "category":  "Traffic Regulation Committee",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://glostext.gloucestershire.gov.uk/mgCommitteeDetails.aspx?ID=268",
+                                        "meetings":  "https://glostext.gloucestershire.gov.uk/ieListMeetings.aspx?CommitteeId=268",
+                                        "membersContact":  "https://glostext.gloucestershire.gov.uk/mgCommitteeMailingList.aspx?ID=268",
+                                        "attendance":  "https://glostext.gloucestershire.gov.uk/mgAttendanceSummary.aspx?RPID=268",
+                                        "interests":  "https://glostext.gloucestershire.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=268",
+                                        "rss":  "https://glostext.gloucestershire.gov.uk/mgRss.aspx?CID=268"
+                                    },
+                           "purpose":  "To respond to consultation upon executive proposals for traffic regulation orders to which valid objections have been received and not been resolved or withdrawn.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  24307,
+                                               "name":  "Cllr Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18046,
+                                               "name":  "Cllr Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18031,
+                                               "name":  "Cllr Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24359,
+                                               "name":  "Cllr Mark Howard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24300,
+                                               "name":  "Cllr Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4529,
+                                               "name":  "Cllr Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  24364,
+                                               "name":  "Cllr Jason Preece",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  154,
+                                               "name":  "Cllr Suzanne Williams",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  18091,
+                                               "name":  "Cllr Dr David Willingham",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Joanne Bolton. Email: joanne.bolton@gloucestershire.gov.uk",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "joanne.bolton@gloucestershire.gov.uk"
+                                       }
+                       }
+                   ]
+}

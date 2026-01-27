@@ -1,0 +1,1247 @@
+﻿{
+    "council":  "Cheltenham Borough Council",
+    "generatedUtc":  "2026-01-27T08:24:32.9603296Z",
+    "source":  {
+                   "committeesUrl":  "https://democracy.cheltenham.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://democracy.cheltenham.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  23,
+                   "activeInOutput":  18,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  13,
+                   "withPurposeSuggested":  5
+               },
+    "committees":  [
+                       {
+                           "id":  426,
+                           "title":  "Community Infrastructure Levy ( CIL ) Neighbourhood Panel",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=426",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=426",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=426",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=426",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=426",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=426"
+                                    },
+                           "purpose":  "The CIL Neighbourhood Panel shall oversee and make recommendations to the Cabinet on the allocation of funds from CIL in connection with non- parished areas to ensure CIL serves its purpose of contributing to the delivery of the infrastructure necessary to support development in Cheltenham.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7057,
+                                               "name":  "Councillor Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6451,
+                                               "name":  "Councillor Barbara Clark",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7422,
+                                               "name":  "Councillor Ashleigh Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1498,
+                                               "name":  "Councillor Tony Oliver",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7058,
+                                               "name":  "Councillor Jackie Chelin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  "Reserve"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  449,
+                           "title":  "Disciplinary",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=449",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=449",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=449",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=449",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=449",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=449"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees and supports Council business related to \u0027Disciplinary\u0027 in line with the Council\u0027s constitution and delegated functions.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1347,
+                                               "name":  "Councillor Paul Baker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3055,
+                                               "name":  "Councillor Angie Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7430,
+                                               "name":  "Councillor Julia Chandler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7431,
+                                               "name":  "Councillor Juan Carlos Garcia Clamp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7059,
+                                               "name":  "Councillor Julian Tooke",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  373,
+                           "title":  "Library",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=373",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=373",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=373",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=373",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=373",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=373"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees and supports Council business related to \u0027Library\u0027 in line with the Council\u0027s constitution and delegated functions.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  166,
+                           "title":  "Cabinet",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=166",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=166",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=166",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=166",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=166",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=166"
+                                    },
+                           "purpose":  "The Cabinet is the part of the Council which is responsible for most day-to-day decisions. Cabinet consists of the Leader of the Council and eight Councillors appointed by the Leader. When major decisions are to be discussed or made, these are published in the Cabinet\u0027s Forward Plan in so far as they can be anticipated. If these decisions are to be discussed with council officers at a meeting of the Cabinet, this will generally be open for the public to attend except where personal or confidential matters are being discussed. The Cabinet has to make decisions which are in line with the Council\u0027s overall policies and budget. If it wishes to make a decision which is outside the Budget or Policy Framework, this must be referred to the Council as a whole to decide. There are circumstances in which Cabinet Members may make individual executive decisions and these are set out in an advice note to members, together with the procedure to be followed. Public questions can be asked at meetings of the Cabinet provided that they meet the criteria and are received by 12 noon on the seventh working day before the day of the meeting. More information can be found on our public questions page.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  3095,
+                                               "name":  "Councillor Victoria Atherstone",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1347,
+                                               "name":  "Councillor Paul Baker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1299,
+                                               "name":  "Councillor Flo Clucas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1495,
+                                               "name":  "Councillor Mike Collins",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  121,
+                                               "name":  "Councillor Rowena Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  124,
+                                               "name":  "Councillor Peter Jeffries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6481,
+                                               "name":  "Councillor Alisha Lewis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7056,
+                                               "name":  "Councillor Izaac Tailford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6478,
+                                               "name":  "Councillor Richard Pineger",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264246",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  448,
+                           "title":  "Cabinet Housing Committee",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=448",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=448",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=448",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=448",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=448",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=448"
+                                    },
+                           "purpose":  "The Cabinet Housing Committee is responsible for overseeing the Council’s housing stock. This includes the reviewing of the performance of all housing functions and the engagement of residents in the effective delivery of services. As an advisory committee it has no decision-making powers of its own but may make recommendations to the Cabinet or Council on matters relating to the discharge of their housing functions, insofar as those functions relate to the Council’s housing stock.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7057,
+                                               "name":  "Councillor Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1299,
+                                               "name":  "Councillor Flo Clucas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7059,
+                                               "name":  "Councillor Julian Tooke",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  463,
+                                               "name":  "Councillor Suzanne Williams",
+                                               "role":  "Vice-Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Rhian Watts, Democracy Officer. Tel: 01242 264251",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  279,
+                           "title":  "CONSTITUTION",
+                           "category":  "Constitution",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=279",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=279",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=279",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=279",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=279",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=279"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Council\u0027s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  143,
+                           "title":  "Council",
+                           "category":  "Council",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=143",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=143",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=143",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=143",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=143",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=143"
+                                    },
+                           "purpose":  "Council consists of 40 elected members and is chaired by the Mayor. It is responsible for setting the budget and policy framework within which decisions are made. It elects the Mayor and Deputy Mayor for the forthcoming municipal year and appoints the Leader of the Council and makes appointments to committees. Public questions can be asked at meetings of the Council provided that they meet the criteria and are received by 12 noon on the seventh working day before the day of the meeting. More information can be found on our public questions page.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Dr David Willingham",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1387,
+                                               "name":  "Councillor Martin Horwood",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  7423,
+                                               "name":  "Councillor Frank Allen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7057,
+                                               "name":  "Councillor Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3095,
+                                               "name":  "Councillor Victoria Atherstone",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1347,
+                                               "name":  "Councillor Paul Baker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7061,
+                                               "name":  "Councillor Adrian Bamford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  111,
+                                               "name":  "Councillor Garth Barnes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1437,
+                                               "name":  "Councillor Dilys Barrell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7062,
+                                               "name":  "Councillor Graham Beale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3055,
+                                               "name":  "Councillor Angie Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7058,
+                                               "name":  "Councillor Jackie Chelin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6451,
+                                               "name":  "Councillor Barbara Clark",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7430,
+                                               "name":  "Councillor Julia Chandler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1299,
+                                               "name":  "Councillor Flo Clucas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1495,
+                                               "name":  "Councillor Mike Collins",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7422,
+                                               "name":  "Councillor Ashleigh Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7425,
+                                               "name":  "Councillor Chris Day",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1309,
+                                               "name":  "Councillor Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7431,
+                                               "name":  "Councillor Juan Carlos Garcia Clamp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1500,
+                                               "name":  "Councillor Steve Harvey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  121,
+                                               "name":  "Councillor Rowena Hay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7491,
+                                               "name":  "Councillor Hannah Healy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  123,
+                                               "name":  "Councillor Sandra Holliday",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  124,
+                                               "name":  "Councillor Peter Jeffries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7060,
+                                               "name":  "Councillor Tabi Joy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6481,
+                                               "name":  "Councillor Alisha Lewis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7428,
+                                               "name":  "Councillor Dr Cathal Lynch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1498,
+                                               "name":  "Councillor Tony Oliver",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7429,
+                                               "name":  "Councillor Ben Orme",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7424,
+                                               "name":  "Councillor Dr Helen Pemberton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6478,
+                                               "name":  "Councillor Richard Pineger",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6498,
+                                               "name":  "Councillor Julie Sankey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7290,
+                                               "name":  "Councillor Stan Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7426,
+                                               "name":  "Councillor Dr Steve Steinhardt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7056,
+                                               "name":  "Councillor Izaac Tailford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7059,
+                                               "name":  "Councillor Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  145,
+                                               "name":  "Councillor Simon Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  463,
+                                               "name":  "Councillor Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Team Leader.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264246",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  200,
+                           "title":  "Appointments and Remuneration Committee",
+                           "category":  "Governance",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=200",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=200",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=200",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=200",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=200",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=200"
+                                    },
+                           "purpose":  "The Appointments Committee was set up by Council on 13 December 2010 to conduct the recruitment, assessment and interview process for the appointment of the Chief Executive, Strategic Directors and Assistant Directors. It is also responsible for determining the conditions on which those officers hold office, including deciding matters relating to their early retirement.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  121,
+                                               "name":  "Councillor Rowena Hay",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  3095,
+                                               "name":  "Councillor Victoria Atherstone",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1347,
+                                               "name":  "Councillor Paul Baker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7058,
+                                               "name":  "Councillor Jackie Chelin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6451,
+                                               "name":  "Councillor Barbara Clark",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7431,
+                                               "name":  "Councillor Juan Carlos Garcia Clamp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  124,
+                                               "name":  "Councillor Peter Jeffries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1500,
+                                               "name":  "Councillor Steve Harvey",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Team Leader. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  204,
+                           "title":  "Appointments and Remuneration Sub-Committee",
+                           "category":  "Governance",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=204",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=204",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=204",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=204",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=204",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=204"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees the recruitment/appointment process for senior officers and makes appointment recommendations/decisions in line with the Council\u0027s constitution.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7431,
+                                               "name":  "Councillor Juan Carlos Garcia Clamp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  121,
+                                               "name":  "Councillor Rowena Hay",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1299,
+                                               "name":  "Councillor Flo Clucas",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Bev Thomas, Democratic Services Team Leader. Email: [email protected] 01242 264246",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  165,
+                           "title":  "Audit, Compliance and Governance Committee",
+                           "category":  "Governance",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=165",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=165",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=165",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=165",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=165",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=165"
+                                    },
+                           "purpose":  "The Audit, Compliance and Governance Committee provides a broad-based audit role across all areas of the council, to promote and ensure effective internal control and independent assurance mechanisms. This includes Internal Audit, External Audit, Risk Management, Annual Statement of Accounts, Corporate Governance Framework, Freedom of Information, Counter Fraud and Enforcement, ICT Security, and Standards. To comply with current best practice for audit committees, an Annual Report is produced to summarise the work undertaken by the committee during the previous municipal year and demonstrate that it has fulfilled its terms of reference. Sharing a summary of its activities and achievements serves as a useful reminder of the role of the committee in providing assurance about the council’s governance, risk management and financial and business controls. Audit, Compliance and Governance Annual Report 2025",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7061,
+                                               "name":  "Councillor Adrian Bamford",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  7422,
+                                               "name":  "Councillor Ashleigh Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7425,
+                                               "name":  "Councillor Chris Day",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7428,
+                                               "name":  "Councillor Dr Cathal Lynch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7429,
+                                               "name":  "Councillor Ben Orme",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  7059,
+                                               "name":  "Councillor Julian Tooke",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Dr David Willingham",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264129",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  190,
+                           "title":  "Standards Sub-Committee",
+                           "category":  "Governance",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=190",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=190",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=190",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=190",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=190",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=190"
+                                    },
+                           "purpose":  "The Standards (Hearing) Sub-Committee will consider cases, including those relating to Parish Council Members and Co-opted Members, of an alleged breach of the Members’ Code of Conduct referred by the Monitoring Officer following a report of an Investigating Officer. Click here for more information on making a complaint about the conduct of a Cheltenham Borough Councillor, Co-opted Member or a Parish Councillor. If you have any other queries please contact Democratic Services . More information about the Standards (Hearing) Sub-Committee is available in the Council’s constitution .",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264246",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  460,
+                           "title":  "Joint Overview and Scrutiny Review Panel - Gloucestershire Airport",
+                           "category":  "Overview and Scrutiny",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=460",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=460",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=460",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=460",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=460",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=460"
+                                    },
+                           "purpose":  "The Overview and Scrutiny Joint Overview and Scrutiny Review Panel consists of a cohort of Overview and Scrutiny Committee Members from Gloucester City Council and Cheltenham Borough Council. At the time the Joint Overview and Scrutiny Review Panel was convened, Gloucestershire Airport was a jointly-owned asset of both Councils. In June 2025, both Councils approved a decision to sell Gloucestershire Airport to a recommended bidder. As a large local employer and contributor to the local economy, Overview and Scrutiny Committee Members have retained an interest in the current operations of Gloucestershire Airport, as well as the future of the organisation. The Joint Overview and Scrutiny Review Panel propose to meet on two occasions, initially to consider the latest financial and operational updates from the airport so that they can understand the position facing the potential new owner. Once the sale has taken place, a secondary session will be held to look ahead to the future of Gloucestershire Airport under its new ownership.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7058,
+                                               "name":  "Councillor Jackie Chelin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7422,
+                                               "name":  "Councillor Ashleigh Davies",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7425,
+                                               "name":  "Councillor Chris Day",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7290,
+                                               "name":  "Councillor Stan Smith",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  267,
+                           "title":  "Overview \u0026 Scrutiny Committee",
+                           "category":  "Overview and Scrutiny",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=267",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=267",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=267",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=267",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=267",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=267"
+                                    },
+                           "purpose":  "The Overview and Scrutiny Committee (O\u0026S) has statutory powers to scrutinise decisions the executive is planning to take, those it plans to implement, and those that have already been taken or implemented. O\u0026S can enable improvements to be made to policies or the implementation of those policies, and also has an important role to play in developing policy and improving performance. The Overview and Scrutiny Committee will: -Provide constructive ‘critical friend’ challenge to the executive; -Amplify the voices and concerns of the public; -Be led by independent people who take responsibility for their role; and -Drive improvement in public services in Cheltenham. If you would like to know more about how Overview and Scrutiny operates in the Borough you may find the set of scrutiny guidelines that have been developed useful. These are in the process of being updated. More information about what has been achieved through Overview and Scrutiny in recent years is contained in the Overview and Scrutiny Annual reports: 2020-21 2021-22 2022-23 2023-24 2024-25 If you would like the Overview and Scrutiny Committee to set up a task group to look at a *particular issue then you can contact your Ward Councillor who can put forward the topic on your behalf. * Please note that there is a limit to the amount of task groups that can be in operation at any one time and it will be for the Overview and Scrutiny Committee to decide whether it can investigate the issues that you suggest. The Overview and Scrutiny Committee cannot deal with Planning or Licensing matters or complaints as there are other processes for dealing with them. Are you interested in a particular agenda item? Why not attend a meeting to find out more and see the Overview and Scrutiny Committee in action. Meeting dates/times (past, present and future) are advertised on our website, along with agendas and reports. Perhaps you are interested in a review that a Task Group is about to undertake and you would like to contribute your views on the matter. You can do this by contacting democratic services ( [email protected] ), however, it is best if you can provide these comments at an early stage of any review in order that the Task Group can consider them properly.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7060,
+                                               "name":  "Councillor Tabi Joy",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  7058,
+                                               "name":  "Councillor Jackie Chelin",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  7062,
+                                               "name":  "Councillor Graham Beale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7430,
+                                               "name":  "Councillor Julia Chandler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7425,
+                                               "name":  "Councillor Chris Day",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7431,
+                                               "name":  "Councillor Juan Carlos Garcia Clamp",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  123,
+                                               "name":  "Councillor Sandra Holliday",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7491,
+                                               "name":  "Councillor Hannah Healy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1387,
+                                               "name":  "Councillor Martin Horwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7290,
+                                               "name":  "Councillor Stan Smith",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services. 01242 264130",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  162,
+                           "title":  "Full Licensing Committee",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=162",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=162",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=162",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=162",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=162",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=162"
+                                    },
+                           "purpose":  "The Licensing Committee meets up to 4 times a year, acting as a consultee to Cabinet/Lead Member on policy matters, establishing sub-committees and dealing with relevant briefings, training, updates and policies and reviewing performance.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Dr David Willingham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3055,
+                                               "name":  "Councillor Angie Boyes",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1437,
+                                               "name":  "Councillor Dilys Barrell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1500,
+                                               "name":  "Councillor Steve Harvey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7060,
+                                               "name":  "Councillor Tabi Joy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7424,
+                                               "name":  "Councillor Dr Helen Pemberton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6498,
+                                               "name":  "Councillor Julie Sankey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7426,
+                                               "name":  "Councillor Dr Steve Steinhardt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  145,
+                                               "name":  "Councillor Simon Wheeler",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  6451,
+                                               "name":  "Councillor Barbara Clark",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services. 01242 264130",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264130",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  362,
+                           "title":  "Licensing Sub Committee-Alcohol and Gambling",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=362",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=362",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=362",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=362",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=362",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=362"
+                                    },
+                           "purpose":  "This sub committee has responsibility for functions under the Licensing Act 2003 (alcohol, regulated entertainment and late night refreshment) and Gambling Act 2005. Due to statutory requirements this sub-committee will meet on a case-by-case basis on dates that cannot be set in advance and 3 Members will determine the application. These 3 Members (and 1 reserve) must be chosen from the 10 full Members of the Licensing Committee.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  1437,
+                                               "name":  "Councillor Dilys Barrell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3055,
+                                               "name":  "Councillor Angie Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1500,
+                                               "name":  "Councillor Steve Harvey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7424,
+                                               "name":  "Councillor Dr Helen Pemberton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7060,
+                                               "name":  "Councillor Tabi Joy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6498,
+                                               "name":  "Councillor Julie Sankey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7426,
+                                               "name":  "Councillor Dr Steve Steinhardt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  145,
+                                               "name":  "Councillor Simon Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Dr David Willingham",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services. 01242 264130",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  359,
+                           "title":  "Licensing Sub-Committee - Miscellaneous",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=359",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=359",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=359",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=359",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=359",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=359"
+                                    },
+                           "purpose":  "This sub-committee has responsibility for hackney carriage, private hire and miscellaneous licensing functions, which will include but not be limited to street trading, objects on the highway, scrap metal dealers, charitable collections and animal establishments. This sub-committee will normally meet monthly and the dates of the meetings have been set in advance. .",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  3055,
+                                               "name":  "Councillor Angie Boyes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7424,
+                                               "name":  "Councillor Dr Helen Pemberton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6498,
+                                               "name":  "Councillor Julie Sankey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  145,
+                                               "name":  "Councillor Simon Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Dr David Willingham",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264130",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  119,
+                           "title":  "Planning Committee",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=119",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=119",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=119",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=119",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=119",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=119"
+                                    },
+                           "purpose":  "Most planning applications received by the council are decided by a planning officer. However, some applications are decided at the monthly planning committee. These are usually high-profile cases which have generated public interest. The planning officers prepare a detailed report for each application considered by the committee. This report includes an assessment of the proposal, comments from consultees (such as the Environment Agency, the local Civic Society, and internal sources such as conservation and tree officers) and any written submissions sent by members of the public. The report ends with a recommendation to the members. Photographs and plans are available to assist committee members in their considerations. Council officers attend the meeting to advise members and to answer any questions arising from the debates. The committee can approve, refuse or (occasionally) defer an application. Decision notices are issued within two working days of the committee meeting via Public Access . We encourage public involvement in the planning process and members of the public have the opportunity to put their views on a planning proposal direct to the planning committee. The opportunity to speak at the planning committee is in addition to the statutory process of written submissions. One speaker in support and one in objection is allowed to speak, in addition to ward and parish councillors. For more information about speaking at planning committee please read our guide on having your say at planning committee .",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  7423,
+                                               "name":  "Councillor Frank Allen",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  7057,
+                                               "name":  "Councillor Glenn Andrews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7061,
+                                               "name":  "Councillor Adrian Bamford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  111,
+                                               "name":  "Councillor Garth Barnes",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  6451,
+                                               "name":  "Councillor Barbara Clark",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7421,
+                                               "name":  "Councillor Jan Foster",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1309,
+                                               "name":  "Councillor Iain Dobie",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1498,
+                                               "name":  "Councillor Tony Oliver",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7426,
+                                               "name":  "Councillor Dr Steve Steinhardt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  145,
+                                               "name":  "Councillor Simon Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  463,
+                                               "name":  "Councillor Suzanne Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services. Tel: 01242 264251",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01242 264251",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  281,
+                           "title":  "Appeals",
+                           "category":  "Working Groups and Panels",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.cheltenham.gov.uk/mgCommitteeDetails.aspx?ID=281",
+                                        "meetings":  "https://democracy.cheltenham.gov.uk/ieListMeetings.aspx?CommitteeId=281",
+                                        "membersContact":  "https://democracy.cheltenham.gov.uk/mgCommitteeMailingList.aspx?ID=281",
+                                        "attendance":  "https://democracy.cheltenham.gov.uk/mgAttendanceSummary.aspx?RPID=281",
+                                        "interests":  "https://democracy.cheltenham.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=281",
+                                        "rss":  "https://democracy.cheltenham.gov.uk/mgRss.aspx?CID=281"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Hears appeals against officer decisions and reviews cases within the committee\u0027s delegated authority, ensuring fair and transparent decision-making.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  124,
+                                               "name":  "Councillor Peter Jeffries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7428,
+                                               "name":  "Councillor Dr Cathal Lynch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7424,
+                                               "name":  "Councillor Dr Helen Pemberton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7056,
+                                               "name":  "Councillor Izaac Tailford",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       }
+                   ]
+}

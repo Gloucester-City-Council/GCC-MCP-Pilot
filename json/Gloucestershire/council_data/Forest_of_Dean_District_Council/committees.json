@@ -1,0 +1,933 @@
+﻿{
+    "council":  "Forest of Dean District Council",
+    "generatedUtc":  "2026-01-27T08:25:00.6328083Z",
+    "source":  {
+                   "committeesUrl":  "https://meetings.fdean.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://meetings.fdean.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  29,
+                   "activeInOutput":  9,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  6,
+                   "withPurposeSuggested":  3
+               },
+    "committees":  [
+                       {
+                           "id":  123,
+                           "title":  "Audit Committee",
+                           "category":  "Audit Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=123",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=123",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=123",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=123",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=123",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=123"
+                                    },
+                           "purpose":  "· Monitors the work of the internal audit team, including risk management and assurance. · Monitors Audit Commission reports. · Responsible for, risk management, the statement of internal control and signing off the final accounts.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  4298,
+                                               "name":  "Councillor Harry Ives",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  816,
+                                               "name":  "Councillor Clive Elsmore",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5660,
+                                               "name":  "Councillor Alison Bruce",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5676,
+                                               "name":  "Councillor Andrew McDermid",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5674,
+                                               "name":  "Councillor Jacob Sanders",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  825,
+                                               "name":  "Councillor Julia Gooch",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sue Robus.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812624",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  115,
+                           "title":  "Cabinet",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=115",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=115",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=115",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=115",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=115",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=115"
+                                    },
+                           "purpose":  "· Makes operational decisions within council policy and proposes the annual budget. · Receives recommendations from the scrutiny committees and task groups. Recommends new policies to council and decides how they are delivered within agreed budgets. · The work programme is updated each month. · Members have specialist areas of interest (portfolios). · Meets in public every month apart from August.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  823,
+                                               "name":  "Councillor Jackie Fraser",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4303,
+                                               "name":  "Councillor Andy Moore",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  5661,
+                                               "name":  "Councillor Adrian Birch",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  5658,
+                                               "name":  "Councillor Johnathan Lane",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2819,
+                                               "name":  "Councillor Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3003,
+                                               "name":  "Councillor Sid Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5980,
+                                               "name":  "Councillor Jackie Dale",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sue Robus.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812624",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  297,
+                           "title":  "Appointments Committee.",
+                           "category":  "Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=297",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=297",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=297",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=297",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=297",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=297"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees the recruitment/appointment process for senior officers and makes appointment recommendations/decisions in line with the Council\u0027s constitution.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  5661,
+                                               "name":  "Councillor Adrian Birch",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  126,
+                                               "name":  "Councillor Philip Burford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  825,
+                                               "name":  "Councillor Julia Gooch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3003,
+                                               "name":  "Councillor Sid Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5674,
+                                               "name":  "Councillor Jacob Sanders",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4168,
+                                               "name":  "Councillor Clayton Williams",
+                                               "role":  "Deputy Chair"
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  389,
+                           "title":  "Standards Panel",
+                           "category":  "Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=389",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=389",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=389",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=389",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=389",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=389"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Supports and determines matters relating to member conduct and standards, including hearings/panels where applicable.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Sue Robus.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812624",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  273,
+                           "title":  "Constitution",
+                           "category":  "Constitution",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=273",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=273",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=273",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=273",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=273",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=273"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Council\u0027s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  108,
+                                               "name":  "Councillor James Bevan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5661,
+                                               "name":  "Councillor Adrian Birch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5660,
+                                               "name":  "Councillor Alison Bruce",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  126,
+                                               "name":  "Councillor Philip Burford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5683,
+                                               "name":  "Councillor Richard Burton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5980,
+                                               "name":  "Councillor Jackie Dale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  816,
+                                               "name":  "Councillor Clive Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5473,
+                                               "name":  "Councillor Jamie Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4304,
+                                               "name":  "Councillor Nick Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5643,
+                                               "name":  "Councillor John Francis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  823,
+                                               "name":  "Councillor Jackie Fraser",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  825,
+                                               "name":  "Councillor Julia Gooch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1523,
+                                               "name":  "Councillor Tim Gwilliam MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4298,
+                                               "name":  "Councillor Harry Ives",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5723,
+                                               "name":  "Councillor Gillian Kilmurray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5684,
+                                               "name":  "Councillor Patrick Kyne",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5658,
+                                               "name":  "Councillor Johnathan Lane",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5682,
+                                               "name":  "Councillor Beth Llewellyn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  140,
+                                               "name":  "Councillor Di Martin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5676,
+                                               "name":  "Councillor Andrew McDermid",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2819,
+                                               "name":  "Councillor Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4303,
+                                               "name":  "Councillor Andy Moore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4373,
+                                               "name":  "Councillor Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  819,
+                                               "name":  "Councillor Bernie O\u0027Neill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3003,
+                                               "name":  "Councillor Sid Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2562,
+                                               "name":  "Councillor Simon Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  143,
+                                               "name":  "Councillor Alan Preest",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5674,
+                                               "name":  "Councillor Jacob Sanders",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5472,
+                                               "name":  "Councillor Shaun Stammers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4299,
+                                               "name":  "Councillor Mark Topping",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5657,
+                                               "name":  "Councillor Dave Tradgett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4295,
+                                               "name":  "Councillor Mark Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4301,
+                                               "name":  "Councillor David Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  824,
+                                               "name":  "Councillor Ian Whitburn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4168,
+                                               "name":  "Councillor Clayton Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  120,
+                           "title":  "Full Council",
+                           "category":  "Council",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=120",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=120",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=120",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=120",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=120",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=120"
+                                    },
+                           "purpose":  "· Decides key strategic policies. · Sets budgets. · Agrees changes to the constitution. · Appoints committees, the leader and deputy leader and members to external bodies. · Meets in public 6 times a year.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6370,
+                                               "name":  "Councillor Jonathan Beeston",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  108,
+                                               "name":  "Councillor James Bevan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5661,
+                                               "name":  "Councillor Adrian Birch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5660,
+                                               "name":  "Councillor Alison Bruce",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  126,
+                                               "name":  "Councillor Philip Burford",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5683,
+                                               "name":  "Councillor Richard Burton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5980,
+                                               "name":  "Councillor Jackie Dale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  816,
+                                               "name":  "Councillor Clive Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5473,
+                                               "name":  "Councillor Jamie Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4304,
+                                               "name":  "Councillor Nick Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5643,
+                                               "name":  "Councillor John Francis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  823,
+                                               "name":  "Councillor Jackie Fraser",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  825,
+                                               "name":  "Councillor Julia Gooch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6371,
+                                               "name":  "Councillor Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1523,
+                                               "name":  "Councillor Tim Gwilliam MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4298,
+                                               "name":  "Councillor Harry Ives",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5723,
+                                               "name":  "Councillor Gillian Kilmurray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5684,
+                                               "name":  "Councillor Patrick Kyne",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5658,
+                                               "name":  "Councillor Johnathan Lane",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5682,
+                                               "name":  "Councillor Beth Llewellyn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  140,
+                                               "name":  "Councillor Di Martin",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  5676,
+                                               "name":  "Councillor Andrew McDermid",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2819,
+                                               "name":  "Councillor Chris McFarling",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4303,
+                                               "name":  "Councillor Andy Moore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4373,
+                                               "name":  "Councillor Gill Moseley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  819,
+                                               "name":  "Councillor Bernie O\u0027Neill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  3003,
+                                               "name":  "Councillor Sid Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2562,
+                                               "name":  "Councillor Simon Phelps",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  143,
+                                               "name":  "Councillor Alan Preest",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5674,
+                                               "name":  "Councillor Jacob Sanders",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5472,
+                                               "name":  "Councillor Shaun Stammers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4299,
+                                               "name":  "Councillor Mark Topping",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5657,
+                                               "name":  "Councillor Dave Tradgett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4295,
+                                               "name":  "Councillor Mark Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4301,
+                                               "name":  "Councillor David Wheeler",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  824,
+                                               "name":  "Councillor Ian Whitburn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4168,
+                                               "name":  "Councillor Clayton Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Julie Jones.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812624",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  121,
+                           "title":  "Licensing Committee",
+                           "category":  "Licensing Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=121",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=121",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=121",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=121",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=121",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=121"
+                                    },
+                           "purpose":  "· Quasi judicial (has some limited legal powers). · Determines those licensing applications not determined by the Head of Health and Environment under the Council’s officer delegation scheme. · Meetings take place in public as and when necessary following receipt of representations (objections). · Will hold hearings into applications for licences.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  5660,
+                                               "name":  "Councillor Alison Bruce",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5684,
+                                               "name":  "Councillor Patrick Kyne",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  5682,
+                                               "name":  "Councillor Beth Llewellyn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  819,
+                                               "name":  "Councillor Bernie O\u0027Neill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  143,
+                                               "name":  "Councillor Alan Preest",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4299,
+                                               "name":  "Councillor Mark Topping",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4295,
+                                               "name":  "Councillor Mark Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  824,
+                                               "name":  "Councillor Ian Whitburn",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  4168,
+                                               "name":  "Councillor Clayton Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Leanne Drew.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812621",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  245,
+                           "title":  "Development Management Committee",
+                           "category":  "Planning Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=245",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=245",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=245",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=245",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=245",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=245"
+                                    },
+                           "purpose":  "· Quasi judicial (has some limited legal powers). · Determines those planning applications not determined by the Group Manager for Planning and Housing under the Council’s officer delegation scheme. · Advises on planning policy and operations. · Meets in public every month.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6370,
+                                               "name":  "Councillor Jonathan Beeston",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5643,
+                                               "name":  "Councillor John Francis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  825,
+                                               "name":  "Councillor Julia Gooch",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6371,
+                                               "name":  "Councillor Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5684,
+                                               "name":  "Councillor Patrick Kyne",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5682,
+                                               "name":  "Councillor Beth Llewellyn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5676,
+                                               "name":  "Councillor Andrew McDermid",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4373,
+                                               "name":  "Councillor Gill Moseley",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  2562,
+                                               "name":  "Councillor Simon Phelps",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5657,
+                                               "name":  "Councillor Dave Tradgett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4301,
+                                               "name":  "Councillor David Wheeler",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  4168,
+                                               "name":  "Councillor Clayton Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Leanne Drew.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812204",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  233,
+                           "title":  "Overview and Scrutiny Committee",
+                           "category":  "Scrutiny Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://meetings.fdean.gov.uk/mgCommitteeDetails.aspx?ID=233",
+                                        "meetings":  "https://meetings.fdean.gov.uk/ieListMeetings.aspx?CommitteeId=233",
+                                        "membersContact":  "https://meetings.fdean.gov.uk/mgCommitteeMailingList.aspx?ID=233",
+                                        "attendance":  "https://meetings.fdean.gov.uk/mgAttendanceSummary.aspx?RPID=233",
+                                        "interests":  "https://meetings.fdean.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=233",
+                                        "rss":  "https://meetings.fdean.gov.uk/mgRss.aspx?CID=233"
+                                    },
+                           "purpose":  "· Deals with issues relating to the planning, performance and management of council services, including value for money and issues affecting the local community. · Checks on the Cabinet’s work as a critical friend. · Focuses on policy review and development alongside scrutiny of external organisations. · Forms permanent working groups and task groups to look at particular issues. · Meets in public six times a year.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  816,
+                                               "name":  "Councillor Clive Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5473,
+                                               "name":  "Councillor Jamie Elsmore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4304,
+                                               "name":  "Councillor Nick Evans",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  5643,
+                                               "name":  "Councillor John Francis",
+                                               "role":  "Vice Chair"
+                                           },
+                                           {
+                                               "uid":  6371,
+                                               "name":  "Councillor Stuart Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1523,
+                                               "name":  "Councillor Tim Gwilliam MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5723,
+                                               "name":  "Councillor Gillian Kilmurray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5682,
+                                               "name":  "Councillor Beth Llewellyn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  140,
+                                               "name":  "Councillor Di Martin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5676,
+                                               "name":  "Councillor Andrew McDermid",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5680,
+                                               "name":  "Councillor Trevor Roach",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5657,
+                                               "name":  "Councillor Dave Tradgett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4301,
+                                               "name":  "Councillor David Wheeler",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Leanne Drew.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01594 812204",
+                                           "email":  null
+                                       }
+                       }
+                   ]
+}

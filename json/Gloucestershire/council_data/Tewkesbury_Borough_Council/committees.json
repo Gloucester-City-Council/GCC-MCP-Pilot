@@ -1,0 +1,1107 @@
+﻿{
+    "council":  "Tewkesbury Borough Council",
+    "generatedUtc":  "2026-01-27T08:24:04.7719470Z",
+    "source":  {
+                   "committeesUrl":  "https://minutes.tewkesbury.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://minutes.tewkesbury.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  40,
+                   "activeInOutput":  15,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  9,
+                   "withPurposeSuggested":  6
+               },
+    "committees":  [
+                       {
+                           "id":  1213,
+                           "title":  "Chief Executive Appointment Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1213",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1213",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1213",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1213",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1213",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1213"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees and supports Council business related to \u0027Chief Executive Appointment Committee\u0027 in line with the Council\u0027s constitution and delegated functions.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1236,
+                           "title":  "Community Infrastructure Levy (CIL) Joint Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1236",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1236",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1236",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1236",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1236",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1236"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Joint committee working in partnership with other authorities or organisations on shared services, strategic initiatives, or statutory requirements.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  6533,
+                                               "name":  "Councillor Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4114,
+                                               "name":  "Councillor Richard Stanley",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: (01684) 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  256,
+                           "title":  "Council",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=256",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=256",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=256",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=256",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=256",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=256"
+                                    },
+                           "purpose":  "The Council comprises 38 Members and exercises the following functions:- · Adoption of the Constitution and any subsequent changes to it · Formulating, approving and adopting the Policy Framework and the Budget · Agreeing and/or amending the Terms of Reference for Committees, deciding on their composition and making appointments to them · Determining matters which have been called in by a Scrutiny Committee and where the recommendation of a Scrutiny Committee is not accepted by the Policy Committee · Considering Motions submitted by Councillors · Considering recommendations from the Scrutiny Committees and from the Policy Committees in respect of new policy initiatives · Considering the electoral arrangements of a Parish including any change of name · Electing the Mayor and appointing the new Deputy Mayor annually · Agreeing and/or amending the Work Programme proposed by the Scrutiny Committees including deciding upon the Best Value Service Review priorities · Appointing Councillors to be representatives of the Council on outside bodies unless the appointment has been delegated by the Council · Adopting a scheme of Members\u0027 allowances · Changing the name of the Borough · Conferring the title of Honorary Alderman/Freeman · Confirming the appointment of the Head of Paid Service and Chief Officers · Determining any delegation to Officers which does not fall within the purview of any Committee · Making, amending, revoking, re-enacting or adopting byelaws and promoting or opposing the making of local legislation or personal bills · Facilitating opportunities for voicing the concerns of the local community and adopting a community leadership role, promoting the \"social, economic and environmental well being\" of the area; and All other matters that by law must be reserved to the Council",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6526,
+                                               "name":  "Councillor Nigel Adcock",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6527,
+                                               "name":  "Councillor Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7028,
+                                               "name":  "Councillor Graham Bocking",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6528,
+                                               "name":  "Councillor Hilarie Bowman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6529,
+                                               "name":  "Councillor Thomas Budge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4101,
+                                               "name":  "Councillor Craig Carter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4102,
+                                               "name":  "Councillor Cate Cody",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6530,
+                                               "name":  "Councillor Christopher Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6531,
+                                               "name":  "Councillor Matt Dimond-Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6532,
+                                               "name":  "Councillor Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1310,
+                                               "name":  "Councillor Pauline Godwin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1311,
+                                               "name":  "Councillor Mel Gore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4104,
+                                               "name":  "Councillor David Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6533,
+                                               "name":  "Councillor Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4105,
+                                               "name":  "Councillor Deborah Harwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6534,
+                                               "name":  "Councillor Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4106,
+                                               "name":  "Councillor Mary Jordan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6535,
+                                               "name":  "Councillor Gemma Madle",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  28,
+                                               "name":  "Councillor Jim Mason",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1315,
+                                               "name":  "Councillor Heather McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4107,
+                                               "name":  "Councillor Paul McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5457,
+                                               "name":  "Councillor Charlotte Mills",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5477,
+                                               "name":  "Councillor Jason Mills",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6536,
+                                               "name":  "Councillor Kashan Pervaiz",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  7015,
+                                               "name":  "Councillor Rojina Pradhan Rai",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6538,
+                                               "name":  "Councillor Liz Skelt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4111,
+                                               "name":  "Councillor Jill Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4112,
+                                               "name":  "Councillor Paul Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  35,
+                                               "name":  "Councillor Richard Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4114,
+                                               "name":  "Councillor Richard Stanley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6539,
+                                               "name":  "Councillor Murray Stewart",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6540,
+                                               "name":  "Councillor Helena Sundarajoo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  39,
+                                               "name":  "Councillor Mike Sztymiak",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  41,
+                                               "name":  "Councillor Robert Vines",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  42,
+                                               "name":  "Councillor Mark Williams",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  194,
+                                               "name":  "Councillor Philip Workman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6541,
+                                               "name":  "Councillor Ian Yates",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1142,
+                           "title":  "Employee Appointments/Disciplinary Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1142",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1142",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1142",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1142",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1142",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1142"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees the recruitment/appointment process for senior officers and makes appointment recommendations/decisions in line with the Council\u0027s constitution.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  4102,
+                                               "name":  "Councillor Cate Cody",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4106,
+                                               "name":  "Councillor Mary Jordan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  28,
+                                               "name":  "Councillor Jim Mason",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6536,
+                                               "name":  "Councillor Kashan Pervaiz",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  39,
+                                               "name":  "Councillor Mike Sztymiak",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1221,
+                           "title":  "Executive Director: Place Appointment Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1221",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1221",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1221",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1221",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1221",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1221"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees and supports Council business related to \u0027Executive Director: Place Appointment Committee\u0027 in line with the Council\u0027s constitution and delegated functions.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  4102,
+                                               "name":  "Councillor Cate Cody",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4105,
+                                               "name":  "Councillor Deborah Harwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4106,
+                                               "name":  "Councillor Mary Jordan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  28,
+                                               "name":  "Councillor Jim Mason",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  35,
+                                               "name":  "Councillor Richard Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  41,
+                                               "name":  "Councillor Robert Vines",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1197,
+                           "title":  "Horsford Trust Management Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1197",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1197",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1197",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1197",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1197",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1197"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Manages the relevant trust/asset and associated governance, including oversight of operations, funding, and stewardship responsibilities.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  6528,
+                                               "name":  "Councillor Hilarie Bowman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4102,
+                                               "name":  "Councillor Cate Cody",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6531,
+                                               "name":  "Councillor Matt Dimond-Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6540,
+                                               "name":  "Councillor Helena Sundarajoo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  39,
+                                               "name":  "Councillor Mike Sztymiak",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  194,
+                                               "name":  "Councillor Philip Workman",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1195,
+                           "title":  "Tewkesbury Borough Council Constitution - Reviewed 2019",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1195",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1195",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1195",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1195",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1195",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1195"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Council\u0027s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  1029,
+                           "title":  "Executive",
+                           "category":  "Policy",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1029",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1029",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1029",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1029",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1029",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1029"
+                                    },
+                           "purpose":  "The Executive Committee comprises 12 Members and its Chair and Vice-Chair are the Leader and Deputy Leader of the Council respectively. Its role is: · To formulate and develop, for adoption by Council, those policies and strategies which comprise the policy framework. · To review and monitor the operation of the policy framework and to recommend to Council proposals for new initiatives and policy developments. · To devise, review, revise and determine all policies and strategies which are not within the scope of the policy framework. · To implement those policies, duties and responsibilities in respect of the Council’s functions which are not otherwise the responsibility of Council, or other Committees. · To prepare a forward plan on a quarterly basis comprising key decisions. The forward plan will be reviewed at each scheduled meeting of the Committee. · To monitor the Council’s Performance Indicators and ensure that action is taken to review and prepare action plans for improvement if necessary in respect of those key Performance Indicators that meet the Council’s priorities. · To provide the lead on all matters of Improvement and deliver on the Council’s Improvement Plan. · To formulate the annual budget including capital and revenue spending in accordance with the Council’s priorities and make recommendations to the Council on Council Tax levels. · To take decisions on spending within the annual budget to ensure delivery of the Council’s priorities. · To provide the lead on partnership working including the joint delivery of services. · To take the lead on community leadership and consultation with stakeholders. · To determine capital grant applications. · To fulfil the Council’s responsibilities in respect of risk management. · To monitor and review the staffing and decision-making structures of the Council and recommend any changes to Council. · To receive reports from Lead Members as appropriate. · To receive, as the parent Committee, reports and recommendations from Working Groups appointed by the Committee. · To determine requests on a case by case basis for Council Tax to be reduced under the locally defined Council Tax discount.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  4102,
+                                               "name":  "Councillor Cate Cody",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6532,
+                                               "name":  "Councillor Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4104,
+                                               "name":  "Councillor David Gray",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6533,
+                                               "name":  "Councillor Sarah Hands",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  4105,
+                                               "name":  "Councillor Deborah Harwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6534,
+                                               "name":  "Councillor Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6535,
+                                               "name":  "Councillor Gemma Madle",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  28,
+                                               "name":  "Councillor Jim Mason",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4111,
+                                               "name":  "Councillor Jill Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4114,
+                                               "name":  "Councillor Richard Stanley",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  6539,
+                                               "name":  "Councillor Murray Stewart",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  39,
+                                               "name":  "Councillor Mike Sztymiak",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1204,
+                           "title":  "Audit and Governance Committee",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1204",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1204",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1204",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1204",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1204",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1204"
+                                    },
+                           "purpose":  "The Audit and Governance Committee comprises of 9 Members and its role is: Audit · To approve the internal audit charter. · To approve the internal audit plan and monitor delivery of the plan. · To review reports from the Chief Audit Executive on work undertaken by internal audit, consider the main issues arising and seek assurance that action is being taken where necessary. · To receive a specific report from the Chief Audit Executive on the status of internal audit recommendations, seeking assurance they have been implemented. On occasions of non-implementation, to challenge why this is the case and that future action is planned for implementation. If necessary, the Committee has authority to ‘call in’ appropriate officers. · To approve the Chief Audit Executive’s annual report and opinion on the overall adequacy and effectiveness of the council’s framework of governance, risk management and control together with a summary of internal audit activity supporting the opinion and the level of assurance it can give over the Council’s corporate governance arrangements. · To consider summaries of specific Internal Audit reports as requested. · To receive reports outlining the action taken where the Chief Audit Executive has concluded that management had accepted a level of risk that may be unacceptable to the Council, or there were concerns about the progress with the implementation of agreed actions. · To consider the internal audit quality assurance and improvement programme and, in particular, to the external assessment of internal audit that takes place at least once every five years. · To approve the letters of representation required by the external auditor and to consider the external auditor’s annual letter, audit opinion, relevant reports, and the report to those charged with governance. · To consider specific reports as agreed with the external auditor. · To comment on the scope and depth of external audit work and to ensure it gives value for money. · Consider appointment of the Council’s external auditor proposed by the appointing person under the Local Audit (Appointing Person) Regulations 2015 and assess whether there are any valid reasons for the Council to object. · To commission additional work from internal audit and the external auditor as necessary. · To prepare an annual report on the Committee’s performance in relation to the Terms of Reference and the effectiveness of the Committee in meetings its purpose. Governance and Financial Reporting · To review and consider the Council’s corporate governance arrangements ensuring they adhere to best practice, and to receive specific reports on governance related items when required. · To approve the Annual Governance Statement and monitor delivery of any significant governance issues arising. · To consider the Council’s arrangements to secure value for money and review assurances and assessments on the effectiveness of these arrangements. · To review the corporate risk register and seek assurance it is reflective of the Council’s risk environment and that key risks are effectively managed. · To review and consider any changes to the Council’s risk management strategy and recommend the strategy to Executive Committee for approval. · To consider the external auditor’s report arising from the audit of the Council’s accounts and to approve the accounts on an annual basis, ensuring that appropriate accounting policies have been followed and to identify whether there are concerns arising that need to be brought to the attention of the Council. · To be responsible for the scrutiny of the Council’s treasury management function. · To approve and monitor Council policies on whistleblowing and the anti-fraud, corruption and bribery strategy and to make recommendations to the Executive Committee as appropriate. · To consider and review on an annual basis a report on the Council’s health and safety arrangements and to take appropriate action where necessary.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6528,
+                                               "name":  "Councillor Hilarie Bowman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6532,
+                                               "name":  "Councillor Stewart Dove",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  4104,
+                                               "name":  "Councillor David Gray",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  4107,
+                                               "name":  "Councillor Paul McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5477,
+                                               "name":  "Councillor Jason Mills",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4112,
+                                               "name":  "Councillor Paul Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  35,
+                                               "name":  "Councillor Richard Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  39,
+                                               "name":  "Councillor Mike Sztymiak",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  257,
+                           "title":  "Licensing",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=257",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=257",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=257",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=257",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=257",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=257"
+                                    },
+                           "purpose":  "The Licensing Committee meets to determine matters relating to licensing and registration. Meetings of the Committee are open to the public. Matters considered may include applications for public entertainment licences or street trading consents, or renewal or variation of existing licences or consents.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6526,
+                                               "name":  "Councillor Nigel Adcock",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6527,
+                                               "name":  "Councillor Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7028,
+                                               "name":  "Councillor Graham Bocking",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4101,
+                                               "name":  "Councillor Craig Carter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6530,
+                                               "name":  "Councillor Christopher Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1310,
+                                               "name":  "Councillor Pauline Godwin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6533,
+                                               "name":  "Councillor Sarah Hands",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6534,
+                                               "name":  "Councillor Alex Hegenbarth",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1315,
+                                               "name":  "Councillor Heather McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5457,
+                                               "name":  "Councillor Charlotte Mills",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  35,
+                                               "name":  "Councillor Richard Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6540,
+                                               "name":  "Councillor Helena Sundarajoo",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  41,
+                                               "name":  "Councillor Robert Vines",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  42,
+                                               "name":  "Councillor Mark Williams",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1019,
+                           "title":  "Licensing Sub-Committee (Licensing Act 2003 and Gambling Act 2005)",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1019",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1019",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1019",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1019",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1019",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1019"
+                                    },
+                           "purpose":  "The Sub-Committee will comprise 3 Members of the Licensing Committee. The 3 Members of the Licensing Sub-Committee will be drawn by the Borough Solicitor from the 15 Members of the Licensing Committee. The first item of business will be the election of a Chairman for the hearing. Upon election the Chairman will remind Members of the Sub-Committee of their obligation to declare any personal and prejudicial interests. The quorum of the Sub-Committee will be 3. The Sub-Committee will exercise the licensing powers and duties of the Council in respect of: i ) Licensing Act 2003 ii) Gambling Act 2005",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1056,
+                           "title":  "Licensing Sub-Committee (Street Trading and Hackney Carriage and Private Hire Vehicles, Drivers and Operators)",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1056",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1056",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1056",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1056",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1056",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1056"
+                                    },
+                           "purpose":  "The Sub-Committee will comprise 3 Members of the Licensing Committee. The 3 Members of the Licensing Sub-Committee will be drawn by the Borough Solicitor from the 15 Members of the Licensing Committee. The first item of business will be the election of a Chairman for the hearing. Upon election the Chairman will remind Members of the Sub-Committee of their obligation to declare any personal and prejudicial interests. The quorum of the Sub-Committee will be 3. The Sub-Committee will exercise the licensing powers and duties of the Council in respect of: i) Street Trading ii) Hackney Carriage and Private Hire Vehicles, Drivers and Operators This will include the determination of applications for Licences and Consents together with hearings for the suspension or revocation of Licences and Consents.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  249,
+                           "title":  "Planning",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=249",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=249",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=249",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=249",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=249",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=249"
+                                    },
+                           "purpose":  "To exercise all powers and duties of the Council on the following matters: · development control and appeals (including development briefs, where appropriate) · enforcement of planning control · building preservation, listed building and conservation areas · making of tree preservation orders · hedgerow protection · control of advertisements · footpath orders. To make representations/objections to applications for heavy goods operators licences in accordance with appropriate legislation. To comment on development related applications submitted by and to other local authorities upon which the Council is invited to comment. The Planning Committee normally meets on every third Tuesday of the month, at 9.30am in the Severn room at Tewkesbury Borough Council Offices to consider applications for planning permission and other matters as shown under the Committee’s Terms of Reference. Meetings of the Planning Committee are open to the public. In addition to the written reports given with recommendations, a schedule of consultation replies and representations received after the report was prepared (the Additional Representations Sheet) will be available at the meeting and further oral reports may be made as appropriate during the meeting. A t its meeting on 17 May 2016, the Council resolved that the Scheme for Public Participation at Planning Committee be confirmed as a permanent arrangement following a one year trial period. Details of the scheme and how to register can be found in our information leaflet.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6529,
+                                               "name":  "Councillor Thomas Budge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6531,
+                                               "name":  "Councillor Matt Dimond-Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1311,
+                                               "name":  "Councillor Mel Gore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4105,
+                                               "name":  "Councillor Deborah Harwood",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4106,
+                                               "name":  "Councillor Mary Jordan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  28,
+                                               "name":  "Councillor Jim Mason",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  4112,
+                                               "name":  "Councillor Paul Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  35,
+                                               "name":  "Councillor Richard Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  41,
+                                               "name":  "Councillor Robert Vines",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  194,
+                                               "name":  "Councillor Philip Workman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6541,
+                                               "name":  "Councillor Ian Yates",
+                                               "role":  "Vice-Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services, Tel: (01684) 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1127,
+                           "title":  "Standards Committee",
+                           "category":  "Regulatory",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1127",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1127",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1127",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1127",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1127",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1127"
+                                    },
+                           "purpose":  "The Standards Committee comprises 7 Members of the Council. In addition there are 2 Independent Persons and 3 Parish Council representatives who are co-opted, non-voting members that act in an advisory capacity. The role of the Standards Committee is to promote and maintain high standards of conduct and to assist Members to observe the Code of Conduct. It will also determine applications for dispensation, in the appropriate circumstances; prepare, monitor and review Codes and Protocols to support the Code of Conduct; and consider reports from the Monitoring Officer on the number of complaints received. The Standards Committee will also establish a Hearings Sub-Committee as necessary (comprising of 3 voting Members of the Committee) to hear cases, including those of Parish/Town Councillors and co-opted Members, of alleged breaches of the Member Code of Conduct following a report of the Investigating Officer. If you have a complaint that a Borough or Parish/Town Councillor has breached their Authority’s Code of Conduct you should write to the Monitoring Officer at the following address outlining your complaint and the reasons that you feel the Councillor has breached the Code of Conduct: The Monitoring Officer Tewkesbury Borough Council Offices Gloucester Road Tewkesbury Glos GL20 5TT (Please note that the Parish/Town Council Codes of Conduct vary and a copy of the relevant Code can be obtained from the Parish Clerk or the Monitoring Officer Tel: 01684 272011. Tewkesbury Borough Council’s Code of Conduct can be obtained from Democratic Services Tel: 01684 272021 or email [email protected] ).",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6532,
+                                               "name":  "Councillor Stewart Dove",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4107,
+                                               "name":  "Councillor Paul McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6528,
+                                               "name":  "Councillor Hilarie Bowman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  4112,
+                                               "name":  "Councillor Paul Smith",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  42,
+                                               "name":  "Councillor Mark Williams",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  194,
+                                               "name":  "Councillor Philip Workman",
+                                               "role":  "Chair"
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  1030,
+                           "title":  "Overview and Scrutiny",
+                           "category":  "Scrutiny",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://minutes.tewkesbury.gov.uk/mgCommitteeDetails.aspx?ID=1030",
+                                        "meetings":  "https://minutes.tewkesbury.gov.uk/ieListMeetings.aspx?CommitteeId=1030",
+                                        "membersContact":  "https://minutes.tewkesbury.gov.uk/mgCommitteeMailingList.aspx?ID=1030",
+                                        "attendance":  "https://minutes.tewkesbury.gov.uk/mgAttendanceSummary.aspx?RPID=1030",
+                                        "interests":  "https://minutes.tewkesbury.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=1030",
+                                        "rss":  "https://minutes.tewkesbury.gov.uk/mgRss.aspx?CID=1030"
+                                    },
+                           "purpose":  "The Overview and Scrutiny Committee comprises 15 Members and its role includes: · Review and scrutinise Council policy and the decisions and performance of the Council’s Committees, issues of local concern and the scrutiny of other public bodies · Assist Council and Executive Committee in policy formulation and review · Exercise the right of call-in for reconsideration of decisions made, but not implemented by the Executive Committee · Consider any matter affecting the borough or its inhabitants",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  6526,
+                                               "name":  "Councillor Nigel Adcock",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6527,
+                                               "name":  "Councillor Cheryl Agg",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  7028,
+                                               "name":  "Councillor Graham Bocking",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6528,
+                                               "name":  "Councillor Hilarie Bowman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  4101,
+                                               "name":  "Councillor Craig Carter",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  6530,
+                                               "name":  "Councillor Christopher Coleman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6531,
+                                               "name":  "Councillor Matt Dimond-Brown",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1310,
+                                               "name":  "Councillor Pauline Godwin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1315,
+                                               "name":  "Councillor Heather McLain",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  5457,
+                                               "name":  "Councillor Charlotte Mills",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6537,
+                                               "name":  "Councillor George Porter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6538,
+                                               "name":  "Councillor Liz Skelt",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  42,
+                                               "name":  "Councillor Mark Williams",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  194,
+                                               "name":  "Councillor Philip Workman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  6541,
+                                               "name":  "Councillor Ian Yates",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services Tel: 01684 272021. Email: [email protected]",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       }
+                   ]
+}

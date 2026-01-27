@@ -1,0 +1,160 @@
+{
+    "council":  "Tewkesbury Borough Council",
+    "url":  "https://minutes.tewkesbury.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "6526",
+                      "name":  "Adcock,  Councillor Nigel Adcock"
+                  },
+                  {
+                      "id":  "6527",
+                      "name":  "Agg,  Councillor Cheryl Agg"
+                  },
+                  {
+                      "id":  "7028",
+                      "name":  "Bocking,  Councillor Graham Bocking"
+                  },
+                  {
+                      "id":  "6528",
+                      "name":  "Bowman,  Councillor Hilarie Bowman"
+                  },
+                  {
+                      "id":  "6529",
+                      "name":  "Budge,  Councillor Thomas Budge"
+                  },
+                  {
+                      "id":  "4101",
+                      "name":  "Carter,  Councillor Craig Carter"
+                  },
+                  {
+                      "id":  "4102",
+                      "name":  "Cody,  Councillor Cate Cody"
+                  },
+                  {
+                      "id":  "6530",
+                      "name":  "Coleman,  Councillor Christopher Coleman"
+                  },
+                  {
+                      "id":  "6531",
+                      "name":  "Dimond-Brown,  Councillor Matt Dimond-Brown"
+                  },
+                  {
+                      "id":  "6532",
+                      "name":  "Dove,  Councillor Stewart Dove"
+                  },
+                  {
+                      "id":  "1310",
+                      "name":  "Godwin,  Councillor Pauline Godwin"
+                  },
+                  {
+                      "id":  "1311",
+                      "name":  "Gore,  Councillor Mel Gore"
+                  },
+                  {
+                      "id":  "4104",
+                      "name":  "Gray,  Councillor David Gray"
+                  },
+                  {
+                      "id":  "6533",
+                      "name":  "Hands,  Councillor Sarah Hands"
+                  },
+                  {
+                      "id":  "4105",
+                      "name":  "Harwood,  Councillor Deborah Harwood"
+                  },
+                  {
+                      "id":  "6534",
+                      "name":  "Hegenbarth,  Councillor Alex Hegenbarth"
+                  },
+                  {
+                      "id":  "4106",
+                      "name":  "Jordan,  Councillor Mary Jordan"
+                  },
+                  {
+                      "id":  "6535",
+                      "name":  "Madle,  Councillor Gemma Madle"
+                  },
+                  {
+                      "id":  "28",
+                      "name":  "Mason,  Councillor Jim Mason"
+                  },
+                  {
+                      "id":  "1315",
+                      "name":  "McLain,  Councillor Heather McLain"
+                  },
+                  {
+                      "id":  "4107",
+                      "name":  "McLain,  Councillor Paul McLain"
+                  },
+                  {
+                      "id":  "5457",
+                      "name":  "Mills,  Councillor Charlotte Mills"
+                  },
+                  {
+                      "id":  "5477",
+                      "name":  "Mills,  Councillor Jason Mills"
+                  },
+                  {
+                      "id":  "6536",
+                      "name":  "Pervaiz,  Councillor Kashan Pervaiz"
+                  },
+                  {
+                      "id":  "6537",
+                      "name":  "Porter,  Councillor George Porter"
+                  },
+                  {
+                      "id":  "7015",
+                      "name":  "Pradhan Rai,  Councillor Rojina Pradhan Rai"
+                  },
+                  {
+                      "id":  "6538",
+                      "name":  "Skelt,  Councillor Liz Skelt"
+                  },
+                  {
+                      "id":  "4111",
+                      "name":  "Smith,  Councillor Jill Smith"
+                  },
+                  {
+                      "id":  "4112",
+                      "name":  "Smith,  Councillor Paul Smith"
+                  },
+                  {
+                      "id":  "35",
+                      "name":  "Smith,  Councillor Richard Smith"
+                  },
+                  {
+                      "id":  "4114",
+                      "name":  "Stanley,  Councillor Richard Stanley"
+                  },
+                  {
+                      "id":  "6539",
+                      "name":  "Stewart,  Councillor Murray Stewart"
+                  },
+                  {
+                      "id":  "6540",
+                      "name":  "Sundarajoo,  Councillor Helena Sundarajoo"
+                  },
+                  {
+                      "id":  "39",
+                      "name":  "Sztymiak,  Councillor Mike Sztymiak"
+                  },
+                  {
+                      "id":  "41",
+                      "name":  "Vines,  Councillor Robert Vines"
+                  },
+                  {
+                      "id":  "42",
+                      "name":  "Williams,  Councillor Mark Williams"
+                  },
+                  {
+                      "id":  "194",
+                      "name":  "Workman,  Councillor Philip Workman"
+                  },
+                  {
+                      "id":  "6541",
+                      "name":  "Yates,  Councillor Ian Yates"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:09Z",
+    "ward_count":  38
+}

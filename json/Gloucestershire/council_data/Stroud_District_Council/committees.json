@@ -1,0 +1,917 @@
+﻿{
+    "council":  "Stroud District Council",
+    "generatedUtc":  "2026-01-27T08:24:16.0089381Z",
+    "source":  {
+                   "committeesUrl":  "https://stroud.moderngov.co.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://stroud.moderngov.co.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  22,
+                   "activeInOutput":  10,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  null,
+                   "withPurposeSuggested":  9
+               },
+    "committees":  [
+                       {
+                           "id":  138,
+                           "title":  "Audit and Standards Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=138",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=138",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=138",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=138",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=138",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=138"
+                                    },
+                           "purpose":  "The Audit \u0026 Standards Committee ensures good quality corporate governance.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  2208,
+                                               "name":  "Councillor Bob Hughes",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  2230,
+                                               "name":  "Councillor Pete Kennedy",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Catherine Braun",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2283,
+                                               "name":  "Councillor Robert Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2209,
+                                               "name":  "Councillor Helen Caton Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1930,
+                                               "name":  "Councillor Lindsey Green",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2206,
+                                               "name":  "Councillor Chris Haynes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2566,
+                                               "name":  "Councillor Kate Kay",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2179,
+                                               "name":  "Councillor Gareth Kitchen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2567,
+                                               "name":  "Councillor Matthew Sargeant",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2250,
+                                               "name":  "Councillor Elizabeth Stanley",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  null,
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01453 754321",
+                                           "email":  "democratic.services@stroud.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  139,
+                           "title":  "Community Services and Licensing Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=139",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=139",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=139",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=139",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=139",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=139"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Exercises the Council\u0027s licensing and related enforcement functions (and/or sub-committee hearings) within the relevant statutory framework.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1708,
+                                               "name":  "Councillor Martin Brown",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  2182,
+                                               "name":  "Councillor James Boyle",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1705,
+                                               "name":  "Councillor Beki Aldam",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2248,
+                                               "name":  "Councillor Fraser Dahdouh",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  147,
+                                               "name":  "Councillor Jonathan Edmunds",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2186,
+                                               "name":  "Councillor Marisa Godfrey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2207,
+                                               "name":  "Councillor Ian Hamilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  128,
+                                               "name":  "Councillor Gill Oxley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  161,
+                                               "name":  "Councillor Nigel Prenter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  139,
+                                               "name":  "Councillor Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2178,
+                                               "name":  "Councillor Gill Thomas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2277,
+                                               "name":  "Councillor Paul Turner",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic Services.",
+                                           "postalAddress":  [
+                                                                 "Stroud District Council",
+                                                                 "Ebley Mill",
+                                                                 "Ebley Wharf",
+                                                                 "Stroud",
+                                                                 "GL5 4UB"
+                                                             ],
+                                           "phone":  null,
+                                           "email":  "democratic.services@stroud.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  143,
+                           "title":  "Council",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=143",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=143",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=143",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=143",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=143",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=143"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Full Council setting the budget and policy framework and taking key decisions reserved to Council, including appointments and constitutional matters.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2566,
+                                               "name":  "Councillor Kate Kay",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  2567,
+                                               "name":  "Councillor Matthew Sargeant",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1705,
+                                               "name":  "Councillor Beki Aldam",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2438,
+                                               "name":  "Councillor Shyama Ananthan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  153,
+                                               "name":  "Councillor Martin Baxendale",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2182,
+                                               "name":  "Councillor James Boyle",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Catherine Braun",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1708,
+                                               "name":  "Councillor Martin Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2283,
+                                               "name":  "Councillor Robert Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2437,
+                                               "name":  "Councillor John Callinan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2235,
+                                               "name":  "Councillor Sarah Canning",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2209,
+                                               "name":  "Councillor Helen Caton Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2241,
+                                               "name":  "Councillor Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2210,
+                                               "name":  "Councillor Terry Cook",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2248,
+                                               "name":  "Councillor Fraser Dahdouh",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2305,
+                                               "name":  "Councillor Maggie Dutton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  147,
+                                               "name":  "Councillor Jonathan Edmunds",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1712,
+                                               "name":  "Councillor Helen Fenton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2186,
+                                               "name":  "Councillor Marisa Godfrey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1930,
+                                               "name":  "Councillor Lindsey Green",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2207,
+                                               "name":  "Councillor Ian Hamilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2206,
+                                               "name":  "Councillor Chris Haynes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2280,
+                                               "name":  "Councillor Milly Hill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2284,
+                                               "name":  "Councillor Katy Hofmann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2208,
+                                               "name":  "Councillor Bob Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1716,
+                                               "name":  "Councillor Steve Hyndside",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2184,
+                                               "name":  "Councillor Cate James-Hodges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2180,
+                                               "name":  "Councillor Carol Kambites",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2230,
+                                               "name":  "Councillor Pete Kennedy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2285,
+                                               "name":  "Councillor Terri Kinnison",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2179,
+                                               "name":  "Councillor Gareth Kitchen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2046,
+                                               "name":  "Councillor Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2247,
+                                               "name":  "Councillor Dave Mathews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2202,
+                                               "name":  "Councillor Cath Moore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  128,
+                                               "name":  "Councillor Gill Oxley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2253,
+                                               "name":  "Councillor John Parker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1719,
+                                               "name":  "Councillor Martin Pearcy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  161,
+                                               "name":  "Councillor Nigel Prenter",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  139,
+                                               "name":  "Councillor Steve Robinson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Natalie Rothwell-Warn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1720,
+                                               "name":  "Councillor Mark Ryder",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1721,
+                                               "name":  "Councillor Lucas Schoemaker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1296,
+                                               "name":  "Councillor Moya Shannon",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2198,
+                                               "name":  "Councillor Holly Simkiss",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2250,
+                                               "name":  "Councillor Elizabeth Stanley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2178,
+                                               "name":  "Councillor Gill Thomas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1284,
+                                               "name":  "Councillor Charlie Tuffin",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2277,
+                                               "name":  "Councillor Paul Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1723,
+                                               "name":  "Councillor Chloe Turner",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2263,
+                                               "name":  "Councillor Demelza Turner-Wilkes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1724,
+                                               "name":  "Councillor Tricia Watson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  141,
+                           "title":  "Development Control Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=141",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=141",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=141",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=141",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=141",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=141"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Determines planning and development applications that are reserved to committee, considering policy compliance and officer recommendations.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  153,
+                                               "name":  "Councillor Martin Baxendale",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1712,
+                                               "name":  "Councillor Helen Fenton",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2437,
+                                               "name":  "Councillor John Callinan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2280,
+                                               "name":  "Councillor Milly Hill",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2180,
+                                               "name":  "Councillor Carol Kambites",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2046,
+                                               "name":  "Councillor Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2247,
+                                               "name":  "Councillor Dave Mathews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2202,
+                                               "name":  "Councillor Cath Moore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1719,
+                                               "name":  "Councillor Martin Pearcy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1720,
+                                               "name":  "Councillor Mark Ryder",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1296,
+                                               "name":  "Councillor Moya Shannon",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2263,
+                                               "name":  "Councillor Demelza Turner-Wilkes",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  140,
+                           "title":  "Environment Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=140",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=140",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=140",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=140",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=140",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=140"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees environmental policy, climate change initiatives, waste management, and sustainability strategies.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1719,
+                                               "name":  "Councillor Martin Pearcy",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1724,
+                                               "name":  "Councillor Tricia Watson",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1708,
+                                               "name":  "Councillor Martin Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2235,
+                                               "name":  "Councillor Sarah Canning",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2305,
+                                               "name":  "Councillor Maggie Dutton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1712,
+                                               "name":  "Councillor Helen Fenton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2284,
+                                               "name":  "Councillor Katy Hofmann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2285,
+                                               "name":  "Councillor Terri Kinnison",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2247,
+                                               "name":  "Councillor Dave Mathews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2253,
+                                               "name":  "Councillor John Parker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2198,
+                                               "name":  "Councillor Holly Simkiss",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2178,
+                                               "name":  "Councillor Gill Thomas",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2263,
+                                               "name":  "Councillor Demelza Turner-Wilkes",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  142,
+                           "title":  "Housing Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=142",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=142",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=142",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=142",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=142",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=142"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees housing policy, homelessness services, council housing management, and housing strategy delivery.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2046,
+                                               "name":  "Councillor Gary Luff",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1721,
+                                               "name":  "Councillor Lucas Schoemaker",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2438,
+                                               "name":  "Councillor Shyama Ananthan",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2241,
+                                               "name":  "Councillor Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2184,
+                                               "name":  "Councillor Cate James-Hodges",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2180,
+                                               "name":  "Councillor Carol Kambites",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2247,
+                                               "name":  "Councillor Dave Mathews",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2202,
+                                               "name":  "Councillor Cath Moore",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Natalie Rothwell-Warn",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2567,
+                                               "name":  "Councillor Matthew Sargeant",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2250,
+                                               "name":  "Councillor Elizabeth Stanley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1284,
+                                               "name":  "Councillor Charlie Tuffin",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  287,
+                           "title":  "Licensing Sub-Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=287",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=287",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=287",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=287",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=287",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=287"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Exercises the Council\u0027s licensing and related enforcement functions (and/or sub-committee hearings) within the relevant statutory framework.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  273,
+                           "title":  "Standards Sub-Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=273",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=273",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=273",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=273",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=273",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=273"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Supports and determines matters relating to member conduct and standards, including hearings/panels where applicable.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2208,
+                                               "name":  "Councillor Bob Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2230,
+                                               "name":  "Councillor Pete Kennedy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1930,
+                                               "name":  "Councillor Lindsey Green",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  137,
+                           "title":  "Strategy and Resources Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=137",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=137",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=137",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=137",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=137",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=137"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees strategic direction, financial planning, budget management, and resource allocation across the council\u0027s operations.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  1723,
+                                               "name":  "Councillor Chloe Turner",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Catherine Braun",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1708,
+                                               "name":  "Councillor Martin Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2283,
+                                               "name":  "Councillor Robert Brown",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2209,
+                                               "name":  "Councillor Helen Caton Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2241,
+                                               "name":  "Councillor Linda Cohen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2210,
+                                               "name":  "Councillor Terry Cook",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1930,
+                                               "name":  "Councillor Lindsey Green",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2284,
+                                               "name":  "Councillor Katy Hofmann",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2208,
+                                               "name":  "Councillor Bob Hughes",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1716,
+                                               "name":  "Councillor Steve Hyndside",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2046,
+                                               "name":  "Councillor Gary Luff",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1719,
+                                               "name":  "Councillor Martin Pearcy",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  139,
+                                               "name":  "Councillor Steve Robinson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  250,
+                           "title":  "Constitution",
+                           "category":  "Constitution",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://stroud.moderngov.co.uk/mgCommitteeDetails.aspx?ID=250",
+                                        "meetings":  "https://stroud.moderngov.co.uk/ieListMeetings.aspx?CommitteeId=250",
+                                        "membersContact":  "https://stroud.moderngov.co.uk/mgCommitteeMailingList.aspx?ID=250",
+                                        "attendance":  "https://stroud.moderngov.co.uk/mgAttendanceSummary.aspx?RPID=250",
+                                        "interests":  "https://stroud.moderngov.co.uk/mgListDeclarationsOfInterest.aspx?RPID=250",
+                                        "rss":  "https://stroud.moderngov.co.uk/mgRss.aspx?CID=250"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Council\u0027s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       }
+                   ]
+}

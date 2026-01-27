@@ -1,0 +1,164 @@
+{
+    "council":  "Gloucester City Council",
+    "url":  "https://democracy.gloucester.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "2228",
+                      "name":  "Bell,  Councillor Andrew Bell"
+                  },
+                  {
+                      "id":  "116",
+                      "name":  "Bhaimia,  Councillor Usman Bha"
+                  },
+                  {
+                      "id":  "1933",
+                      "name":  "Bowkett,  Councillor Ashley Bo"
+                  },
+                  {
+                      "id":  "1501",
+                      "name":  "Brooker,  Councillor Laura Bro"
+                  },
+                  {
+                      "id":  "2142",
+                      "name":  "Campbell,  Councillor Lorraine"
+                  },
+                  {
+                      "id":  "1783",
+                      "name":  "Castle,  Councillor Linda Cast"
+                  },
+                  {
+                      "id":  "2041",
+                      "name":  "Chambers,  Councillor Alastair"
+                  },
+                  {
+                      "id":  "2032",
+                      "name":  "Chambers,  Councillor Stephani"
+                  },
+                  {
+                      "id":  "2010",
+                      "name":  "Chambers-Dubus,  Councillor Tr"
+                  },
+                  {
+                      "id":  "2018",
+                      "name":  "Conder,  Councillor Angela Con"
+                  },
+                  {
+                      "id":  "2028",
+                      "name":  "Courtney,  Councillor Caroline"
+                  },
+                  {
+                      "id":  "2034",
+                      "name":  "Evans,  Councillor Sylvia Evan"
+                  },
+                  {
+                      "id":  "695",
+                      "name":  "Field,  Councillor Sebastian F"
+                  },
+                  {
+                      "id":  "2227",
+                      "name":  "Graham,  Councillor Adrian Gra"
+                  },
+                  {
+                      "id":  "125",
+                      "name":  "Gravells,  Councillor Andrew G"
+                  },
+                  {
+                      "id":  "2049",
+                      "name":  "Harries,  Councillor Liam Harr"
+                  },
+                  {
+                      "id":  "129",
+                      "name":  "Hilton,  Councillor Jeremy Hil"
+                  },
+                  {
+                      "id":  "2242",
+                      "name":  "Hyland,  Councillor Kate Hylan"
+                  },
+                  {
+                      "id":  "1531",
+                      "name":  "Hyman,  Councillor Howard Hyma"
+                  },
+                  {
+                      "id":  "2015",
+                      "name":  "James,  Councillor Karen James"
+                  },
+                  {
+                      "id":  "2012",
+                      "name":  "Jones,  Councillor John Jones"
+                  },
+                  {
+                      "id":  "117",
+                      "name":  "Lewis,  Councillor Andrew Lewi"
+                  },
+                  {
+                      "id":  "2232",
+                      "name":  "Marshall,  Councillor Roseanna"
+                  },
+                  {
+                      "id":  "2055",
+                      "name":  "Millard,  Councillor Tracy Mil"
+                  },
+                  {
+                      "id":  "2261",
+                      "name":  "Miller,  Councillor Victoria M"
+                  },
+                  {
+                      "id":  "2239",
+                      "name":  "Norledge,  Councillor Vicky No"
+                  },
+                  {
+                      "id":  "2042",
+                      "name":  "O\u0026#96;Donnell,  Councillor Brendon"
+                  },
+                  {
+                      "id":  "1147",
+                      "name":  "Patel,  Councillor Sajid Patel"
+                  },
+                  {
+                      "id":  "1522",
+                      "name":  "Pullen,  Councillor Terry Pull"
+                  },
+                  {
+                      "id":  "2029",
+                      "name":  "Radley,  Councillor Anne Radle"
+                  },
+                  {
+                      "id":  "2052",
+                      "name":  "Sawyer,  Councillor Sarah Sawy"
+                  },
+                  {
+                      "id":  "2019",
+                      "name":  "Shervey,  Councillor Luke Sher"
+                  },
+                  {
+                      "id":  "2014",
+                      "name":  "Simms,  Councillor Valerie Sim"
+                  },
+                  {
+                      "id":  "2066",
+                      "name":  "Taylor,  Councillor Joshua Tay"
+                  },
+                  {
+                      "id":  "113",
+                      "name":  "Tracey,  Councillor Pam Tracey"
+                  },
+                  {
+                      "id":  "2078",
+                      "name":  "Trimnell,  Councillor Rebecca"
+                  },
+                  {
+                      "id":  "2036",
+                      "name":  "Walker,  Councillor Louise Wal"
+                  },
+                  {
+                      "id":  "2020",
+                      "name":  "Wiederhold,  Councillor Alwin"
+                  },
+                  {
+                      "id":  "144",
+                      "name":  "Wilson,  Councillor Declan Wil"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:05Z",
+    "ward_count":  39
+}

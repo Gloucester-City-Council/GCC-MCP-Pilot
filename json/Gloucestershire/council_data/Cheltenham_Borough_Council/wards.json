@@ -1,0 +1,168 @@
+{
+    "council":  "Cheltenham Borough Council",
+    "url":  "https://democracy.cheltenham.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "7423",
+                      "name":  "Allen,  Councillor Frank Allen"
+                  },
+                  {
+                      "id":  "7057",
+                      "name":  "Andrews,  Councillor Glenn Andrews"
+                  },
+                  {
+                      "id":  "3095",
+                      "name":  "Atherstone,  Councillor Victoria Atherstone"
+                  },
+                  {
+                      "id":  "1347",
+                      "name":  "Baker,  Councillor Paul Baker"
+                  },
+                  {
+                      "id":  "7061",
+                      "name":  "Bamford,  Councillor Adrian Bamford"
+                  },
+                  {
+                      "id":  "111",
+                      "name":  "Barnes,  Councillor Garth Barnes"
+                  },
+                  {
+                      "id":  "1437",
+                      "name":  "Barrell,  Councillor Dilys Barrell"
+                  },
+                  {
+                      "id":  "7062",
+                      "name":  "Beale,  Councillor Graham Beale"
+                  },
+                  {
+                      "id":  "3055",
+                      "name":  "Boyes,  Councillor Angie Boyes"
+                  },
+                  {
+                      "id":  "7430",
+                      "name":  "Chandler,  Councillor Julia Chandler"
+                  },
+                  {
+                      "id":  "7058",
+                      "name":  "Chelin,  Councillor Jackie Chelin"
+                  },
+                  {
+                      "id":  "6451",
+                      "name":  "Clark,  Councillor Barbara Clark"
+                  },
+                  {
+                      "id":  "1299",
+                      "name":  "Clucas,  Councillor Flo Clucas"
+                  },
+                  {
+                      "id":  "1495",
+                      "name":  "Collins,  Councillor Mike Collins"
+                  },
+                  {
+                      "id":  "7422",
+                      "name":  "Davies,  Councillor Ashleigh Davies"
+                  },
+                  {
+                      "id":  "7425",
+                      "name":  "Day,  Councillor Chris Day"
+                  },
+                  {
+                      "id":  "1309",
+                      "name":  "Dobie,  Councillor Iain Dobie"
+                  },
+                  {
+                      "id":  "7421",
+                      "name":  "Foster,  Councillor Jan Foster"
+                  },
+                  {
+                      "id":  "7431",
+                      "name":  "Garcia Clamp,  Councillor Juan Carlos Garcia"
+                  },
+                  {
+                      "id":  "1500",
+                      "name":  "Harvey,  Councillor Steve Harvey"
+                  },
+                  {
+                      "id":  "121",
+                      "name":  "Hay,  Councillor Rowena Hay"
+                  },
+                  {
+                      "id":  "7491",
+                      "name":  "Healy,  Councillor Hannah Healy"
+                  },
+                  {
+                      "id":  "123",
+                      "name":  "Holliday,  Councillor Sandra Holliday"
+                  },
+                  {
+                      "id":  "1387",
+                      "name":  "Horwood,  Councillor Martin Horwood"
+                  },
+                  {
+                      "id":  "124",
+                      "name":  "Jeffries,  Councillor Peter Jeffries"
+                  },
+                  {
+                      "id":  "7060",
+                      "name":  "Joy,  Councillor Tabi Joy"
+                  },
+                  {
+                      "id":  "6481",
+                      "name":  "Lewis,  Councillor Alisha Lewis"
+                  },
+                  {
+                      "id":  "7428",
+                      "name":  "Lynch,  Councillor Dr Cathal Lynch"
+                  },
+                  {
+                      "id":  "1498",
+                      "name":  "Oliver,  Councillor Tony Oliver"
+                  },
+                  {
+                      "id":  "7429",
+                      "name":  "Orme,  Councillor Ben Orme"
+                  },
+                  {
+                      "id":  "7424",
+                      "name":  "Pemberton,  Councillor Dr  Helen Pemberton"
+                  },
+                  {
+                      "id":  "6478",
+                      "name":  "Pineger,  Councillor Richard Pineger"
+                  },
+                  {
+                      "id":  "6498",
+                      "name":  "Sankey,  Councillor Julie Sankey"
+                  },
+                  {
+                      "id":  "7290",
+                      "name":  "Smith,  Councillor Stan Smith"
+                  },
+                  {
+                      "id":  "7426",
+                      "name":  "Steinhardt,  Councillor Dr Steve Steinhardt"
+                  },
+                  {
+                      "id":  "7056",
+                      "name":  "Tailford,  Councillor Izaac Tailford"
+                  },
+                  {
+                      "id":  "7059",
+                      "name":  "Tooke,  Councillor Julian Tooke"
+                  },
+                  {
+                      "id":  "145",
+                      "name":  "Wheeler,  Councillor Simon Wheeler"
+                  },
+                  {
+                      "id":  "463",
+                      "name":  "Williams,  Councillor Suzanne Williams"
+                  },
+                  {
+                      "id":  "1501",
+                      "name":  "Willingham,  Councillor Dr David Willingham"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:15Z",
+    "ward_count":  40
+}

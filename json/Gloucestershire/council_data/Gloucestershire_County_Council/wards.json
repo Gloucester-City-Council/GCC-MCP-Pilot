@@ -1,0 +1,228 @@
+{
+    "council":  "Gloucestershire County Council",
+    "url":  "https://glostext.gloucestershire.gov.uk",
+    "wards":  [
+                  {
+                      "id":  "24522",
+                      "name":  "Agg,  Cllr Cheryl Agg"
+                  },
+                  {
+                      "id":  "24453",
+                      "name":  "Andrews,  Cllr Glenn Andrews"
+                  },
+                  {
+                      "id":  "24476",
+                      "name":  "Botterill,  Cllr Dean Botterill"
+                  },
+                  {
+                      "id":  "24307",
+                      "name":  "Bowkett,  Cllr Ashley Bowkett"
+                  },
+                  {
+                      "id":  "24442",
+                      "name":  "Boyes,  Cllr Angela Boyes"
+                  },
+                  {
+                      "id":  "18009",
+                      "name":  "Bradley,  Cllr Tom Bradley"
+                  },
+                  {
+                      "id":  "24478",
+                      "name":  "Cameron,  Cllr Dr Ian Cameron"
+                  },
+                  {
+                      "id":  "24336",
+                      "name":  "Camp,  Cllr Piers Camp"
+                  },
+                  {
+                      "id":  "24318",
+                      "name":  "Challis,  Cllr Leigh Challis"
+                  },
+                  {
+                      "id":  "18046",
+                      "name":  "Chambers,  Cllr Alastair Chambers"
+                  },
+                  {
+                      "id":  "18120",
+                      "name":  "Cohen,  Cllr Linda Cohen"
+                  },
+                  {
+                      "id":  "24362",
+                      "name":  "Corps,  Cllr Daryl Corps"
+                  },
+                  {
+                      "id":  "11284",
+                      "name":  "Davies,  Cllr Stephen  Davies"
+                  },
+                  {
+                      "id":  "24335",
+                      "name":  "Dean,  Cllr Dr Richard Dean"
+                  },
+                  {
+                      "id":  "4641",
+                      "name":  "Dobie,  Cllr Iain Dobie"
+                  },
+                  {
+                      "id":  "24311",
+                      "name":  "Donaghue,  Cllr Ray Donaghue"
+                  },
+                  {
+                      "id":  "24480",
+                      "name":  "Dove,  Cllr Stewart Dove"
+                  },
+                  {
+                      "id":  "12019",
+                      "name":  "Evans,  Cllr Ben Evans"
+                  },
+                  {
+                      "id":  "24374",
+                      "name":  "Graham,  Cllr Stuart Graham"
+                  },
+                  {
+                      "id":  "117",
+                      "name":  "Gravells,  Cllr Andrew Gravells MBE"
+                  },
+                  {
+                      "id":  "24434",
+                      "name":  "Gray,  Cllr Vernon Gray"
+                  },
+                  {
+                      "id":  "24502",
+                      "name":  "Hands,  Cllr Sarah Hands"
+                  },
+                  {
+                      "id":  "4574",
+                      "name":  "Harris,  Cllr Joe Harris"
+                  },
+                  {
+                      "id":  "24326",
+                      "name":  "Harris,  Cllr Mark Harris"
+                  },
+                  {
+                      "id":  "4595",
+                      "name":  "Hay,  Cllr Colin Hay"
+                  },
+                  {
+                      "id":  "18031",
+                      "name":  "Hegenbarth,  Cllr Alex Hegenbarth"
+                  },
+                  {
+                      "id":  "166",
+                      "name":  "Hilton,  Cllr Jeremy Hilton"
+                  },
+                  {
+                      "id":  "4551",
+                      "name":  "Hodgkinson,  Cllr Paul Hodgkinson"
+                  },
+                  {
+                      "id":  "24462",
+                      "name":  "Horrocks,  Cllr Craig Horrocks"
+                  },
+                  {
+                      "id":  "24511",
+                      "name":  "Horwood,  Cllr Martin Horwood"
+                  },
+                  {
+                      "id":  "24359",
+                      "name":  "Howard,  Cllr Mark Howard"
+                  },
+                  {
+                      "id":  "18012",
+                      "name":  "Hoyland,  Cllr Beki Hoyland"
+                  },
+                  {
+                      "id":  "24300",
+                      "name":  "Luff,  Cllr Gary Luff"
+                  },
+                  {
+                      "id":  "24420",
+                      "name":  "Mayo,  Cllr Chris Mayo"
+                  },
+                  {
+                      "id":  "4669",
+                      "name":  "McFarling,  Cllr Chris McFarling"
+                  },
+                  {
+                      "id":  "18102",
+                      "name":  "Morris,  Cllr Dom Morris"
+                  },
+                  {
+                      "id":  "11370",
+                      "name":  "Moseley,  Cllr Gill Moseley"
+                  },
+                  {
+                      "id":  "4529",
+                      "name":  "Patel,  Cllr Sajid Patel"
+                  },
+                  {
+                      "id":  "24408",
+                      "name":  "Patient,  Cllr John Patient"
+                  },
+                  {
+                      "id":  "24364",
+                      "name":  "Preece,  Cllr Jason Preece"
+                  },
+                  {
+                      "id":  "24328",
+                      "name":  "Rees,  Cllr Michael Rees"
+                  },
+                  {
+                      "id":  "11289",
+                      "name":  "Robinson,  Cllr Steve Robinson"
+                  },
+                  {
+                      "id":  "24501",
+                      "name":  "Rothwell-Warn,  Cllr Dr Natalie Rothwell-Warn"
+                  },
+                  {
+                      "id":  "18135",
+                      "name":  "Sawyer,  Cllr Sarah Sawyer"
+                  },
+                  {
+                      "id":  "176",
+                      "name":  "Smith,  Cllr Vernon  Smith"
+                  },
+                  {
+                      "id":  "18109",
+                      "name":  "Spivey,  Cllr Lisa Spivey"
+                  },
+                  {
+                      "id":  "24521",
+                      "name":  "Stanley,  Cllr Richard Stanley"
+                  },
+                  {
+                      "id":  "24459",
+                      "name":  "Tooke,  Cllr Julian Tooke"
+                  },
+                  {
+                      "id":  "18105",
+                      "name":  "Trimnell,  Cllr Dr Rebecca Trimnell"
+                  },
+                  {
+                      "id":  "18081",
+                      "name":  "Turner,  Cllr Chloe Turner"
+                  },
+                  {
+                      "id":  "24530",
+                      "name":  "Usmar,  Cllr Dr Kate Usmar"
+                  },
+                  {
+                      "id":  "24411",
+                      "name":  "Watson,  Cllr Ian Watson"
+                  },
+                  {
+                      "id":  "18043",
+                      "name":  "Whyborn,  Cllr Roger Whyborn"
+                  },
+                  {
+                      "id":  "154",
+                      "name":  "Williams,  Cllr Suzanne Williams"
+                  },
+                  {
+                      "id":  "18091",
+                      "name":  "Willingham,  Cllr Dr David Willingham"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:02Z",
+    "ward_count":  55
+}

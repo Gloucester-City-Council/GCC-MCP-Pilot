@@ -1,0 +1,212 @@
+{
+    "council":  "Stroud District Council",
+    "url":  "https://stroud.moderngov.co.uk",
+    "wards":  [
+                  {
+                      "id":  "1705",
+                      "name":  "Aldam,  Councillor Beki Aldam"
+                  },
+                  {
+                      "id":  "2438",
+                      "name":  "Ananthan,  Councillor Shyama Ananthan"
+                  },
+                  {
+                      "id":  "153",
+                      "name":  "Baxendale,  Councillor Martin Baxendale"
+                  },
+                  {
+                      "id":  "2182",
+                      "name":  "Boyle,  Councillor James Boyle"
+                  },
+                  {
+                      "id":  "116",
+                      "name":  "Braun,  Councillor Catherine Braun"
+                  },
+                  {
+                      "id":  "1708",
+                      "name":  "Brown,  Councillor Martin Brown"
+                  },
+                  {
+                      "id":  "2283",
+                      "name":  "Brown,  Councillor Robert Brown"
+                  },
+                  {
+                      "id":  "2437",
+                      "name":  "Callinan,  Councillor John Callinan"
+                  },
+                  {
+                      "id":  "2235",
+                      "name":  "Canning,  Councillor Sarah Canning"
+                  },
+                  {
+                      "id":  "2241",
+                      "name":  "Cohen,  Councillor Linda Cohen"
+                  },
+                  {
+                      "id":  "2210",
+                      "name":  "Cook,  Councillor Terry Cook"
+                  },
+                  {
+                      "id":  "2248",
+                      "name":  "Dahdouh,  Councillor Fraser Dahdouh"
+                  },
+                  {
+                      "id":  "2305",
+                      "name":  "Dutton,  Councillor Maggie Dutton"
+                  },
+                  {
+                      "id":  "147",
+                      "name":  "Edmunds,  Councillor Jonathan Edmunds"
+                  },
+                  {
+                      "id":  "1712",
+                      "name":  "Fenton,  Councillor Helen Fenton"
+                  },
+                  {
+                      "id":  "2186",
+                      "name":  "Godfrey,  Councillor Marisa Godfrey"
+                  },
+                  {
+                      "id":  "1930",
+                      "name":  "Green,  Councillor Lindsey Green"
+                  },
+                  {
+                      "id":  "2207",
+                      "name":  "Hamilton,  Councillor Ian Hamilton"
+                  },
+                  {
+                      "id":  "2206",
+                      "name":  "Haynes,  Councillor Chris Haynes"
+                  },
+                  {
+                      "id":  "2280",
+                      "name":  "Hill,  Councillor Milly Hill"
+                  },
+                  {
+                      "id":  "2284",
+                      "name":  "Hofmann,  Councillor Katy Hofmann"
+                  },
+                  {
+                      "id":  "2208",
+                      "name":  "Hughes,  Councillor Bob Hughes"
+                  },
+                  {
+                      "id":  "2209",
+                      "name":  "Hughes,  Councillor Helen Caton Hughes"
+                  },
+                  {
+                      "id":  "1716",
+                      "name":  "Hyndside,  Councillor Steve Hyndside"
+                  },
+                  {
+                      "id":  "2184",
+                      "name":  "James-Hodges,  Councillor Cate James-Hodges"
+                  },
+                  {
+                      "id":  "2180",
+                      "name":  "Kambites,  Councillor Carol Kambites"
+                  },
+                  {
+                      "id":  "2566",
+                      "name":  "Kay,  Councillor Kate Kay"
+                  },
+                  {
+                      "id":  "2230",
+                      "name":  "Kennedy,  Councillor Pete Kennedy"
+                  },
+                  {
+                      "id":  "2285",
+                      "name":  "Kinnison,  Councillor Terri Kinnison"
+                  },
+                  {
+                      "id":  "2179",
+                      "name":  "Kitchen,  Councillor Gareth Kitchen"
+                  },
+                  {
+                      "id":  "2046",
+                      "name":  "Luff,  Councillor Gary Luff"
+                  },
+                  {
+                      "id":  "2247",
+                      "name":  "Mathews,  Councillor Dave Mathews"
+                  },
+                  {
+                      "id":  "2202",
+                      "name":  "Moore,  Councillor Cath Moore"
+                  },
+                  {
+                      "id":  "128",
+                      "name":  "Oxley,  Councillor Gill Oxley"
+                  },
+                  {
+                      "id":  "2253",
+                      "name":  "Parker,  Councillor John Parker"
+                  },
+                  {
+                      "id":  "1719",
+                      "name":  "Pearcy,  Councillor Martin Pearcy"
+                  },
+                  {
+                      "id":  "161",
+                      "name":  "Prenter,  Councillor Nigel Prenter"
+                  },
+                  {
+                      "id":  "139",
+                      "name":  "Robinson,  Councillor Steve Robinson"
+                  },
+                  {
+                      "id":  "2239",
+                      "name":  "Rothwell-Warn,  Councillor Natalie Rothwell-Warn"
+                  },
+                  {
+                      "id":  "1720",
+                      "name":  "Ryder,  Councillor Mark Ryder"
+                  },
+                  {
+                      "id":  "2567",
+                      "name":  "Sargeant,  Councillor Matthew Sargeant"
+                  },
+                  {
+                      "id":  "1721",
+                      "name":  "Schoemaker,  Councillor Lucas Schoemaker"
+                  },
+                  {
+                      "id":  "1296",
+                      "name":  "Shannon,  Councillor Moya Shannon"
+                  },
+                  {
+                      "id":  "2198",
+                      "name":  "Simkiss,  Councillor Holly Simkiss"
+                  },
+                  {
+                      "id":  "2250",
+                      "name":  "Stanley,  Councillor Elizabeth Stanley"
+                  },
+                  {
+                      "id":  "2178",
+                      "name":  "Thomas,  Councillor Gill Thomas"
+                  },
+                  {
+                      "id":  "1284",
+                      "name":  "Tuffin,  Councillor Charlie Tuffin"
+                  },
+                  {
+                      "id":  "1723",
+                      "name":  "Turner,  Councillor Chloe Turner"
+                  },
+                  {
+                      "id":  "2277",
+                      "name":  "Turner,  Councillor Paul Turner"
+                  },
+                  {
+                      "id":  "2263",
+                      "name":  "Turner-Wilkes,  Councillor Demelza Turner-Wilkes"
+                  },
+                  {
+                      "id":  "1724",
+                      "name":  "Watson,  Councillor Tricia Watson"
+                  }
+              ],
+    "scraped_at":  "2026-01-27T08:14:13Z",
+    "ward_count":  51
+}
