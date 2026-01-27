@@ -1,66 +1,1328 @@
 {
-  "metadata": {
-    "council": "Gloucester City Council",
-    "last_updated": "2025-01-25",
-    "source": "https://democracy.gloucester.gov.uk",
-    "note": "moderngov_id values will be populated once we discover actual IDs from SOAP responses. Use /api/test-soap/GetCommittees to explore."
-  },
-  "committees": {
-    "cabinet": {
-      "moderngov_id": null,
-      "official_name": "Cabinet",
-      "description": "The executive decision-making body of the council. Makes key policy and budget decisions.",
-      "keywords": ["cabinet", "executive", "leader"],
-      "typical_topics": ["policy", "budget", "strategic decisions", "major projects", "partnerships"]
-    },
-    "council": {
-      "moderngov_id": null,
-      "official_name": "Council",
-      "description": "Full council meetings where all councillors come together to debate and decide major issues.",
-      "keywords": ["full council", "council meeting"],
-      "typical_topics": ["constitution", "budget approval", "major policies", "ceremonial"]
-    },
-    "planning": {
-      "moderngov_id": null,
-      "official_name": "Planning Committee",
-      "description": "Determines planning applications and related matters.",
-      "keywords": ["planning", "development", "applications", "building"],
-      "typical_topics": ["planning applications", "enforcement", "appeals", "development control"]
-    },
-    "licensing": {
-      "moderngov_id": null,
-      "official_name": "Licensing and Enforcement Committee",
-      "description": "Deals with licensing applications and enforcement matters.",
-      "keywords": ["licensing", "enforcement", "alcohol", "gambling", "taxi"],
-      "typical_topics": ["premises licenses", "taxi licenses", "gambling", "street trading"]
-    },
-    "overview_scrutiny": {
-      "moderngov_id": null,
-      "official_name": "Overview and Scrutiny Committee",
-      "description": "Reviews and scrutinises decisions made by the Cabinet and council services.",
-      "keywords": ["scrutiny", "overview", "review", "call-in"],
-      "typical_topics": ["policy review", "performance monitoring", "budget scrutiny", "service reviews"]
-    },
-    "audit": {
-      "moderngov_id": null,
-      "official_name": "Audit and Governance Committee",
-      "description": "Oversees the council's governance, risk management and audit functions.",
-      "keywords": ["audit", "governance", "risk", "accounts"],
-      "typical_topics": ["annual accounts", "internal audit", "risk management", "governance"]
-    },
-    "general_purposes": {
-      "moderngov_id": null,
-      "official_name": "General Purposes Committee",
-      "description": "Handles constitutional and staffing matters.",
-      "keywords": ["general purposes", "constitution", "staffing"],
-      "typical_topics": ["electoral matters", "constitution changes", "senior appointments"]
-    },
-    "standards": {
-      "moderngov_id": null,
-      "official_name": "Standards Committee",
-      "description": "Promotes and maintains high standards of conduct by councillors.",
-      "keywords": ["standards", "conduct", "ethics", "complaints"],
-      "typical_topics": ["councillor conduct", "code of conduct", "complaints", "training"]
-    }
-  }
+    "council":  "Gloucester City Council",
+    "generatedUtc":  "2026-01-22T13:20:26.1794027Z",
+    "source":  {
+                   "committeesUrl":  "https://democracy.gloucester.gov.uk/mgWebService.asmx/GetCommittees",
+                   "baseUrl":  "https://democracy.gloucester.gov.uk"
+               },
+    "counts":  {
+                   "totalInFeed":  131,
+                   "activeInOutput":  15,
+                   "scrapeFailures":  0,
+                   "withPurposeScraped":  8,
+                   "withPurposeSuggested":  7
+               },
+    "committees":  [
+                       {
+                           "id":  544,
+                           "title":  "General Purposes Committee",
+                           "category":  null,
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=544",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=544",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=544",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=544",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=544",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=544"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Handles a range of general delegated matters not otherwise assigned to another committee, often including procedural/governance or miscellaneous functions.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  129,
+                                               "name":  "Councillor Jeremy Hilton",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2010,
+                                               "name":  "Councillor Tree Chambers-Dubus",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  144,
+                                               "name":  "Councillor Declan Wilson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396192",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  129,
+                           "title":  "Cabinet",
+                           "category":  "Cabinet",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=129",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=129",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=129",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=129",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=129",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=129"
+                                    },
+                           "purpose":  "The Cabinet comprises seven councillors including the Leader of the Council who chairs its meetings. It has responsibility for the day-to-day decisions on council functions and makes recommendations to full Council on the major policy plans and the budget and Council Tax. There is a Cabinet Member for each of the following Council services: · Regeneration · Resources · Environment · Housing · Planning · Community Engagement · Culture and Leisure The Leader of the Council is appointed by full Council at its annual meeting and the Leader appoints the Cabinet. The Cabinet is held to account by the Overview and Scrutiny Committee. The Council has a Liberal Democrat minority Administration and Cabinet comprises 7 Liberal Democrat Councillors.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  129,
+                                               "name":  "Councillor Jeremy Hilton",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  144,
+                                               "name":  "Councillor Declan Wilson",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2028,
+                                               "name":  "Councillor Caroline Courtney",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  695,
+                                               "name":  "Councillor Sebastian Field",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2052,
+                                               "name":  "Councillor Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2019,
+                                               "name":  "Councillor Luke Shervey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2078,
+                                               "name":  "Councillor Rebecca Trimnell",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "Gloucester City Council",
+                                                                 "Eastgate Management Suite",
+                                                                 "Eastgate Street",
+                                                                 "Gloucester",
+                                                                 "GL1 1PA"
+                                                             ],
+                                           "phone":  "01452 396126",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  564,
+                           "title":  "Constitution",
+                           "category":  "Constitution",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=564",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=564",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=564",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=564",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=564",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=564"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Maintains and oversees the Councilâ€™s Constitution and associated governance arrangements, ensuring it remains current and fit for purpose.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  141,
+                           "title":  "Council",
+                           "category":  "Council",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=141",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=141",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=141",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=141",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=141",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=141"
+                                    },
+                           "purpose":  "All 39 councillors meet together as the full Council, presided over by the Mayor, eight times a year. Here Councillors decide the overall policies and set the budget each year. The main roles of the full Council are: -To appoint the Mayor and Sheriff/Deputy Mayor for the forthcoming municipal year -To appoint and remove the Leader of the Council -To set the budget and level of Council Tax -To approve the policy framework. The policy framework is the collection of plans and strategies that dictate the Council’s overall policy direction At Council meetings there is opportunity for all Councillors to ask questions of the Leader and Cabinet Members. The Council also debates Notices of Motion, which are requests from Councillors for an issue of city-wide importance to be discussed and a decision to be made. Meetings of the Council are open to the public except where personal or confidential matters are being discussed.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  "Mayor"
+                                           },
+                                           {
+                                               "uid":  1783,
+                                               "name":  "Councillor Linda Castle",
+                                               "role":  "Sheriff \u0026 Deputy Mayor"
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Councillor Jeremy Hilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  144,
+                                               "name":  "Councillor Declan Wilson",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2028,
+                                               "name":  "Councillor Caroline Courtney",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  695,
+                                               "name":  "Councillor Sebastian Field",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2052,
+                                               "name":  "Councillor Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2019,
+                                               "name":  "Councillor Luke Shervey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2078,
+                                               "name":  "Councillor Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1522,
+                                               "name":  "Councillor Terry Pullen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  125,
+                                               "name":  "Councillor Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  113,
+                                               "name":  "Councillor Pam Tracey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Councillor Andrew Lewis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Usman Bhaimia",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Laura Brooker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2010,
+                                               "name":  "Councillor Tree Chambers-Dubus",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2018,
+                                               "name":  "Councillor Angela Conder",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2034,
+                                               "name":  "Councillor Sylvia Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2142,
+                                               "name":  "Councillor Lorraine Campbell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2228,
+                                               "name":  "Councillor Andrew Bell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2227,
+                                               "name":  "Councillor Adrian Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2049,
+                                               "name":  "Councillor Liam Harries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2242,
+                                               "name":  "Councillor Kate Hyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2015,
+                                               "name":  "Councillor Karen James",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2012,
+                                               "name":  "Councillor John Jones",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2232,
+                                               "name":  "Councillor Roseanna Marshall",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2261,
+                                               "name":  "Councillor Victoria Miller",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2014,
+                                               "name":  "Councillor Valerie Simms",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2036,
+                                               "name":  "Councillor Louise Walker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2020,
+                                               "name":  "Councillor Alwin Wiederhold",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396125",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  578,
+                           "title":  "Saintbridge Recreation Ground Management Committee",
+                           "category":  "Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=578",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=578",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=578",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=578",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=578",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=578"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Manages the relevant trust/asset and associated governance, including oversight of operations, funding, and stewardship responsibilities.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2028,
+                                               "name":  "Councillor Caroline Courtney",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2227,
+                                               "name":  "Councillor Adrian Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2078,
+                                               "name":  "Councillor Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2036,
+                                               "name":  "Councillor Louise Walker",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  577,
+                           "title":  "Saintbridge Trust",
+                           "category":  "Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=577",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=577",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=577",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=577",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=577",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=577"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Manages the relevant trust/asset and associated governance, including oversight of operations, funding, and stewardship responsibilities.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2228,
+                                               "name":  "Councillor Andrew Bell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Usman Bhaimia",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Laura Brooker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2142,
+                                               "name":  "Councillor Lorraine Campbell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1783,
+                                               "name":  "Councillor Linda Castle",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2010,
+                                               "name":  "Councillor Tree Chambers-Dubus",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2018,
+                                               "name":  "Councillor Angela Conder",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2028,
+                                               "name":  "Councillor Caroline Courtney",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2034,
+                                               "name":  "Councillor Sylvia Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  695,
+                                               "name":  "Councillor Sebastian Field",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2227,
+                                               "name":  "Councillor Adrian Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  125,
+                                               "name":  "Councillor Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2049,
+                                               "name":  "Councillor Liam Harries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  129,
+                                               "name":  "Councillor Jeremy Hilton",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2242,
+                                               "name":  "Councillor Kate Hyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2015,
+                                               "name":  "Councillor Karen James",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2012,
+                                               "name":  "Councillor John Jones",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Councillor Andrew Lewis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2232,
+                                               "name":  "Councillor Roseanna Marshall",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2261,
+                                               "name":  "Councillor Victoria Miller",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1522,
+                                               "name":  "Councillor Terry Pullen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2052,
+                                               "name":  "Councillor Sarah Sawyer",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2019,
+                                               "name":  "Councillor Luke Shervey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2014,
+                                               "name":  "Councillor Valerie Simms",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  113,
+                                               "name":  "Councillor Pam Tracey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2078,
+                                               "name":  "Councillor Rebecca Trimnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2036,
+                                               "name":  "Councillor Louise Walker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2020,
+                                               "name":  "Councillor Alwin Wiederhold",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  144,
+                                               "name":  "Councillor Declan Wilson",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  546,
+                           "title":  "Senior Appointments Committee",
+                           "category":  "Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=546",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=546",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=546",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=546",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=546",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=546"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees the recruitment/appointment process for senior officers and makes appointment recommendations/decisions in line with the Councilâ€™s constitution.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  129,
+                                               "name":  "Councillor Jeremy Hilton",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  144,
+                                               "name":  "Councillor Declan Wilson",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1522,
+                                               "name":  "Councillor Terry Pullen",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  598,
+                           "title":  "Standards Hearing Panel",
+                           "category":  "Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=598",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=598",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=598",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=598",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=598",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=598"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Supports and determines matters relating to member conduct and standards, including hearings/panels where applicable.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+
+                                       ],
+                           "contact":  null
+                       },
+                       {
+                           "id":  603,
+                           "title":  "Joint Overview and Scrutiny Review Panel - Gloucestershire Airport",
+                           "category":  "Overview and Scrutiny",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=603",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=603",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=603",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=603",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=603",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=603"
+                                    },
+                           "purpose":  "The Joint Overview and Scrutiny Review Panel consists of a cohort of Overview and Scrutiny Committee Members from Gloucester City Council and Cheltenham Borough Council. At the time the Joint Overview and Scrutiny Review Panel was convened, Gloucestershire Airport was a jointly-owned asset of both Councils. In June 2025, both Councils approved a decision to sell Gloucestershire Airport to a recommended bidder. As a large local employer and contributor to the local economy, Overview and Scrutiny Committee Members have retained an interest in the current operations of Gloucestershire Airport, as well as the future of the organisation. The Joint Overview and Scrutiny Review Panel propose to meet on two occasions, initially to consider the latest financial and operational updates from the airport so that they can understand the position facing the potential new owner. Once the sale has taken place, a secondary session will be held to look ahead to the future of Gloucestershire Airport under its new ownership.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  125,
+                                               "name":  "Councillor Andrew Gravells MBE",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2010,
+                                               "name":  "Councillor Tree Chambers-Dubus",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "Eastgate Management Suite",
+                                                                 "Eastgate Street",
+                                                                 "Gloucester",
+                                                                 "GL1 1PA"
+                                                             ],
+                                           "phone":  "01452 369203",
+                                           "email":  null
+                                       }
+                       },
+                       {
+                           "id":  408,
+                           "title":  "Overview and Scrutiny Committee",
+                           "category":  "Overview and Scrutiny",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=408",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=408",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=408",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=408",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=408",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=408"
+                                    },
+                           "purpose":  "The Overview and Scrutiny Committee co-ordinates scrutiny at Gloucester City Council. It conducts both pre- and post-scrutiny of Cabinet decisions, and commissions Task \u0026 Finish Groups to investigate specific policy areas. Its main responsibilities can be summarised as follows: Co-ordinating and leading scrutiny of Cabinet decisions. Acting as a ‘critical friend’ for Cabinet. Tracking the progress of recommendations made by Task \u0026 Finish groups once they have received a Cabinet response Monitoring the Forward Plan and deciding which policy areas to scrutinise Managing overall scrutiny work plan Scrutiny of bodies external to Gloucester City Council.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  125,
+                                               "name":  "Councillor Andrew Gravells MBE",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  2010,
+                                               "name":  "Councillor Tree Chambers-Dubus",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  2020,
+                                               "name":  "Councillor Alwin Wiederhold",
+                                               "role":  "Spokesperson"
+                                           },
+                                           {
+                                               "uid":  2228,
+                                               "name":  "Councillor Andrew Bell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2018,
+                                               "name":  "Councillor Angela Conder",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2049,
+                                               "name":  "Councillor Liam Harries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2242,
+                                               "name":  "Councillor Kate Hyland",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2015,
+                                               "name":  "Councillor Karen James",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1522,
+                                               "name":  "Councillor Terry Pullen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2036,
+                                               "name":  "Councillor Louise Walker",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396127",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  487,
+                           "title":  "Audit and Governance Committee",
+                           "category":  "Regulatory and Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=487",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=487",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=487",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=487",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=487",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=487"
+                                    },
+                           "purpose":  null,
+                           "purposeSuggested":  "Suggested: Oversees governance, risk, internal controls, and audit arrangements; reviews assurances and compliance on key corporate matters.",
+                           "purposeSource":  "suggested",
+                           "purposeConfidence":  "low",
+                           "members":  [
+                                           {
+                                               "uid":  2261,
+                                               "name":  "Councillor Victoria Miller",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Councillor Andrew Lewis",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2227,
+                                               "name":  "Councillor Adrian Graham",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1522,
+                                               "name":  "Councillor Terry Pullen",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2020,
+                                               "name":  "Councillor Alwin Wiederhold",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396127",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  115,
+                           "title":  "Licensing and Enforcement Committee",
+                           "category":  "Regulatory and Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=115",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=115",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=115",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=115",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=115",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=115"
+                                    },
+                           "purpose":  "The Licensing and Enforcement Committee is responsible for carrying out functions in relation to private hire vehicles; Hackney Carriages; gaming; entertainment; food, street trading and miscellaneous licensing. It also oversees the activities of the Licensing Sub-Committee.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Laura Brooker",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2034,
+                                               "name":  "Councillor Sylvia Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2014,
+                                               "name":  "Councillor Valerie Simms",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396158",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  482,
+                           "title":  "Licensing and Enforcement Sub-Committee",
+                           "category":  "Regulatory and Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=482",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=482",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=482",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=482",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=482",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=482"
+                                    },
+                           "purpose":  "The Licensing and Enforcement Sub-Committee is responsible for enforcement matters. Meetings will be called as required and the membership will comprise a minimum of three and a maximum of seven Members from the Licensing and Enforcement Committee membership.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Laura Brooker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2034,
+                                               "name":  "Councillor Sylvia Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2014,
+                                               "name":  "Councillor Valerie Simms",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  "01452 396203",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  222,
+                           "title":  "Licensing Sub-Committee",
+                           "category":  "Regulatory and Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=222",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=222",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=222",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=222",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=222",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=222"
+                                    },
+                           "purpose":  "The Licensing Sub-Committee is responsible for functions relating to Licenses for the sale of alcohol.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  2055,
+                                               "name":  "Councillor Tracy Millard",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1501,
+                                               "name":  "Councillor Laura Brooker",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1933,
+                                               "name":  "Councillor Ashley Bowkett",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2034,
+                                               "name":  "Councillor Sylvia Evans",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1531,
+                                               "name":  "Councillor Howard Hyman",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2239,
+                                               "name":  "Councillor Vicky Norledge",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2042,
+                                               "name":  "Councillor Brendon O`Donnell",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  1147,
+                                               "name":  "Councillor Sajid Patel",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2029,
+                                               "name":  "Councillor Anne Radley",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2014,
+                                               "name":  "Councillor Valerie Simms",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2066,
+                                               "name":  "Councillor Joshua Taylor",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+                                                                 "PO Box 3252",
+                                                                 "Gloucester",
+                                                                 "GL1 9FW"
+                                                             ],
+                                           "phone":  "01452 396158",
+                                           "email":  "democratic.services@gloucester.gov.uk"
+                                       }
+                       },
+                       {
+                           "id":  111,
+                           "title":  "Planning Committee",
+                           "category":  "Regulatory and Other Committees",
+                           "flags":  {
+                                         "deleted":  false,
+                                         "expired":  false
+                                     },
+                           "urls":  {
+                                        "details":  "https://democracy.gloucester.gov.uk/mgCommitteeDetails.aspx?ID=111",
+                                        "meetings":  "https://democracy.gloucester.gov.uk/ieListMeetings.aspx?CommitteeId=111",
+                                        "membersContact":  "https://democracy.gloucester.gov.uk/mgCommitteeMailingList.aspx?ID=111",
+                                        "attendance":  "https://democracy.gloucester.gov.uk/mgAttendanceSummary.aspx?RPID=111",
+                                        "interests":  "https://democracy.gloucester.gov.uk/mgListDeclarationsOfInterest.aspx?RPID=111",
+                                        "rss":  "https://democracy.gloucester.gov.uk/mgRss.aspx?CID=111"
+                                    },
+                           "purpose":  "Purpose of the Planning Committee Most planning applications received by the council are decided by a planning officer. However, some applications are decided at the monthly planning committee meetings which normally take place the first Tuesday of each month. These are usually high-profile planning applications which have created a lot of public interest. The planning officers prepare a detailed report for each application to be considered by the committee and these reports are contained in the committee agenda published five working days before the meeting. All reports are available on the link above on browse meetings and agendas for this committee. Updates to the agenda papers are published prior to the meeting and there may be a final update for members to read on the day of the meeting. Members of the public can attend Planning Committees and arrangements for public speaking are set out below. Occasionally, there may be an \"exempt\" item which needs to be decided in closed session and the Chairman will announce this at the start of the meeting. Public Speaking at the Planning Committee We encourage public involvement in the planning process and members of the public have the opportunity to put their views on a planning proposal direct to the planning committee. Only individuals who have made written representations will be eligible to speak. If you would like to register to speak, please contact us on 01452 396203 or 01452 396158, or email democratic.services@gloucester.gov.uk any time after the publication of the agenda but by no later than 17.00 on the day before the Planning Committee meeting. Registering to speak will not guarantee an opportunity to address the Committee. This is because with some applications there may be many requests to speak from the same viewpoint. In this situation we ask that a single speaker represents the group. The onus is upon the parties concerned to communicate with each other and agree who should act as the spokesperson. If an agreement on a spokesperson is not reached, the speaking slot will be given to the first registered speaker. The Chairman will invite the registered speaker to speak for 5 minutes to outline their views. This time limit will be strictly enforced.",
+                           "purposeSuggested":  null,
+                           "purposeSource":  "scraped",
+                           "purposeConfidence":  "high",
+                           "members":  [
+                                           {
+                                               "uid":  2018,
+                                               "name":  "Councillor Angela Conder",
+                                               "role":  "Chair"
+                                           },
+                                           {
+                                               "uid":  1783,
+                                               "name":  "Councillor Linda Castle",
+                                               "role":  "Vice-Chair"
+                                           },
+                                           {
+                                               "uid":  116,
+                                               "name":  "Councillor Usman Bhaimia",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2041,
+                                               "name":  "Councillor Alastair Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2032,
+                                               "name":  "Councillor Stephanie Chambers",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2049,
+                                               "name":  "Councillor Liam Harries",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2012,
+                                               "name":  "Councillor John Jones",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  117,
+                                               "name":  "Councillor Andrew Lewis",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2232,
+                                               "name":  "Councillor Roseanna Marshall",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  113,
+                                               "name":  "Councillor Pam Tracey",
+                                               "role":  null
+                                           },
+                                           {
+                                               "uid":  2020,
+                                               "name":  "Councillor Alwin Wiederhold",
+                                               "role":  null
+                                           }
+                                       ],
+                           "contact":  {
+                                           "supportOfficer":  "Democratic and Electoral Services.",
+                                           "postalAddress":  [
+
+                                                             ],
+                                           "phone":  null,
+                                           "email":  null
+                                       }
+                       }
+                   ]
 }
