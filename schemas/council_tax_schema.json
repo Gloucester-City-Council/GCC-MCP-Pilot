@@ -1,0 +1,1626 @@
+{
+  "schema_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2025-01-22",
+    "status": "draft",
+    "package_type": "service_definition",
+    
+    "validation_status": {
+      "TODO_SUMMARY": [
+        "Cabinet Member for Finance - needs confirmation of current role holder",
+        "Service Manager role - needs confirmation of current post holder",
+        "Corporate Director accountability - needs confirmation of current structure",
+        "Council Tax Support policy document links - need current 2025/26 policy URL",
+        "Performance metrics - collection rates and processing times need validation",
+        "Care leavers discount policy - need full policy document reference",
+        "DPO sign off - required before publication",
+        "Data retention periods - need formal confirmation for all processes",
+        "Payment system details - GOV.UK Pay implementation status",
+        "Appeals process - Valuation Tribunal timescales need confirmation",
+        "Enforcement policy - need current policy document reference",
+        "Exemption class definitions - need comprehensive list with codes",
+        "Holiday lets - council's monitoring approach needs confirmation",
+        "Holiday lets - council guidance document URL needed",
+        "Holiday lets - Business Rates application processing times need confirmation",
+        "Holiday lets - composite property guidance needed"
+      ],
+      
+      "cabinet_member": "TODO - confirm current Cabinet Member for Finance",
+      "service_manager": "TODO - confirm current Council Tax Service Manager role",
+      "corporate_director": "TODO - confirm accountability sits with Corporate Director, Resources",
+      "performance_metrics": "TODO - validate collection rates and processing times",
+      "council_tax_support_policy": "TODO - add link to Local Council Tax Support Policy 2025/26",
+      "care_leavers_policy": "TODO - add link to care leavers discount policy",
+      "dpo_sign_off": "TODO - required before publication",
+      "retention_periods": "TODO - confirm retention periods for all data types",
+      "payment_systems": "TODO - confirm GOV.UK Pay implementation status",
+      "appeals_timescales": "TODO - confirm Valuation Tribunal timescales",
+      "enforcement_policy": "TODO - add link to enforcement policy document",
+      "exemption_classes": "TODO - add comprehensive list of exemption class codes and descriptions"
+    }
+  },
+  
+  "package_identity": {
+    "package_id": "council-tax",
+    "package_name": "Council Tax",
+    "package_description": "Local taxation system for residential properties to fund local services including police, fire, waste collection, schools and other essential council services"
+  },
+  
+  "service_overview": {
+    "what_is_council_tax": "Council Tax is a property-based tax charged on domestic properties. It helps fund essential local services provided by Gloucester City Council, Gloucestershire County Council, and the Police and Crime Commissioner. The amount you pay depends on your property's valuation band and who lives there.",
+    
+    "what_it_pays_for": [
+      "Local services from Gloucester City Council (waste collection, street cleaning, parks, leisure facilities)",
+      "County Council services (adult social care, children's services, schools, highways, libraries)",
+      "Police and Crime Commissioner for Gloucestershire",
+      "Parish/Town Council precepts (where applicable - e.g. Quedgeley)"
+    ],
+    
+    "financial_year": "2025/26",
+    "billing_authority": "Gloucester City Council",
+    "collection_authority": "Gloucester City Council"
+  },
+  
+  "legal_framework": {
+    "service_type": "statutory",
+    
+    "primary_legislation": {
+      "act": "Local Government Finance Act 1992",
+      "reference": "c.14",
+      "url": "https://www.legislation.gov.uk/ukpga/1992/14/contents",
+      "what_law_requires": "Billing authorities must levy and collect Council Tax on domestic properties in their area",
+      "key_sections": [
+        {
+          "section": "Part I, Sections 1-9",
+          "purpose": "Defines Council Tax, liability hierarchy, and valuation bands"
+        },
+        {
+          "section": "Schedule 2",
+          "purpose": "Administration and collection provisions"
+        },
+        {
+          "section": "Schedule 3",
+          "purpose": "Civil penalties"
+        },
+        {
+          "section": "Schedule 8",
+          "purpose": "Recovery of sums due"
+        }
+      ]
+    },
+    
+    "supporting_legislation": [
+      {
+        "title": "Council Tax (Administration and Enforcement) Regulations 1992",
+        "reference": "SI 1992/613",
+        "purpose": "Detailed regulations for administration, billing, and enforcement"
+      },
+      {
+        "title": "Council Tax (Demand Notices) (England) Regulations 2011",
+        "reference": "SI 2011/3038",
+        "purpose": "Requirements for Council Tax bills and demand notices"
+      },
+      {
+        "title": "Council Tax Reduction Schemes (Prescribed Requirements) (England) Regulations 2012",
+        "reference": "SI 2012/2885",
+        "purpose": "Framework for pension-age Council Tax Support schemes"
+      },
+      {
+        "title": "Levelling-up and Regeneration Act 2023",
+        "purpose": "Amendments to empty homes and second homes premiums from April 2025"
+      },
+      {
+        "title": "Equality Act 2010",
+        "purpose": "Requirements for reasonable adjustments (e.g. disabled band reduction)"
+      }
+    ],
+    
+    "local_policies": [
+      {
+        "policy": "Local Council Tax Support Policy 2025/26",
+        "status": "TODO - add URL",
+        "purpose": "Local scheme for working-age residents on low income",
+        "approval": "Full Council",
+        "last_updated": "2025"
+      },
+      {
+        "policy": "Care Leavers Discount Policy",
+        "status": "TODO - add URL",
+        "purpose": "100% discount for Gloucestershire care leavers aged 18-24",
+        "approval": "Cabinet",
+        "last_updated": "TODO"
+      },
+      {
+        "policy": "Empty Homes Premium Policy",
+        "approval": "Full Council meeting 7 February 2024",
+        "effective_date": "2025-04-01",
+        "purpose": "Premiums to encourage bringing empty properties back into use"
+      },
+      {
+        "policy": "Second Homes Premium Policy",
+        "approval": "Full Council meeting 25 January 2024",
+        "effective_date": "2025-04-01",
+        "purpose": "100% premium on periodically occupied properties"
+      }
+    ],
+    
+    "strategic_alignment": {
+      "corporate_plan_2025_28": {
+        "theme": "Inclusive, Thriving Communities and Residents that Feel Safe, Supported and Valued",
+        "objective": "Ensure that all our residents have somewhere to call home by providing more affordable housing",
+        "relevance": "Empty homes and second homes premiums incentivise bringing properties into residential use"
+      },
+      "annual_budget": {
+        "council_proportion": "Council Tax is a key source of locally-raised income alongside business rates and government grants",
+        "gloucester_city_band_d": "£237.04",
+        "gloucester_city_increase": "3%",
+        "note": "Funding from central government has declined significantly 2010-2024"
+      }
+    },
+    
+    "legal_status": {
+      "statutory_authority": "Local Government Finance Act 1992 is statute created by democratically elected Parliament with Royal Assent",
+      "not_a_contract": "Council Tax is a statutory tax, not a contract. Signature or agreement is not required.",
+      "liability_hierarchy": "Defined in Local Government Finance Act 1992, Part 1, Chapter 1, Sections 6-9",
+      "challenge_routes": [
+        "Appeal decision under Section 16 of Local Government Finance Act 1992",
+        "Valuation Tribunal for banding disputes",
+        "Magistrates Court for liability order challenges"
+      ]
+    }
+  },
+  
+  "valuation_and_charging": {
+    "valuation_bands": {
+      "system": "Properties valued and banded by Valuation Office Agency (VOA) based on 1 April 1991 values",
+      "voa_url": "https://www.gov.uk/government/organisations/valuation-office-agency",
+      "challenge_banding": "Contact VOA if you believe your property is in wrong band",
+      
+      "bands_2025_26": [
+        {
+          "band": "A",
+          "property_value_1991": "Up to £40,000",
+          "gloucester_city": "£158.03",
+          "county_council": "£1,119.77",
+          "police_pcc": "£214.72",
+          "total": "£1,492.52"
+        },
+        {
+          "band": "B",
+          "property_value_1991": "£40,001 to £52,000",
+          "gloucester_city": "£184.36",
+          "county_council": "£1,306.39",
+          "police_pcc": "£250.51",
+          "total": "£1,741.26"
+        },
+        {
+          "band": "C",
+          "property_value_1991": "£52,001 to £68,000",
+          "gloucester_city": "£210.70",
+          "county_council": "£1,493.02",
+          "police_pcc": "£286.29",
+          "total": "£1,990.01"
+        },
+        {
+          "band": "D",
+          "property_value_1991": "£68,001 to £88,000",
+          "gloucester_city": "£237.04",
+          "county_council": "£1,679.65",
+          "police_pcc": "£322.08",
+          "total": "£2,238.77"
+        },
+        {
+          "band": "E",
+          "property_value_1991": "£88,001 to £120,000",
+          "gloucester_city": "£289.72",
+          "county_council": "£2,052.91",
+          "police_pcc": "£393.65",
+          "total": "£2,736.28"
+        },
+        {
+          "band": "F",
+          "property_value_1991": "£120,001 to £160,000",
+          "gloucester_city": "£342.39",
+          "county_council": "£2,426.16",
+          "police_pcc": "£465.23",
+          "total": "£3,233.78"
+        },
+        {
+          "band": "G",
+          "property_value_1991": "£160,001 to £320,000",
+          "gloucester_city": "£395.07",
+          "county_council": "£2,799.42",
+          "police_pcc": "£536.80",
+          "total": "£3,731.29"
+        },
+        {
+          "band": "H",
+          "property_value_1991": "Over £320,000",
+          "gloucester_city": "£474.08",
+          "county_council": "£3,359.30",
+          "police_pcc": "£644.16",
+          "total": "£4,477.54"
+        }
+      ],
+      
+      "increases_2025_26": {
+        "gloucester_city": "3%",
+        "county_council": "5% (including adult social care precept)",
+        "police_pcc": "4.5%",
+        "average_total": "4.7%",
+        "band_d_weekly_increase": "£0.13 per week (£6.68 per year)"
+      }
+    },
+    
+    "calculation_basis": {
+      "standard_bill": "Based on at least 2 adults aged 18+ living in the property",
+      "note": "Bill does not increase if more than 2 adults live there",
+      "discounts_available": "Reductions available if fewer adults or certain circumstances apply"
+    },
+    
+    "parish_precepts": {
+      "quedgeley_town_council": {
+        "note": "Additional precept applies to properties in Quedgeley parish",
+        "status": "See separate Quedgeley spending plans document"
+      }
+    }
+  },
+  
+  "discounts": {
+    "overview": "Discounts reduce the Council Tax bill. Multiple discounts may apply but typically only the most beneficial one is awarded. Most discounts are statutory (national) but some are local discretionary policies.",
+    
+    "person_based_discounts": [
+      {
+        "discount_id": "single-person-discount",
+        "discount_name": "Single Person Discount",
+        "discount_amount": "25%",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1",
+          "status": "National mandatory discount"
+        },
+        
+        "eligibility": {
+          "criteria": "Only one person aged 18 or over lives in the property as their sole or main residence",
+          "note": "Some people are 'disregarded' and don't count as adults for Council Tax purposes"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk with 'Reference [Council Tax number]' in subject",
+            "Include Council Tax account reference number"
+          ],
+          "processing": "Continue paying until notified of decision",
+          "notification_requirement": "Tell us within 21 days if circumstances change"
+        },
+        
+        "change_in_circumstances": {
+          "tell_us_within": "21 days",
+          "examples": [
+            "Someone moves in",
+            "You move out",
+            "Someone in household turns 18"
+          ],
+          "consequence_of_not_telling": "May receive amended bill and penalty charge"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/single-person/"
+      },
+      
+      {
+        "discount_id": "severely-mentally-impaired",
+        "discount_name": "Severely Mentally Impaired Discount",
+        "discount_amount": "Either 25% or 100% depending on household composition",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(7)",
+          "status": "National mandatory discount (person is disregarded)"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Person is severely mentally impaired (certified by doctor)",
+            "Person receives qualifying benefit"
+          ],
+          "qualifying_benefits": [
+            "Attendance Allowance",
+            "Disability Living Allowance (middle or higher rate care component)",
+            "Personal Independence Payment (daily living component)",
+            "Constant Attendance Allowance",
+            "Severe Disablement Allowance",
+            "Employment and Support Allowance (support group)",
+            "Universal Credit (limited capability for work element)",
+            "Incapacity Benefit",
+            "Income Support (including disability premium)"
+          ],
+          "evidence_required": "Medical certificate from doctor confirming severe mental impairment"
+        },
+        
+        "discount_levels": {
+          "100_percent": "If severely mentally impaired person is only adult, or all other adults are disregarded/also severely mentally impaired",
+          "25_percent": "If severely mentally impaired person lives with one other non-disregarded adult",
+          "no_discount": "If severely mentally impaired person lives with two or more other non-disregarded adults"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk",
+            "Include medical certificate and benefit evidence"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/severely-mentally-impaired/"
+      },
+      
+      {
+        "discount_id": "care-leavers",
+        "discount_name": "Care Leavers Discount",
+        "discount_amount": "100%",
+        
+        "legal_basis": {
+          "type": "local_discretionary",
+          "policy": "Gloucester City Council Care Leavers Policy",
+          "status": "TODO - add policy URL",
+          "power": "Local Government Finance Act 1992, Section 13A(1)(c) - discretionary discount"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Aged 18-24 (discount ends on 25th birthday)",
+            "Gloucestershire County Council Former Relevant Child",
+            "Confirmed by Gloucestershire's 11-25 Permanency Service",
+            "Liable to pay Council Tax (property is your main home)"
+          ],
+          "geographic_scope": "Only Gloucestershire County Council care leavers in Gloucester"
+        },
+        
+        "discount_calculation": {
+          "sole_occupier": "100% of full bill",
+          "joint_liability": "Discount applied proportionally to care leaver's share",
+          "with_single_person_discount": "Care leaver discount takes precedence over single person discount"
+        },
+        
+        "end_of_discount": {
+          "age_limit": "25th birthday",
+          "policy_change": "May end if council policy revised"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk",
+            "Confirmation required from 11-25 Permanency Service"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/care-leavers/"
+      },
+      
+      {
+        "discount_id": "carer-disregard",
+        "discount_name": "Carer Disregard",
+        "discount_amount": "Carer is disregarded - may result in 25% discount if only one other adult",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(5)",
+          "status": "National mandatory disregard"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Provides care for at least 35 hours per week",
+            "Person cared for receives qualifying benefit",
+            "Person cared for is NOT your spouse, partner, or child under 18"
+          ],
+          "qualifying_benefits_for_cared_person": [
+            "Attendance Allowance (higher or lower rate)",
+            "Disability Living Allowance (middle or higher rate care component)",
+            "Personal Independence Payment (daily living component)",
+            "Constant Attendance Allowance (war pension scheme)"
+          ],
+          "exclusions": [
+            "Paid carers employed by care company (counted as normal adults)",
+            "Caring for spouse/partner",
+            "Caring for child under 18"
+          ]
+        },
+        
+        "how_disregard_works": {
+          "effect": "Carer is not counted when calculating number of adults",
+          "example": "If only carer and cared-for person live in property, and cared-for person also qualifies as disregarded, 100% discount may apply"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk",
+            "Evidence of care arrangement and benefits required"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/carers/"
+      }
+    ],
+    
+    "student_discounts": [
+      {
+        "discount_id": "full-time-students",
+        "discount_name": "Full-time Student Disregard",
+        "discount_amount": "Students disregarded - 100% discount if all adults are students, otherwise may result in 25% if one student with one other adult",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(4)",
+          "status": "National mandatory disregard"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Enrolled on full-time course of education",
+            "Course lasts at least one academic year",
+            "At least 24 weeks per year",
+            "At least 21 hours study per week during term time"
+          ],
+          "applies_to": [
+            "University and college students",
+            "Student nurses on courses leading to registration",
+            "Students under 20 in full-time further education"
+          ],
+          "exemption": "Property occupied only by full-time students is exempt (Class N)"
+        },
+        
+        "evidence_required": "Student certificate from educational institution",
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk with student certificate"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/students-and-student-nurses/"
+      },
+      
+      {
+        "discount_id": "apprentices-youth-trainees",
+        "discount_name": "Apprentice and Youth Trainee Disregard",
+        "discount_amount": "Disregarded - may result in discount depending on household",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(6)",
+          "status": "National mandatory disregard"
+        },
+        
+        "eligibility": {
+          "apprentices": "Undertaking apprenticeship under Apprenticeships, Skills, Children and Learning Act 2009",
+          "youth_trainees": "Youth training under specified schemes"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk with apprenticeship agreement"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/apprentices-and-youth-trainees/"
+      },
+      
+      {
+        "discount_id": "school-college-leavers",
+        "discount_name": "School/College Leaver Disregard (Age 18-19)",
+        "discount_amount": "Disregarded until 1 November",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Schedule 1",
+          "status": "National mandatory disregard"
+        },
+        
+        "eligibility": {
+          "criteria": "Left school or college after 30 April, aged 18-19",
+          "disregard_period": "Not counted for Council Tax until 1 November of same year",
+          "child_benefit": "If over 18 and someone receives child benefit for you, also disregarded"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk"
+          ]
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/school-college-leavers-or-receiving-child-benefit/"
+      }
+    ],
+    
+    "property_based_discounts": [
+      {
+        "discount_id": "disabled-band-reduction",
+        "discount_name": "Disabled Band Reduction",
+        "discount_amount": "One band lower (Band A gets 1/9th reduction)",
+        
+        "legal_basis": {
+          "type": "statutory",
+          "legislation": "Local Government Finance Act 1992, Section 13(2) and Schedule 1A",
+          "status": "National mandatory reduction"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Property is main home of disabled person (adult or child)",
+            "Property has been adapted or has features essential for disabled person's needs"
+          ],
+          "qualifying_features": [
+            "Additional bathroom or kitchen for disabled person's use",
+            "Room (not bathroom/kitchen/toilet) used by disabled person for special purpose (e.g. dialysis)",
+            "Extra space inside property for wheelchair use"
+          ],
+          "assessment": "Site visit required to verify features meet criteria"
+        },
+        
+        "how_reduction_works": {
+          "bands_b_to_h": "Pay one band lower (Band D pays Band C rate)",
+          "band_a": "17% reduction on Band A charge (approximately 1/9th reduction)",
+          "note": "This is not a discount but a reduction in the valuation band used for calculation"
+        },
+        
+        "application_process": {
+          "how_to_apply": [
+            "Apply through My Gloucester online account",
+            "Download and email form to revenues@gloucester.gov.uk",
+            "Post form to: Gloucester City Revenues & Benefits, Eastgate Management Suite, Eastgate Street, Gloucester, GL1 1PA"
+          ],
+          "assessment": "Council officer will visit to verify eligibility"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/discounts/disabled-reduction/"
+      },
+      
+      {
+        "discount_id": "unoccupied-unfurnished",
+        "discount_name": "Empty Property Discount (Unoccupied and Unfurnished)",
+        "discount_amount": "25% for up to 6 months",
+        
+        "legal_basis": {
+          "type": "local_discretionary",
+          "legislation": "Local Government Finance Act 1992, Schedule 1A, Paragraph 4",
+          "policy": "Council decision on empty property discount",
+          "status": "Local discretionary discount (councils can set 0-100% for up to 12 months)"
+        },
+        
+        "eligibility": {
+          "criteria": "Property is unoccupied and unfurnished",
+          "discount_period": "25% discount for maximum 6 months from date furniture removed",
+          "after_6_months": "Full charge (100%) applies"
+        },
+        
+        "property_based_discount": {
+          "note": "Discount awarded to property, not person",
+          "consequence": "If you buy/rent property already empty, you only get remaining period of 6-month maximum"
+        },
+        
+        "long_term_empty": {
+          "after_6_months": "No discount - full charge",
+          "after_1_year": "Empty homes premium applies (see property premiums section)"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/empty-properties/"
+      },
+      
+      {
+        "discount_id": "major-repair",
+        "discount_name": "Major Repair Discount",
+        "discount_amount": "25% for up to 12 months",
+        
+        "legal_basis": {
+          "type": "local_discretionary",
+          "legislation": "Local Government Finance Act 1992, Schedule 1A, Paragraph 4",
+          "policy": "Council decision on major repair discount"
+        },
+        
+        "eligibility": {
+          "criteria": "Property unoccupied and undergoing major structural alteration or repair to make it habitable",
+          "qualifying_works": [
+            "Major repairs to roof structure (not just re-tiling/re-slating)",
+            "Total gutting including removing most internal walls (not stud/partition walls)",
+            "Making habitable after flood, fire, or subsidence damage"
+          ],
+          "non_qualifying_works": [
+            "General refurbishment",
+            "Cosmetic improvements",
+            "Minor repairs"
+          ],
+          "maximum_period": "12 months",
+          "once_per_property": "Can only claim once per property unless new major damage (flood/fire/subsidence) occurs"
+        },
+        
+        "application_process": {
+          "evidence_required": "Details of major works being undertaken",
+          "assessment": "Council will verify works qualify"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/empty-properties/"
+      },
+      
+      {
+        "discount_id": "annexe-discount",
+        "discount_name": "Annexe Discount",
+        "discount_amount": "50%",
+        
+        "legal_basis": {
+          "type": "local_discretionary",
+          "legislation": "Local Government Finance Act 1992, Schedule 1A",
+          "policy": "Local annexe discount policy"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Annexe occupied by relative of council tax payer of main property, OR",
+            "Annexe used as part of main property (not separately let)"
+          ],
+          "exemption_exists": "Annexes occupied by elderly or disabled relatives may be exempt instead of discounted"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/"
+      },
+      
+      {
+        "discount_id": "job-related-second-home",
+        "discount_name": "Job-Related Second Home Discount",
+        "discount_amount": "50%",
+        
+        "legal_basis": {
+          "type": "local_discretionary",
+          "legislation": "Local Government Finance Act 1992, Schedule 1A",
+          "policy": "Job-related accommodation discount"
+        },
+        
+        "eligibility": {
+          "criteria": [
+            "Employer requires you to live in property (job-related accommodation)",
+            "You are also liable for Council Tax on a second furnished property"
+          ],
+          "note": "Applies to the furnished second home, not the job-related property"
+        },
+        
+        "application_process": {
+          "contact": "revenues@gloucester.gov.uk",
+          "evidence_required": "Proof of employment requirement and dual liability"
+        },
+        
+        "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/second-homes/"
+      }
+    ],
+    
+    "other_disregards": [
+      {
+        "category": "Hospital/Care Patients",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+        "who": [
+          "Long-term hospital patients",
+          "Residential care/nursing home residents",
+          "Hospice residents",
+          "Hostel residents (providing high level of care)"
+        ],
+        "effect": "Disregarded - not counted as adults for Council Tax"
+      },
+      {
+        "category": "Persons in Detention",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+        "who": [
+          "Persons in prison",
+          "Persons on remand",
+          "Persons detained under Mental Health Act 1983"
+        ],
+        "effect": "Disregarded - not counted as adults for Council Tax"
+      },
+      {
+        "category": "Members of Religious Communities",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+        "who": "Members of religious communities whose principal occupation is prayer, contemplation, education, or relief of suffering",
+        "effect": "Disregarded - not counted as adults for Council Tax"
+      },
+      {
+        "category": "Foreign Spouses/Dependants of Students",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+        "who": "Non-British spouses/dependants of students prevented by Home Office from working or claiming benefits",
+        "effect": "Disregarded - not counted as adults for Council Tax"
+      }
+    ]
+  },
+  
+  "property_premiums": {
+    "overview": "Premiums add extra charges to the Council Tax bill to incentivise bringing empty properties into use and discouraging second homes. These changes took effect from 1 April 2025 following the Levelling-up and Regeneration Act 2023.",
+    
+    "empty_homes_premium": {
+      "premium_id": "long-term-empty",
+      "premium_name": "Long-term Empty Homes Premium",
+      
+      "legal_basis": {
+        "legislation": "Local Government Finance Act 1992, Sections 11B and 11C (as amended by Levelling-up and Regeneration Act 2023)",
+        "policy": "Approved by Full Council 7 February 2024",
+        "effective_date": "2025-04-01"
+      },
+      
+      "what_it_is": "Additional charge on top of standard Council Tax to encourage owners to bring empty properties back into use",
+      
+      "premium_levels": {
+        "1_to_2_years": {
+          "empty_period": "Empty and unfurnished for 1 year or more (from 1 April 2025)",
+          "premium": "100% extra (total bill = 200% of standard charge)",
+          "note": "Previously applied after 2 years - reduced to 1 year from April 2025"
+        },
+        "2_to_5_years": {
+          "empty_period": "Empty and unfurnished for 2 years or more",
+          "premium": "100% extra (total bill = 200% of standard charge)"
+        },
+        "5_to_10_years": {
+          "empty_period": "Empty and unfurnished for 5 years or more",
+          "premium": "200% extra (total bill = 300% of standard charge)"
+        },
+        "10_plus_years": {
+          "empty_period": "Empty and unfurnished for 10 years or more (from 1 April 2021)",
+          "premium": "300% extra (total bill = 400% of standard charge)"
+        }
+      },
+      
+      "property_based_charge": {
+        "applies_to_property": "Premium applies to property, not owner",
+        "change_of_ownership": "Buying property already empty means you inherit the premium",
+        "removal": "Premium only removed by bringing property back into use or qualifying for exception"
+      },
+      
+      "exceptions": {
+        "qualifying_exceptions": [
+          "Property where occupation is prohibited by planning restrictions",
+          "Property held by trustee in bankruptcy",
+          "Property of deceased person (for up to 6 months after grant of probate)",
+          "Property repossessed by mortgage lender",
+          "Property undergoing probate",
+          "Property where owner moved to care home",
+          "Property where owner is providing care elsewhere",
+          "Armed forces accommodation"
+        ],
+        "evidence_required": "Must provide evidence to demonstrate exception applies"
+      },
+      
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/empty-properties/"
+    },
+    
+    "second_homes_premium": {
+      "premium_id": "second-homes",
+      "premium_name": "Second Homes Premium (Periodically Occupied Properties)",
+      
+      "legal_basis": {
+        "legislation": "Local Government Finance Act 1992, Sections 11B and 11C (as amended by Levelling-up and Regeneration Act 2023)",
+        "policy": "Approved by Full Council 25 January 2024",
+        "effective_date": "2025-04-01"
+      },
+      
+      "what_it_is": "Additional 100% charge on furnished properties not occupied as anyone's sole or main residence",
+      
+      "premium_rate": {
+        "premium": "100% extra (total bill = 200% of standard charge)",
+        "applies_to": "Properties which are furnished but not occupied as sole or main residence"
+      },
+      
+      "definition": {
+        "second_home": "Furnished property where there is no resident (sole or main residence)",
+        "note": "Formerly no discount was awarded - from April 2025 there is a 100% premium"
+      },
+      
+      "exceptions": {
+        "job_related": "50% discount may apply if second home is job-related (see job-related second home discount)",
+        "other_exceptions": "See legislation for full list of statutory exceptions",
+        "application": "From 1 April 2025 can apply for exception with evidence"
+      },
+      
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/second-homes/"
+    }
+  },
+  
+  "exemptions": {
+    "overview": "Exemptions mean no Council Tax is payable. They are defined by legislation and local policy. Status: TODO - need comprehensive list with exemption class codes.",
+    
+    "unoccupied_property_exemptions": [
+      {
+        "exemption": "Death of owner/occupier",
+        "class": "F (if unoccupied) or E (if occupied only by personal representatives)",
+        "duration": "Up to 6 months after grant of probate",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Repossessed property",
+        "class": "B",
+        "criteria": "Property repossessed by mortgage lender",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Owner in care/hospital",
+        "class": "TODO - confirm class",
+        "criteria": "Property left empty by person moving to care home or hospital",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Owner providing care elsewhere",
+        "class": "TODO - confirm class",
+        "criteria": "Property left empty by person moving elsewhere to provide care",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Student hall of residence",
+        "class": "TODO - confirm class",
+        "criteria": "Property used as student accommodation by educational institution",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Armed forces accommodation",
+        "class": "TODO - confirm class",
+        "criteria": "MOD-owned accommodation for armed forces",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Trustee in bankruptcy",
+        "class": "TODO - confirm class",
+        "criteria": "Property where liable person is trustee in bankruptcy",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      }
+    ],
+    
+    "occupied_property_exemptions": [
+      {
+        "exemption": "All residents are students",
+        "class": "N",
+        "criteria": "Property occupied only by full-time students",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Under 18 residents only",
+        "class": "S",
+        "criteria": "Property occupied only by persons under 18",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Annexe occupied by elderly/disabled relative",
+        "class": "W",
+        "criteria": "Annexe part of main dwelling occupied by elderly or disabled relative",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      },
+      {
+        "exemption": "Caravan pitch/boat mooring",
+        "class": "TODO - confirm class",
+        "criteria": "Pitch or mooring not occupied by caravan or boat",
+        "legal_basis": "Local Government Finance Act 1992, Schedule 1"
+      }
+    ],
+    
+    "application_process": {
+      "how_to_apply": "Contact revenues@gloucester.gov.uk",
+      "evidence_required": "Must provide evidence exemption criteria met",
+      "notification_requirement": "Must tell us within 21 days if exemption ends",
+      "consequence_of_late_notification": "May receive amended bill and penalty charge"
+    },
+    
+    "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/property-exemptions/",
+    
+    "TODO": "Add comprehensive list of all exemption classes (A-W) with full descriptions"
+  },
+  
+  "council_tax_support": {
+    "scheme_id": "council-tax-support",
+    "scheme_name": "Council Tax Support (Council Tax Reduction)",
+    
+    "what_it_is": "Financial help with Council Tax bills for people on low income or claiming benefits. This is NOT a discount - it is a reduction in the bill based on financial assessment.",
+    
+    "legal_basis": {
+      "type": "statutory_framework_local_scheme",
+      "legislation": [
+        {
+          "act": "Local Government Finance Act 1992, Section 13A",
+          "purpose": "Requires billing authorities to have Council Tax Reduction scheme"
+        },
+        {
+          "regulations": "Council Tax Reduction Schemes (Prescribed Requirements) (England) Regulations 2012",
+          "purpose": "Prescribes scheme for pension-age claimants (national scheme)"
+        }
+      ],
+      "local_policy": {
+        "title": "Local Council Tax Support Policy 2025/26",
+        "status": "TODO - add URL",
+        "approval": "Full Council",
+        "scope": "Working-age scheme is locally determined by each billing authority"
+      }
+    },
+    
+    "replaced": "Council Tax Benefit (abolished April 2013)",
+    
+    "eligibility": {
+      "who_can_apply": "Anyone on low income or claiming benefits",
+      "applies_to": [
+        "Homeowners",
+        "Private renters",
+        "Council tenants",
+        "Employed people",
+        "Unemployed people",
+        "Pension age",
+        "Working age"
+      ]
+    },
+    
+    "maximum_support": {
+      "amount": "Up to 100% of Council Tax bill",
+      "note": "Actual amount depends on circumstances"
+    },
+    
+    "assessment_factors": {
+      "considered": [
+        "Income (earnings, benefits, pensions)",
+        "Savings and investments",
+        "Household composition",
+        "Other circumstances"
+      ],
+      "savings_limit": {
+        "working_age": "£16,000 - you will not qualify if savings/investments over this (unless receiving Pension Credit)",
+        "pension_age": "No upper savings limit if receiving Guarantee Credit"
+      }
+    },
+    
+    "exclusions": {
+      "cannot_claim_if": [
+        "Already receiving student discount",
+        "Property is exempt"
+      ]
+    },
+    
+    "application_process": {
+      "how_to_apply": "Apply through My Gloucester online account or download application form",
+      "processing": "Financial assessment undertaken",
+      "outcome": "If approved, bill credited and revised bill sent"
+    },
+    
+    "change_in_circumstances": {
+      "tell_us_within": "21 days",
+      "examples": [
+        "Change in income",
+        "Change in benefits",
+        "Change in household",
+        "Change in savings"
+      ],
+      "consequence": {
+        "overpayment": "Must repay amount not entitled to - deducted from Council Tax account",
+        "underpayment": "May receive additional support backdated"
+      }
+    },
+    
+    "appeals": {
+      "how_to_appeal": "Contact benefits@gloucester.gov.uk or write to us",
+      "state_reason": "Must explain why you disagree with decision",
+      "include": "Benefit claim number and word 'claim' in email subject"
+    },
+    
+    "url": "https://www.gloucester.gov.uk/council-tax/council-tax-support/",
+    
+    "note": "Council Tax Support is means-tested financial assistance, distinct from discounts which are based on household composition or property characteristics"
+  },
+  
+  "payment": {
+    "payment_schedule": {
+      "instalments": "10 monthly instalments",
+      "months": "April to January (inclusive)",
+      "default_dates": "Usually around the 1st of each month",
+      "no_payments": "February and March (unless different arrangement agreed)"
+    },
+    
+    "payment_methods": {
+      "direct_debit": {
+        "recommended": true,
+        "benefits": [
+          "Automatic payments",
+          "Never miss a payment",
+          "Direct Debit Guarantee protection"
+        ],
+        "setup": "Through My Gloucester account or download form"
+      },
+      "online": {
+        "my_gloucester": "https://gloucester-self.achieveservice.com/",
+        "debit_card": "Accepted",
+        "credit_card": "Not typically accepted - check website"
+      },
+      "phone": {
+        "number": "01452 396396",
+        "automated_line": "Available 24/7",
+        "note": "Debit card payments"
+      },
+      "post": {
+        "cheque": "Payable to 'Gloucester City Council'",
+        "address": "Gloucester City Revenues & Benefits, Eastgate Management Suite, Eastgate Street, Gloucester, GL1 1PA",
+        "include": "Council Tax account reference number"
+      }
+    },
+    
+    "payment_difficulties": {
+      "contact_us": "If struggling to pay, contact us immediately",
+      "support_available": [
+        "Payment arrangement discussions",
+        "Council Tax Support assessment if eligible",
+        "Advice on budgeting and support services"
+      ],
+      "early_contact": "Contact us before you fall behind - easier to help"
+    },
+    
+    "gov_pay_implementation": "TODO - confirm if GOV.UK Pay in use for online payments"
+  },
+  
+  "liability": {
+    "who_pays": {
+      "hierarchy": "Liability determined by Local Government Finance Act 1992, Part 1, Chapter 1, Sections 6-9",
+      "order": [
+        {
+          "priority": 1,
+          "liable_person": "Resident freeholder (owner-occupier)"
+        },
+        {
+          "priority": 2,
+          "liable_person": "Resident leaseholder (long leasehold)"
+        },
+        {
+          "priority": 3,
+          "liable_person": "Resident tenant"
+        },
+        {
+          "priority": 4,
+          "liable_person": "Resident licensee (has permission to occupy)"
+        },
+        {
+          "priority": 5,
+          "liable_person": "Owner (if no residents)"
+        }
+      ],
+      "joint_liability": "If multiple people at same level of hierarchy, they are jointly and severally liable (each responsible for full amount)"
+    },
+    
+    "special_cases": {
+      "hmo": "Houses in Multiple Occupation - owner liable, not tenants",
+      "care_homes": "Resident liable unless meets exemption criteria",
+      "empty_properties": "Owner liable"
+    }
+  },
+  
+  "enforcement": {
+    "overview": "If Council Tax is not paid, the council has statutory powers to recover the debt.",
+    
+    "recovery_process": {
+      "stage_1": {
+        "action": "Reminder notice",
+        "timeline": "If payment missed",
+        "effect": "Lose right to pay in instalments if don't respond",
+        "consequence": "Full year's balance becomes due"
+      },
+      "stage_2": {
+        "action": "Final notice",
+        "timeline": "If still not paid",
+        "warning": "Legal action will follow"
+      },
+      "stage_3": {
+        "action": "Summons to Magistrates Court",
+        "timeline": "If still not paid",
+        "cost": "Court costs added to bill",
+        "note": "You can still pay and avoid court"
+      },
+      "stage_4": {
+        "action": "Liability Order granted by Magistrates",
+        "effect": "Legal authority to enforce debt",
+        "costs": "Further costs added",
+        "enforcement_options": [
+          "Attachment of Earnings (deductions from wages)",
+          "Attachment of Benefits (deductions from benefits)",
+          "Enforcement agents (bailiffs)",
+          "Charging Order on property",
+          "Bankruptcy proceedings (debts over £5,000)",
+          "Committal to prison (last resort)"
+        ]
+      }
+    },
+    
+    "avoiding_enforcement": {
+      "pay_on_time": "Set up Direct Debit to never miss payment",
+      "contact_early": "If struggling, contact us before you fall behind",
+      "payment_plans": "We can discuss arrangements",
+      "council_tax_support": "Check if eligible for financial support"
+    },
+    
+    "legislation": {
+      "recovery_powers": "Local Government Finance Act 1992, Schedule 8",
+      "administration": "Council Tax (Administration and Enforcement) Regulations 1992"
+    },
+    
+    "enforcement_policy": "TODO - add link to council's enforcement policy document"
+  },
+  
+  "appeals_and_challenges": {
+    "challenging_bill": {
+      "grounds_for_appeal": [
+        "You are not the person who should pay",
+        "You have not received discount or reduction you were expecting",
+        "You think property is exempt",
+        "You dispute the valuation band"
+      ],
+      "cannot_appeal": "You cannot appeal just because you think bill is too expensive",
+      
+      "process": {
+        "step_1": "Write to revenues@gloucester.gov.uk explaining why you disagree",
+        "step_2": "Include Council Tax account reference",
+        "step_3": "We will review and respond"
+      },
+      
+      "if_still_disagree": {
+        "timeline": "If no response within 2 calendar months, or you disagree with our decision",
+        "next_step": "Appeal to Valuation Tribunal"
+      }
+    },
+    
+    "valuation_band_challenges": {
+      "contact": "Valuation Office Agency (VOA)",
+      "grounds": [
+        "Property in wrong band",
+        "Property band should have changed (e.g. after demolition, splitting, merging)",
+        "Neighbouring property in different band and should be same"
+      ],
+      "cannot_appeal": "Band too high is not grounds - bands are relative to 1991 values",
+      "voa_url": "https://www.gov.uk/challenge-council-tax-band",
+      "note": "VOA decision can be appealed to Valuation Tribunal"
+    },
+    
+    "valuation_tribunal": {
+      "url": "https://www.valuationtribunal.gov.uk/",
+      "independent": "Independent of council and VOA",
+      "decides": "Council Tax liability and banding disputes",
+      "timescales": "TODO - confirm typical timescales"
+    },
+    
+    "legal_basis": {
+      "appeals": "Local Government Finance Act 1992, Section 16",
+      "note": "Making appeal does not suspend payment requirement - must continue paying unless appeal succeeds"
+    }
+  },
+  
+  "service_standards": {
+    "processing_times": {
+      "discount_applications": "TODO - define target processing time",
+      "exemption_applications": "TODO - define target processing time",
+      "council_tax_support": "TODO - define target processing time",
+      "change_of_address": "TODO - define target processing time",
+      "bill_corrections": "TODO - define target processing time"
+    },
+    
+    "collection_performance": {
+      "target_collection_rate": "TODO - define annual target",
+      "actual_performance": "TODO - validate actual performance"
+    },
+    
+    "customer_service": {
+      "response_times": {
+        "phone": "Answer within reasonable time during office hours",
+        "email": "TODO - define target response time",
+        "post": "TODO - define target response time"
+      }
+    }
+  },
+  
+  "data_privacy": {
+    "overview": "This section covers data processing for Council Tax services",
+    
+    "what_we_process": {
+      "account_creation": {
+        "data": "Name, address, property details (UPRN), contact details",
+        "purpose": "Issue Council Tax bills and manage account",
+        "lawful_basis_article_6": "Article 6(1)(e) - public task (statutory duty to levy and collect Council Tax)",
+        "lawful_basis_article_9": "Article 9(2)(g) where special category data processed (e.g. health data for disabled reduction)",
+        "storage": "TODO - define storage system",
+        "retention": "TODO - confirm retention period (likely 6+ years for financial records)",
+        "shared_with": [
+          "Gloucestershire County Council (for county precept)",
+          "Police and Crime Commissioner (for police precept)",
+          "Credit reference agencies (for enforcement)",
+          "Enforcement agents (for debt recovery)",
+          "Department for Work and Pensions (for Council Tax Support verification)"
+        ]
+      },
+      
+      "discount_applications": {
+        "data": "Name, address, household composition, evidence documents (e.g. student certificates, medical certificates)",
+        "purpose": "Assess entitlement to discounts and apply to account",
+        "lawful_basis_article_6": "Article 6(1)(e) - public task (statutory duty to administer discounts)",
+        "lawful_basis_article_9": "Article 9(2)(g) for health data (SMI, disabled reduction)",
+        "storage": "TODO - define storage system",
+        "retention": "TODO - confirm retention period"
+      },
+      
+      "council_tax_support": {
+        "data": "Income, benefits, savings, household details, bank statements",
+        "purpose": "Assess entitlement to financial support",
+        "lawful_basis_article_6": "Article 6(1)(e) - public task (statutory duty to operate reduction scheme)",
+        "storage": "TODO - define storage system",
+        "retention": "TODO - confirm retention period",
+        "shared_with": "DWP for benefit verification"
+      },
+      
+      "payment_processing": {
+        "data": "Bank details (Direct Debit), payment card details (online/phone)",
+        "purpose": "Process Council Tax payments",
+        "lawful_basis_article_6": "Article 6(1)(e) - public task (statutory duty to collect Council Tax)",
+        "payment_processor": "TODO - confirm if GOV.UK Pay or other processor",
+        "retention": "Financial records retained per legal requirements"
+      },
+      
+      "enforcement": {
+        "data": "Name, address, liability details, payment history, employment details",
+        "purpose": "Recover unpaid Council Tax",
+        "lawful_basis_article_6": "Article 6(1)(e) - public task (statutory power to recover debt)",
+        "shared_with": "Magistrates Court, enforcement agents, employers (for attachment of earnings)",
+        "retention": "TODO - confirm retention period for enforcement records"
+      }
+    },
+    
+    "your_rights": {
+      "right_to_access": "Request copy of data we hold about you",
+      "right_to_rectification": "Request correction of inaccurate data",
+      "right_to_erasure": "Limited right (we must retain for legal requirements)",
+      "right_to_object": "Limited right (processing based on statutory duty)",
+      "contact_dpo": "Data Protection Officer, Gloucester City Council"
+    },
+    
+    "data_protection_officer": {
+      "required": "TODO - confirm DPO contact details",
+      "sign_off": "TODO - DPO sign-off required before publication"
+    },
+    
+    "privacy_notice": "https://www.gloucester.gov.uk/about-the-council/data-protection-and-freedom-of-information/data-protection/"
+  },
+  
+  "governance": {
+    "operational_delivery": {
+      "service_manager": {
+        "role": "TODO - confirm current Council Tax Service Manager post",
+        "responsibilities": [
+          "Day-to-day service delivery",
+          "Billing and collection",
+          "Processing discount and exemption applications",
+          "Managing contractor relationships",
+          "Performance monitoring",
+          "Staff management"
+        ]
+      }
+    },
+    
+    "strategic_accountability": {
+      "corporate_director": {
+        "role": "TODO - confirm Corporate Director, Resources (or equivalent)",
+        "accountability": [
+          "Statutory compliance (Section 151 Officer responsibilities)",
+          "Overall service delivery",
+          "Financial strategy",
+          "Collection performance"
+        ]
+      }
+    },
+    
+    "political_accountability": {
+      "cabinet_member": {
+        "role": "TODO - confirm current Cabinet Member for Finance (or equivalent portfolio)",
+        "responsibilities": [
+          "Policy decisions on local schemes (Council Tax Support, empty homes premiums)",
+          "Fee and charge decisions",
+          "Council Tax setting (with Full Council)",
+          "Service changes requiring political approval"
+        ]
+      },
+      
+      "full_council": {
+        "role": "Full Council",
+        "decisions": [
+          "Setting Council Tax each year",
+          "Approving Local Council Tax Support scheme",
+          "Approving empty homes and second homes premiums",
+          "Major policy changes"
+        ]
+      }
+    },
+    
+    "external_bodies": {
+      "valuation_office_agency": {
+        "role": "Independent agency",
+        "responsibility": "Property valuation and banding",
+        "not_council": "Council cannot change bandings - VOA only"
+      },
+      
+      "magistrates_court": {
+        "role": "Judicial body",
+        "responsibility": "Granting liability orders for debt recovery"
+      },
+      
+      "valuation_tribunal": {
+        "role": "Independent tribunal",
+        "responsibility": "Hear appeals on banding and liability"
+      }
+    }
+  },
+  
+  "channels": {
+    "website": "https://www.gloucester.gov.uk/council-tax/",
+    "online_account": "https://gloucester-self.achieveservice.com/ (My Gloucester)",
+    "phone": "01452 396396",
+    "email": "revenues@gloucester.gov.uk (for bill queries) or benefits@gloucester.gov.uk (for Council Tax Support)",
+    "post": "Gloucester City Revenues & Benefits, Eastgate Management Suite, Eastgate Street, Gloucester, GL1 1PA",
+    
+    "office_hours": "TODO - confirm current office hours",
+    
+    "accessibility": {
+      "digital_exclusion": "Face-to-face and telephone support available for those unable to use online services",
+      "language_support": "Translation services available on request",
+      "format_support": "Alternative formats available (large print, audio) on request"
+    }
+  },
+  
+  "complaints": {
+    "how_to_complain": "https://www.gloucester.gov.uk/about-the-council/consultations-and-feedback/compliments-comments-and-complaints/",
+    "stages": [
+      {
+        "stage": "Stage 1",
+        "action": "Contact service directly to resolve",
+        "timeline": "TODO - define response time"
+      },
+      {
+        "stage": "Stage 2",
+        "action": "Formal complaint if not resolved",
+        "timeline": "TODO - define response time"
+      },
+      {
+        "stage": "Stage 3",
+        "action": "Local Government and Social Care Ombudsman",
+        "url": "https://www.lgo.org.uk/",
+        "note": "Only after completing council's complaints process"
+      }
+    ]
+  },
+  
+  "holiday_lets_and_self_catering": {
+    "overview": "Holiday lets and self-catering accommodation occupy a unique position - they can be liable for either Council Tax OR Business Rates depending on usage. This is a critical boundary that affects whether second homes premium applies.",
+    
+    "legal_basis": {
+      "legislation": "Non-Domestic Rating (Definition of Domestic Property) Order 1991 (as amended)",
+      "voa_authority": "Valuation Office Agency determines whether property is domestic (Council Tax) or non-domestic (Business Rates)",
+      "changes_april_2023": "New stricter eligibility rules from 1 April 2023 make it harder to qualify for Business Rates"
+    },
+    
+    "business_rates_eligibility": {
+      "effective_from": "2023-04-01",
+      "criteria_all_must_be_met": [
+        {
+          "requirement": "Availability",
+          "rule": "Available to let commercially for short periods totalling at least 140 days in previous 12 months AND in current 12 months",
+          "evidence": "Marketing evidence, calendar availability, advertising on commercial platforms"
+        },
+        {
+          "requirement": "Actual lettings",
+          "rule": "Actually let commercially for at least 70 days in previous 12 months",
+          "evidence": "Booking records, receipts for rental income, occupancy data",
+          "counting_rule": "Property occupied immediately before midnight counts as one day let"
+        },
+        {
+          "requirement": "Commerciality",
+          "rule": "Let on commercial basis with view to making profit",
+          "evidence": "Market rate pricing, active marketing, business records",
+          "not_commercial": "Letting only to friends/family at nominal rates, or purely for personal use"
+        },
+        {
+          "requirement": "Future intention",
+          "rule": "Owner intends to make available for at least 140 days in following 12 months",
+          "evidence": "Continued marketing, forward bookings"
+        }
+      ],
+      
+      "exclusions_from_day_counts": [
+        "Nights property closed for repair or refurbishment",
+        "Nights the site was closed",
+        "Personal use by owner (counts toward availability but not actual lettings)",
+        "Lettings over 28 consecutive days (not 'short periods')"
+      ],
+      
+      "new_properties": {
+        "initial_liability": "Council Tax from day 1",
+        "transition": "Remains on Council Tax until meets 140 days available AND 70 days let",
+        "switch_date": "Day 141 (if criteria met) - moves to Business Rates",
+        "example": "New holiday let advertised Day 1, if let for 70 of first 140 days and will continue being available, switches to Business Rates on Day 141"
+      },
+      
+      "existing_properties": {
+        "voa_compliance_checks": "VOA conducts rolling programme of checks via 'Request for Information' forms",
+        "must_respond": "Financial penalty if fail to respond to VOA form",
+        "moved_to_council_tax": "If fail to meet criteria, VOA removes from Business Rates list and adds to Council Tax list",
+        "backdated_bills": "May face backdated Council Tax bills if should have been on Council Tax list"
+      }
+    },
+    
+    "council_tax_liability_for_holiday_lets": {
+      "when_liable": [
+        "Property does not meet 140/70 day Business Rates criteria",
+        "Property removed from Business Rates list by VOA for non-compliance",
+        "New property not yet qualified for Business Rates (first 140 days minimum)",
+        "Owner chooses not to pursue Business Rates assessment"
+      ],
+      
+      "which_charge_applies": {
+        "if_furnished_not_main_residence": {
+          "charge": "Second Homes Premium applies",
+          "rate": "200% of standard Council Tax (100% premium) from 1 April 2025",
+          "note": "This is why failing Business Rates criteria is very expensive - you pay double Council Tax instead of Business Rates"
+        },
+        "if_unfurnished": {
+          "charge": "Standard Council Tax or empty homes premium depending on duration",
+          "see": "empty_homes_premium section"
+        }
+      },
+      
+      "liability_person": {
+        "owner_liable": "Owner liable for Council Tax on holiday let, not guests/tenants",
+        "joint_owners": "Joint and several liability if multiple owners"
+      }
+    },
+    
+    "business_rates_for_holiday_lets": {
+      "if_eligible": {
+        "charge": "Business Rates instead of Council Tax",
+        "assessment": "Valuation Office Agency sets rateable value",
+        "billing": "Gloucester City Council bills and collects Business Rates",
+        "note": "Business Rates often lower than Council Tax for small properties"
+      },
+      
+      "small_business_rate_relief": {
+        "eligibility": "If only letting one property AND rateable value under £15,000",
+        "relief": "Up to 100% relief depending on rateable value",
+        "apply": "Download form from council website or contact revenues@gloucester.gov.uk",
+        "note": "This makes Business Rates very attractive if you can qualify - potentially zero rates"
+      },
+      
+      "url": "https://www.gloucester.gov.uk/business-economy/business-rates/"
+    },
+    
+    "strategic_implications": {
+      "second_homes_vs_holiday_lets": {
+        "second_home": "Furnished property not let commercially - pays 200% Council Tax from April 2025",
+        "holiday_let_qualifying": "Meets 140/70 criteria - pays Business Rates (potentially with relief)",
+        "holiday_let_not_qualifying": "Does not meet 140/70 criteria - pays 200% Council Tax as second home",
+        "financial_difference": "Massive financial incentive to meet Business Rates criteria or make property main residence"
+      },
+      
+      "policy_intent": {
+        "government": "Tighter rules from April 2023 to stop 'fake' holiday lets avoiding Council Tax",
+        "council": "Second homes premium from April 2025 to discourage empty properties and encourage residential use",
+        "combined_effect": "Properties must be genuinely commercially let OR occupied as main residence - middle ground very expensive"
+      }
+    },
+    
+    "application_process": {
+      "new_holiday_let": [
+        "Property initially on Council Tax list",
+        "Market commercially for at least 140 days",
+        "Achieve at least 70 days actual commercial lettings",
+        "Maintain evidence (bookings, receipts, marketing materials)",
+        "After Day 141, contact VOA to request Business Rates assessment",
+        "VOA will request evidence and assess",
+        "If approved, moved from Council Tax to Business Rates (typically 12 weeks)"
+      ],
+      
+      "existing_holiday_let": [
+        "VOA will send 'Request for Information' form",
+        "Must respond with evidence of 140 days availability and 70 days lettings",
+        "VOA assesses compliance",
+        "If fail to meet criteria, moved back to Council Tax (with second homes premium)"
+      ],
+      
+      "stop_being_holiday_let": [
+        "Tell VOA immediately if stop commercial letting",
+        "Property moved from Business Rates to Council Tax",
+        "If don't inform, may face backdated Council Tax bill"
+      ]
+    },
+    
+    "contact_and_evidence": {
+      "voa_contact": "https://www.gov.uk/contact-voa",
+      "council_contact": "revenues@gloucester.gov.uk",
+      
+      "evidence_to_maintain": [
+        "Booking calendar showing availability",
+        "Marketing materials and listings (Airbnb, Booking.com, etc)",
+        "Booking confirmations and receipts",
+        "Rental income records",
+        "Business accounts showing profit motive",
+        "Evidence of market-rate pricing"
+      ],
+      
+      "annual_declaration": "VOA may require annual declaration that criteria still met"
+    },
+    
+    "common_scenarios": {
+      "scenario_1": {
+        "situation": "Own second home, let to friends/family occasionally at low rates",
+        "outcome": "Not commercial letting - liable for Council Tax with 200% second homes premium"
+      },
+      "scenario_2": {
+        "situation": "Airbnb property, available 200 days, actually let 90 days commercially",
+        "outcome": "Meets criteria - eligible for Business Rates (potentially with small business relief)"
+      },
+      "scenario_3": {
+        "situation": "Holiday let, available 140 days but only actually let 50 days",
+        "outcome": "Fails 70-day letting test - liable for Council Tax with 200% second homes premium"
+      },
+      "scenario_4": {
+        "situation": "New holiday let, first 100 days, let for 60 days so far",
+        "outcome": "Still on Council Tax (no premium yet as working toward qualification), will switch to Business Rates at Day 141 if hits 70 days"
+      },
+      "scenario_5": {
+        "situation": "Former holiday let stopped commercial letting",
+        "outcome": "Must tell VOA - moves to Council Tax, if keep furnished and not main residence pays 200% as second home"
+      }
+    },
+    
+    "TODO": [
+      "Confirm council's approach to monitoring holiday let compliance",
+      "Add link to council's holiday let guidance",
+      "Confirm processing time for Business Rates applications",
+      "Add detail on composite properties (part residential, part holiday let)"
+    ]
+  },
+  
+  "related_services": {
+    "housing_benefit": {
+      "note": "Housing Benefit helps with rent - separate from Council Tax",
+      "administered_by": "Gloucester City Council Benefits Team",
+      "email": "benefits@gloucester.gov.uk"
+    },
+    
+    "business_rates": {
+      "note": "Business rates charged on non-domestic properties - separate from Council Tax",
+      "includes": "Self-catering holiday lets that meet 140/70 day criteria",
+      "contact": "revenues@gloucester.gov.uk",
+      "url": "https://www.gloucester.gov.uk/business-economy/business-rates/"
+    }
+  },
+  
+  "fraud": {
+    "council_tax_fraud": [
+      "Claiming Single Person Discount when not entitled",
+      "Claiming Student exemption when not a student",
+      "Not declaring change in circumstances",
+      "Providing false information on applications"
+    ],
+    
+    "reporting_fraud": {
+      "how": "Contact fraud team",
+      "email": "TODO - add fraud reporting contact",
+      "anonymous": "Can report anonymously"
+    },
+    
+    "investigation": "Council has powers to investigate fraud",
+    "prosecution": "Fraudulent claims may result in prosecution"
+  },
+  
+  "security_warning": {
+    "scam_alert": "Council Tax scam emails claiming arrears and asking to click link",
+    "never_click": "Do not click links in unexpected emails",
+    "council_will_never": [
+      "Ask for bank details via email",
+      "Ask to verify details through email link"
+    ],
+    "check_status": "Use My Gloucester account to check Council Tax status",
+    "report_scams": "Contact Council Tax team if unsure about any contact"
+  }
+}
