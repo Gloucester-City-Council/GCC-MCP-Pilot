@@ -1,0 +1,837 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://gloucester.gov.uk/schemas/services/heritage-assets/v1",
+  "title": "Designated Heritage Assets Service Schema",
+  "description": "Policy-as-code schema defining the legislative framework, consent processes, and service delivery for designated heritage assets including listed buildings, conservation areas, and related heritage consents under the Planning (Listed Buildings and Conservation Areas) Act 1990, NPPF Chapter 16, and Historic England guidance.",
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-29",
+  "authorityContext": {
+    "primaryAuthority": "Gloucester City Council",
+    "serviceArea": "Planning and Development Control",
+    "jurisdiction": "England",
+    "geographicScope": "Gloucester City Council administrative boundary"
+  },
+  "legislativeFramework": {
+    "primaryLegislation": [
+      {
+        "statute": "Planning (Listed Buildings and Conservation Areas) Act 1990",
+        "citation": "1990 c. 9",
+        "jurisdictionScope": "England (Wales repealed by Historic Environment (Wales) Act 2023)",
+        "effectiveDate": "1990-05-24",
+        "status": "In force with amendments",
+        "keyProvisions": [
+          {
+            "section": "Section 1",
+            "title": "Duty to compile lists of buildings of special architectural or historic interest",
+            "summary": "Secretary of State duty to compile or approve lists of buildings of special architectural or historic interest. Historic England compiles lists; Secretary of State responsible for listing decisions.",
+            "criticalPrinciples": [
+              "Buildings included if of special architectural or historic interest",
+              "Listing considers desirability of preserving features fixed to building or within curtilage",
+              "For time being, 'listed building' means building included in compiled/approved list"
+            ],
+            "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/section/1"
+          },
+          {
+            "section": "Section 7",
+            "title": "Restriction on works affecting listed buildings",
+            "summary": "Core prohibition on unauthorised works to listed buildings",
+            "statutoryText": "Subject to the following provisions of this Act, no person shall execute or cause to be executed any works for the demolition of a listed building or for its alteration or extension in any manner which would affect its character as a building of special architectural or historic interest, unless the works are authorised.",
+            "criticalPrinciples": [
+              "Prohibition applies to demolition, alteration, or extension",
+              "Trigger: works must affect character as building of special interest",
+              "Criminal offence if unauthorised works carried out",
+              "Authorization obtained through listed building consent process"
+            ],
+            "penaltiesForBreach": {
+              "criminalOffence": true,
+              "maxPenalty": "Unlimited fine and/or imprisonment",
+              "enforcementPowers": "Local planning authority may require reversal of unauthorized works"
+            },
+            "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/section/7"
+          },
+          {
+            "section": "Section 16",
+            "title": "Grant or refusal of listed building consent",
+            "summary": "Duty of local planning authority in determining listed building consent applications",
+            "criticalPrinciples": [
+              "LPA must have special regard to desirability of preserving building or its setting",
+              "Must consider preserving features of special architectural or historic interest",
+              "Applies to any features fixed to building or within curtilage"
+            ],
+            "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/section/16"
+          },
+          {
+            "section": "Section 66",
+            "title": "General duty as respects listed buildings in exercise of planning functions",
+            "summary": "Statutory duty applying to planning permission decisions affecting listed buildings",
+            "statutoryText": "In considering whether to grant planning permission for development which affects a listed building or its setting, the local planning authority or, as the case may be, the Secretary of State shall have special regard to the desirability of preserving the building or its setting or any features of special architectural or historic interest which it possesses.",
+            "criticalPrinciples": [
+              "Applies to planning permission (separate from LBC)",
+              "Statutory duty to have 'special regard'",
+              "Covers building, setting, and special features",
+              "Case law: requires 'considerable importance and weight' (Barnwell Manor)"
+            ],
+            "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/section/66"
+          },
+          {
+            "section": "Section 72",
+            "title": "General duty as respects conservation areas",
+            "summary": "Statutory duty in exercise of planning functions affecting conservation areas",
+            "statutoryText": "Special attention shall be paid to the desirability of preserving or enhancing the character or appearance of [conservation] areas.",
+            "criticalPrinciples": [
+              "Applies to conservation areas designated by local planning authority",
+              "Duty to preserve or enhance character or appearance",
+              "Special attention must be paid"
+            ],
+            "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/section/72"
+          }
+        ],
+        "sourceUrl": "https://www.legislation.gov.uk/ukpga/1990/9/contents"
+      }
+    ],
+    "nationalPolicy": [
+      {
+        "policyDocument": "National Planning Policy Framework (NPPF)",
+        "chapter": "Chapter 16: Conserving and enhancing the historic environment",
+        "lastRevised": "2023-12",
+        "status": "Material consideration in planning decisions",
+        "keyParagraphs": [
+          {
+            "paragraph": "202",
+            "principle": "Heritage assets as irreplaceable resource",
+            "policyText": "Heritage assets range from sites and buildings of local historic value to those of the highest significance, such as World Heritage Sites which are internationally recognised to be of Outstanding Universal Value. These assets are an irreplaceable resource, and should be conserved in a manner appropriate to their significance, so that they can be enjoyed for their contribution to the quality of life of existing and future generations.",
+            "criticalConcepts": [
+              "Heritage assets are irreplaceable",
+              "Conservation manner appropriate to significance",
+              "Contribution to quality of life for present and future generations"
+            ]
+          },
+          {
+            "paragraph": "203",
+            "principle": "Positive strategy requirement",
+            "requirements": [
+              "Plans must set out positive strategy for conservation and enjoyment",
+              "Include heritage assets most at risk",
+              "Consider desirability of sustaining and enhancing significance",
+              "Recognize wider social, cultural, economic and environmental benefits",
+              "Promote new development making positive contribution to local character"
+            ]
+          },
+          {
+            "paragraph": "205",
+            "principle": "Historic Environment Record requirement",
+            "requirements": [
+              "LPAs must maintain or have access to HER",
+              "Must contain up-to-date evidence about historic environment",
+              "Used to assess significance of heritage assets",
+              "Used to predict likelihood of discovering unidentified heritage assets"
+            ]
+          },
+          {
+            "paragraph": "207",
+            "principle": "Information requirements for applications",
+            "requirements": [
+              "Applicant must describe significance of affected heritage assets",
+              "Include contribution made by setting",
+              "Level of detail proportionate to importance",
+              "Minimum: consult HER, assess using appropriate expertise",
+              "Archaeological interest: desk-based assessment and field evaluation where necessary"
+            ]
+          },
+          {
+            "paragraph": "208",
+            "principle": "Assessment of significance by LPA",
+            "requirements": [
+              "LPA must identify and assess particular significance",
+              "Take account of available evidence and expertise",
+              "Consider when determining impact on heritage asset",
+              "Avoid or minimise conflict between conservation and proposal"
+            ]
+          },
+          {
+            "paragraph": "212",
+            "principle": "Great weight to conservation",
+            "policyText": "When considering the impact of a proposed development on the significance of a designated heritage asset, great weight should be given to the asset's conservation (and the more important the asset, the greater the weight should be). This is irrespective of whether any potential harm amounts to substantial harm, total loss or less than substantial harm to its significance.",
+            "criticalPrinciples": [
+              "Great weight to conservation in all cases",
+              "More important asset = greater weight",
+              "Applies regardless of level of harm",
+              "Scale: Grade II < Grade II* < Grade I < Scheduled Monument/World Heritage Site"
+            ]
+          },
+          {
+            "paragraph": "213",
+            "principle": "Justification for harm",
+            "policyText": "Any harm to, or loss of, the significance of a designated heritage asset (from its alteration or destruction, or from development within its setting), should require clear and convincing justification.",
+            "tieredApproach": {
+              "gradeII": "Substantial harm/loss should be exceptional",
+              "highestSignificance": "Substantial harm/loss should be wholly exceptional (scheduled monuments, protected wrecks, registered battlefields, Grade I/II* listed buildings, Grade I/II* registered parks/gardens, World Heritage Sites)"
+            }
+          },
+          {
+            "paragraph": "214",
+            "principle": "Substantial harm test",
+            "policyText": "Where a proposed development will lead to substantial harm to (or total loss of significance of) a designated heritage asset, local planning authorities should refuse consent, unless it can be demonstrated that the substantial harm or total loss is necessary to achieve substantial public benefits that outweigh that harm or loss, or all of the following apply...",
+            "decisionFramework": {
+              "presumption": "Refuse consent",
+              "exception1": "Substantial public benefits outweigh harm/loss",
+              "exception2_allMustApply": [
+                "Nature of asset prevents all reasonable uses of site",
+                "No viable use of asset itself can be found in medium term through appropriate marketing",
+                "Conservation by grant-funding or charitable/public ownership demonstrably not possible",
+                "Harm/loss outweighed by benefit of bringing site back into use"
+              ]
+            }
+          },
+          {
+            "paragraph": "215",
+            "principle": "Less than substantial harm test",
+            "policyText": "Where a development proposal will lead to less than substantial harm to the significance of a designated heritage asset, this harm should be weighed against the public benefits of the proposal including, where appropriate, securing its optimum viable use.",
+            "decisionFramework": {
+              "balancingExercise": "Harm weighed against public benefits",
+              "considerations": ["Public benefits (not private)", "Optimum viable use"]
+            }
+          }
+        ],
+        "sourceUrl": "https://www.gov.uk/guidance/national-planning-policy-framework/16-conserving-and-enhancing-the-historic-environment"
+      }
+    ],
+    "technicalGuidance": [
+      {
+        "guidanceDocument": "Historic England Advice Note 16: Listed Building Consent",
+        "published": "2021-06-21",
+        "audience": ["Local planning authorities", "Heritage consultants", "Building owners", "Developers"],
+        "purpose": "Detailed practical advice on when listed building consent is required and how to apply",
+        "keyConcepts": [
+          {
+            "concept": "Certificate of Lawfulness of Proposed Works (CLPW)",
+            "description": "Mechanism for obtaining certainty that LBC is not required",
+            "procedure": "Application to LPA for certificate confirming proposed works do not require LBC",
+            "validity": "10 years (longer than LBC which is typically 3 years)",
+            "limitations": ["Cannot be retrospective", "Does not remove need for planning permission"]
+          },
+          {
+            "concept": "Works affecting character",
+            "guidancePrinciple": "LBC required when works affect character as building of special architectural or historic interest",
+            "factors": [
+              "Special architectural interest (design, decoration, craftsmanship)",
+              "Historic interest (age, rarity, social/economic history)",
+              "Impact on historic fabric and materials",
+              "Impact on plan form and spatial arrangement",
+              "Impact on setting and curtilage structures"
+            ]
+          },
+          {
+            "concept": "Curtilage buildings and structures",
+            "principle": "Pre-1948 buildings/structures within curtilage of listed building are treated as part of listed building",
+            "legislativeSource": "Planning (Listed Buildings and Conservation Areas) Act 1990, Section 1(5)",
+            "requiresAssessment": "Whether structure is within curtilage (see HEAN 10)"
+          }
+        ],
+        "sourceUrl": "https://historicengland.org.uk/images-books/publications/listed-building-consent-advice-note-16/"
+      },
+      {
+        "guidanceDocument": "Historic England Advice Note 2: Making Changes to Heritage Assets",
+        "published": "2024-12",
+        "keyConcepts": [
+          {
+            "concept": "Repair vs alteration",
+            "principle": "Repair (like-for-like) may not require LBC; alteration affecting character does require LBC",
+            "guidance": "Maintenance using same materials, construction method, and design typically does not require LBC"
+          },
+          {
+            "concept": "Restoration",
+            "principle": "Restoration of listed building requires alteration, needs LBC if affects character",
+            "additionalConsent": "May also require planning permission"
+          }
+        ],
+        "sourceUrl": "https://historicengland.org.uk/images-books/publications/making-changes-heritage-assets-advice-note-2/"
+      },
+      {
+        "guidanceDocument": "Historic England Advice Note 12: Statements of Heritage Significance",
+        "published": "2019-10",
+        "purpose": "Guide to assessing and describing significance of heritage assets",
+        "applicationRequirement": "Proportionate statement of significance required with LBC applications (NPPF para 207)",
+        "sourceUrl": "https://historicengland.org.uk/images-books/publications/statements-heritage-significance-advice-note-12/"
+      },
+      {
+        "guidanceDocument": "Planning Practice Guidance: Historic Environment",
+        "published": "Online (regularly updated)",
+        "purpose": "Government guidance on implementing NPPF heritage policies",
+        "keyGuidance": [
+          {
+            "topic": "What is significance",
+            "guidance": "Value of heritage asset to this and future generations because of its heritage interest (archaeological, architectural, artistic or historic)"
+          },
+          {
+            "topic": "What is setting",
+            "guidance": "Surroundings in which a heritage asset is experienced. Elements can make positive, neutral or negative contribution to significance."
+          },
+          {
+            "topic": "Public benefits",
+            "guidance": "Anything that delivers economic, social or environmental objectives described in the NPPF. Not limited to public access; includes heritage benefits, better use of site, economic growth."
+          }
+        ],
+        "sourceUrl": "https://www.gov.uk/guidance/conserving-and-enhancing-the-historic-environment"
+      }
+    ]
+  },
+  "heritageAssetTypes": {
+    "designatedAssets": [
+      {
+        "assetType": "Listed Building",
+        "designation": "Statutory",
+        "legislativeAuthority": "Planning (Listed Buildings and Conservation Areas) Act 1990, Section 1",
+        "listingGrades": [
+          {
+            "grade": "Grade I",
+            "description": "Buildings of exceptional interest",
+            "proportion": "Approximately 2.5% of listed buildings",
+            "policyWeight": "Highest - substantial harm should be wholly exceptional (NPPF 213)"
+          },
+          {
+            "grade": "Grade II*",
+            "description": "Particularly important buildings of more than special interest",
+            "proportion": "Approximately 5.5% of listed buildings",
+            "policyWeight": "High - substantial harm should be wholly exceptional (NPPF 213)"
+          },
+          {
+            "grade": "Grade II",
+            "description": "Buildings of special interest",
+            "proportion": "Approximately 92% of listed buildings",
+            "policyWeight": "Significant - substantial harm should be exceptional (NPPF 213)"
+          }
+        ],
+        "listingCriteria": [
+          "Architectural interest (design, decoration, craftsmanship)",
+          "Historic interest (age, rarity, social/economic history, association with significant people/events)",
+          "Group value (part of larger ensemble or relationship with other heritage assets)"
+        ],
+        "scopeOfListing": {
+          "building": "Entire building (internal and external) unless list entry states otherwise",
+          "curtilageStructures": "Pre-July 1948 structures within curtilage treated as part of listed building",
+          "fixedObjects": "Objects or structures fixed to building or forming part of land within curtilage",
+          "setting": "Surroundings in which asset is experienced (material consideration in planning decisions)"
+        },
+        "consentRequired": {
+          "listedBuildingConsent": {
+            "trigger": "Works for demolition, alteration, or extension affecting character as building of special interest",
+            "authority": "Local planning authority",
+            "criminalOffence": "Carrying out works without LBC when required",
+            "enforcement": "LPA may require reversal of unauthorized works"
+          },
+          "planningPermission": {
+            "relationship": "Separate consent regime; both may be required",
+            "statutoryDuty": "Section 66(1) duty to have special regard to preserving building or setting"
+          }
+        }
+      },
+      {
+        "assetType": "Conservation Area",
+        "designation": "Statutory",
+        "legislativeAuthority": "Planning (Listed Buildings and Conservation Areas) Act 1990, Part II",
+        "definition": "Area of special architectural or historic interest, character or appearance of which is desirable to preserve or enhance",
+        "designationAuthority": "Local planning authority",
+        "statutoryDuty": "Section 72 - special attention to desirability of preserving or enhancing character or appearance",
+        "controls": {
+          "demolition": "Conservation area consent required for demolition of unlisted buildings (subject to conditions)",
+          "trees": "Six weeks notice required before works to trees",
+          "permittedDevelopmentRights": "Some PDRs restricted; Article 4 directions may remove additional PDRs",
+          "design": "Development should preserve or enhance character or appearance"
+        },
+        "appraisalRequirement": "LPAs should ensure area justifies status through character appraisal (NPPF 204)"
+      },
+      {
+        "assetType": "Scheduled Monument",
+        "designation": "Statutory",
+        "legislativeAuthority": "Ancient Monuments and Archaeological Areas Act 1979",
+        "consentAuthority": "Secretary of State for Culture, Media and Sport (via Historic England)",
+        "consentType": "Scheduled Monument Consent (separate from planning system)",
+        "note": "Covered by separate legislative framework; referenced for completeness"
+      },
+      {
+        "assetType": "Registered Park or Garden",
+        "designation": "Statutory (non-statutory protection)",
+        "listingAuthority": "Historic England maintains register on behalf of Secretary of State",
+        "grades": ["Grade I", "Grade II*", "Grade II"],
+        "protectionMechanism": "Material consideration in planning decisions; no separate consent regime",
+        "policyApplication": "NPPF Chapter 16 applies; great weight to conservation"
+      },
+      {
+        "assetType": "Registered Battlefield",
+        "designation": "Statutory register (non-statutory protection)",
+        "protectionMechanism": "Material consideration in planning decisions",
+        "policyApplication": "NPPF para 213 - highest significance, substantial harm should be wholly exceptional"
+      },
+      {
+        "assetType": "World Heritage Site",
+        "designation": "International (UNESCO)",
+        "recognitionBasis": "Outstanding Universal Value",
+        "protectionMechanism": "Material consideration; statutory protection through listing/scheduling where applicable",
+        "policyApplication": "NPPF para 213 - highest significance, substantial harm should be wholly exceptional",
+        "note": "NPPF 202 emphasizes importance of WHS and international recognition"
+      }
+    ],
+    "nonDesignatedAssets": [
+      {
+        "assetType": "Non-designated heritage asset",
+        "definition": "Building, monument, site, place, area or landscape identified by LPA as having degree of significance meriting consideration in planning decisions",
+        "includes": ["Locally listed buildings", "Assets identified through Historic Environment Record", "Assets identified during planning process"],
+        "protectionMechanism": "Material consideration in planning decisions",
+        "policyApplication": "NPPF para 216 - balanced judgement having regard to scale of harm/loss and significance"
+      }
+    ]
+  },
+  "serviceProcesses": {
+    "listedBuildingConsent": {
+      "processName": "Listed Building Consent Application",
+      "trigger": "Proposed works to listed building that would affect its character as building of special architectural or historic interest",
+      "preApplicationAdvice": {
+        "recommended": true,
+        "contact": "Conservation Officer",
+        "purpose": "Establish if consent needed, outline what might be acceptable, identify issues early",
+        "benefit": "Can save time and money; allows applicant to refine proposals"
+      },
+      "alternativeProcedures": [
+        {
+          "procedure": "Certificate of Lawfulness of Proposed Works (CLPW)",
+          "when": "Uncertainty whether works require LBC; seeking certainty before proceeding",
+          "outcome": "Legal confirmation that proposed works do not require LBC",
+          "validity": "10 years",
+          "note": "Cannot be retrospective; does not provide planning permission"
+        }
+      ],
+      "applicationRequirements": {
+        "forms": "Application form from local planning authority (available on Planning Portal)",
+        "fee": "No fee for listed building consent application",
+        "statutoryRequirements": [
+          {
+            "requirement": "Description of significance of heritage assets affected",
+            "source": "NPPF para 207",
+            "detail": "Include contribution made by setting; level of detail proportionate to importance"
+          },
+          {
+            "requirement": "Historic Environment Record consulted",
+            "source": "NPPF para 207",
+            "detail": "As minimum, relevant HER should be consulted"
+          },
+          {
+            "requirement": "Heritage assets assessed using appropriate expertise",
+            "source": "NPPF para 207",
+            "detail": "Where necessary, use qualified heritage professionals"
+          }
+        ],
+        "supportingDocuments": [
+          {
+            "document": "Heritage Statement (Statement of Heritage Significance)",
+            "purpose": "Assess significance and impact of proposals",
+            "guidanceSource": "Historic England Advice Note 12",
+            "contentRequirements": [
+              "Analysis of significance of affected heritage assets",
+              "Contribution made by setting",
+              "Explanation of proposal and how informed by significance analysis",
+              "Assessment of impact using NPPF terminology (no harm / less than substantial harm / substantial harm)",
+              "Where relevant, explanation of how proposals avoid, minimize, or mitigate harm",
+              "Photographs and drawings where helpful"
+            ]
+          },
+          {
+            "document": "Design and Access Statement",
+            "when": "Required for certain applications (check with LPA)",
+            "content": "Explain design approach, access arrangements, how proposal responds to site and context"
+          },
+          {
+            "document": "Drawings and plans",
+            "requirements": ["Existing and proposed elevations", "Floor plans", "Site location plan", "Block plan"],
+            "scale": "As appropriate to proposal"
+          },
+          {
+            "document": "Photographs",
+            "purpose": "Show existing condition, context, details affected by proposal"
+          }
+        ]
+      },
+      "consultationRequirements": {
+        "statutoryConsultees": [
+          {
+            "consultee": "Historic England",
+            "when": [
+              "Works for demolition or substantial demolition of listed building",
+              "Works for alteration or extension of Grade I or II* listed building which would affect character"
+            ],
+            "responseTime": "28 days (extendable by agreement)"
+          },
+          {
+            "consultee": "National Amenity Societies",
+            "when": "Works for demolition or alteration of listed building (as specified in direction)",
+            "societies": ["Ancient Monuments Society", "Council for British Archaeology", "Georgian Group", "Society for Protection of Ancient Buildings", "Victorian Society", "Twentieth Century Society"]
+          }
+        ],
+        "publicConsultation": {
+          "requirement": "LPA must advertise application",
+          "methods": ["Site notice", "Newspaper advertisement", "Neighbor notification"],
+          "responseTime": "21 days (typically)"
+        }
+      },
+      "determinationProcess": {
+        "decisionMaker": "Local planning authority (conservation officer typically provides specialist advice)",
+        "statutoryDuties": [
+          {
+            "duty": "Special regard to desirability of preserving building or its setting",
+            "source": "Section 16, Planning (Listed Buildings and Conservation Areas) Act 1990",
+            "caselaw": "Must give considerable importance and weight to preserving listed building (Barnwell Manor)"
+          }
+        ],
+        "policyFramework": {
+          "nationalPolicy": "NPPF Chapter 16",
+          "localPolicy": "Local Plan heritage policies",
+          "materialConsiderations": ["Significance of heritage asset", "Impact on significance (including setting)", "Public benefits", "Justification for any harm", "Alternative approaches", "Mitigation measures"]
+        },
+        "decisionTests": [
+          {
+            "test": "Would works affect character as building of special architectural or historic interest?",
+            "outcome": "If no - consent not required (or CLPW can be issued)"
+          },
+          {
+            "test": "What is significance of heritage asset?",
+            "assessment": "Identify special interest (architectural, historic) and what contributes to it"
+          },
+          {
+            "test": "What is impact on significance?",
+            "options": ["No harm", "Less than substantial harm", "Substantial harm", "Total loss"],
+            "decisionFramework": {
+              "noHarm": "Consent likely subject to other considerations",
+              "lessThanSubstantialHarm": "Weigh harm against public benefits (NPPF 215)",
+              "substantialHarm": "Refuse unless substantial public benefits outweigh harm OR all criteria in NPPF 214 met",
+              "totalLoss": "As substantial harm"
+            }
+          }
+        ],
+        "determinationPeriod": {
+          "standard": "8 weeks from validation",
+          "majorDevelopment": "13 weeks",
+          "extensionByAgreement": "Possible with applicant consent"
+        },
+        "possibleDecisions": [
+          "Grant listed building consent (unconditional)",
+          "Grant listed building consent (with conditions)",
+          "Refuse listed building consent",
+          "Invalid application (not determined)"
+        ],
+        "conditions": {
+          "powerToImpose": "LPA may impose conditions on grant of consent",
+          "purposeOfConditions": ["Protect special interest", "Secure proper execution of works", "Mitigation measures", "Recording of heritage", "Materials and methods specification"]
+        }
+      },
+      "postDecision": {
+        "consentValidity": "Typically 3 years from date of consent",
+        "commencementRequirement": "Works must commence within validity period",
+        "displayRequirement": "Notice of consent may be required to be displayed on site",
+        "completionNotification": "Notify LPA when works completed"
+      },
+      "appeals": {
+        "rightOfAppeal": "Applicant may appeal refusal or conditions",
+        "appealTo": "Planning Inspectorate (on behalf of Secretary of State)",
+        "appealPeriod": "6 months from decision notice",
+        "appealProcedures": ["Written representations", "Hearing", "Public inquiry"]
+      },
+      "enforcement": {
+        "offence": "Executing works affecting character of listed building without consent",
+        "criminalPenalty": "Unlimited fine and/or imprisonment (up to 2 years)",
+        "civilRemedies": [
+          {
+            "remedy": "Listed Building Enforcement Notice",
+            "purpose": "Require reversal of unauthorized works or other remedial action",
+            "appealRight": "28 days to appeal to Secretary of State"
+          },
+          {
+            "remedy": "Injunction",
+            "purpose": "Prevent unauthorized works or continuing breach"
+          }
+        ]
+      }
+    },
+    "conservationAreaConsent": {
+      "processName": "Conservation Area Consent / Notification",
+      "applicableTo": "Works in conservation areas",
+      "controls": {
+        "demolition": {
+          "requirement": "Conservation area consent required for demolition of unlisted buildings (subject to size/type thresholds)",
+          "exceptions": "Some buildings/structures exempt (see regulations)"
+        },
+        "trees": {
+          "requirement": "Six weeks notice to LPA before works to trees",
+          "offence": "Criminal offence to carry out works without notice or before period expires"
+        },
+        "development": {
+          "requirement": "Planning permission may be required; some permitted development rights restricted",
+          "article4Directions": "LPA may remove additional PDRs through Article 4 direction"
+        }
+      },
+      "statutoryDuty": {
+        "duty": "Special attention to desirability of preserving or enhancing character or appearance",
+        "source": "Section 72, Planning (Listed Buildings and Conservation Areas) Act 1990",
+        "application": "Applies to planning decisions affecting conservation areas"
+      },
+      "designationProcess": {
+        "authority": "Local planning authority",
+        "requirement": "Area must justify status because of special architectural or historic interest (NPPF 204)",
+        "process": "Character appraisal to assess special interest; public consultation; formal designation",
+        "review": "Periodic review of conservation area boundaries and character appraisals"
+      }
+    },
+    "heritageAtRisk": {
+      "processName": "Heritage at Risk Programme",
+      "purpose": "Identify, monitor, and secure repair of heritage assets most at risk",
+      "register": "Historic England maintains Heritage at Risk Register",
+      "localAuthorityRole": "Monitor condition of heritage assets; use enforcement powers where necessary",
+      "enforcementPowers": [
+        {
+          "power": "Repairs Notice (Section 48, Listed Buildings Act 1990)",
+          "purpose": "Specify works necessary to preserve listed building",
+          "consequence": "If not complied with, may lead to compulsory purchase"
+        },
+        {
+          "power": "Urgent Works Notice (Section 54)",
+          "purpose": "LPA may execute urgent works to preserve unoccupied listed building",
+          "costRecovery": "Costs recoverable from owner"
+        },
+        {
+          "power": "Compulsory Purchase (Section 47)",
+          "purpose": "Acquire listed building in need of repair where owner unwilling/unable",
+          "process": "Following service of repairs notice; must demonstrate reasonable steps to secure preservation"
+        }
+      ]
+    }
+  },
+  "userJourneys": {
+    "ownerOfListedBuilding": {
+      "scenario": "Owner wishes to make alterations to listed building",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Owner identifies need for alteration/repair",
+          "question": "Does this require listed building consent?"
+        },
+        {
+          "step": 2,
+          "action": "Seek pre-application advice from Conservation Officer",
+          "outcome": "Officer advises whether LBC likely needed; outlines what might be acceptable"
+        },
+        {
+          "step": 3,
+          "action": "Commission heritage statement if required",
+          "provider": "Heritage consultant, conservation architect, or qualified surveyor",
+          "content": "Assess significance, describe proposals, evaluate impact"
+        },
+        {
+          "step": 4,
+          "action": "Submit listed building consent application",
+          "submissionTo": "Local planning authority",
+          "supporting": ["Heritage statement", "Drawings", "Photographs"]
+        },
+        {
+          "step": 5,
+          "action": "LPA validates and consults on application",
+          "consultees": ["Historic England (if applicable)", "Amenity societies (if applicable)", "Public (via site notice/advertisement)"]
+        },
+        {
+          "step": 6,
+          "action": "LPA determines application",
+          "timescale": "8-13 weeks (or as agreed)",
+          "decision": ["Grant consent (with/without conditions)", "Refuse consent"]
+        },
+        {
+          "step": 7,
+          "action": "If granted: carry out works in accordance with consent",
+          "compliance": "Adhere to any conditions; complete within validity period"
+        },
+        {
+          "step": 8,
+          "action": "If refused: consider appeal or revise proposal",
+          "appealPeriod": "6 months"
+        }
+      ],
+      "alternativeRoute": {
+        "route": "Certificate of Lawfulness of Proposed Works",
+        "when": "Uncertainty whether works require consent",
+        "benefit": "Obtain legal certainty without full LBC application",
+        "validity": "10 years"
+      }
+    },
+    "developerProposingWorkNearListedBuilding": {
+      "scenario": "Developer proposes development affecting setting of listed building",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Developer identifies heritage assets potentially affected",
+          "sources": ["National Heritage List for England", "Local authority conservation team", "Historic Environment Record"]
+        },
+        {
+          "step": 2,
+          "action": "Commission heritage assessment",
+          "content": "Identify significance; assess impact on setting; consider mitigation"
+        },
+        {
+          "step": 3,
+          "action": "Design development to avoid/minimize harm",
+          "approaches": ["Reduce scale", "Adjust siting", "Modify design", "Landscaping/screening"]
+        },
+        {
+          "step": 4,
+          "action": "Pre-application consultation with LPA",
+          "outcome": "Identify any concerns; refine proposals"
+        },
+        {
+          "step": 5,
+          "action": "Submit planning application with heritage statement",
+          "content": "Heritage statement addresses impact on setting per NPPF 207"
+        },
+        {
+          "step": 6,
+          "action": "LPA determination",
+          "considerations": ["Section 66(1) duty (special regard to preserving listed building or setting)", "NPPF para 212 (great weight to conservation)", "Harm weighed against public benefits"]
+        }
+      ]
+    },
+    "localAuthorityOfficerDeterminingApplication": {
+      "scenario": "Planning or conservation officer determining application affecting heritage asset",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Validate application and check heritage information",
+          "checks": ["Heritage statement provided?", "HER consulted?", "Appropriate expertise used?"]
+        },
+        {
+          "step": 2,
+          "action": "Identify significance of heritage asset",
+          "sources": ["List description", "Historic Environment Record", "Conservation area appraisal", "Site visit", "Heritage statement"]
+        },
+        {
+          "step": 3,
+          "action": "Assess impact of proposal on significance",
+          "assessment": "Consider impact on special interest, character, setting, historic fabric"
+        },
+        {
+          "step": 4,
+          "action": "Categorize level of harm",
+          "categories": ["No harm", "Less than substantial harm", "Substantial harm", "Total loss"]
+        },
+        {
+          "step": 5,
+          "action": "Apply statutory duties and policy framework",
+          "duties": ["Section 16/66/72 duties (special regard/attention)", "NPPF para 212 (great weight)", "NPPF para 213/214/215 (harm tests)"]
+        },
+        {
+          "step": 6,
+          "action": "Weigh harm against benefits (if applicable)",
+          "considerations": ["Clear and convincing justification for harm?", "Public benefits (not private)?", "Can harm be avoided/mitigated?", "Alternative approaches?"]
+        },
+        {
+          "step": 7,
+          "action": "Reach decision and draft decision notice",
+          "requirements": ["Explain how duties discharged", "Justify decision with reference to policy", "Impose conditions if appropriate"]
+        }
+      ]
+    }
+  },
+  "keyDefinitions": {
+    "significance": {
+      "term": "Significance (for heritage policy)",
+      "definition": "The value of a heritage asset to this and future generations because of its heritage interest. That interest may be archaeological, architectural, artistic or historic.",
+      "source": "NPPF Glossary",
+      "assessment": "Assessed by understanding special interest of asset and what contributes to it"
+    },
+    "setting": {
+      "term": "Setting (of heritage asset)",
+      "definition": "The surroundings in which a heritage asset is experienced. Its extent is not fixed and may change as the asset and its surroundings evolve.",
+      "source": "NPPF Glossary",
+      "note": "Elements of setting may make positive, negative, or neutral contribution to significance"
+    },
+    "conservation": {
+      "term": "Conservation (for heritage policy)",
+      "definition": "The process of maintaining and managing change to a heritage asset in a way that sustains and, where appropriate, enhances its significance.",
+      "source": "NPPF Glossary"
+    },
+    "substantialHarm": {
+      "term": "Substantial harm",
+      "definition": "No statutory definition; assessed on case-by-case basis",
+      "caselaw": "High bar; not simply considerable, serious, or significant harm (Bedford case)",
+      "guidance": "Likely to arise where proposal would seriously affect attributes conveying significance"
+    },
+    "publicBenefits": {
+      "term": "Public benefits",
+      "definition": "Anything that delivers economic, social or environmental objectives as described in the NPPF",
+      "source": "Planning Practice Guidance",
+      "includes": ["Heritage benefits (e.g. securing optimum viable use)", "Better use of site/area", "Economic growth and regeneration", "Public access to heritage"],
+      "excludes": "Private benefits (e.g. private financial gain)"
+    },
+    "curtilage": {
+      "term": "Curtilage (of listed building)",
+      "definition": "Land attached to and serving the listed building",
+      "significance": "Pre-1948 buildings/structures within curtilage are treated as part of listed building",
+      "assessment": "Complex legal question; see Historic England Advice Note 10",
+      "factors": ["Physical layout", "Ownership", "Use and function"]
+    }
+  },
+  "contactInformation": {
+    "gloucesterCityCouncil": {
+      "department": "Planning and Development Control",
+      "address": "Eastgate Management Suite, Eastgate Street, Gloucester GL1 1PA",
+      "conservationTeam": {
+        "service": "Conservation and Heritage Advice",
+        "preApplicationAdvice": "Available by appointment",
+        "phone": "[To be populated]",
+        "email": "[To be populated]"
+      },
+      "planningApplications": {
+        "portal": "Gloucester City Council Planning Portal",
+        "email": "[To be populated]",
+        "onlineApplications": "Available through Planning Portal"
+      }
+    },
+    "externalOrganizations": {
+      "historicEngland": {
+        "website": "https://historicengland.org.uk",
+        "adviceLines": "Available for technical heritage advice",
+        "nationalHeritageList": "https://historicengland.org.uk/listing/the-list/",
+        "guidancePublications": "https://historicengland.org.uk/advice/"
+      },
+      "planningInspectorate": {
+        "appeals": "https://www.gov.uk/appeal-planning-decision",
+        "listedBuildingAppeals": "https://www.gov.uk/guidance/appeals"
+      },
+      "amenitySocieties": {
+        "ancientMonumentsSociety": "https://ancientmonumentssociety.org.uk",
+        "councilForBritishArchaeology": "https://www.archaeologyuk.org",
+        "georgianGroup": "https://georgiangroup.org.uk",
+        "societyForProtectionOfAncientBuildings": "https://www.spab.org.uk",
+        "victorianSociety": "https://victoriansociety.org.uk",
+        "twentiethCenturySociety": "https://c20society.org.uk"
+      }
+    }
+  },
+  "metadata": {
+    "schemaType": "service-policy-as-code",
+    "authorityLevel": "local-authority-service",
+    "complianceFramework": [
+      "Planning (Listed Buildings and Conservation Areas) Act 1990",
+      "National Planning Policy Framework Chapter 16",
+      "Historic England Guidance"
+    ],
+    "updateFrequency": "As required by legislative or policy changes",
+    "dataClassification": "official-public",
+    "contentGovernance": {
+      "owner": "Head of Planning and Development Control",
+      "technicalLead": "Principal Conservation Officer",
+      "reviewCycle": "Annual or upon legislative/policy change",
+      "approvalRequired": ["Service Director", "Legal review for statutory interpretation"]
+    },
+    "integrationPoints": {
+      "historicEnvironmentRecord": "Gloucestershire Historic Environment Record",
+      "nationalHeritageList": "Historic England National Heritage List for England API",
+      "planningApplicationSystem": "Planning portal integration",
+      "gis": "Heritage asset layers in corporate GIS"
+    }
+  }
+}
