@@ -1,14 +1,22 @@
 /**
  * MCP Schema HTTP Function - POST /mcp-schema
  * Implements MCP JSON-RPC protocol for schema-driven tools
+ * Supports multiple schemas: Council Tax and Heritage Assets
  */
 
 const { app } = require('@azure/functions');
+
+// Council Tax schema tools
 const schemaGet = require('../tools/schemaGet');
 const schemaSearch = require('../tools/schemaSearch');
 const schemaTodos = require('../tools/schemaTodos');
 const schemaEvaluate = require('../tools/schemaEvaluate');
 const { getSchemaVersion, getSchemaHash, isSchemaLoaded } = require('../schema/loader');
+
+// Heritage Assets schema tools
+const heritageGet = require('../tools/heritageGet');
+const heritageSearch = require('../tools/heritageSearch');
+const heritageLoader = require('../heritage/loader');
 
 /**
  * MCP Tool definitions with JSON Schema
@@ -140,6 +148,89 @@ Returns advisory candidates with likelihood (likely/unclear/unlikely).`,
             },
             required: ['rulesetId', 'userFacts']
         }
+    },
+    // Heritage Assets schema tools
+    {
+        name: 'heritage_get',
+        description: `Retrieve data from the Heritage Assets schema by JSON Pointer path.
+
+Usage: heritage_get(path='/legislativeFramework/primaryLegislation/0')
+
+Supports:
+- JSON Pointer (RFC 6901) paths like "/serviceProcesses", "/heritageAssetTypes/designatedAssets"
+- Optional projection to select specific fields
+- maxBytes limit to prevent oversized responses
+
+Returns heritage policy data with version and hash for cache validation.
+
+Key paths:
+- /legislativeFramework - Planning (Listed Buildings and Conservation Areas) Act 1990 and NPPF Chapter 16
+- /heritageAssetTypes - Listed buildings, conservation areas, scheduled monuments, etc.
+- /serviceProcesses - Listed building consent, conservation area consent, heritage at risk
+- /userJourneys - Owner, developer, and officer journeys
+- /keyDefinitions - Significance, setting, substantial harm, public benefits`,
+        inputSchema: {
+            type: 'object',
+            properties: {
+                path: {
+                    type: 'string',
+                    description: 'JSON Pointer path (e.g., "/serviceProcesses", "/heritageAssetTypes"). Must start with /'
+                },
+                projection: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Optional list of fields to include in response'
+                },
+                maxBytes: {
+                    type: 'integer',
+                    description: 'Maximum response size in bytes (default: 200000)'
+                }
+            },
+            required: ['path']
+        }
+    },
+    {
+        name: 'heritage_search',
+        description: `Search the Heritage Assets schema for relevant content.
+
+Usage: heritage_search(text='listed building consent', topK=5)
+
+Features:
+- Hybrid search using BM25 + keyword boosting
+- Scope filtering by section (legislativeFramework, serviceProcesses, heritageAssetTypes, etc.)
+- Heritage-specific term boosting for statutory concepts
+- Returns ranked snippets with JSON paths
+
+Good for finding:
+- Statutory duties (Section 66, Section 72)
+- NPPF policies (paragraphs 202-219)
+- Consent requirements and processes
+- Heritage asset types and grades
+- Harm assessment frameworks
+- Public benefits tests`,
+        inputSchema: {
+            type: 'object',
+            properties: {
+                text: {
+                    type: 'string',
+                    description: 'Search query text'
+                },
+                scope: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Sections to search (e.g., ["serviceProcesses", "legislativeFramework"]). Empty = all sections.'
+                },
+                topK: {
+                    type: 'integer',
+                    description: 'Number of results to return (default: 5)'
+                },
+                filters: {
+                    type: 'object',
+                    description: 'Additional filters (e.g., {"tag": "consent"}, {"section": "serviceProcesses"})'
+                }
+            },
+            required: ['text']
+        }
     }
 ];
 
@@ -147,10 +238,14 @@ Returns advisory candidates with likelihood (likely/unclear/unlikely).`,
  * Tool name to handler mapping
  */
 const TOOL_HANDLERS = {
+    // Council Tax tools
     'schema_get': schemaGet.execute,
     'schema_search': schemaSearch.execute,
     'schema_todos': schemaTodos.execute,
-    'schema_evaluate': schemaEvaluate.execute
+    'schema_evaluate': schemaEvaluate.execute,
+    // Heritage Assets tools
+    'heritage_get': heritageGet.execute,
+    'heritage_search': heritageSearch.execute
 };
 
 /**
@@ -195,16 +290,30 @@ async function handleMcpRequest(request, context) {
                         tools: {}
                     },
                     serverInfo: {
-                        name: 'council-tax-schema-mcp',
-                        version: '1.0.0',
-                        description: 'Gloucester City Council Tax Schema - Policy and Discount Information',
-                        schemaVersion: getSchemaVersion(),
-                        schemaHash: getSchemaHash(),
-                        schemaLoaded: isSchemaLoaded(),
+                        name: 'gcc-policy-schema-mcp',
+                        version: '1.1.0',
+                        description: 'Gloucester City Council Policy Schemas - Council Tax and Heritage Assets',
+                        schemas: {
+                            councilTax: {
+                                version: getSchemaVersion(),
+                                hash: getSchemaHash(),
+                                loaded: isSchemaLoaded()
+                            },
+                            heritage: {
+                                version: heritageLoader.getSchemaVersion(),
+                                hash: heritageLoader.getSchemaHash(),
+                                loaded: heritageLoader.isSchemaLoaded()
+                            }
+                        },
                         ...getDateContext(),
-                        instructions: `📋 COUNCIL TAX SCHEMA MCP SERVER
+                        instructions: `🏛️ GLOUCESTER CITY COUNCIL POLICY SCHEMA MCP SERVER
 
-This MCP provides access to Gloucester City Council's Council Tax schema, containing comprehensive information about:
+This MCP provides access to Gloucester City Council's policy schemas:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 COUNCIL TAX SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Comprehensive information about:
 - Discounts (single person, students, carers, care leavers, disabled)
 - Exemptions (property and person-based)
 - Premiums (empty homes, second homes)
@@ -212,31 +321,35 @@ This MCP provides access to Gloucester City Council's Council Tax schema, contai
 - Appeals and challenges
 - Holiday lets and self-catering rules
 
-🔧 AVAILABLE TOOLS:
+Tools:
+- schema_get(path) - Retrieve specific sections
+- schema_search(text) - Search for content
+- schema_todos(scope) - Find incomplete items
+- schema_evaluate(rulesetId, userFacts) - Check eligibility
 
-1. schema_get - Retrieve specific sections by path
-   Example: schema_get(path='/discounts/person_based_discounts')
+Key paths: /discounts, /exemptions, /property_premiums, /enforcement, /appeals_and_challenges
 
-2. schema_search - Search for relevant content
-   Example: schema_search(text='single person discount')
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏛️ HERITAGE ASSETS SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Designated heritage assets policy including:
+- Listed Building Consent requirements and processes
+- Conservation Area controls
+- NPPF Chapter 16 policy framework
+- Statutory duties (Sections 16, 66, 72 of the 1990 Act)
+- Harm assessment frameworks
+- Public benefits tests
+- Heritage at Risk procedures
 
-3. schema_todos - Find incomplete/validation items
-   Example: schema_todos(scope=['data_privacy'])
+Tools:
+- heritage_get(path) - Retrieve specific sections
+- heritage_search(text) - Search for content
 
-4. schema_evaluate - Check discount eligibility
-   Example: schema_evaluate(rulesetId='discount_eligibility', userFacts={adults: 1})
+Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJourneys, /keyDefinitions
 
-📍 KEY PATHS:
-- /schema_metadata - Version and validation status
-- /discounts - All discount types
-- /exemptions - Property exemptions
-- /property_premiums - Empty homes and second homes premiums
-- /council_tax_support - Financial assistance scheme
-- /enforcement - Recovery process stages
-- /appeals_and_challenges - How to dispute
-- /holiday_lets_and_self_catering - Business rates vs Council Tax
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚠️ ADVISORY ONLY: Eligibility evaluations are advisory. Actual eligibility requires formal assessment with evidence.`
+⚠️ ADVISORY: All information is for guidance only. Actual eligibility and consent requirements depend on specific circumstances and professional assessment.`
                     }
                 },
                 id
