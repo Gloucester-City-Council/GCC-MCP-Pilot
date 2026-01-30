@@ -1,0 +1,1174 @@
+{
+  "schema_metadata": {
+    "title": "Gloucester City Council Fees and Charges",
+    "version": "2026-27",
+    "effective_date": "2026-04-01",
+    "authority": "Gloucester City Council",
+    "address": "Eastgate Management Suite, Eastgate Street, Gloucester GL1 1PA",
+    "document_source": "Appendix_G_-_Fees_and_Charges.pdf",
+    "last_updated": "2026-01-30",
+    "schema_version": "1.0"
+  },
+  "service_categories": [
+    {
+      "category_id": "environmental_health",
+      "category_name": "Environmental Health",
+      "manager": "Gupti Gosine",
+      "page_range": "1-10",
+      "default_vat_status": "non_business",
+      "services": [
+        {
+          "service_id": "pest_control_rodent",
+          "service_name": "Rodent Control",
+          "fees": [
+            {
+              "fee_type": "visit",
+              "customer_type": "domestic",
+              "net_fee": 50.0,
+              "vat": 10.0,
+              "total_fee": 60.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "visit",
+              "customer_type": "commercial_industrial",
+              "net_fee": 50.0,
+              "vat": 10.0,
+              "total_fee": 60.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "pest_control_disinfestation",
+          "service_name": "Disinfestation of Premises",
+          "fees": [
+            {
+              "fee_type": "visit",
+              "customer_type": "domestic",
+              "net_fee": 60.0,
+              "vat": 12.0,
+              "total_fee": 72.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "visit",
+              "customer_type": "commercial_industrial",
+              "net_fee": 60.0,
+              "vat": 12.0,
+              "total_fee": 72.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "pest_control_wasps",
+          "service_name": "Wasp Nests",
+          "fees": [
+            {
+              "fee_type": "single_nest",
+              "customer_type": "domestic",
+              "net_fee": 42.5,
+              "vat": 8.5,
+              "total_fee": 51.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "single_nest",
+              "customer_type": "commercial_industrial",
+              "net_fee": 42.5,
+              "vat": 8.5,
+              "total_fee": 51.0,
+              "currency": "GBP"
+            }
+          ],
+          "notes": "Additional £10 for second nest at same domestic property"
+        },
+        {
+          "service_id": "eho_rates",
+          "service_name": "Environmental Health Officer Rates",
+          "fees": [
+            {
+              "fee_type": "hourly_court_charges",
+              "total_fee": 64.0,
+              "vat_status": "exempt",
+              "unit": "per hour",
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "hourly_bbfa",
+              "total_fee": 83.0,
+              "vat_status": "exempt",
+              "unit": "per hour",
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "skin_piercing",
+          "service_name": "Skin Piercing, Acupuncture etc registration",
+          "fees": [
+            {
+              "fee_type": "premises",
+              "total_fee": 141.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "per_person",
+              "total_fee": 141.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "high_hedge",
+          "service_name": "High Hedge Nuisance",
+          "fees": [
+            {
+              "fee_type": "investigation_full",
+              "total_fee": 500.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "food_safety",
+          "service_name": "Food Safety",
+          "fees": [
+            {
+              "fee_type": "export_certificates",
+              "net_fee": 30.83,
+              "vat": 6.17,
+              "total_fee": 37.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "hygiene_rating_revisit",
+              "net_fee": 175.0,
+              "vat": 35.0,
+              "total_fee": 210.0,
+              "currency": "GBP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "environmental_permits",
+      "category_name": "Environmental Permits (LAPC/LAPPC)",
+      "manager": "Gupti Gosine",
+      "page_range": "3-5",
+      "default_vat_status": "non_business",
+      "notes": "Fees provided by Environment Agency - Final confirmation expected March 2026",
+      "services": [
+        {
+          "service_id": "lapc_fees",
+          "service_name": "LAPC Application and Subsistence",
+          "fees": [
+            {
+              "fee_type": "a2_application",
+              "total_fee": 3300.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "operating_without_permit",
+              "total_fee": 1200.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "annual_subsistence_low",
+              "total_fee": 1420.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "annual_subsistence_medium",
+              "total_fee": 1600.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "annual_subsistence_high",
+              "total_fee": 2300.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "substantial_variation",
+              "total_fee": 1350.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "transfer",
+              "total_fee": 235.0,
+              "currency": "GBP"
+            },
+            {
+              "fee_type": "surrender",
+              "total_fee": 685.0,
+              "currency": "GBP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "la_ippc",
+      "category_name": "LA-IPPC Charges",
+      "manager": "Gupti Gosine",
+      "services": [
+        {
+          "service_id": "la_ippc_fees",
+          "service_name": "LA-IPPC Charges",
+          "fees": [
+            {
+              "fee_type": "a2_application",
+              "total_fee": 3300.0
+            },
+            {
+              "fee_type": "operating_without_permit",
+              "total_fee": 1170.0
+            },
+            {
+              "fee_type": "annual_subsistence_low",
+              "total_fee": 1420.0
+            },
+            {
+              "fee_type": "annual_subsistence_medium",
+              "total_fee": 1580.0
+            },
+            {
+              "fee_type": "annual_subsistence_high",
+              "total_fee": 2290.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "animal_welfare",
+      "category_name": "Animal Welfare Licensing",
+      "manager": "Gupti Gosine",
+      "legal_framework": "Animal Welfare (Licensing of Activities Involving Animals) (England) Regulations 2018",
+      "services": [
+        {
+          "service_id": "animal_licences",
+          "service_name": "Animal Activity Licences",
+          "fees": [
+            {
+              "activity": "animal_boarding_10_plus",
+              "application_fee": 265.0,
+              "grant_fee_part_a": 106.0,
+              "grant_fee_part_b": 133.0
+            },
+            {
+              "activity": "breeding_dogs_10_plus",
+              "application_fee": 265.0,
+              "grant_fee_part_a": 106.0,
+              "grant_fee_part_b": 133.0
+            },
+            {
+              "activity": "selling_animals_pets",
+              "application_fee": 194.0,
+              "grant_fee_part_a": 47.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "scrap_metal",
+      "category_name": "Scrap Metal Dealers Licence",
+      "manager": "Gupti Gosine",
+      "services": [
+        {
+          "service_id": "scrap_metal_licences",
+          "service_name": "Scrap Metal Licences",
+          "fees": [
+            {
+              "type": "new_site_licence",
+              "total_fee": 519.0
+            },
+            {
+              "type": "new_collectors",
+              "total_fee": 407.0
+            },
+            {
+              "type": "site_renewal",
+              "total_fee": 314.0
+            },
+            {
+              "type": "collectors_renewal",
+              "total_fee": 259.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "abandoned_vehicles",
+      "category_name": "Abandoned Vehicle Charges",
+      "manager": "Gupti Gosine",
+      "services": [
+        {
+          "service_id": "vehicle_collection",
+          "service_name": "Vehicle Collection",
+          "fees": [
+            {
+              "condition": "on_road_upright",
+              "total_fee": 182.0
+            },
+            {
+              "condition": "on_road_damaged",
+              "total_fee": 303.0
+            },
+            {
+              "condition": "off_road_upright",
+              "total_fee": 242.0
+            },
+            {
+              "condition": "off_road_damaged",
+              "total_fee": 363.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "no_smoking",
+      "category_name": "No Smoking Policy (Health Act 2006)",
+      "manager": "Gupti Gosine",
+      "services": [
+        {
+          "service_id": "no_smoking_penalties",
+          "service_name": "Fixed Penalty Notices",
+          "fees": [
+            {
+              "offence": "failure_display_signs",
+              "paid_15_days": 166.0,
+              "paid_29_days": 220.0
+            },
+            {
+              "offence": "smoking_smokefree_place",
+              "paid_15_days": 34.0,
+              "paid_29_days": 56.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "stray_dogs",
+      "category_name": "Stray Dogs",
+      "manager": "Gupti Gosine",
+      "services": [
+        {
+          "service_id": "stray_dog_collection",
+          "service_name": "Stray Dog Collection and Kenneling",
+          "fees": [
+            {
+              "days": 1,
+              "collection_hours": 1,
+              "total_fee": 111.0
+            },
+            {
+              "days": 1,
+              "collection_hours": 2,
+              "total_fee": 156.0
+            },
+            {
+              "days": 7,
+              "collection_hours": 2,
+              "total_fee": 282.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "enforcement_regulation",
+      "category_name": "Enforcement and Regulation",
+      "manager": "James Dykes",
+      "services": [
+        {
+          "service_id": "hmo_licensing",
+          "service_name": "HMO Licensing",
+          "fees": [
+            {
+              "type": "standard_application_new",
+              "total_fee": 1260.0
+            },
+            {
+              "type": "renewal",
+              "total_fee": 900.0
+            },
+            {
+              "type": "application_support",
+              "total_fee": 330.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "fixed_penalty_notices",
+      "category_name": "Fixed Penalty Notices",
+      "manager": "James Dykes",
+      "services": [
+        {
+          "service_id": "environmental_fpns",
+          "service_name": "Environmental FPNs",
+          "fees": [
+            {
+              "offence": "depositing_litter",
+              "standard": 159.0,
+              "reduced": 100.0,
+              "reduction_days": 10
+            },
+            {
+              "offence": "fly_tipping_1_4_bags",
+              "standard": 600.0,
+              "reduced_first_offence": 450.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "shopping_trolleys",
+      "category_name": "Abandoned Shopping Trolleys",
+      "manager": "James Dykes",
+      "services": [
+        {
+          "service_id": "trolley_charges",
+          "service_name": "Shopping Trolley Charges",
+          "fees": [
+            {
+              "type": "collection",
+              "total_fee": 100.0
+            },
+            {
+              "type": "storage_per_day",
+              "total_fee": 10.0
+            },
+            {
+              "type": "disposal",
+              "total_fee": 65.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "gambling",
+      "category_name": "Gambling Act 2005 Licences",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "gambling_premises",
+          "service_name": "Gambling Premises Licences",
+          "licence_types": [
+            {
+              "type": "bingo_club",
+              "new_application": 2769.0,
+              "annual_fee": 791.0
+            },
+            {
+              "type": "betting_premises",
+              "new_application": 2373.0,
+              "annual_fee": 475.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "sex_establishment",
+      "category_name": "Sex Establishment Licences",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "sex_shop",
+          "service_name": "Sex Shop Licences",
+          "fees": [
+            {
+              "type": "new_application",
+              "total_fee": 4420.0
+            },
+            {
+              "type": "renewal",
+              "total_fee": 2810.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "alcohol_licences",
+      "category_name": "Licensing Act 2003",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "premises_licences",
+          "service_name": "Premises Licences by NDRV",
+          "bands": [
+            {
+              "band": "A",
+              "ndrv_range": "£0-£4,300",
+              "new_variation": 100.0,
+              "annual": 70.0
+            },
+            {
+              "band": "B",
+              "ndrv_range": "£4,301-£33,000",
+              "new_variation": 190.0,
+              "annual": 180.0
+            },
+            {
+              "band": "E",
+              "ndrv_range": ">£125,001",
+              "new_variation": 635.0,
+              "annual": 350.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "hackney_private_hire",
+      "category_name": "Hackney Carriages and Private Hire",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "driver_licences",
+          "service_name": "Driver Licences",
+          "fees": [
+            {
+              "duration": "1_year",
+              "new": 115.0,
+              "renewal": 81.0
+            },
+            {
+              "duration": "3_year",
+              "new": 251.0,
+              "renewal": 210.0
+            }
+          ]
+        },
+        {
+          "service_id": "vehicle_licences",
+          "service_name": "Vehicle Licences",
+          "fees": [
+            {
+              "type": "hc_vehicle",
+              "total_fee": 193.0
+            },
+            {
+              "type": "ph_vehicle",
+              "total_fee": 193.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "street_trading",
+      "category_name": "Street Trading Licences",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "street_trading_fees",
+          "service_name": "Street Trading",
+          "fees": [
+            {
+              "type": "city_centre_catering_annual_everyday",
+              "total_fee": 8000.0
+            },
+            {
+              "type": "city_centre_catering_daily_jan_oct",
+              "total_fee": 25.0
+            },
+            {
+              "type": "ice_cream_mobile_annual",
+              "total_fee": 400.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "planning",
+      "category_name": "Planning",
+      "manager": "Claire Haslam",
+      "services": [
+        {
+          "service_id": "pre_app_advice",
+          "service_name": "Pre-Application Advice",
+          "residential": [
+            {
+              "size": "1-2_dwellings",
+              "letter": 400.0,
+              "meeting": 575.0,
+              "site_visit": 775.0
+            },
+            {
+              "size": "50-199_dwellings",
+              "letter": 4368.0,
+              "meeting": 5460.0,
+              "site_visit": 5889.0
+            }
+          ],
+          "non_residential": [
+            {
+              "size": "<500m2",
+              "letter": 425.0,
+              "meeting": 613.0,
+              "site_visit": 825.0
+            }
+          ]
+        },
+        {
+          "service_id": "s106_monitoring",
+          "service_name": "S106 Monitoring",
+          "fees": [
+            {
+              "type": "on_site_open_space",
+              "fee": 1170.0
+            },
+            {
+              "type": "off_site_affordable_housing",
+              "fee": 810.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "cil",
+      "category_name": "Community Infrastructure Levy",
+      "manager": "Claire Haslam",
+      "services": [
+        {
+          "service_id": "cil_rates",
+          "service_name": "CIL Residential Rates",
+          "rates": [
+            {
+              "development": "10_dwellings_under",
+              "rate_per_sqm": 0.0
+            },
+            {
+              "development": "11_to_449_dwellings",
+              "rate_per_sqm": 55.9
+            },
+            {
+              "development": "450_plus_dwellings",
+              "rate_per_sqm": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "pitch_hire",
+      "category_name": "Pitch Hire",
+      "manager": "Dawn Fearn",
+      "services": [
+        {
+          "service_id": "sports_pitches",
+          "service_name": "Sports Pitch Hire",
+          "cricket": {
+            "adults": 75.0,
+            "youth": 37.5
+          },
+          "football": {
+            "adults": 70.0,
+            "youth": 35.0
+          },
+          "rugby": {
+            "adults": 70.0,
+            "youth": 35.0
+          },
+          "changing_rooms": 15.0
+        }
+      ]
+    },
+    {
+      "category_id": "allotments",
+      "category_name": "Allotments",
+      "manager": "Dawn Fearn",
+      "services": [
+        {
+          "service_id": "allotment_rental",
+          "service_name": "Allotment Rental",
+          "rate_per_sqm": 0.39,
+          "examples": [
+            {
+              "plot": "half_plot_126sqm",
+              "fee": 49.14
+            },
+            {
+              "plot": "full_plot_253sqm",
+              "fee": 98.67
+            }
+          ],
+          "water_charge": 10.0,
+          "setup_fee": 35.0
+        }
+      ]
+    },
+    {
+      "category_id": "waste",
+      "category_name": "Waste Services",
+      "manager": "Dawn Fearn",
+      "services": [
+        {
+          "service_id": "bulky_items",
+          "service_name": "Bulky Items",
+          "fees": [
+            {
+              "type": "up_to_3_items",
+              "total_fee": 30.0
+            },
+            {
+              "type": "additional_per_item",
+              "total_fee": 10.0
+            }
+          ]
+        },
+        {
+          "service_id": "garden_waste",
+          "service_name": "Garden Waste",
+          "annual_fee": 60.0
+        },
+        {
+          "service_id": "replacement_bins",
+          "service_name": "Replacement Bins",
+          "fees": [
+            {
+              "type": "140l_refuse",
+              "fee": 16.5
+            },
+            {
+              "type": "240l_refuse_garden",
+              "fee": 25.0
+            },
+            {
+              "type": "360l_bin",
+              "fee": 55.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "property",
+      "category_name": "Property Services",
+      "manager": "Jayne Wilsdon",
+      "services": [
+        {
+          "service_id": "landlord_consents",
+          "service_name": "Landlord Consents",
+          "minimum_charge": 300.0,
+          "hourly_rate": 150.0
+        }
+      ]
+    },
+    {
+      "category_id": "car_parking",
+      "category_name": "Car Parking",
+      "manager": "Jayne Wilsdon",
+      "services": [
+        {
+          "service_id": "zone_a_parking",
+          "service_name": "Zone A Car Parks",
+          "sample_rates": {
+            "1_hour": 1.5,
+            "2_hours": 2.6,
+            "all_day": 8.4
+          },
+          "season_ticket_12_weeks": 420.0
+        }
+      ]
+    },
+    {
+      "category_id": "facilities",
+      "category_name": "Facilities",
+      "manager": "Jayne Wilsdon",
+      "services": [
+        {
+          "service_id": "room_hire",
+          "service_name": "Room Hire",
+          "rooms": [
+            {
+              "name": "Civic Suite",
+              "per_hour": 54.0,
+              "whole_day": 422.0
+            },
+            {
+              "name": "Meeting Room 1",
+              "per_hour": 45.5,
+              "whole_day": 357.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "bus_station",
+      "category_name": "Bus Station Departures",
+      "manager": "Jayne Wilsdon",
+      "services": [
+        {
+          "service_id": "bus_departures",
+          "service_name": "Bus Station Charges",
+          "fees": [
+            {
+              "type": "bus",
+              "net_fee": 1.2,
+              "vat": 0.24,
+              "total_fee": 1.44
+            },
+            {
+              "type": "coach",
+              "net_fee": 2.4,
+              "vat": 0.48,
+              "total_fee": 2.88
+            },
+            {
+              "type": "unbooked_coach",
+              "net_fee": 6.0,
+              "vat": 1.2,
+              "total_fee": 7.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "land_charges",
+      "category_name": "Local Land Charges",
+      "manager": "Cherry Foster",
+      "services": [
+        {
+          "service_id": "land_charges_searches",
+          "service_name": "Land Charges Searches",
+          "fees": [
+            {
+              "type": "llc1",
+              "total_fee": 27.0,
+              "vat_exempt": true
+            },
+            {
+              "type": "con29r",
+              "net_fee": 162.5,
+              "vat": 32.5,
+              "total_fee": 195.0
+            },
+            {
+              "type": "full_search",
+              "total_fee": 222.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "street_naming",
+      "category_name": "Street Naming and Numbering",
+      "manager": "Chris Webb",
+      "services": [
+        {
+          "service_id": "street_naming_fees",
+          "service_name": "Street Naming and Numbering",
+          "fees": [
+            {
+              "type": "naming_renaming_renumbering",
+              "fee": 51.5
+            },
+            {
+              "type": "new_number",
+              "fee": 75.0
+            },
+            {
+              "type": "new_street_name",
+              "fee": 170.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "outdoor_events",
+      "category_name": "Gloucester Outdoor Event Bookings",
+      "manager": "Lucy Chilton and Nicola Salmon",
+      "services": [
+        {
+          "service_id": "event_bookings",
+          "service_name": "Outdoor Events",
+          "admin_fees": [
+            {
+              "type": "commercial",
+              "fee": 120.0
+            },
+            {
+              "type": "national_charity",
+              "fee": 61.0
+            },
+            {
+              "type": "local_charity",
+              "fee": 30.0
+            }
+          ],
+          "hire_fees_city_centre_small_event": [
+            {
+              "type": "commercial",
+              "fee": 122.0
+            },
+            {
+              "type": "national_charity",
+              "fee": 62.0
+            },
+            {
+              "type": "local_charity",
+              "fee": 31.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "film_bookings",
+      "category_name": "Gloucester Film Bookings",
+      "manager": "Lucy Chilton and Nicola Salmon",
+      "services": [
+        {
+          "service_id": "commercial_filming",
+          "service_name": "Commercial Filming",
+          "fees": [
+            {
+              "crew_size": "small_1_5",
+              "half_day": 295.0,
+              "full_day": 570.0
+            },
+            {
+              "crew_size": "medium_6_20",
+              "half_day": 590.0,
+              "full_day": 1160.0
+            },
+            {
+              "crew_size": "large_21_plus",
+              "half_day": 1180.0,
+              "full_day": 2300.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "museum",
+      "category_name": "Museum of Gloucester",
+      "manager": "Lucy Chilton and Nicola Salmon",
+      "services": [
+        {
+          "service_id": "museum_admission",
+          "service_name": "Museum Admission",
+          "admission_fee": "Free"
+        },
+        {
+          "service_id": "wheatstone_hall",
+          "service_name": "Wheatstone Hall Hire",
+          "fees": [
+            {
+              "type": "hourly",
+              "net_fee": 50.0
+            },
+            {
+              "type": "half_day",
+              "net_fee": 145.0
+            },
+            {
+              "type": "full_day",
+              "net_fee": 245.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "guildhall",
+      "category_name": "Gloucester Guildhall",
+      "manager": "Lucy Chilton and Nicola Salmon",
+      "services": [
+        {
+          "service_id": "guildhall_rooms",
+          "service_name": "Meeting Rooms",
+          "rooms": [
+            {
+              "name": "Blue Coat Room",
+              "hourly": 40.0,
+              "half_day": 125.0,
+              "full_day": 215.0
+            },
+            {
+              "name": "Fisher Room",
+              "hourly": 40.0,
+              "half_day": 125.0,
+              "full_day": 215.0
+            }
+          ]
+        },
+        {
+          "service_id": "guildhall_ballroom",
+          "service_name": "Ballroom",
+          "fees": [
+            {
+              "period": "half_day_tues_thurs",
+              "fee": 350.0
+            },
+            {
+              "period": "full_day_tues_thurs",
+              "fee": 535.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "shopmobility",
+      "category_name": "Shopmobility",
+      "manager": "Ismael Rhyman",
+      "services": [
+        {
+          "service_id": "scooter_hire",
+          "service_name": "Electric Scooter Hire",
+          "fees": [
+            {
+              "type": "annual_membership",
+              "net_fee": 30.0,
+              "vat": 6.0,
+              "total_fee": 36.0
+            },
+            {
+              "type": "per_visit",
+              "net_fee": 3.0,
+              "vat": 0.6,
+              "total_fee": 3.6
+            },
+            {
+              "type": "weekend",
+              "net_fee": 36.0,
+              "vat": 7.2,
+              "total_fee": 43.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "cemeteries_crematorium",
+      "category_name": "Cemeteries and Crematorium",
+      "manager": "Carly Hughes",
+      "services": [
+        {
+          "service_id": "cemetery_interment",
+          "service_name": "Cemetery Interment Fees",
+          "fees": [
+            {
+              "type": "child_3_months_to_17_years_5ft",
+              "fee": 304.0,
+              "statutory": true
+            },
+            {
+              "type": "adult_17_plus_5ft",
+              "fee": 873.0,
+              "statutory": true
+            },
+            {
+              "type": "adult_17_plus_7ft",
+              "fee": 1254.5,
+              "statutory": true
+            },
+            {
+              "type": "extra_depth_7_to_9ft",
+              "fee": 552.0
+            }
+          ]
+        },
+        {
+          "service_id": "exclusive_burial_rights",
+          "service_name": "Exclusive Right of Burial",
+          "fees": [
+            {
+              "duration": "50_years",
+              "resident": 941.0,
+              "non_resident": 1882.0
+            },
+            {
+              "duration": "75_years",
+              "resident": 1307.0,
+              "non_resident": 2614.0
+            },
+            {
+              "duration": "99_years",
+              "resident": 2176.0,
+              "non_resident": 4355.0
+            }
+          ]
+        },
+        {
+          "service_id": "cremation",
+          "service_name": "Cremation Fees",
+          "fees": [
+            {
+              "type": "stillborn_or_under_3_months",
+              "fee": 118.0
+            },
+            {
+              "type": "child_3_months_to_17_years",
+              "fee": 200.0
+            },
+            {
+              "type": "adult_17_plus",
+              "fee": 1156.0,
+              "includes": "medical referee fee and mercury abatement"
+            },
+            {
+              "type": "cremation_service_45_min",
+              "fee": 1272.0
+            },
+            {
+              "type": "sunrise_service_9_10am",
+              "fee": 583.0
+            },
+            {
+              "type": "direct_cremation",
+              "fee": 400.0
+            }
+          ]
+        },
+        {
+          "service_id": "memorials",
+          "service_name": "Memorial Items",
+          "fees": [
+            {
+              "type": "book_of_memory_2_line",
+              "fee": 89.0
+            },
+            {
+              "type": "book_of_memory_5_line",
+              "fee": 155.0
+            },
+            {
+              "type": "single_bronze_kerb_plaque_20yrs",
+              "fee": 446.0,
+              "vat_inclusive": true
+            },
+            {
+              "type": "standard_rose_tree_plaque_20yrs",
+              "fee": 1172.0,
+              "vat_inclusive": true
+            }
+          ]
+        }
+      ],
+      "concessions": "100% concession for interment/cremation of children under 17 whose usual residence was within City of Gloucester. Does not apply to interment of cremated remains."
+    }
+  ]
+}
