@@ -717,43 +717,163 @@
       "category_id": "waste",
       "category_name": "Waste Services",
       "manager": "Dawn Fearn",
+      "page_range": "23",
+      "default_vat_status": "non_business_except_bulky",
       "services": [
         {
           "service_id": "bulky_items",
           "service_name": "Bulky Items",
+          "vat_status": "standard_rated_inclusive",
           "fees": [
             {
               "type": "up_to_3_items",
-              "total_fee": 30.0
+              "total_fee": 30.0,
+              "currency": "GBP"
             },
             {
               "type": "additional_per_item",
-              "total_fee": 10.0
+              "total_fee": 10.0,
+              "currency": "GBP",
+              "unit": "per item"
             }
           ]
         },
         {
           "service_id": "garden_waste",
           "service_name": "Garden Waste",
-          "annual_fee": 60.0
+          "description": "Fortnightly collection service covering 1 Feb to 30 Nov",
+          "annual_fee": 60.0,
+          "currency": "GBP",
+          "notes": "Existing customers invoiced annually in January. 2026/27 charge effective from 1 Jan 2026 for renewals."
+        },
+        {
+          "service_id": "new_development_bins",
+          "service_name": "New Developments/Conversions Wheelie Bin and Recycling Receptacles (includes delivery)",
+          "fees": [
+            {
+              "type": "1100l_communal_waste_containers",
+              "description": "Communal collection",
+              "fee": 325.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "660l_communal_waste_containers",
+              "description": "Communal collection",
+              "fee": 275.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "recycling_containers_communal_up_to_8_flats",
+              "fee": 275.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "recycling_containers_communal_large_blocks_8_plus_flats",
+              "fee": 499.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "individual_household_full_set",
+              "description": "140L refuse bin, 3 recycling boxes and lids, food caddy set and blue bag",
+              "fee": 40.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "individual_household_240l_bin",
+              "fee": 55.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "individual_household_360l_bin",
+              "description": "By agreed waste audit",
+              "fee": 85.0,
+              "currency": "GBP"
+            }
+          ]
         },
         {
           "service_id": "replacement_bins",
-          "service_name": "Replacement Bins",
+          "service_name": "Replacement Wheelie Bin and Recycling Receptacles (includes delivery)",
+          "description": "Charges where bins damaged or lost",
           "fees": [
             {
-              "type": "140l_refuse",
-              "fee": 16.5
+              "type": "1100l_communal_refuse_bins",
+              "fee": 325.0,
+              "currency": "GBP"
             },
             {
-              "type": "240l_refuse_garden",
-              "fee": 25.0
+              "type": "1100l_communal_recycling_bin",
+              "description": "Cardboard, cans, plastic, glass",
+              "fee": 150.0,
+              "currency": "GBP"
             },
             {
-              "type": "360l_bin",
-              "fee": 55.0
+              "type": "communal_360l_bin",
+              "description": "Cardboard, cans, plastic, glass",
+              "fee": 55.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "communal_food_bin_240l",
+              "fee": 25.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_refuse_bin_140l",
+              "description": "Smaller bin supplied",
+              "fee": 16.5,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_refuse_bin_240l_garden_waste",
+              "fee": 25.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_360l_bin",
+              "fee": 55.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_black_refuse_sack_terraced",
+              "fee": 5.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_green_box_and_lid",
+              "fee": 7.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_blue_sack",
+              "fee": 3.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_small_food_caddy",
+              "fee": 2.5,
+              "currency": "GBP"
+            },
+            {
+              "type": "replacement_large_food_caddy",
+              "fee": 6.0,
+              "currency": "GBP"
             }
           ]
+        },
+        {
+          "service_id": "waste_clearance_landlords",
+          "service_name": "Waste clearance for private landlords",
+          "description": "By arrangement, up to 20 black bags",
+          "fee": 150.0,
+          "currency": "GBP"
+        },
+        {
+          "service_id": "graffiti_removal",
+          "service_name": "Removal of offensive graffiti from private property",
+          "description": "Only where property owner unable to remove and agreed by Council. Disclaimer required.",
+          "fee": 250.0,
+          "currency": "GBP"
         }
       ]
     },
@@ -774,23 +894,185 @@
       "category_id": "car_parking",
       "category_name": "Car Parking",
       "manager": "Jayne Wilsdon",
+      "page_range": "25",
+      "default_vat_status": "standard_rated_inclusive",
+      "notes": "All charges shown are inclusive of VAT",
       "services": [
         {
-          "service_id": "zone_a_parking",
-          "service_name": "Zone A Car Parks",
-          "sample_rates": {
-            "1_hour": 1.5,
-            "2_hours": 2.6,
-            "all_day": 8.4
+          "service_id": "zone_a_car_parks",
+          "service_name": "Zone A Off-Street Car Parks",
+          "chargeable_hours": "7am-6pm (exceptions noted)",
+          "car_parks": [
+            {
+              "name": "Kings Walk",
+              "hours": "7am-5pm",
+              "1h": 1.5,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Eastgate",
+              "hours": "7am-5pm",
+              "1h": 1.5,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Longsmith Street",
+              "hours": "7am-7pm",
+              "1h": 1.5,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Southgate Moorings",
+              "hours": "24 hour (evening £2.00 6pm-7am)",
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Ladybellegate Street",
+              "1h": 1.5,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Hampden Way",
+              "1h": 1.4,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Westgate Street",
+              "1h": 1.4,
+              "2h": 4.0,
+              "3h": 4.4,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "CastleMeads",
+              "1h": 1.4,
+              "2h": 2.5,
+              "3h": 4.0,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 1.6,
+              "sun_all_day": 2.3
+            },
+            {
+              "name": "Hare Lane South",
+              "1h": 1.4,
+              "2h": 2.6,
+              "3h": 4.0,
+              "4h": 5.1,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Station Road",
+              "1h": 1.4,
+              "2h": 4.0,
+              "3h": 4.8,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "St Michaels Square",
+              "1h": 1.4,
+              "2h": 4.0,
+              "3h": 4.4,
+              "4h": 5.1,
+              "5h": 8.4,
+              "sun_1h": 2.6,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "North Warehouse",
+              "2h": 2.5,
+              "3h": 4.8,
+              "all_day": 8.4,
+              "sun_1h": 1.6,
+              "sun_all_day": 2.3
+            }
+          ],
+          "season_tickets": {
+            "duration": "12_weeks",
+            "fee": 420.0
           },
-          "season_ticket_12_weeks": 420.0
+          "currency": "GBP"
+        },
+        {
+          "service_id": "zone_b_car_parks",
+          "service_name": "Zone B Off-Street Car Parks",
+          "car_parks": [
+            {
+              "name": "Great Western Road",
+              "all_day": 5.2,
+              "sun_all_day": 4.2
+            },
+            {
+              "name": "Hare Lane North",
+              "1h": 1.4,
+              "2h": 4.0,
+              "3h": 5.3,
+              "sun_1h": 1.6,
+              "sun_all_day": 4.2
+            }
+          ],
+          "season_tickets": {
+            "duration": "12_weeks",
+            "fee": 360.0
+          },
+          "currency": "GBP",
+          "notes": "Zone B charges to be aligned to Zone A over two years. Season tickets adjusted accordingly - subject to revised Parking Order."
+        },
+        {
+          "service_id": "gl1_car_park",
+          "service_name": "GL1 Car Park",
+          "chargeable_hours": "Monday to Saturday: 9am to 3pm",
+          "maximum_stay": "2.5 hours",
+          "fee": 4.2,
+          "concessions": "Blue badge holders: free for 3 hours max stay (100% concession)",
+          "currency": "GBP"
         }
       ]
     },
     {
       "category_id": "facilities",
-      "category_name": "Facilities",
+      "category_name": "Facilities Fees",
       "manager": "Jayne Wilsdon",
+      "page_range": "26",
+      "default_vat_status": "exempt",
+      "notes": "Exempt unless facilities like catering provided, then standard rated",
       "services": [
         {
           "service_id": "room_hire",
@@ -799,14 +1081,80 @@
             {
               "name": "Civic Suite",
               "per_hour": 54.0,
-              "whole_day": 422.0
+              "morning_8_1230": 211.0,
+              "afternoon_1230_5": 211.0,
+              "whole_day_8_5": 422.0,
+              "evening_5_11": 422.0,
+              "evening_per_hour": 76.0,
+              "saturday_morning_8_1230": 330.0,
+              "saturday_afternoon_1230_5": 330.0,
+              "saturday_evening_5_11": 422.0
             },
             {
               "name": "Meeting Room 1",
               "per_hour": 45.5,
-              "whole_day": 357.0
+              "morning_8_1230": 183.0,
+              "afternoon_1230_5": 183.0,
+              "whole_day_8_5": 357.0,
+              "evening_5_11": 357.0,
+              "evening_per_hour": 70.0,
+              "saturday_morning_8_1230": 270.0,
+              "saturday_afternoon_1230_5": 270.0,
+              "saturday_evening_5_11": 400.0
+            },
+            {
+              "name": "Sheriff's Room",
+              "per_hour": 32.0,
+              "morning_8_1230": 151.0,
+              "afternoon_1230_5": 151.0,
+              "whole_day_8_5": 264.0,
+              "evening_5_11": 357.0,
+              "evening_per_hour": 70.0
             }
-          ]
+          ],
+          "currency": "GBP"
+        },
+        {
+          "service_id": "equipment_hire",
+          "service_name": "Additional Charges",
+          "equipment": [
+            {
+              "item": "Multi Media Projector",
+              "fee": 65.0
+            },
+            {
+              "item": "Laptop",
+              "fee": 33.0
+            },
+            {
+              "item": "Flip Chart & Pens",
+              "fee": 16.0
+            }
+          ],
+          "currency": "GBP"
+        },
+        {
+          "service_id": "catering",
+          "service_name": "Catering",
+          "items": [
+            {
+              "item": "Kitchen",
+              "fee": 140.0
+            },
+            {
+              "item": "Tea/Coffee per head",
+              "fee": 2.1
+            },
+            {
+              "item": "Tea/Coffee/Biscuits per head",
+              "fee": 2.5
+            },
+            {
+              "item": "Fruit Juice per head",
+              "fee": 2.0
+            }
+          ],
+          "currency": "GBP"
         }
       ]
     },
@@ -873,22 +1221,101 @@
       "category_id": "street_naming",
       "category_name": "Street Naming and Numbering",
       "manager": "Chris Webb",
+      "page_range": "29",
+      "default_vat_status": "exempt",
       "services": [
         {
-          "service_id": "street_naming_fees",
-          "service_name": "Street Naming and Numbering",
+          "service_id": "individual_development",
+          "service_name": "Individual Development",
           "fees": [
             {
               "type": "naming_renaming_renumbering",
-              "fee": 51.5
+              "fee": 51.5,
+              "currency": "GBP"
+            },
+            {
+              "type": "removal_property_name",
+              "fee": 51.5,
+              "currency": "GBP"
             },
             {
               "type": "new_number",
-              "fee": 75.0
-            },
+              "fee": 75.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "new_development",
+          "service_name": "Development - New Road name and house number allocation",
+          "fees": [
             {
               "type": "new_street_name",
-              "fee": 170.0
+              "fee": 170.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "number_a_plot",
+              "fee": 75.0,
+              "currency": "GBP",
+              "unit": "per plot"
+            }
+          ]
+        },
+        {
+          "service_id": "commercial_flats",
+          "service_name": "Other fees and charges",
+          "fees": [
+            {
+              "type": "commercial_industrial_building",
+              "per_block": 139.0,
+              "per_unit_plot": 75.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "block_of_flats",
+              "per_block": 147.0,
+              "per_unit_plot": 75.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "letter_of_certification",
+              "fee": 37.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "enquiries_solicitors_building_societies",
+              "fee": 72.0,
+              "currency": "GBP"
+            }
+          ]
+        },
+        {
+          "service_id": "street_name_plate_relocation",
+          "service_name": "Street Name Plate Relocation charges",
+          "fees": [
+            {
+              "type": "application_fee_viability_investigation",
+              "fee": 63.86,
+              "currency": "GBP",
+              "notes": "Non-refundable"
+            },
+            {
+              "type": "relocating_installing_plate",
+              "fee": 117.0,
+              "currency": "GBP"
+            },
+            {
+              "type": "new_street_name_plate",
+              "fee": 55.0,
+              "currency": "GBP",
+              "notes": "If applicable"
+            },
+            {
+              "type": "new_posts_2",
+              "fee": 40.0,
+              "currency": "GBP",
+              "notes": "If applicable"
             }
           ]
         }
