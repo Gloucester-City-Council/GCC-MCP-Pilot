@@ -27,6 +27,9 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+# Document harvest cache (large, rebuilt on demand)
+cache/
+
 # Azure deployment
 .deployment
 deploy.sh
