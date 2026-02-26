@@ -5,6 +5,7 @@
 
 const { app } = require('@azure/functions');
 const { isSchemaLoaded, getSchemaVersion, getSchemaHash, getLoadError } = require('../schema/loader');
+const heritageLoader = require('../heritage/loader');
 
 /**
  * Handle GET /healthz-schema requests
@@ -17,33 +18,59 @@ app.http('healthzSchema', {
         context.log('Health check request received');
 
         try {
-            const loaded = isSchemaLoaded();
-            const version = getSchemaVersion();
-            const hash = getSchemaHash();
-            const loadError = getLoadError();
+            const ctLoaded = isSchemaLoaded();
+            const ctVersion = getSchemaVersion();
+            const ctHash = getSchemaHash();
+            const ctLoadError = getLoadError();
 
-            if (loaded) {
+            const heritageLoaded = heritageLoader.isSchemaLoaded();
+            const heritageVersion = heritageLoader.getSchemaVersion();
+            const heritageHash = heritageLoader.getSchemaHash();
+            const heritageLoadError = heritageLoader.getLoadError();
+
+            const allLoaded = ctLoaded && heritageLoaded;
+
+            if (allLoaded) {
                 return {
                     status: 200,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ok: true,
-                        schemaLoaded: true,
-                        schemaVersion: version,
-                        hash: hash
+                        schemas: {
+                            councilTax: {
+                                loaded: true,
+                                schemaVersion: ctVersion,
+                                hash: ctHash
+                            },
+                            heritage: {
+                                loaded: true,
+                                schemaVersion: heritageVersion,
+                                hash: heritageHash
+                            }
+                        }
                     })
                 };
             } else {
-                // Schema failed to load
+                // One or more schemas failed to load
                 return {
                     status: 503,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ok: false,
-                        schemaLoaded: false,
-                        schemaVersion: null,
-                        hash: null,
-                        error: loadError ? loadError.message : 'Schema not loaded'
+                        schemas: {
+                            councilTax: {
+                                loaded: ctLoaded,
+                                schemaVersion: ctLoaded ? ctVersion : null,
+                                hash: ctLoaded ? ctHash : null,
+                                error: !ctLoaded ? (ctLoadError ? ctLoadError.message : 'Schema not loaded') : undefined
+                            },
+                            heritage: {
+                                loaded: heritageLoaded,
+                                schemaVersion: heritageLoaded ? heritageVersion : null,
+                                hash: heritageLoaded ? heritageHash : null,
+                                error: !heritageLoaded ? (heritageLoadError ? heritageLoadError.message : 'Schema not loaded') : undefined
+                            }
+                        }
                     })
                 };
             }

@@ -60,7 +60,7 @@ function truncateToBytes(data, maxBytes) {
         data: null,
         truncated: true,
         preview: preview + '...',
-        omittedBytes: bytes - preview.length,
+        omittedBytes: bytes - Buffer.byteLength(preview, 'utf8'),
         totalBytes: bytes
     };
 }

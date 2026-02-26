@@ -397,9 +397,11 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                 context.log(`Executing schema tool: ${name}`);
                 const result = handler(args || {});
 
+                // Use the appropriate schema version based on which tool was called
+                const isHeritageTool = name.startsWith('heritage_');
                 const wrappedResult = {
                     ...getDateContext(),
-                    schemaVersion: getSchemaVersion(),
+                    schemaVersion: isHeritageTool ? heritageLoader.getSchemaVersion() : getSchemaVersion(),
                     data: result
                 };
 
