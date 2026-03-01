@@ -367,33 +367,33 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                 id
             };
 
-        case 'tools/call':
+        case 'tools/call': {
+            const { name, arguments: args } = params || {};
+
+            if (!name) {
+                return {
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32602,
+                        message: 'Invalid params: tool name is required'
+                    },
+                    id
+                };
+            }
+
+            const handler = TOOL_HANDLERS[name];
+            if (!handler) {
+                return {
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32602,
+                        message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`
+                    },
+                    id
+                };
+            }
+
             try {
-                const { name, arguments: args } = params || {};
-
-                if (!name) {
-                    return {
-                        jsonrpc: '2.0',
-                        error: {
-                            code: -32602,
-                            message: 'Invalid params: tool name is required'
-                        },
-                        id
-                    };
-                }
-
-                const handler = TOOL_HANDLERS[name];
-                if (!handler) {
-                    return {
-                        jsonrpc: '2.0',
-                        error: {
-                            code: -32602,
-                            message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`
-                        },
-                        id
-                    };
-                }
-
                 context.log(`Executing schema tool: ${name}`);
                 const result = handler(args || {});
 
@@ -416,7 +416,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                     id
                 };
             } catch (error) {
-                context.log.error(`Schema tool error: ${error.message}`);
+                context.log.error(`Schema tool error [${name}]: ${error.message}`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -424,7 +424,9 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                             {
                                 type: 'text',
                                 text: JSON.stringify({
-                                    error: error.message
+                                    error: error.message,
+                                    tool: name,
+                                    note: 'An unexpected error occurred executing the schema tool.'
                                 }, null, 2)
                             }
                         ],
@@ -433,6 +435,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                     id
                 };
             }
+        }
 
         case 'ping':
             return {
