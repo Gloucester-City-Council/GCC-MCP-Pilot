@@ -110,6 +110,54 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/cabinet is asked to resolve that/i);
     });
 
+
+    it('matches Council is asked to RESOLVE that trigger across line breaks', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Council Report',
+                'Recommendations',
+                'Council is asked to',
+                'RESOLVE that:',
+                '1. the policy be approved.',
+                '2. the delivery plan be noted.',
+                'Background',
+                'Context'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=7', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/council\s+is\s+asked\s+to\s+resolve\s+that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
+
+    it('matches Committee is asked to resolve trigger with messy spacing', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Committee Report',
+                '2.0 Recommendations',
+                'Committee\u00A0is asked   to',
+                'resolve   that:',
+                '(1) the draft action plan be endorsed;',
+                '(2) officers proceed with procurement.',
+                '3.0 Financial Implications',
+                'Contained within existing budget.'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=8', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/committee\s+is\s+asked\s+to\s+resolve\s+that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
     it('supports RESOLVED that trigger under Recommendations heading', async () => {
         axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
         pdfParse.mockResolvedValue({
