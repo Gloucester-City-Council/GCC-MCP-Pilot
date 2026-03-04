@@ -200,6 +200,108 @@ function evaluateMissingAssessments(input, value, contractType, isAbove) {
 }
 
 /**
+ * Evaluate checks that have been positively satisfied for audit output.
+ */
+function evaluateVerifiedChecks(input, value, contractType, isAbove) {
+    const type = (contractType || '').toLowerCase();
+    const route = (input.procurement_route || '').toLowerCase();
+    const verified = [];
+
+    if (value > 100000 && input.forward_plan_reference) {
+        verified.push({
+            check: 'Forward Plan reference',
+            status: 'PASS',
+            source: 'ART12 12.03(b)(iii) and (iv); PART3E 3E.11',
+            forward_plan_reference: input.forward_plan_reference,
+        });
+    }
+
+    if (value > 250000 && value <= 500000 && input.cabinet_member_decision_reference) {
+        verified.push({
+            check: 'Cabinet Member decision reference',
+            status: 'PASS',
+            source: 'SUB-DELEGATION; PART3E Table 4',
+            cabinet_member_decision_reference: input.cabinet_member_decision_reference,
+        });
+    }
+
+    if (value > 500000 && input.cabinet_decision_reference) {
+        verified.push({
+            check: 'Cabinet decision reference',
+            status: 'PASS',
+            source: 'ART12 KD4; PART3E Table 4',
+            cabinet_decision_reference: input.cabinet_decision_reference,
+        });
+    }
+
+    if (route === 'direct_award' || route === 'below_threshold_direct') {
+        if (input.direct_award_justification_reference) {
+            verified.push({
+                check: 'Direct award justification reference',
+                status: 'PASS',
+                source: 'CONTRACT-RULES Rule 10.8; PA2023 s.44',
+                direct_award_justification_reference: input.direct_award_justification_reference,
+            });
+        }
+    }
+
+    if (route === 'waiver' && input.waiver_reference) {
+        verified.push({
+            check: 'Waiver approval reference',
+            status: 'PASS',
+            source: 'CONTRACT-RULES Rule 6.3; PART3E Table 4',
+            waiver_reference: input.waiver_reference,
+        });
+    }
+
+    if (isAbove) {
+        const isServices = type === 'services' || type === 'goods' || type === 'mixed';
+
+        if (isServices && input.social_value_assessed === true) {
+            verified.push({
+                check: 'Social value assessment',
+                status: 'PASS',
+                source: 'SV2012 — Public Services (Social Value) Act 2012',
+            });
+        }
+
+        if (input.conflicts_assessment_completed === true) {
+            verified.push({
+                check: 'Conflicts of interest assessment',
+                status: 'PASS',
+                source: 'CONTRACT-RULES Rule 7; PA2023 s.82',
+            });
+        }
+
+        if (input.lots_considered === true) {
+            verified.push({
+                check: 'Lots consideration',
+                status: 'PASS',
+                source: 'PA2023 s.34',
+            });
+        }
+
+        if (input.existing_framework_checked === true) {
+            verified.push({
+                check: 'Existing framework / dynamic market check',
+                status: 'PASS',
+                source: 'CONTRACT-RULES Rule 22; NPPS2024',
+            });
+        }
+
+        if (isServices && input.tupe_assessed === true) {
+            verified.push({
+                check: 'TUPE assessment',
+                status: 'PASS',
+                source: 'TUPE 2006 (SI 2006/246)',
+            });
+        }
+    }
+
+    return verified;
+}
+
+/**
  * Determine overall status from flags and missing assessments.
  */
 function overallStatus(flags, missingAssessments) {
@@ -339,6 +441,7 @@ function execute(input = {}) {
 
     const triggered_flags = evaluateFlags(input, value, contractType, thresholdResult.above);
     const missing_assessments = evaluateMissingAssessments(input, value, contractType, thresholdResult.above);
+    const verified_checks = evaluateVerifiedChecks(input, value, contractType, thresholdResult.above);
     const status = overallStatus(triggered_flags, missing_assessments);
     const recommendations = buildRecommendations(triggered_flags, missing_assessments, value);
 
@@ -351,6 +454,7 @@ function execute(input = {}) {
         overall_status: status,
         triggered_flags,
         missing_assessments,
+        verified_checks,
         recommendations,
         schema_version: SCHEMA_VERSION,
     };
