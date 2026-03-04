@@ -20,37 +20,46 @@ try {
     schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
 } catch (err) {
     throw new Error(
-        `GCC Procurement: schema failed to load from ${SCHEMA_PATH} — ${err.message}`
+        `GCC Procurement: schema file unreadable at ${SCHEMA_PATH} — ${err.message}`
     );
 }
 
-const MATRIX = schema.approvals_and_governance
-    .decision_making
-    .procurement_decision_authority_matrix
-    .matrix;
+// Extract constants — a TypeError here means the schema structure has changed
+let MATRIX, WAIVER_MATRIX, THRESHOLDS, NOTICES, DERIVED, CONFLICTS, RISK_FLAGS, SOURCES, KD_TRIGGERS, EXECUTION_AUTHORITY;
+try {
+    MATRIX = schema.approvals_and_governance
+        .decision_making
+        .procurement_decision_authority_matrix
+        .matrix;
 
-const WAIVER_MATRIX = schema.approvals_and_governance
-    .decision_making
-    .procurement_decision_authority_matrix
-    .waiver_matrix;
+    WAIVER_MATRIX = schema.approvals_and_governance
+        .decision_making
+        .procurement_decision_authority_matrix
+        .waiver_matrix;
 
-const THRESHOLDS = schema.thresholds.sub_central_authorities;
+    THRESHOLDS = schema.thresholds.sub_central_authorities;
 
-// notices is the array inside notice_types
-const NOTICES = schema.notice_types.notices;
+    // notices is the array inside notice_types
+    NOTICES = schema.notice_types.notices;
 
-const DERIVED    = schema.derived_fields;
-const CONFLICTS  = schema.source_documents.known_conflicts;
-const RISK_FLAGS = schema.risk_flags.flags;
-const SOURCES    = schema.source_documents.documents;
+    DERIVED    = schema.derived_fields;
+    CONFLICTS  = schema.source_documents.known_conflicts;
+    RISK_FLAGS = schema.risk_flags.flags;
+    SOURCES    = schema.source_documents.documents;
 
-const KD_TRIGGERS = schema.approvals_and_governance
-    .decision_making
-    .decision_types
-    .key_decision
-    .triggers;
+    KD_TRIGGERS = schema.approvals_and_governance
+        .decision_making
+        .decision_types
+        .key_decision
+        .triggers;
 
-const EXECUTION_AUTHORITY = schema.approvals_and_governance.execution_authority;
+    EXECUTION_AUTHORITY = schema.approvals_and_governance.execution_authority;
+} catch (err) {
+    throw new Error(
+        `GCC Procurement: schema structure invalid in ${SCHEMA_PATH} — ${err.message}. ` +
+        'Schema may have been updated without corresponding schema-loader changes.'
+    );
+}
 
 const SCHEMA_VERSION = schema.version;
 

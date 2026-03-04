@@ -11,7 +11,20 @@
 'use strict';
 
 const { app } = require('@azure/functions');
-const { TOOLS, TOOL_HANDLERS, SERVER_INFO } = require('../gcc-procurement/index');
+
+// Wrap module load so a schema load failure returns a 503 rather than
+// crashing the entire Azure Functions worker process (which would take
+// down all other endpoints too).
+let TOOLS = [], TOOL_HANDLERS = {}, SERVER_INFO = { name: 'gcc-procurement-mcp', version: '1.0.0', schemaVersion: 'unknown' };
+let _moduleLoadError = null;
+
+try {
+    ({ TOOLS, TOOL_HANDLERS, SERVER_INFO } = require('../gcc-procurement/index'));
+} catch (err) {
+    _moduleLoadError = err;
+    // Log at startup so the error appears in Azure Application Insights / Log Stream
+    console.error('GCC Procurement MCP: module load failed —', err.message);
+}
 
 // ─── Date context helper (matches mcpSchema.js pattern) ──────────────────────
 function getDateContext() {
@@ -173,6 +186,23 @@ app.http('mcpProcurement', {
     route: 'mcp-procurement',
     handler: async (request, context) => {
         context.log('MCP Procurement request received');
+
+        // Schema failed to load at startup — surface the error rather than crashing
+        if (_moduleLoadError) {
+            context.log.error('Procurement MCP unavailable — schema load error:', _moduleLoadError.message);
+            return {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32603,
+                        message: `Procurement MCP unavailable: ${_moduleLoadError.message}`,
+                    },
+                    id: null,
+                }),
+            };
+        }
 
         try {
             let body;
