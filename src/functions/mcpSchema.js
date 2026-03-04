@@ -264,6 +264,17 @@ function getDateContext() {
  * Handle MCP JSON-RPC requests
  */
 async function handleMcpRequest(request, context) {
+    if (!request || typeof request !== 'object' || Array.isArray(request)) {
+        return {
+            jsonrpc: '2.0',
+            error: {
+                code: -32600,
+                message: 'Invalid Request: body must be a JSON object'
+            },
+            id: null
+        };
+    }
+
     const { jsonrpc, method, params, id } = request;
 
     // Validate JSON-RPC version
@@ -395,7 +406,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
 
             try {
                 context.log(`Executing schema tool: ${name}`);
-                const result = handler(args || {});
+                const result = await Promise.resolve(handler(args || {}));
 
                 const wrappedResult = {
                     ...getDateContext(),
