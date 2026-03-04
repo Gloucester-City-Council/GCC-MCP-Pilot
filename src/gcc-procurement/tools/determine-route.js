@@ -53,10 +53,19 @@ function deriveNotices(value, isAbove, procurementRoute) {
     // Map code strings to full notice objects where possible (UK prefixed codes)
     return codes.map(code => {
         const ukCode = code.split('_')[0]; // e.g. 'UK4' from 'UK4_tender_notice'
-        const notice = /^UK\d+$/.test(ukCode) ? findNotice(ukCode) : null;
+        const notice = findNotice(code) || (/^UK\d+$/.test(ukCode) ? findNotice(ukCode) : null);
         return notice
             ? { code: notice.code, name: notice.name, timing: notice.timing, section: notice.section }
-            : { code, name: code.replace(/_/g, ' '), timing: 'See Contract Rules', section: 'CONTRACT-RULES' };
+            : {
+                code,
+                name: code === 'BT-TENDER'
+                    ? 'Below-Threshold Tender Notice'
+                    : code === 'BT-AWARD'
+                        ? 'Below-Threshold Award / Contract Details Notice'
+                        : code.replace(/_/g, ' '),
+                timing: 'See Contract Rules',
+                section: 'CONTRACT-RULES',
+            };
     });
 }
 
