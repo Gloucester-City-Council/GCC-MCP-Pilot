@@ -41,11 +41,11 @@ describe('schema-loader configuration', () => {
     });
 
     it('supports overriding schema file via environment variable', () => {
-        process.env.GCC_PROCUREMENT_SCHEMA_FILE = 'procurement-contracts-schema-v0.9.2.json';
+        process.env.GCC_PROCUREMENT_SCHEMA_FILE = 'procurement-contracts-schema-v0.9.3.json';
 
         const loader = require('../src/gcc-procurement/schema-loader');
 
-        expect(loader.SCHEMA_FILE).toBe('procurement-contracts-schema-v0.9.2.json');
+        expect(loader.SCHEMA_FILE).toBe('procurement-contracts-schema-v0.9.3.json');
         expect(loader.SCHEMA_VERSION).toBeDefined();
     });
 });

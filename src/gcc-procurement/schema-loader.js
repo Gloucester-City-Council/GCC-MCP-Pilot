@@ -1,7 +1,7 @@
 /**
  * GCC Procurement Schema Loader
  *
- * Loads procurement-contracts-schema-v0.9.1.json once at module initialisation
+ * Loads procurement-contracts-schema-v0.9.3.json once at module initialisation
  * and extracts the key constants used by all five procurement tools.
  *
  * Fail-fast: if the schema file is missing or malformed this module throws on
@@ -13,7 +13,7 @@
 const path = require('path');
 const fs   = require('fs');
 
-const SCHEMA_FILE = process.env.GCC_PROCUREMENT_SCHEMA_FILE || 'procurement-contracts-schema-v0.9.2.json';
+const SCHEMA_FILE = process.env.GCC_PROCUREMENT_SCHEMA_FILE || 'procurement-contracts-schema-v0.9.3.json';
 const SCHEMA_PATH = path.resolve(__dirname, `../../schemas/${SCHEMA_FILE}`);
 
 let schema;
