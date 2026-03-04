@@ -57,9 +57,10 @@ function evaluateFlags(input, value, contractType, isAbove) {
         }
     }
 
-    // ── R12: Above officer award ceiling — Cabinet Member approval not confirmed
-    // Source: SUB-DELEGATION — officer award ceiling £250,000
-    if (value > 250000 && !input.cabinet_member_decision_reference) {
+    // ── R12: Tier 5 — Cabinet Member decision reference missing
+    // Scoped to tier 5 (£250,001–£500,000) only. For tier 6 (above £500,000), R13 applies.
+    // Source: SUB-DELEGATION; PART3E Table 4; risk_flags.R12 (v0.9.2)
+    if (value > 250000 && value <= 500000 && !input.cabinet_member_decision_reference) {
         const flag = findRiskFlag('R12');
         if (flag) {
             triggered.push({

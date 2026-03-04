@@ -59,17 +59,25 @@ function resolveNotice(codeOrKey) {
         }
     }
 
-    // Below-threshold notices are on CDP (Contracts Data Platform), not Find a Tender
-    if (codeOrKey.includes('below_threshold') || codeOrKey === 'contract_details_notice') {
-        const name = codeOrKey === 'contract_details_notice'
-            ? 'Contract Details Notice (below threshold)'
-            : 'Below-Threshold Tender Notice';
+    // Below-threshold notices — published on CDP (Contracts Data Platform), not Find a Tender
+    // v0.9.2 codes: BT-TENDER (below-threshold tender notice), BT-AWARD (below-threshold award/details)
+    // v0.9.1 legacy codes also handled for robustness
+    if (codeOrKey === 'BT-TENDER' || codeOrKey.includes('below_threshold_tender')) {
         return {
-            code: codeOrKey,
-            name,
-            timing: codeOrKey === 'contract_details_notice'
-                ? 'After contract signature'
-                : 'Before tender documents issued',
+            code: 'BT-TENDER',
+            name: 'Below-Threshold Tender Notice',
+            timing: 'Before tender documents issued',
+            mandatory: true,
+            section: 'CONTRACT-RULES Rule 9',
+            notes: 'Published on Contracts Data Platform (CDP), not Find a Tender',
+            platform: 'Contracts Data Platform (CDP)',
+        };
+    }
+    if (codeOrKey === 'BT-AWARD' || codeOrKey === 'contract_details_notice') {
+        return {
+            code: 'BT-AWARD',
+            name: 'Below-Threshold Award / Contract Details Notice',
+            timing: 'After contract award',
             mandatory: true,
             section: 'CONTRACT-RULES Rule 9; PA2023 s.53',
             notes: 'Published on Contracts Data Platform (CDP), not Find a Tender',

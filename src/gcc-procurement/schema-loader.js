@@ -13,7 +13,7 @@
 const path = require('path');
 const fs   = require('fs');
 
-const SCHEMA_PATH = path.resolve(__dirname, '../../schemas/procurement-contracts-schema-v0.9.1.json');
+const SCHEMA_PATH = path.resolve(__dirname, '../../schemas/procurement-contracts-schema-v0.9.2.json');
 
 let schema;
 try {
