@@ -61,6 +61,14 @@ describe('handleMcpRequest - protocol validation', () => {
         expect(result.jsonrpc).toBe('2.0');
     });
 
+
+    it('rejects non-object JSON-RPC payloads', async () => {
+        const result = await handleMcpRequest(null, mockContext);
+        expect(result.error.code).toBe(-32600);
+        expect(result.error.message).toMatch(/body must be a JSON object/);
+        expect(result.id).toBeNull();
+    });
+
     it('returns null for notifications/initialized', async () => {
         const result = await handleMcpRequest(
             { jsonrpc: '2.0', method: 'notifications/initialized', id: null },

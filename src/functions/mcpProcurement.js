@@ -37,6 +37,17 @@ function getDateContext() {
 
 // ─── MCP JSON-RPC handler ─────────────────────────────────────────────────────
 async function handleMcpRequest(request, context) {
+    if (!request || typeof request !== 'object' || Array.isArray(request)) {
+        return {
+            jsonrpc: '2.0',
+            error: {
+                code: -32600,
+                message: 'Invalid Request: body must be a JSON object',
+            },
+            id: null,
+        };
+    }
+
     const { jsonrpc, method, params, id } = request;
 
     if (jsonrpc !== '2.0') {
@@ -121,7 +132,7 @@ For live procurement decisions always verify with the Head of Procurement and On
 
             try {
                 context.log(`Executing procurement tool: ${name}`);
-                const result = handler(args || {});
+                const result = await Promise.resolve(handler(args || {}));
 
                 const wrappedResult = {
                     ...getDateContext(),
