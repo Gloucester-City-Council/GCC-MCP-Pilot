@@ -60,6 +60,31 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.recommendation_extraction.confidence).toBe('high');
     });
 
+    it('extracts RESOLVE decision list under Recommendations heading', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Resource Requirements for GCC Finance Team',
+                '2.0 Recommendations',
+                'Cabinet is asked to RESOLVE that:',
+                '(1) the review findings be noted, and officers be supported to address the recommendations therein;',
+                '(2) the recommended new structure for the Finance Team in Appendix 2 be noted.',
+                '3.0 Background and Key Issues'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=4', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.cabinet_recommendation_text).toContain('the review findings be noted');
+        expect(result.sections.cabinet_recommendation_text).toContain('the recommended new structure for the Finance Team in Appendix 2 be noted');
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+        expect(result.sections.recommendation_extraction.heading_detected).toBe('2.0 Recommendations');
+        expect(result.sections.recommendation_extraction.decision_trigger).toBe('Cabinet is asked to RESOLVE that:');
+        expect(result.sections.recommendation_extraction.evidence_pages).toContain(1);
+    });
+
     it('returns low confidence and null cabinet recommendation text when no formal wording exists', async () => {
         axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
         pdfParse.mockResolvedValue({
