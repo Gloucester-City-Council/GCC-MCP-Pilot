@@ -1,0 +1,3439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gloucester.gov.uk/schemas/procurement/v0.9.3",
+  "title": "Procurement and Contract Management Schema",
+  "description": "Schema-driven procurement and contract lifecycle management for public sector authorities. Anchored to the Procurement Act 2023 (c.54), the National Procurement Policy Statement (2024), and the Local Government Act 1972 s.135. Thresholds reflect the Procurement Act 2023 (Threshold Amounts) (Amendment) Regulations 2025, in force 1 January 2026. v0.2 adds framework management. v0.3 populates GCC constitutional rules from Contract Rules (effective 24 February 2025). v0.3.1 corrects execution authority thresholds. v0.4 adds scheme of delegation and proper officer designations. v0.4.2 removes SIRO and Monitoring Officer from schema \u2014 governance roles out of scope for procurement schema. and electronic signature rule per Article 13 of GCC Constitution (constitutional article takes precedence over Contract Rule 18) covering customer, host and joint_host roles.",
+  "version": "0.9.3",
+  "schema_status": "draft",
+  "effective_date": "2026-03-03",
+  "review_date": "2027-03-03",
+  "owner": {
+    "role": "Head of Transformation and Commissioning",
+    "organisation": "Gloucester City Council",
+    "contact": "TODO - procurement lead contact"
+  },
+  "legislative_basis": [
+    {
+      "title": "Procurement Act 2023",
+      "reference": "c.54",
+      "commencement": "2025-02-24",
+      "notes": "Primary legislation governing public procurement in England, Wales and Northern Ireland above threshold. Replaced PCR 2015."
+    },
+    {
+      "title": "Procurement Act 2023 (Threshold Amounts) (Amendment) Regulations 2025",
+      "reference": "SI 2025/1200",
+      "in_force": "2026-01-01",
+      "notes": "Updates threshold amounts. First review since Act came into force."
+    },
+    {
+      "title": "Local Government Act 1972",
+      "reference": "s.135",
+      "notes": "Requires councils to make standing orders for contracts for the supply of goods or materials or the execution of works."
+    },
+    {
+      "title": "National Procurement Policy Statement 2024",
+      "reference": "NPPS 2024",
+      "notes": "Section 13(9) of Procurement Act 2023 requires contracting authorities to have regard to the NPPS. Sets out government priorities: value for money, social value, SME access, net zero."
+    },
+    {
+      "title": "Public Services (Social Value) Act 2012",
+      "reference": "c.3",
+      "notes": "Requires commissioners of public services to consider how procurement might improve economic, social and environmental wellbeing."
+    },
+    {
+      "title": "Subsidy Control Act 2022",
+      "reference": "c.23",
+      "notes": "Applies where contracts may confer a subsidy on a supplier."
+    }
+  ],
+  "thresholds": {
+    "description": "Financial thresholds as amended by SI 2025/1200, in force 1 January 2026. All values inclusive of VAT. Thresholds reviewed every two years to align with UK GPA obligations.",
+    "central_government": {
+      "goods_and_services": 138760,
+      "works": 5372772,
+      "light_touch": 663540,
+      "currency": "GBP_inc_VAT"
+    },
+    "sub_central_authorities": {
+      "description": "Applies to local authorities including district councils",
+      "goods_and_services": 213477,
+      "works": 5372772,
+      "light_touch": 663540,
+      "currency": "GBP_inc_VAT",
+      "notes": "Gloucester City Council is a sub-central authority. Use these thresholds.",
+      "source": "SI 2025/1200, Schedule 1 PA2023. Gloucester City Council is a sub-central authority."
+    },
+    "below_threshold": {
+      "notifiable_lower": 0,
+      "notifiable_upper": 135018,
+      "description": "Regulated below-threshold contracts: Part 6 of Act applies. UK7 contract details notice required for all. Duty to consider SMEs (s.86).",
+      "de_minimis": {
+        "description": "Contracts below this value may be treated as non-regulated. Local standing orders apply.",
+        "notes": "Often \u00a310,000 or \u00a325,000 depending on council policy. Must be confirmed.",
+        "value_gbp": null,
+        "value_note": "Not confirmed. See schema_incomplete_flags I01. Tier 1 lower bound assumed 0 pending confirmation from GCC Financial Regulations."
+      }
+    },
+    "pipeline_notice_trigger": {
+      "annual_spend_threshold": 100000000,
+      "individual_contract_threshold": 2000000,
+      "description": "Authorities forecasting >\u00a3100m spend must publish a UK1 Pipeline Notice covering procurements >\u00a32m."
+    },
+    "kpi_threshold": {
+      "value": 5000000,
+      "description": "Contracts above \u00a35m must include KPIs and publish annual UK9 Contract Performance Notices."
+    },
+    "payment_reporting_threshold": {
+      "value": 30000,
+      "description": "Individual payments above \u00a330,000 must be reported in UK17 Payment Compliance Notices."
+    },
+    "source": "SI 2025/1200 (PA2023-REGS) in force 1 January 2026"
+  },
+  "notice_types": {
+    "description": "Notice taxonomy under Procurement Act 2023. Published on Find a Tender (find-tender.service.gov.uk). All notices carry an Open Contracting Identifier (OCID) creating a golden thread across the procurement lifecycle.",
+    "notices": [
+      {
+        "code": "UK1",
+        "name": "Pipeline Notice",
+        "trigger": "Mandatory where annual procurement spend forecast exceeds \u00a3100m. Voluntary where framework value exceeds \u00a32m.",
+        "timing": "Before procurement activity commences for the year",
+        "mandatory": "conditional",
+        "section": "s.93 PA 2023"
+      },
+      {
+        "code": "UK2",
+        "name": "Preliminary Market Engagement Notice",
+        "trigger": "Before conducting preliminary market engagement with suppliers",
+        "timing": "Prior to market engagement activity",
+        "mandatory": true,
+        "section": "s.16 PA 2023",
+        "notes": "Publishing a UK2 can reduce minimum tender period to 10 days."
+      },
+      {
+        "code": "UK3",
+        "name": "Planned Procurement Notice",
+        "trigger": "Optional. Signals intent to publish a UK4 Tender Notice at a future date.",
+        "timing": "Minimum 40 days before UK4 to benefit from reduced tender period",
+        "mandatory": false,
+        "section": "s.17 PA 2023"
+      },
+      {
+        "code": "UK4",
+        "name": "Tender Notice",
+        "trigger": "Required to launch any competitive procurement above or below threshold",
+        "timing": "Before any tender documents issued",
+        "mandatory": true,
+        "section": "s.21 PA 2023",
+        "notes": "Also used for below-threshold competitions. Must be published on Find a Tender."
+      },
+      {
+        "code": "UK5",
+        "name": "Transparency Notice",
+        "trigger": "Where a direct award without competition is intended under specific grounds",
+        "timing": "Before contract signed. Starts 8-working-day standstill period.",
+        "mandatory": true,
+        "section": "s.44 PA 2023"
+      },
+      {
+        "code": "UK6",
+        "name": "Contract Award Notice",
+        "trigger": "On award of contract following competitive tender",
+        "timing": "Within 30 days of contract award. Triggers 8-working-day standstill period.",
+        "mandatory": true,
+        "section": "s.50 PA 2023",
+        "notes": "Replaces standstill letters under PCR 2015. All bidders notified simultaneously via publication."
+      },
+      {
+        "code": "UK7",
+        "name": "Contract Details Notice",
+        "trigger": "After contract signature, for all contracts above threshold and all regulated below-threshold contracts",
+        "timing": "After contract signed",
+        "mandatory": true,
+        "section": "s.53 PA 2023",
+        "notes": "Must include signed contract document for contracts above \u00a35m."
+      },
+      {
+        "code": "UK9",
+        "name": "Contract Performance Notice",
+        "trigger": "Contracts above \u00a35m with defined KPIs",
+        "timing": "Annually and on termination",
+        "mandatory": "conditional",
+        "section": "s.71 PA 2023",
+        "performance_ratings": [
+          "Exceeding",
+          "On Track",
+          "Approaching Target",
+          "Requires Improvement",
+          "Inadequate",
+          "Other"
+        ]
+      },
+      {
+        "code": "UK10",
+        "name": "Contract Change Notice",
+        "trigger": "Before modifying a public contract. Also used for convertible contracts.",
+        "timing": "Before modification implemented (standstill applies to qualifying modifications)",
+        "mandatory": true,
+        "section": "s.75 PA 2023",
+        "notes": "Modified contract document must be published within 90 days for qualifying modifications (>\u00a35m)."
+      },
+      {
+        "code": "UK11",
+        "name": "Contract Termination Notice",
+        "trigger": "On termination of a public contract",
+        "timing": "Within 30 days of termination",
+        "mandatory": true,
+        "section": "s.80 PA 2023"
+      },
+      {
+        "code": "UK12",
+        "name": "Procurement Termination Notice",
+        "trigger": "Where contract is not awarded following a tender or transparency notice",
+        "timing": "As soon as decision made not to proceed",
+        "mandatory": true,
+        "section": "PA 2023",
+        "notes": "Used to cancel an erroneous UK5 or UK6 notice."
+      },
+      {
+        "code": "UK17",
+        "name": "Payment Compliance Notice",
+        "trigger": "Reporting compliance with 30-day payment obligations",
+        "timing": "Within 30 days of end of each reporting period",
+        "mandatory": true,
+        "section": "PA 2023",
+        "notes": "Includes details of payments above \u00a330,000."
+      }
+    ],
+    "source": "PA2023 (PA2023) \u2014 sections as noted per notice type. Published on Find a Tender (find-tender.service.gov.uk).",
+    "below_threshold_notices": {
+      "description": "Notices for below-threshold contracts. These are GCC/CDP requirements, not PA2023 regulated notices. No UK-code format applies below threshold.",
+      "notices": [
+        {
+          "code": "BT-TENDER",
+          "name": "Below-Threshold Tender Notice",
+          "trigger": "Contracts \u00a330,001 to PA2023 threshold where open market sought",
+          "platform": "Contracts Portal (CDP) or council procurement portal",
+          "source": "CONTRACT-RULES Rule 9, Local Government Transparency Code 2015"
+        },
+        {
+          "code": "BT-AWARD",
+          "name": "Below-Threshold Contract Award Notice",
+          "trigger": "Contracts \u00a330,001 to PA2023 threshold on award",
+          "platform": "Council website / Contracts Finder (\u00a310,000+)",
+          "source": "Local Government Transparency Code 2015, CONTRACT-RULES Rule 16"
+        }
+      ],
+      "note": "Below-threshold notices use BT- prefix codes to distinguish from PA2023 UK-coded notices. The derived_fields.required_notices logic uses these BT codes for the 30000_to_threshold range."
+    }
+  },
+  "procurement_procedures": {
+    "above_threshold": [
+      {
+        "name": "Open Procedure",
+        "description": "Single-stage. Any supplier may submit a full tender. No shortlisting. Selection and award criteria applied to same submission.",
+        "use_cases": [
+          "Simple, well-specified requirements",
+          "Where broad market participation is desired"
+        ],
+        "minimum_tender_period_days": 25,
+        "reduced_tender_period_days": 10,
+        "reduction_conditions": [
+          "UK2 Preliminary Market Engagement Notice published",
+          "UK3 Planned Procurement Notice published at least 40 days prior",
+          "Urgent and justified circumstances"
+        ],
+        "section": "s.19 PA 2023"
+      },
+      {
+        "name": "Competitive Flexible Procedure",
+        "description": "Multi-stage procedure allowing dialogue, negotiation, shortlisting and supplier assessments. Replaces Restricted, Competitive Dialogue, Negotiated and Innovation Partnership procedures.",
+        "use_cases": [
+          "Complex or novel requirements",
+          "Where specification cannot be fully defined at outset",
+          "Large or high-risk contracts"
+        ],
+        "minimum_participation_period_days": 25,
+        "reduced_participation_period_days": 10,
+        "reduction_conditions": [
+          "Urgency",
+          "UK2 notice published"
+        ],
+        "section": "s.20 PA 2023"
+      },
+      {
+        "name": "Direct Award",
+        "description": "Award without competition. Only permissible on specific statutory grounds.",
+        "grounds": [
+          "Extreme urgency (not foreseeable or attributable to contracting authority)",
+          "Prototype or experimental goods/services",
+          "Only one capable supplier exists",
+          "Additional works/services from same supplier where change of supplier not possible",
+          "Framework call-off where direct award permitted by framework terms",
+          "Award following unsuccessful competitive procedure"
+        ],
+        "required_notice": "UK5 Transparency Notice",
+        "section": "ss.41-43 PA 2023"
+      }
+    ],
+    "below_threshold": {
+      "description": "Part 6 of Procurement Act 2023 applies. Lighter-touch regime but transparency and SME duties still apply.",
+      "requirements": [
+        "Publish UK4 below-threshold tender notice on Find a Tender before advertising elsewhere",
+        "Publish UK7 Contract Details Notice after award",
+        "Consider SMEs in procurement approach (s.86 duty)",
+        "30-day payment terms implied by Act (s.88)"
+      ]
+    },
+    "frameworks": {
+      "description": "Arrangements with multiple suppliers establishing terms for future call-off contracts.",
+      "types": [
+        "Closed framework (fixed supplier list)",
+        "Open framework (can add suppliers, must reopen at least once in 3 years and again at 5 years)"
+      ],
+      "maximum_duration_years": 8,
+      "open_framework_reopen_obligations": "Must reopen to new suppliers at least once within 3 years, and once more within 5 years",
+      "call_off_notices": [
+        "UK6 Contract Award Notice",
+        "UK7 Contract Details Notice"
+      ],
+      "section": "ss.45-54 PA 2023"
+    },
+    "dynamic_markets": {
+      "description": "Replaces Dynamic Purchasing Systems. Open list of qualified suppliers from which contracts can be awarded.",
+      "notes": "Can be used below threshold but conditions for membership not permitted below threshold (except specific cases).",
+      "section": "ss.34-40 PA 2023"
+    },
+    "source": "PA2023 ss.19-20 (open and competitive flexible), ss.41-43 (direct award), ss.34-40 (dynamic markets), ss.45-54 (frameworks). GCC Contract Rules s.5 (CONTRACT-RULES)."
+  },
+  "contract_record": {
+    "description": "Data model for an individual contract record. Each contract should have a corresponding record in the contract register.",
+    "required_fields": [
+      "contract_id",
+      "title",
+      "description",
+      "category",
+      "procurement_route",
+      "supplier",
+      "value_estimated_gbp",
+      "value_actual_gbp",
+      "start_date",
+      "expiry_date",
+      "responsible_officer",
+      "status"
+    ],
+    "fields": {
+      "contract_id": {
+        "type": "string",
+        "example": "GCC-2026-0042",
+        "notes": "Internal unique identifier. Separate from OCID.",
+        "pattern": "^GCC-[0-9]{4}-[0-9]{4,}$",
+        "pattern_note": "Format: GCC-YYYY-NNNN e.g. GCC-2026-0042"
+      },
+      "ocid": {
+        "type": "string",
+        "description": "Open Contracting Identifier from Find a Tender. Links all notices for this procurement.",
+        "required": "where notices published on Find a Tender"
+      },
+      "title": {
+        "type": "string",
+        "description": "Descriptive title of the contract"
+      },
+      "description": {
+        "type": "string",
+        "description": "Plain English description of what is being procured"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "goods",
+          "services",
+          "works",
+          "light_touch_services",
+          "concession"
+        ]
+      },
+      "cpv_codes": {
+        "type": "array",
+        "description": "Common Procurement Vocabulary codes",
+        "items": {
+          "type": "string"
+        }
+      },
+      "procurement_route": {
+        "type": "string",
+        "enum": [
+          "open_procedure",
+          "competitive_flexible",
+          "direct_award",
+          "framework_call_off_direct",
+          "framework_call_off_mini_competition",
+          "dynamic_market",
+          "below_threshold_competition",
+          "below_threshold_direct",
+          "waiver"
+        ]
+      },
+      "direct_award_ground": {
+        "type": "string",
+        "description": "Required if procurement_route is direct_award or below_threshold_direct. Must cite statutory ground or approved waiver reason."
+      },
+      "waiver_approved_by": {
+        "type": "string",
+        "description": "Name and role of approver if contract awarded by waiver of procurement rules"
+      },
+      "framework_reference": {
+        "type": "object",
+        "description": "Where contract awarded via framework",
+        "properties": {
+          "framework_name": {
+            "type": "string"
+          },
+          "framework_provider": {
+            "type": "string"
+          },
+          "framework_reference_number": {
+            "type": "string"
+          },
+          "lot": {
+            "type": "string"
+          }
+        }
+      },
+      "supplier": {
+        "type": "object",
+        "description": "Supplier identity. Companies House number is the primary identifier for UK-registered entities.",
+        "source": "CONTRACT-RULES Rules 10.8, 14.6, 20, Definitions (SME). PA2023 Schedule 6. Subsidy Control Act 2022.",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Registered trading name of the supplier"
+          },
+          "companies_house_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "UK Companies House registration number. Primary identifier for debarment and subsidy control checks. 8 characters.",
+            "pattern": "^[A-Z0-9]{6,8}$",
+            "pattern_note": "6-8 alphanumeric: 8 chars for post-1990 numbers, shorter for some older registrations"
+          },
+          "vat_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "VAT registration number. Required for value verification where VAT applicable."
+          },
+          "registered_country": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Country of registration ISO 3166-1 alpha-2. Relevant for treaty state supplier status under PA2023 s.20."
+          },
+          "is_uk_or_treaty_supplier": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether supplier is a UK or treaty state supplier under PA2023. Non-UK/non-treaty suppliers may be disregarded under Contract Rule 14.6."
+          },
+          "is_sme": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether supplier meets SME definition: fewer than 250 staff AND turnover <= \u00a344m OR balance sheet <= \u00a338m. Source: CONTRACT-RULES Definitions."
+          },
+          "debarment_checked": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Confirms UK Government debarment list checked before above-threshold contract award. Source: CONTRACT-RULES Rule 10.8."
+          },
+          "debarment_checked_date": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "description": "Date debarment list checked. Should be immediately prior to award."
+          },
+          "debarment_list_url": {
+            "type": "string",
+            "description": "URL of debarment list at time of check.",
+            "default": "https://www.find-tender.service.gov.uk/debarment"
+          },
+          "exclusion_grounds_assessed": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Confirms mandatory and discretionary exclusion grounds assessed. Source: CONTRACT-RULES Rule 10, PA2023 Schedule 6."
+          },
+          "parent_company_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Parent company name where supplier is a subsidiary. Relevant for Parent Company Guarantee. Source: CONTRACT-RULES Rule 20."
+          },
+          "parent_company_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Parent company Companies House number."
+          },
+          "beneficial_owner": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Beneficial owner information where relevant for subsidy control or transparency. Source: Subsidy Control Act 2022."
+          }
+        }
+      },
+      "value_estimated_gbp": {
+        "type": "number",
+        "description": "Estimated contract value inclusive of VAT and any extensions at time of procurement"
+      },
+      "value_actual_gbp": {
+        "type": "number",
+        "description": "Actual contract value at signature. May differ from estimated."
+      },
+      "start_date": {
+        "type": "string",
+        "format": "date"
+      },
+      "expiry_date": {
+        "type": "string",
+        "format": "date"
+      },
+      "extension_options": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "duration_months": {
+              "type": "integer"
+            },
+            "exercised": {
+              "type": "boolean"
+            },
+            "exercise_date": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        }
+      },
+      "maximum_contract_duration_months": {
+        "type": "integer",
+        "description": "Total maximum duration including all extension options"
+      },
+      "responsible_officer": {
+        "type": "object",
+        "required": [
+          "name",
+          "service_area"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "job_title": {
+            "type": "string"
+          },
+          "service_area": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "authorised_signatory": {
+        "type": "object",
+        "description": "Officer authorised to sign contract under scheme of delegation",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "job_title": {
+            "type": "string"
+          }
+        }
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "pipeline",
+          "in_procurement",
+          "standstill",
+          "awarded_not_commenced",
+          "live",
+          "extension_active",
+          "expired",
+          "terminated_early",
+          "novated",
+          "cancelled"
+        ]
+      },
+      "status_reason": {
+        "type": "string",
+        "description": "Free text reason, especially relevant for terminated_early or cancelled"
+      },
+      "forward_plan_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reference to Forward Plan entry. Required before procurement commences where contract is a key decision (value above \u00a3100,000 or meeting KD1/KD2 criteria).",
+        "source": "Article 12.03(b)"
+      },
+      "cabinet_decision_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reference to Cabinet minute or decision record. Required before contract award where value exceeds \u00a3500,000.",
+        "source": "Article 12.03(b)(iv)"
+      },
+      "cabinet_member_decision_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reference to individual Cabinet Member decision record where contract value is \u00a3250,001\u2013\u00a3500,000. Required before contract award.",
+        "source": "Part 3E Table 4, Appendix A"
+      }
+    }
+  },
+  "contract_performance": {
+    "description": "Performance monitoring framework. KPIs mandatory for contracts above \u00a35m per s.70 PA 2023.",
+    "kpis": {
+      "required_above_value_gbp": 5000000,
+      "must_be_agreed": "Before or at point of contract signature",
+      "annual_reporting": "UK9 Contract Performance Notice required annually",
+      "reporting_ratings": [
+        "Exceeding",
+        "On Track",
+        "Approaching Target",
+        "Requires Improvement",
+        "Inadequate",
+        "Other"
+      ],
+      "kpi_fields": [
+        {
+          "field": "kpi_id",
+          "type": "string"
+        },
+        {
+          "field": "description",
+          "type": "string"
+        },
+        {
+          "field": "metric",
+          "type": "string",
+          "description": "How attainment is measured"
+        },
+        {
+          "field": "target",
+          "type": "string"
+        },
+        {
+          "field": "reporting_frequency",
+          "type": "string",
+          "enum": [
+            "monthly",
+            "quarterly",
+            "annual"
+          ]
+        },
+        {
+          "field": "current_rating",
+          "type": "string",
+          "enum": [
+            "Exceeding",
+            "On Track",
+            "Approaching Target",
+            "Requires Improvement",
+            "Inadequate",
+            "Other"
+          ]
+        },
+        {
+          "field": "remediation_plan",
+          "type": "string",
+          "description": "Required where rating is Approaching Target or below"
+        }
+      ]
+    },
+    "review_schedule": {
+      "description": "Planned contract review points",
+      "types": [
+        "Quarterly performance review",
+        "Annual strategic review",
+        "Mid-term review",
+        "Pre-expiry review"
+      ],
+      "pre_expiry_trigger_months": 12,
+      "notes": "Pre-expiry review at 12 months before expiry (or 18 months for complex/high-value contracts) to allow sufficient lead time for re-procurement."
+    },
+    "payment_compliance": {
+      "standard_payment_terms_days": 30,
+      "legislative_basis": "s.88 PA 2023 implies 30-day payment terms into all regulated contracts",
+      "reporting": "UK17 Payment Compliance Notice required within 30 days of each reporting period",
+      "reporting_threshold_gbp": 30000
+    },
+    "source": "PA2023 ss.70-71 (KPIs and performance notices), s.88 (payment terms). GCC Contract Rule 27 (CONTRACT-RULES)."
+  },
+  "supplier_management": {
+    "exclusion_and_debarment": {
+      "description": "PA 2023 introduced mandatory and discretionary exclusion grounds and a centralised Debarment List.",
+      "mandatory_exclusion_grounds_reference": "Schedule 6, Part 1, PA 2023",
+      "discretionary_exclusion_grounds_reference": "Schedule 6, Part 2, PA 2023",
+      "debarment_list": {
+        "url": "https://www.find-tender.service.gov.uk/debarment",
+        "check_at": [
+          "Pre-qualification stage",
+          "Before contract award",
+          "Periodically during contract term"
+        ]
+      },
+      "examples_mandatory": [
+        "Bribery and corruption",
+        "Modern slavery",
+        "Tax evasion",
+        "Cartel membership"
+      ],
+      "examples_discretionary": [
+        "Poor past performance",
+        "Financial instability",
+        "Environmental offences",
+        "Labour law breaches"
+      ]
+    },
+    "sme_duties": {
+      "legislative_basis": "s.86 PA 2023 and NPPS 2024",
+      "requirements": [
+        "Consider whether requirements can be structured to facilitate SME participation",
+        "Consider whether use of frameworks or lots would assist SMEs",
+        "Avoid unnecessarily burdensome requirements"
+      ]
+    },
+    "social_value": {
+      "legislative_basis": "Public Services (Social Value) Act 2012, NPPS 2024",
+      "requirements": [
+        "Consider how procurement can improve economic, social and environmental wellbeing",
+        "Consider whether to specify social value requirements",
+        "Record social value commitments in contract and monitor delivery"
+      ],
+      "categories": [
+        "Employment and skills",
+        "Environmental / net zero",
+        "Diversity and inclusion",
+        "Community benefit",
+        "Supply chain / local spend"
+      ]
+    },
+    "source": "PA2023 Schedule 6 (exclusion grounds), s.86 (SME duties). Public Services (Social Value) Act 2012 (SV2012). NPPS 2024 (NPPS2024)."
+  },
+  "approvals_and_governance": {
+    "description": "Approval thresholds, execution authority, and governance requirements derived from Gloucester City Council Contract Rules (effective 24 February 2025). Source: GCC Constitution, Contract Rules, Sections 4, 5, 6 and 18. All values inclusive of VAT.",
+    "source_document": "GCC Contract Rules, effective 24 February 2025 (PA2023 regime)",
+    "contract_letting_tiers": {
+      "description": "Procurement route requirements by estimated total contract value. Source: Contract Rule 5.1. Applies to below-threshold contracts not procured via a compliant Framework Agreement or Dynamic Market.",
+      "tiers": [
+        {
+          "tier": 1,
+          "label": "Budget Holder Discretion",
+          "min_value_gbp": 0,
+          "max_value_gbp": 30000,
+          "procurement_requirements": [
+            "Budget Holder may purchase from source offering best value for money",
+            "Demonstrable best value \u2014 minimum two written quotes where possible",
+            "Via Authority's e-tendering system portal where appropriate",
+            "Contract by purchase order with relevant standard terms and conditions attached or drawn to supplier's attention",
+            "No waiver required unless best value cannot be demonstrated"
+          ],
+          "contract_form": "Purchase order with standard terms and conditions",
+          "legal_involvement": "Standard terms and conditions only \u2014 no bespoke contract required",
+          "source_rule": "5.1, row 1"
+        },
+        {
+          "tier": 2,
+          "label": "Three Quotes \u2014 Formal Contract",
+          "min_value_gbp": 30001,
+          "max_value_gbp": 60000,
+          "procurement_requirements": [
+            "At least three written quotes sought where possible",
+            "Via Authority's e-tendering system portal where appropriate",
+            "Below-threshold tender notice published on Central Digital Platform before advertising elsewhere",
+            "Pre-qualification stage not permitted \u2014 appropriate suitability questions may be asked in Request to Quote",
+            "Contract details notice published on Central Digital Platform as soon as reasonably practicable after award"
+          ],
+          "contract_form": "Formal written contract prepared or approved by Director of One Legal",
+          "legal_involvement": "Director of One Legal must draft or approve contract terms (Contract Rule 4.2.11)",
+          "advertising": "Below-threshold tender notice on Central Digital Platform mandatory before advertising elsewhere",
+          "source_rule": "5.1, row 2"
+        },
+        {
+          "tier": 3,
+          "label": "Full ITT \u2014 Formal Contract",
+          "min_value_gbp": 60001,
+          "max_value_gbp_note": "Up to but not reaching Threshold (\u00a3213,477 for sub-central authority goods/services, \u00a35,372,772 for works)",
+          "procurement_requirements": [
+            "Full competitive procurement via Authority's e-tendering system using Invitation to Tender",
+            "Below-threshold tender notice published on Central Digital Platform before advertising elsewhere \u2014 with unrestricted full direct internet access to contract documents",
+            "Pre-qualification stage not permitted except for works contracts above the supplies/services threshold",
+            "For works contracts: Common Assessment Standard (CAS) must be used for pre-qualification",
+            "Contract details notice published on Central Digital Platform as soon as reasonably practicable after award"
+          ],
+          "contract_form": "Formal written contract prepared or approved by Director of One Legal",
+          "legal_involvement": "Director of One Legal must draft or approve contract terms (Contract Rule 4.2.11)",
+          "works_prequalification": "Common Assessment Standard (CAS) required for works contracts",
+          "source_rule": "5.1, row 3"
+        },
+        {
+          "tier": 4,
+          "label": "Above Threshold \u2014 Full Regulated Procurement",
+          "min_value_gbp_note": "At or above Threshold (\u00a3213,477 goods/services, \u00a35,372,772 works for sub-central authority)",
+          "procurement_requirements": [
+            "One of the procedures set out in the Legislation must be used: Open Procedure, Competitive Flexible Procedure, or Direct Award where justified",
+            "Procurement Adviser, with Authorised Officer and Director of One Legal, to establish appropriate procedure considering value, risk, complexity and market size",
+            "Full competitive procurement via e-tendering system using ITT for open or competitive flexible procedures",
+            "All PA2023 notice obligations apply (UK4, UK5/UK6, UK7, UK9, UK10, UK11, UK17 as applicable)",
+            "8 working day standstill period mandatory before contract execution following UK6 publication",
+            "Contract shall not be completed or Purchase Order issued during standstill period",
+            "Authorised Officer must notify Procurement Adviser and Director of One Legal immediately on receipt of any challenge during standstill"
+          ],
+          "contract_form": "Formal written contract prepared or approved by Director of One Legal. Executed as deed (common seal) for contracts above \u00a350,000.",
+          "legal_involvement": "Director of One Legal mandatory for all above-threshold contracts",
+          "source_rule": "5.2, 5.3, 5.4, 16.3, 16.4"
+        }
+      ]
+    },
+    "execution_authority": {
+      "description": "Who may sign or execute contracts. Source: Article 13.02 of GCC Constitution (takes precedence over Contract Rule 18 where they differ). Note: Article 13 uses 'Council Solicitor' \u2014 this is the same officer as 'Director of One Legal' in the Contract Rules, currently employed by Tewkesbury Borough Council under a s.101 Agreement.",
+      "conflict_note": "Contract Rule 18 states the lower tier threshold as \u00a330,000 and middle tier as \u00a330,001\u2013\u00a350,000. Article 13.02 of the Constitution states \u00a325,000 and \u00a325,001\u2013\u00a350,000 respectively. The Constitution takes precedence. This discrepancy should be resolved in the next Contract Rules review.",
+      "tiers": [
+        {
+          "label": "Officer delegation",
+          "max_value_gbp": 25000,
+          "signatories": [
+            "Managing Director",
+            "Directors",
+            "Council Solicitor (Director of One Legal)",
+            "Any other officer with delegated authority"
+          ],
+          "form": "Signed contract, or sealed if Council Solicitor requires",
+          "source": "Article 13.02"
+        },
+        {
+          "label": "Council Solicitor sign-off",
+          "min_value_gbp": 25001,
+          "max_value_gbp": 50000,
+          "signatories": [
+            "Council Solicitor (Director of One Legal)",
+            "Person authorised by Council Solicitor"
+          ],
+          "form": "Signed contract, or sealed if Council Solicitor requires",
+          "source": "Article 13.02"
+        },
+        {
+          "label": "Deed with common seal",
+          "min_value_gbp": 50001,
+          "signatories": [
+            "Council Solicitor (Director of One Legal)",
+            "Person authorised by Council Solicitor"
+          ],
+          "common_seal_custody": "Kept by Tewkesbury Borough Council (One Legal)",
+          "common_seal_attestors": [
+            "Mayor",
+            "Managing Director",
+            "A Director",
+            "Section 151 Officer",
+            "Council Solicitor",
+            "Any other person authorised by Council Solicitor"
+          ],
+          "source": "Article 13.02, 13.05",
+          "deed_normally_required": true,
+          "deed_may_be_waived_by_council_solicitor": true,
+          "deed_waiver_note": "Council Solicitor may consider it more expedient to sign rather than seal. This is a professional judgement by Council Solicitor, not a general officer discretion. Source: ART13 Article 13.02.",
+          "form_default": "Executed as deed with common seal affixed",
+          "form_alternative": "Signed contract where Council Solicitor considers more expedient"
+        }
+      ],
+      "electronic_signatures": {
+        "permitted": "conditional",
+        "condition": "Prior consent of Section 151 Officer, having first obtained advice from Council Solicitor",
+        "note": "Contract Rule 18.4 also lists Monitoring Officer as an approver \u2014 Article 13.06 does not. Article 13.06 takes precedence. Discrepancy should be resolved in next Contract Rules review.",
+        "source": "Article 13.06"
+      },
+      "legal_proceedings": {
+        "description": "Council Solicitor is authorised to institute, defend or participate in any legal proceedings where necessary to give effect to Council decisions or protect Council's interests",
+        "source": "Article 13.03"
+      },
+      "authentication_of_documents": {
+        "description": "Documents necessary to legal procedure or proceedings signed by Managing Director, Council Solicitor, or person authorised by them, unless enactment or Council authority requires otherwise",
+        "source": "Article 13.04"
+      }
+    },
+    "waiver_rules": {
+      "description": "Circumstances in which Contract Rules may be waived for below-threshold contracts. Source: Contract Rule 6. Waivers are NOT available for above-threshold contracts \u2014 Direct Award, Framework or full competition must be used instead.",
+      "above_threshold_waiver": "NOT PERMITTED. Above-threshold contracts must use Direct Award (with justification report), Framework Agreement, Dynamic Market, or full competitive tender. Source: Rule 6.2.",
+      "permitted_grounds": [
+        {
+          "ground_id": "W1",
+          "description": "Supplies, works or services of unique or specialised nature, or identical/similar/compatible with existing provision making only one or two sources appropriate \u2014 including upgrades or repairs to proprietary machinery where alternative suppliers are not practicable",
+          "source_rule": "6.1.1"
+        },
+        {
+          "ground_id": "W2",
+          "description": "Supplies are proprietary articles or sold only at fixed prices",
+          "source_rule": "6.1.2"
+        },
+        {
+          "ground_id": "W3",
+          "description": "Price controlled by trade organisations or no genuine competition for other reasons",
+          "source_rule": "6.1.3"
+        },
+        {
+          "ground_id": "W4",
+          "description": "Urgency \u2014 in opinion of Authorised Officer in consultation with Section 151 Officer and Director of One Legal",
+          "source_rule": "6.1.4"
+        },
+        {
+          "ground_id": "W5",
+          "description": "Specialist consultants, solicitors, barristers, agents, artists or professional advisers required where: no satisfactory alternative; or evidence indicates no genuine competition; or in Authorised Officer's opinion it is in the Authority's best interest",
+          "source_rule": "6.1.5"
+        },
+        {
+          "ground_id": "W6",
+          "description": "Authority is purchasing a property or taking a service back in-house with associated contracts, and in Authorised Officer's opinion it is in the Authority's best interests to take on those contracts",
+          "source_rule": "6.1.6"
+        },
+        {
+          "ground_id": "W7",
+          "description": "Works or supplies can only be carried out or supplied by a statutory body",
+          "source_rule": "6.1.7"
+        }
+      ],
+      "approval_required": [
+        {
+          "contract_value_threshold_gbp": 250000,
+          "label": "Above \u00a3250,000",
+          "approvers": [
+            "Appropriate Cabinet Member"
+          ],
+          "urgent_alternative": "Head of Paid Service in consultation with Leader of the Authority, Section 151 Officer and Director of One Legal \u2014 where urgent decision required and Committee cannot be called",
+          "source_rule": "6.3.1"
+        },
+        {
+          "label": "Up to \u00a3250,000",
+          "approvers": [
+            "Budget Holder (if authority delegated) or Head of Paid Service, a Director"
+          ],
+          "consultation_required": [
+            "Section 151 Officer",
+            "Director of One Legal"
+          ],
+          "source_rule": "6.3.2"
+        }
+      ],
+      "record_keeping": "Record of decision and reasons kept on file. Waiver itself kept by Director of One Legal with copy to Procurement Adviser. Source: Rule 6.4."
+    },
+    "direct_award_rules": {
+      "description": "Above-threshold direct award. Only permissible on specific statutory grounds listed in PA2023. Source: Contract Rule 5.4.",
+      "prerequisite": "Direct Award Justification Report must be approved before award. Report kept by Director of One Legal.",
+      "transparency_notice": "UK5 Transparency Notice must be published on Central Digital Platform prior to contract award in all cases.",
+      "permitted_grounds": [
+        {
+          "ground_id": "DA1",
+          "description": "Prototypes and development \u2014 production of a prototype for the purpose of testing the suitability of goods or services",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA2",
+          "description": "Single supplier \u2014 creation or acquisition of a unique work of art or artistic performance",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA3",
+          "description": "Single supplier \u2014 on grounds of intellectual property or exclusive works where there is no reasonable alternative",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA4",
+          "description": "Single supplier \u2014 due to absence of competition for technical reasons where there are no reasonable alternatives",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA5",
+          "description": "Additional or repeat goods, services or works where difference or incompatibility arising from a change of supplier would result in disproportionate technical difficulties in operation or maintenance",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA6",
+          "description": "Commodities",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA7",
+          "description": "Advantageous terms on insolvency",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA8",
+          "description": "Urgency \u2014 goods, services or works strictly necessary for reasons of extreme and unavoidable urgency and as a result cannot be awarded through competitive process. NOTE: urgency is only deemed unavoidable if (1) not attributable to any act or omission of the Authority and (2) could not have been foreseen by the Authority.",
+          "source_rule": "5.4, PA2023"
+        },
+        {
+          "ground_id": "DA9",
+          "description": "User Choice Services \u2014 services of a specified kind in regulations under Section 9 of PA2023 supplied for the benefit of a particular individual in respect of which the Authority must have regard to the person in relation to who should provide the service",
+          "source_rule": "5.4, PA2023"
+        }
+      ]
+    },
+    "key_officers": {
+      "description": "Officers with specific roles in GCC procurement governance. Source: Contract Rules definitions and sections 4, 6, 18.",
+      "authorised_officer": {
+        "definition": "Officer responsible for carrying out the procurement who has received corporate training on Contract Rules, internal guidance and the Legislation. Source: Rule 4.1, Definitions.",
+        "responsibilities": [
+          "Appraise need for expenditure and priority",
+          "Define procurement objectives",
+          "Assess and manage procurement risks",
+          "Consider most appropriate procurement method including frameworks and collaborative arrangements",
+          "Consult users on procurement method, standards and performance monitoring",
+          "Check whether a corporate contract already exists",
+          "Ensure compliance with s.3 Local Government Act 1999 (duty to consult) where changing services",
+          "Ensure compliance with Equality Act 2010",
+          "Consider social value obligations (Public Social Value Act 2012) for above-threshold service contracts",
+          "Ensure Budget Holder has sufficient budget for contract life",
+          "Instruct Director of One Legal in writing to draft or approve contract terms for contracts above \u00a330,000",
+          "Raise a purchase order for every contract",
+          "Actively manage contract throughout its term",
+          "Consider TUPE implications and obtain legal advice before inviting tenders where staff may transfer",
+          "Ensure debarment list checked before above-threshold contract award"
+        ],
+        "source_rule": "4.1, 4.2, 4.3"
+      },
+      "awarding_officer": {
+        "definition": "Officer with delegated authority to award the contract. Source: Definitions, Rule 16.2.",
+        "responsibilities": [
+          "Award contracts only to Most Advantageous Tender as defined by Award Criteria",
+          "Ensure Budget Holder has sufficient funds before award",
+          "Sign Tender Acceptance Form or waiver"
+        ],
+        "note": "Consultants may advise but must never make the award decision \u2014 this rests solely with the Awarding Officer. Source: Rule 24.4."
+      },
+      "budget_holder": {
+        "definition": "Officer responsible for the budget for the relevant procurement. Source: Definitions.",
+        "responsibilities": [
+          "Confirm sufficient budget to sustain contract for its full life",
+          "For contracts up to \u00a330,000: may purchase from best value source without formal waiver"
+        ]
+      },
+      "section_151_officer": {
+        "legislative_basis": "s.151 Local Government Act 1972",
+        "responsibilities": [
+          "Financial propriety and sign-off",
+          "Consulted on waivers",
+          "Consulted on late tender acceptance",
+          "Decision-maker where contract is over budget and no further budget identified",
+          "Approval required for electronic signatures",
+          "Maintains contracts register for all contracts over \u00a35,000",
+          "Decides whether bonds or PCGs required on works contracts above \u00a31m"
+        ]
+      },
+      "director_of_one_legal": {
+        "definition": "Senior legal adviser currently employed by Tewkesbury Borough Council acting under a Section 101 Agreement. Source: Definitions.",
+        "responsibilities": [
+          "Draft or approve all contract terms for contracts above \u00a330,000",
+          "Execute all contracts above \u00a330,000 (or authorise named person)",
+          "Execute all contracts above \u00a350,000 as deed with common seal",
+          "Approve electronic signatures",
+          "Keep waiver records (copy to Procurement Adviser)",
+          "Keep Direct Award Justification Reports",
+          "Maintain all contracts above \u00a330,000 (electronic copy to Procurement Adviser)",
+          "Consulted on late tender acceptance",
+          "Consulted on waivers",
+          "Approve new Framework Agreement or Dynamic Market sign-ups (Rule 22.3)",
+          "Advise on above-threshold contract modifications before any changes agreed with supplier"
+        ],
+        "note": "Shared legal service via Tewkesbury Borough Council s.101 Agreement. LGR implications: this arrangement will need review as part of transition planning."
+      },
+      "procurement_adviser": {
+        "definition": "Officer engaged by or on behalf of the Authority to provide procurement services. Source: Definitions.",
+        "responsibilities": [
+          "Lead above-threshold procurement procedures in conjunction with Authorised Officer",
+          "Approve new Framework Agreement or Dynamic Market sign-ups (Rule 22.3)",
+          "Maintain list of all tenders and quotes received",
+          "Receive copy of all contracts above \u00a330,000",
+          "Receive copy of all waivers",
+          "Consent to e-tendering exceptions below \u00a330,000",
+          "Advise on light touch and concession procurements",
+          "Notified immediately on receipt of standstill challenge"
+        ]
+      },
+      "cross_reference": "Full statutory proper officer designations are in approvals_and_governance.proper_officers. Full sub-delegation detail is in approvals_and_governance.scheme_of_delegation."
+    },
+    "contract_register_rules": {
+      "description": "Contract register requirements from Contract Rules. Source: Rule 19.",
+      "maintained_by": "Section 151 Officer",
+      "threshold_for_inclusion_gbp": 5000,
+      "contract_storage": {
+        "above_30000": "Kept by Director of One Legal. Electronic copy sent to Procurement Adviser.",
+        "below_30000": "Kept securely by Budget Holder in accordance with Authority's retention policy."
+      },
+      "source_rule": "19.2, 19.3"
+    },
+    "financial_checks": {
+      "threshold_gbp": 10000,
+      "requirement": "Financial checks must be undertaken for all contracts above \u00a310,000 before contract award",
+      "source_rule": "15.5"
+    },
+    "bonds_and_guarantees": {
+      "works_contracts_mandatory_above_gbp": 1000000,
+      "mandatory_unless": "Section 151 Officer considers inappropriate following consultation with Director of One Legal",
+      "discretionary": "May be required for any contract if considered appropriate by Director or Section 151 Officer following consultation with Director of One Legal",
+      "minimum_bond_percentage": 10,
+      "source_rule": "20.1, 20.2, 20.3"
+    },
+    "embedded_leases_and_derivatives": {
+      "description": "Authorised Officer must notify Section 151 Officer before award where contract contains any of the following. Source: Rule 21.",
+      "triggers": [
+        "Authority will have use or control of, or will be paying for use of, a specific asset or group of assets (embedded lease indicator)",
+        "Contract contains a price cap or floor on amounts payable by the Authority (embedded derivative indicator)",
+        "Prices increase by more than 2x RPI",
+        "Prices increase by some other index or commodity price"
+      ],
+      "source_rule": "21.1"
+    },
+    "tupe_referral": {
+      "description": "Certain procurement decisions must be referred to Cabinet or full Authority. Source: Rule 4.4.",
+      "referral_triggers": [
+        "Contract is above threshold AND TUPE applies to Authority employees OR will result in transfer of staff back to Authority \u2014 refer to Cabinet",
+        "Contract is over budget AND no further budget identified by Section 151 Officer \u2014 refer to Authority (full council)"
+      ],
+      "exception": "Unless otherwise stated elsewhere in the Authority's constitution",
+      "source_rule": "4.4"
+    },
+    "scope_exclusions": {
+      "description": "Arrangements to which Contract Rules do not apply. Source: Rule 2.2.",
+      "exclusions": [
+        "Contracts of employment making an individual a direct employee of the Authority",
+        "Acquisition, disposal or transfer of land \u2014 except where services or works are required as part of the land transaction (e.g. development agreements)",
+        "Contracts relating to placement of deposits or raising of loans under treasury management strategy",
+        "Purchases made at public auction",
+        "Agreements between public bodies not relating to works, services or supplies",
+        "Giving of grants"
+      ],
+      "source_rule": "2.2"
+    },
+    "conflicts_of_interest": {
+      "legislative_basis": "s.83 PA2023, Contract Rule 7, Bribery Act 2010, Code of Conduct for Employees",
+      "definition": "An interest includes a personal, professional or financial interest and may be direct or indirect. A conflict arises where a person acting on behalf of the Authority in relation to procurement has such an interest. Source: Rule 7.2.",
+      "requirements": [
+        "Conflicts assessment prepared prior to publication of tender or transparency notice \u2014 kept under review and revised as appropriate (Rule 7.3)",
+        "All reasonable steps taken to ensure conflicts do not put a supplier at unfair advantage or disadvantage (Rule 7.4)",
+        "Declaration of interest form completed by each officer involved in evaluation \u2014 held on file by Authorised Officer (Rule 15.3)",
+        "No person with personal or financial interest in any candidate may be involved in influencing the award decision \u2014 applies regardless of contract value (Rule 15.3)",
+        "Mitigation may include removal of individual from process or removal of supplier from process (Rule 7.5)"
+      ],
+      "source_rule": "7.1-7.6, 15.3"
+    },
+    "evaluation_rules": {
+      "award_criteria_basis": "Most Advantageous Tender (MAT) only. Source: Rule 11.1, Definitions.",
+      "mat_assessment_methods": [
+        "Price (lowest bid)",
+        "Cost (cost-effectiveness basis e.g. asset life-cycle assessment)",
+        "Best Price/Quality Ratio (quality including technical merit, aesthetic and functional characteristics, delivery, after-sales service, environmental and social matters)"
+      ],
+      "award_criteria_requirements": [
+        "Disclosed in Invitation to Tender or Request for Quote",
+        "Must relate to subject-matter of contract",
+        "Must be sufficiently clear, measurable and specific",
+        "Must not breach rules on technical specifications (e.g. no specific trademarks or place of origin without necessity)",
+        "Must be a proportionate means of assessing tenders having regard to nature, complexity and cost",
+        "Must be accompanied by assessment methodology describing how tenders will be assessed",
+        "Where more than one criterion: relative importance must be expressed by weighting as percentage, ranking in order of importance, or other clear description",
+        "Criteria strictly observed throughout the award procedure by all officers involved"
+      ],
+      "social_value": "Can be included within quality element of award criteria. Source: Rule 11.2.",
+      "site_visits_presentations": "If used as part of evaluation: must be stated in ITT with clear indication of whether scored separately or used to moderate scores. If scored separately, criteria and weighting must be disclosed. Source: Rule 15.4.",
+      "source_rule": "11.1-11.5, 15.1-15.4"
+    },
+    "lots_policy": {
+      "description": "GCC has a duty to consider lot structure to reduce barriers for SMEs. Source: Rule 12.",
+      "duty": "Must consider whether goods, services or works could reasonably be supplied under more than one contract and whether contracts could appropriately be awarded by reference to lots",
+      "notice_requirement": "Tender notice and documents must state whether lots are suitable or provide justification for not using them",
+      "source_rule": "12.1-12.4"
+    },
+    "collaborative_procurement": {
+      "description": "GCC may participate in collaborative or joint procurement with other local authorities or public bodies. Source: Rule 23.",
+      "approval_required": "Prior approval of the Director",
+      "includes": "Membership or use of a Purchasing Consortia",
+      "framework_sign_up": "Approval of Procurement Adviser or Director of One Legal required before signing up to any new Framework Agreement or Dynamic Market. Source: Rule 22.3.",
+      "source_rule": "22.3, 23.1"
+    },
+    "assessment_summaries": {
+      "description": "Debriefing requirements. Source: Rule 17.",
+      "mandatory": "For all suppliers that submitted an assessed tender as required by Legislation (above-threshold competitive procurements)",
+      "below_threshold": "Not mandatory for below-threshold procurements or framework call-offs (unless framework terms require it). Best practice to provide for all procurements in line with procurement objective of sharing information.",
+      "source_rule": "17.1, 17.2"
+    },
+    "contract_modifications": {
+      "above_threshold": "Can only be changed if permitted by Legislation. Legal advice from Director of One Legal must be sought before agreeing any changes with supplier. Source: Rule 26.1.",
+      "below_threshold": "In limited circumstances and with regard to Legislation and advice from Director of One Legal, Awarding Officer may authorise changes including extensions not already provided for. Source: Rule 26.2.",
+      "source_rule": "26.1, 26.2"
+    },
+    "scheme_of_delegation": {
+      "description": "Sub-delegations to officers from the Managing Director. Source: Scheme of Sub-Delegation (signed by Managing Director). Part 3 of Constitution sets out powers delegated to Managing Director and Directors. This scheme sets out sub-delegations from the Managing Director to Heads of Service.",
+      "source_document": "Scheme of Sub-Delegation, GCC Constitution Part 3",
+      "award_authority_by_officer": {
+        "description": "All Heads of Service listed below share a common tender/quotation acceptance limit. This is the key awarding officer threshold for procurement purposes.",
+        "common_limit_gbp": 250000,
+        "condition": "Within budget",
+        "officers_with_award_authority": [
+          {
+            "post": "Head of Finance and Resources",
+            "award_limit_gbp": 250000,
+            "additional_procurement_powers": [
+              "Approve waiver to Contract Rules where value does not exceed \u00a3250,000",
+              "Monitor performance of contracts and service level agreements for non-internally provided services within remit",
+              "Operational control of Procurement function"
+            ],
+            "service_areas": [
+              "Accountancy (including banking)",
+              "Investments, borrowing and financing",
+              "Insurances",
+              "Housing and Council Tax Benefits",
+              "Council Tax, NNDR and other Revenues",
+              "Internal Audit",
+              "Debtors and Creditors",
+              "The Collection Fund",
+              "Investigation of fraud and financial impropriety",
+              "Control of funds and reserves",
+              "Procurement",
+              "Capital Projects",
+              "Non-housing property",
+              "Facilities and property asset management",
+              "Property maintenance",
+              "Review of listings for Assets of Community Value",
+              "Cemeteries and Crematoriums"
+            ],
+            "notes": "Only Head with explicit waiver approval authority up to \u00a3250,000 and operational control of Procurement. Also has delegated authority for budget virements up to \u00a325,000, ex gratia payments up to \u00a35,000, debt write-offs under \u00a310,000."
+          },
+          {
+            "post": "Head of Transformation and Commissioning",
+            "award_limit_gbp": 250000,
+            "additional_procurement_powers": [
+              "Strategic Commissioning function",
+              "Data Controller function"
+            ],
+            "service_areas": [
+              "ICT (including Transformation)",
+              "Customer Services",
+              "Data Controller",
+              "Strategic Commissioning",
+              "Human Resources (as Client Officer/Commissioner)",
+              "Communications (as Client Officer/Commissioner)",
+              "Legal Services (as Client Officer/Commissioner)"
+            ],
+            "funding_bid_limit_gbp": 50000,
+            "notes": "Commissioning and digital transformation remit. Strategic Commissioning and Data Controller functions relevant to contracts involving data processing \u2014 but SIRO and information governance responsibilities are out of scope for this schema."
+          },
+          {
+            "post": "Head of Place",
+            "award_limit_gbp": 250000,
+            "service_areas": [
+              "Local Development Framework",
+              "Heritage and Conservation",
+              "Archaeology",
+              "Monuments",
+              "Development Control",
+              "Building Control",
+              "Planning Policy",
+              "Capital projects",
+              "Economic Regeneration",
+              "Public Rights of Way"
+            ],
+            "funding_bid_limit_gbp": 100000,
+            "notes": "Planning and development remit. Section 106 agreements determined jointly with Director One Legal."
+          },
+          {
+            "post": "Head of Culture",
+            "award_limit_gbp": 250000,
+            "service_areas": [
+              "Council's Cultural Strategy",
+              "Visitor Experience",
+              "Tourism and Destination Marketing"
+            ],
+            "funding_bid_limit_gbp": 50000
+          }
+        ],
+        "above_250000": {
+          "description": "Contracts above \u00a3250,000 require Director or above. Specific thresholds for Director and Cabinet/Council level not set out in this Scheme \u2014 refer to Part 3 of Constitution and Cabinet/Council delegation tables.",
+          "waiver_above_250000": "Requires appropriate Cabinet Member (or Head of Paid Service in consultation with Leader, s151 Officer and Director of One Legal in urgent cases). Source: Contract Rule 6.3.1.",
+          "TODO": "Obtain Part 3 Constitution delegation tables to complete the picture above \u00a3250,000"
+        }
+      },
+      "waiver_approval_authority": {
+        "description": "Resolves the waiver approval tiers from Contract Rule 6.3. Now confirmed by Scheme of Sub-Delegation.",
+        "tiers": [
+          {
+            "label": "Up to \u00a3250,000",
+            "approver": "Head of Finance and Resources (as Budget Holder with delegated authority) or Head of Paid Service, a Director",
+            "consultation_required": [
+              "Section 151 Officer",
+              "Director of One Legal"
+            ],
+            "source": "Contract Rule 6.3.2, Scheme of Sub-Delegation (Head of Finance and Resources)"
+          },
+          {
+            "label": "Above \u00a3250,000",
+            "approver": "Appropriate Cabinet Member",
+            "urgent_alternative": "Head of Paid Service in consultation with Leader of the Authority, Section 151 Officer and Director of One Legal",
+            "source": "Contract Rule 6.3.1"
+          }
+        ],
+        "note": "Waivers not available above threshold. Above-threshold contracts must use Direct Award, Framework, Dynamic Market or full competitive tender. Source: Contract Rule 6.2."
+      },
+      "funding_bid_authority": {
+        "description": "Delegation to Heads for funding bids with resource implications",
+        "limits": [
+          {
+            "post": "Head of Finance and Resources",
+            "limit_gbp": 100000
+          },
+          {
+            "post": "Head of Transformation and Commissioning",
+            "limit_gbp": 50000,
+            "condition": "within budget"
+          },
+          {
+            "post": "Head of Place",
+            "limit_gbp": 100000
+          },
+          {
+            "post": "Head of Culture",
+            "limit_gbp": 50000,
+            "condition": "within budget"
+          }
+        ]
+      }
+    },
+    "proper_officers": {
+      "description": "Statutory Proper Officer designations relevant to procurement and contract governance. Source: Proper Officers document, GCC Constitution.",
+      "source_document": "Proper Officers, GCC Constitution",
+      "officers": [
+        {
+          "post": "Head of Paid Service",
+          "legislative_basis": "s.4 Local Government and Housing Act 1989",
+          "procurement_relevant_functions": [
+            "Appointment of Proper Officers (s.270(3) LGA 1972)",
+            "Emergency powers \u2014 authority to exercise Council powers in cases of emergency (s.138 LGA 1972)",
+            "Above \u00a3250,000 waiver urgent approval \u2014 in consultation with Leader, s151 Officer and Director of One Legal"
+          ],
+          "notes": "Managing Director holds Head of Paid Service designation at GCC"
+        },
+        {
+          "post": "Chief Finance Officer (Section 151 Officer)",
+          "legislative_basis": "s.151 Local Government Act 1972, Local Government Finance Act 1988",
+          "statutory_functions": [
+            "Responsible for proper administration of the Authority's financial affairs (s.151 LGA 1972)",
+            "Must issue report to Members if there is or is likely to be unlawful expenditure or unbalanced budget (s.114 LGFA 1988)",
+            "Report to Council annually on robustness of estimates and financial reserves (LGA 2003)",
+            "Adequate and effective system of internal audit (Accounts and Audit Regulations 2011)",
+            "Certification of relevant powers to enter into contracts (Local Government (Contracts) Act 1997)"
+          ],
+          "procurement_relevant_functions": [
+            "Financial sign-off and budget confirmation for all significant contracts",
+            "Consulted on waivers at all tiers",
+            "Consulted on late tender acceptance",
+            "Decides whether bonds or PCGs required on works contracts above \u00a31m",
+            "Maintains contracts register for all contracts above \u00a35,000",
+            "Approval of electronic signatures (having obtained advice from Council Solicitor)",
+            "Referred contracts over budget where no further budget identified",
+            "Referred above-threshold TUPE contracts"
+          ]
+        },
+        {
+          "post": "Corporate Director",
+          "legislative_basis": "Local Government (Contracts) Act 1997",
+          "procurement_relevant_functions": [
+            "Certification of relevant powers to enter into contracts under Local Government (Contracts) Act 1997",
+            "Civil Evidence Act 1995 \u2014 certify Council records for admitting documents in civil proceedings"
+          ]
+        },
+        {
+          "post": "Council Solicitor (Director of One Legal)",
+          "legislative_basis": "s.101 Agreement with Tewkesbury Borough Council",
+          "procurement_relevant_functions": [
+            "Execute all contracts above \u00a325,000 (or authorise named person) \u2014 Article 13.02",
+            "Execute all contracts above \u00a350,000 as deed with common seal \u2014 Article 13.02",
+            "Draft or approve all contract terms above \u00a330,000 \u2014 Contract Rule 4.2.11",
+            "Keep Direct Award Justification Reports \u2014 Contract Rule 5.4",
+            "Keep waiver records (copy to Procurement Adviser) \u2014 Contract Rule 6.4",
+            "Keep all contracts above \u00a330,000 (electronic copy to Procurement Adviser) \u2014 Contract Rule 19.3",
+            "Consulted on late tender acceptance \u2014 Contract Rule 14.5",
+            "Consulted on waivers at all tiers \u2014 Contract Rule 6.3",
+            "Approve new Framework Agreement or Dynamic Market sign-ups \u2014 Contract Rule 22.3",
+            "Advise on above-threshold contract modifications before any changes agreed with supplier \u2014 Contract Rule 26.1",
+            "Custody of Common Seal (held at Tewkesbury Borough Council) \u2014 Article 13.05",
+            "Institute, defend or participate in legal proceedings \u2014 Article 13.03"
+          ],
+          "lgr_risk": "This is a shared service via s.101 Agreement with Tewkesbury Borough Council. Tewkesbury is itself subject to LGR. The continuation and governance of this arrangement post-vesting day requires urgent legal and constitutional review."
+        }
+      ],
+      "scope_note": "This section covers only officers with direct procurement or contract execution responsibilities. Monitoring Officer and SIRO are excluded \u2014 they are governance roles relevant to other schemas (information governance, constitutional governance) not to procurement decisions."
+    },
+    "decision_making": {
+      "description": "Decision-making thresholds and types relevant to procurement. Sources: Article 12 GCC Constitution, Part 3E Executive Functions (Table 4 and Appendix A).",
+      "source_documents": [
+        "Article 12 \u2014 Decision Making, GCC Constitution",
+        "Part 3E \u2014 Executive Functions, Table 4 and Appendix A"
+      ],
+      "principles": [
+        "Proportionality \u2014 action should be proportionate to the desired outcome",
+        "Due consideration of professional advice from officers",
+        "Respect for human rights",
+        "Presumption in favour of openness",
+        "Clarity of aims and desired outcomes"
+      ],
+      "key_rules": {
+        "officer_key_decision_restriction": {
+          "rule": "An Officer does not have delegated authority to take a Key Decision unless (a) specifically authorised to do so by the Leader, or (b) the Managing Director is taking an urgent decision as set out in Part 3E.",
+          "source": "Part 3E, 3E.11",
+          "procurement_implication": "Officers may award contracts in the \u00a3100k\u2013\u00a3250k space (which are technically key decisions under KD3) only where the Leader has specifically authorised it \u2014 in practice via the Forward Plan entry mechanism."
+        },
+        "tender_acceptance_table4": {
+          "officer_limit": {
+            "rule": "Accept tenders and quotations within budget and not exceeding \u00a3250,000",
+            "authority": "MD/D (sub-delegated to Heads of Service)",
+            "source": "PART3E Table 4"
+          },
+          "cabinet_member_limit": {
+            "rule": "Accept tenders within budget and exceeding \u00a3250,000",
+            "authority": "Cabinet Member (specific Table 4 delegation \u2014 overrides Appendix A general ceiling per lex specialis)",
+            "upper_bound": "Up to \u00a3500,000 \u2014 above this KD4 triggers full Cabinet requirement",
+            "source": "PART3E Table 4"
+          },
+          "full_cabinet": {
+            "rule": "Key decisions including contracts above \u00a3500,000",
+            "authority": "Full Cabinet",
+            "source": "PART3E Table 4 \u2014 Make Key Decision: Cabinet, ART12 KD4"
+          }
+        },
+        "waiver_table4": {
+          "officer_limit": "Approve waiver to Contract Rules where value does not exceed \u00a3250,000 \u2014 MD/D",
+          "cabinet_member_urgent": "Approve waiver from Contract Rules where value exceeds \u00a3250,000 and urgent decision required \u2014 MD only (Contract Rule 6.3.1)",
+          "cabinet_limit": "Approve waiver to Contract Rules where value is in excess of \u00a3250,000 \u2014 Cabinet Member",
+          "source": "Part 3E, Table 4 \u2014 Commissioning and Contracts, Contract Rule 6.3"
+        },
+        "cabinet_member_authority": {
+          "general_rule": {
+            "rule": "Individual Cabinet Members cannot make decisions involving expenditure or savings exceeding \u00a3250,000.",
+            "source": "PART3E Appendix A para 2(3)"
+          },
+          "specific_carve_out": {
+            "rule": "Table 4 (Commissioning and Contracts) explicitly delegates 'Accept tenders within budget and exceeding \u00a3250,000' to Cabinet Member. This is a named specific function delegation.",
+            "source": "PART3E Table 4 \u2014 Commissioning and Contracts"
+          },
+          "constitutional_interpretation": {
+            "principle": "Lex specialis \u2014 specific delegation overrides general rule. The Table 4 tender acceptance delegation is a specific carve-out from the Appendix A general ceiling. Cabinet Members may therefore accept tenders above \u00a3250,000 (up to the KD4 full Cabinet threshold of \u00a3500,000) by virtue of the Table 4 specific delegation, notwithstanding the general Appendix A ceiling.",
+            "source": "PART3E Table 4 read with PART3E Appendix A para 2(3)"
+          },
+          "full_cabinet_trigger": {
+            "rule": "Above \u00a3500,000 the KD4 key decision threshold is triggered and the function passes to full Cabinet regardless of Table 4 Cabinet Member delegation.",
+            "source": "ART12 12.03(b)(iv), PART3E Table 4 \u2014 Make Key Decision: Cabinet"
+          }
+        }
+      },
+      "decision_types": {
+        "key_decision": {
+          "description": "Executive function decisions meeting any of the following criteria. Must follow Executive Procedure Rules and appear on the Forward Plan.",
+          "source": "Article 12.03(b)",
+          "forward_plan": "Leader publishes Forward Plan at least monthly showing 12-month programme including Key Decisions. Source: Part 3E, Appendix A, para 2.",
+          "triggers": [
+            {
+              "trigger_id": "KD1",
+              "description": "Expenditure or saving significant having regard to the budget for the service or function",
+              "procurement_note": "Qualitative test \u2014 applies where a contract represents a significant proportion of a service budget even if below monetary thresholds"
+            },
+            {
+              "trigger_id": "KD2",
+              "description": "Likely to have a significant impact on two or more wards",
+              "procurement_note": "Relevant to city-wide contracts \u2014 waste, parks, CCTV, customer services"
+            },
+            {
+              "trigger_id": "KD3",
+              "description": "Budget expenditure or budget savings in excess of \u00a3100,000",
+              "threshold_gbp": 100000,
+              "procurement_note": "Makes contracts above \u00a3100k technically key decisions requiring Forward Plan entry. However, award authority for contracts up to \u00a3250k remains with officers where Leader has authorised via Forward Plan mechanism (3E.11)."
+            },
+            {
+              "trigger_id": "KD4",
+              "description": "Contract valued in excess of \u00a3500,000, or acquisition/disposal of land with value in excess of \u00a3250,000",
+              "contract_threshold_gbp": 500000,
+              "land_threshold_gbp": 250000,
+              "procurement_note": "Primary full Cabinet threshold for contract decisions. Above \u00a3500,000 requires full Cabinet approval."
+            }
+          ]
+        },
+        "urgent_decision": {
+          "description": "Decision meeting urgency criteria in Article 12.03(c).",
+          "urgent_key_decision": "Leader or Cabinet Member only \u2014 MD can take urgent key decisions only where specifically permitted. Source: Part 3E Table 4.",
+          "urgent_officer_decision": "MD may take urgent non-key decisions where insufficient time for Leader/Cabinet Member consideration \u2014 reported to next Cabinet meeting. Source: Part 3E Table 5.",
+          "procurement_note": "Urgency does not remove procurement compliance obligations. Above-threshold direct awards still require Direct Award Justification Report and UK5 Transparency Notice."
+        }
+      },
+      "procurement_decision_authority_matrix": {
+        "description": "Definitive procurement decision authority matrix for GCC. Synthesised from Contract Rules (Rule 5.1), Scheme of Sub-Delegation, Part 3E Table 4, Appendix A, and Article 12. All values inclusive of VAT.",
+        "matrix": [
+          {
+            "tier": 1,
+            "label": "Budget Holder discretion",
+            "min_value_gbp": 0,
+            "max_value_gbp": 30000,
+            "award_authority": "budget_holder",
+            "award_authority_label": "Budget Holder",
+            "key_decision": false,
+            "forward_plan_required": false,
+            "above_threshold": false,
+            "one_legal_contract_required": false,
+            "deed_required": false,
+            "min_quotes": 2,
+            "process": "Best value \u2014 minimum two quotes where possible. Purchase order with standard T&Cs. No waiver required unless best value cannot be demonstrated.",
+            "sources": [
+              "CONTRACT-RULES Rule 5.1 row 1"
+            ]
+          },
+          {
+            "tier": 2,
+            "label": "Three quotes \u2014 officer award",
+            "min_value_gbp": 30001,
+            "max_value_gbp": 60000,
+            "award_authority": "officer",
+            "award_authority_label": "Authorised Officer / Head of Service (sub-delegated, ceiling \u00a3250,000)",
+            "key_decision": false,
+            "forward_plan_required": false,
+            "above_threshold": false,
+            "one_legal_contract_required": true,
+            "deed_required": false,
+            "min_quotes": 3,
+            "cdp_notice_required": true,
+            "cdp_notice_type": "below_threshold_tender_notice",
+            "process": "Three written quotes. Below-threshold tender notice on CDP. Formal contract via One Legal.",
+            "sources": [
+              "CONTRACT-RULES Rule 5.1 row 2",
+              "SUB-DELEGATION"
+            ]
+          },
+          {
+            "tier": 3,
+            "label": "Full ITT \u2014 officer award",
+            "min_value_gbp": 60001,
+            "max_value_gbp": 100000,
+            "award_authority": "officer",
+            "award_authority_label": "Authorised Officer / Head of Service (sub-delegated, ceiling \u00a3250,000)",
+            "key_decision": false,
+            "forward_plan_required": false,
+            "above_threshold": false,
+            "one_legal_contract_required": true,
+            "full_itt_required": true,
+            "cdp_notice_required": true,
+            "cdp_notice_type": "below_threshold_tender_notice",
+            "process": "Full ITT via e-tendering. Below-threshold tender notice on CDP. Formal contract via One Legal. Deed if above \u00a350,000.",
+            "sources": [
+              "CONTRACT-RULES Rule 5.1 row 3",
+              "SUB-DELEGATION",
+              "ART13"
+            ],
+            "deed_normally_required": true,
+            "deed_may_be_waived_by_council_solicitor": true
+          },
+          {
+            "tier": 4,
+            "label": "Officer decision space \u2014 key decision",
+            "min_value_gbp": 100001,
+            "max_value_gbp": 250000,
+            "award_authority": "officer",
+            "award_authority_label": "Officer (MD or Director \u2014 sub-delegated to Heads of Service, ceiling \u00a3250,000)",
+            "key_decision": true,
+            "key_decision_triggers": [
+              "KD3"
+            ],
+            "forward_plan_required": true,
+            "forward_plan_note": "Officers may award under 3E.11 where Leader has authorised \u2014 Forward Plan entry is the authorisation mechanism. Without Forward Plan entry the officer lacks authority to award even within financial limit.",
+            "one_legal_contract_required": true,
+            "full_itt_required": true,
+            "compliance_note": "LIVE COMPLIANCE QUESTION (C3): GCC may not currently be applying Forward Plan requirement to contracts in this range. See source_documents.known_conflicts.C3 and risk flag R11.",
+            "sources": [
+              "PART3E 3E.11",
+              "PART3E Table 4",
+              "SUB-DELEGATION",
+              "ART12 KD3",
+              "ART13"
+            ],
+            "deed_normally_required": true,
+            "deed_may_be_waived_by_council_solicitor": true,
+            "above_threshold_logic": {
+              "description": "Whether a contract in this tier is above threshold depends on contract type. Evaluate against thresholds.sub_central_authorities.",
+              "rules": [
+                {
+                  "contract_type": "goods_or_services",
+                  "threshold_gbp": 213477,
+                  "above_threshold_if": "value_estimated_gbp >= 213477"
+                },
+                {
+                  "contract_type": "light_touch",
+                  "threshold_gbp": 663540,
+                  "above_threshold_if": "value_estimated_gbp >= 663540 \u2014 no contracts in tier 4 will reach this"
+                },
+                {
+                  "contract_type": "works",
+                  "threshold_gbp": 5372772,
+                  "above_threshold_if": "value_estimated_gbp >= 5372772 \u2014 no contracts in tier 4 will reach this"
+                }
+              ],
+              "source": "SI 2025/1200 \u2014 PA2023-REGS, thresholds.sub_central_authorities"
+            }
+          },
+          {
+            "tier": 5,
+            "label": "Cabinet Member decision space",
+            "min_value_gbp": 250001,
+            "max_value_gbp": 500000,
+            "award_authority": "cabinet_member",
+            "award_authority_label": "Individual Cabinet Member (within portfolio)",
+            "key_decision": true,
+            "key_decision_triggers": [
+              "KD3",
+              "KD4"
+            ],
+            "forward_plan_required": true,
+            "above_threshold": true,
+            "one_legal_contract_required": true,
+            "full_itt_required": true,
+            "sources": [
+              "PART3E Table 4 \u2014 'Accept tenders within budget and exceeding \u00a3250,000: Cabinet Member'",
+              "PART3E Appendix A para 2(3) \u2014 general ceiling, overridden by specific Table 4 delegation",
+              "ART12 KD3",
+              "ART12 KD4"
+            ],
+            "cabinet_member_delegation_basis": "Specific delegation under PART3E Table 4: 'Accept tenders within budget and exceeding \u00a3250,000 \u2014 Cabinet Member'. This is a specific carve-out that overrides the general Appendix A para 2(3) ceiling of \u00a3250,000 per the principle of lex specialis (specific rule overrides general rule). The Table 4 delegation governs; the Appendix A ceiling applies to other Cabinet Member decisions not subject to a specific Table 4 function delegation.",
+            "deed_normally_required": true,
+            "deed_may_be_waived_by_council_solicitor": true,
+            "risk_flag": "R12",
+            "reference_field_required": "cabinet_member_decision_reference"
+          },
+          {
+            "tier": 6,
+            "label": "Full Cabinet \u2014 key decision",
+            "min_value_gbp": 500001,
+            "max_value_gbp": null,
+            "award_authority": "full_cabinet",
+            "award_authority_label": "Full Cabinet",
+            "key_decision": true,
+            "key_decision_triggers": [
+              "KD3",
+              "KD4"
+            ],
+            "forward_plan_required": true,
+            "above_threshold": true,
+            "one_legal_contract_required": true,
+            "full_itt_required": true,
+            "executive_procedure_rules_apply": true,
+            "sources": [
+              "PART3E Table 4",
+              "ART12 KD4"
+            ],
+            "deed_normally_required": true,
+            "deed_may_be_waived_by_council_solicitor": true,
+            "risk_flag": "R13",
+            "reference_field_required": "cabinet_decision_reference",
+            "reference_field_note": "cabinet_decision_reference is required. cabinet_member_decision_reference is NOT sufficient for tier 6 \u2014 these are distinct constitutional requirements.",
+            "key_decision_triggers_note": "KD3 (value > \u00a3100,000) applies to all contracts in this tier in addition to KD4. Both triggers are active. KD4 is the primary trigger that requires full Cabinet; KD3 is also satisfied and is noted for completeness. Source: ART12 12.03(b)(iii) and (iv)."
+          }
+        ],
+        "waiver_matrix": [
+          {
+            "value_range": "Up to \u00a3250,000",
+            "approver": "MD/Director (sub-delegated to Head of Finance and Resources)",
+            "consultation": [
+              "Section 151 Officer",
+              "Director of One Legal"
+            ],
+            "source": "Part 3E Table 4, Contract Rule 6.3.2, Scheme of Sub-Delegation"
+          },
+          {
+            "value_range": "Above \u00a3250,000 \u2014 standard",
+            "approver": "Cabinet Member",
+            "source": "Part 3E Table 4, Contract Rule 6.3.1"
+          },
+          {
+            "value_range": "Above \u00a3250,000 \u2014 urgent",
+            "approver": "Managing Director only",
+            "consultation": [
+              "Leader",
+              "Section 151 Officer",
+              "Director of One Legal"
+            ],
+            "source": "Part 3E Table 4, Contract Rule 6.3.1"
+          }
+        ],
+        "notes": [
+          "KD1 and KD2 are qualitative tests that can make any contract a key decision regardless of value \u2014 must be assessed at procurement planning stage",
+          "Officer award authority in tier 4 depends on Leader authorisation via Forward Plan mechanism (3E.11) \u2014 without Forward Plan entry the officer technically lacks authority to award",
+          "Individual Cabinet Members cannot make decisions exceeding \u00a3250,000 expenditure \u2014 tenders above \u00a3250,000 go to full Cabinet not individual Cabinet Member",
+          "The \u00a3100,000 KD3 threshold and the \u00a3250,000 officer award ceiling are distinct \u2014 KD3 triggers Forward Plan requirement, the \u00a3250,000 ceiling triggers escalation from officer to Cabinet Member"
+        ],
+        "evaluator": {
+          "description": "Logic for determining tier and compliance requirements from contract value. All values inclusive of VAT.",
+          "inputs": [
+            "value_estimated_gbp",
+            "contract_type"
+          ],
+          "pseudocode": [
+            "tier = first tier where min_value_gbp <= value_estimated_gbp <= (max_value_gbp or infinity)",
+            "if tier.key_decision and not forward_plan_reference: flag R11",
+            "if value_estimated_gbp > 250000 and not cabinet_member_decision_reference: flag R12",
+            "if value_estimated_gbp > 500000 and not cabinet_decision_reference: flag R13",
+            "if value_estimated_gbp > threshold[contract_type] and procurement_route not in regulated_routes: flag R08"
+          ]
+        }
+      }
+    }
+  },
+  "contract_register": {
+    "description": "Requirements for GCC's contracts register. Source: Contract Rule 19.2 and Local Government Transparency Code 2015.",
+    "legislative_basis": "Contract Rule 19.2, Local Government Transparency Code 2015, PA2023 transparency obligations",
+    "maintained_by": "Section 151 Officer",
+    "threshold_for_inclusion_gbp": 5000,
+    "publication_requirement": "All contracts above \u00a35,000 must be included in the register. Transparency Code requires publication of contracts above \u00a35,000. Above-threshold contracts additionally require Find a Tender notice publication.",
+    "minimum_fields": [
+      "contract_id",
+      "title",
+      "description",
+      "supplier_name",
+      "value_actual_gbp",
+      "start_date",
+      "expiry_date",
+      "procurement_route",
+      "responsible_service_area",
+      "responsible_officer",
+      "find_a_tender_ocid"
+    ],
+    "update_frequency": "At least annually, and on any material change",
+    "platform": "TODO - confirm publication platform (council website and/or Contracts Finder). Note: Find a Tender notices satisfy statutory publication obligations for above-threshold contracts.",
+    "source_rule": "19.1, 19.2"
+  },
+  "procurement_lifecycle_stages": [
+    {
+      "stage_id": "S1",
+      "name": "Needs Definition and Business Case",
+      "description": "Define the requirement, confirm budget, assess whether existing contracts or frameworks can be used, consider make-vs-buy.",
+      "key_actions": [
+        "Produce specification / scope of requirements",
+        "Estimate contract value (whole life, including extensions and VAT)",
+        "Identify correct procurement threshold",
+        "Check existing frameworks",
+        "Complete social value assessment",
+        "Consider SME-friendly structuring",
+        "Confirm budget with Section 151 Officer"
+      ],
+      "outputs": [
+        "Approved business case",
+        "Procurement strategy note for above-threshold"
+      ],
+      "notices_at_this_stage": [
+        "UK1 Pipeline Notice (if applicable)"
+      ]
+    },
+    {
+      "stage_id": "S2",
+      "name": "Market Engagement",
+      "description": "Optional but recommended pre-procurement engagement with the market to refine requirements and test market appetite.",
+      "key_actions": [
+        "Publish UK2 Preliminary Market Engagement Notice before engaging",
+        "Hold supplier events, issue RFIs, or conduct desk research",
+        "Document engagement and how it has shaped requirements",
+        "Manage conflicts of interest from engaged suppliers"
+      ],
+      "notices_at_this_stage": [
+        "UK2 Preliminary Market Engagement Notice"
+      ]
+    },
+    {
+      "stage_id": "S3",
+      "name": "Procurement",
+      "description": "Formal competitive or direct award process",
+      "key_actions": [
+        "Finalise procurement documents (specification, award criteria, contract terms)",
+        "Publish UK4 Tender Notice (or UK5 Transparency Notice for direct award)",
+        "Manage clarifications",
+        "Evaluate tenders against published criteria",
+        "Check exclusion grounds and debarment list",
+        "Issue Assessment Summaries to all bidders",
+        "Publish UK6 Contract Award Notice",
+        "Observe 8-working-day standstill period"
+      ],
+      "notices_at_this_stage": [
+        "UK3 Planned Procurement Notice (optional)",
+        "UK4 Tender Notice",
+        "UK5 Transparency Notice (direct award only)",
+        "UK6 Contract Award Notice"
+      ],
+      "standstill_period_working_days": 8
+    },
+    {
+      "stage_id": "S4",
+      "name": "Contract Award and Mobilisation",
+      "description": "Formalise the contract, ensure supplier is ready to deliver.",
+      "key_actions": [
+        "Execute contract (signed by authorised signatory)",
+        "Publish UK7 Contract Details Notice",
+        "Issue purchase order",
+        "Conduct supplier mobilisation meeting",
+        "Agree KPIs (mandatory >\u00a35m)",
+        "Set up monitoring and review schedule",
+        "Establish data processing agreement if supplier handles personal data"
+      ],
+      "notices_at_this_stage": [
+        "UK7 Contract Details Notice"
+      ]
+    },
+    {
+      "stage_id": "S5",
+      "name": "Contract Management",
+      "description": "Ongoing management of contract performance, payments and compliance.",
+      "key_actions": [
+        "Conduct performance reviews per schedule",
+        "Monitor KPIs and publish UK9 annually (>\u00a35m contracts)",
+        "Publish UK17 Payment Compliance Notices each reporting period",
+        "Manage change control - publish UK10 Contract Change Notice before modifications",
+        "Escalate poor performance through contract mechanisms",
+        "Maintain contract register entry"
+      ],
+      "notices_at_this_stage": [
+        "UK9 Contract Performance Notice (annual, >\u00a35m)",
+        "UK10 Contract Change Notice",
+        "UK17 Payment Compliance Notice"
+      ]
+    },
+    {
+      "stage_id": "S6",
+      "name": "Expiry or Termination",
+      "description": "Planned expiry or early termination of contract.",
+      "key_actions": [
+        "Trigger pre-expiry review at 12 months (18 months for complex contracts)",
+        "Decide whether to extend, re-procure, or exit",
+        "Manage transition / handover to new supplier",
+        "Publish UK11 Contract Termination Notice within 30 days",
+        "Conduct lessons learned review",
+        "Update contract register"
+      ],
+      "notices_at_this_stage": [
+        "UK11 Contract Termination Notice",
+        "UK9 Final Contract Performance Notice"
+      ]
+    }
+  ],
+  "risk_flags": {
+    "description": "Schema-encoded risk indicators for procurement and contract records. Can be used to drive dashboards and exception reports.",
+    "flags": [
+      {
+        "flag_id": "R01",
+        "label": "Expiring within 6 months",
+        "logic": "expiry_date within 180 days of today and status in [live, extension_active]",
+        "severity": "amber"
+      },
+      {
+        "flag_id": "R02",
+        "label": "Expiring within 3 months",
+        "logic": "expiry_date within 90 days of today and status in [live, extension_active]",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R03",
+        "label": "No active contract manager",
+        "logic": "responsible_officer is null or blank",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R04",
+        "label": "KPI reporting overdue",
+        "logic": "value_actual_gbp > 5000000 and last_uk9_published > 13 months ago",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R05",
+        "label": "Contract performance Requires Improvement or Inadequate",
+        "logic": "any current KPI rating in [Requires Improvement, Inadequate] and no remediation_plan recorded",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R06",
+        "label": "Direct award without documented ground",
+        "logic": "procurement_route in [direct_award, below_threshold_direct] and direct_award_ground is null",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R07",
+        "label": "High value below-threshold (potential split contract risk)",
+        "logic": "value_estimated_gbp > 150000 and procurement_route = below_threshold_direct",
+        "severity": "amber",
+        "notes": "Scrutiny for potential contract splitting contrary to s.86 PA 2023"
+      },
+      {
+        "flag_id": "R08",
+        "label": "Payment compliance notice overdue",
+        "logic": "last_uk17_published > 31 days after end of last reporting period",
+        "severity": "amber"
+      },
+      {
+        "flag_id": "R09",
+        "label": "Contract modified without UK10 notice",
+        "logic": "contract_value_changed = true and no linked UK10 notice recorded",
+        "severity": "red"
+      },
+      {
+        "flag_id": "R10",
+        "label": "Extension exercised without procurement assessment",
+        "logic": "extension_exercised = true and no pre_expiry_review recorded",
+        "severity": "amber"
+      },
+      {
+        "flag_id": "R11",
+        "label": "Key decision (KD3) \u2014 no Forward Plan reference recorded",
+        "logic": "value_estimated_gbp > 100000 AND forward_plan_reference is null AND status in [pipeline, in_procurement]",
+        "severity": "red",
+        "source": "Article 12.03(b)(iii) and (iv)",
+        "note": "Contracts above \u00a3100k are key decisions under KD3. Forward Plan entry required before procurement commences.",
+        "constitutional_conflict_conditional": {
+          "condition": "value_estimated_gbp > 100000 AND value_estimated_gbp <= 250000",
+          "conflict_id": "C3",
+          "rationale": "In the \u00a3100k\u2013\u00a3250k band, the requirement for a Forward Plan entry is constitutionally contested. ART12 KD3 makes contracts above \u00a3100k key decisions requiring Forward Plan entry. PART3E 3E.11 states officers cannot take key decisions without Leader authorisation \u2014 the Forward Plan entry is the authorisation mechanism. However, GCC practice has treated this range as pure officer space based on the financial sub-delegation alone, without Forward Plan entries. The constitutional position is therefore unclear in practice. Monitoring Officer input is required to confirm whether current practice is constitutionally sound or whether a change is needed.",
+          "action": "Refer to Monitoring Officer before proceeding. Do not treat this as a simple procedural gap \u2014 the constitutional requirement itself is contested.",
+          "source": "source_documents.known_conflicts.C3"
+        },
+        "constitutional_conflict_above_250k": {
+          "condition": "value_estimated_gbp > 250000",
+          "conflict_id": null,
+          "rationale": "Above \u00a3250k the constitutional position is clearer \u2014 KD4 applies and Cabinet approval is required. The Forward Plan obligation is unambiguous. C3 does not apply. R11 fires on its own merits as a straightforward procedural gap."
+        }
+      },
+      {
+        "flag_id": "R12",
+        "label": "Tier 5 \u2014 Cabinet Member decision reference missing",
+        "logic": "value_estimated_gbp > 250000 AND value_estimated_gbp <= 500000 AND cabinet_member_decision_reference is null AND status not in [pipeline]",
+        "severity": "red",
+        "source": "Scheme of Sub-Delegation",
+        "note": "Applies to tier 5 contracts (\u00a3250,001\u2013\u00a3500,000) only. For tier 6 contracts (above \u00a3500,000) use R13 \u2014 cabinet_decision_reference is the appropriate reference. R12 and R13 are mutually exclusive by tier. A cabinet_decision_reference does NOT satisfy the R12 requirement \u2014 tier 6 contracts require both a Cabinet decision (R13) and, where the procurement straddled tier 5, a Cabinet Member decision record for that phase."
+      },
+      {
+        "flag_id": "R13",
+        "label": "Full Cabinet key decision \u2014 no Cabinet minute reference recorded",
+        "logic": "value_estimated_gbp > 500000 AND cabinet_decision_reference is null AND status not in [pipeline]",
+        "severity": "red",
+        "source": "Article 12.03(b)(iv)",
+        "note": "Applies to tier 6 contracts (above \u00a3500,000). Cabinet minute reference required before award. cabinet_decision_reference is distinct from cabinet_member_decision_reference \u2014 the latter is not sufficient for tier 6."
+      }
+    ]
+  },
+  "frameworks": {
+    "description": "Framework agreements relevant to GCC procurement. Covers three distinct roles: customer (GCC calls off from a framework established by another authority or body), host (GCC establishes and manages a framework, potentially for use by other contracting authorities), and joint_host (GCC co-establishes a framework with one or more other authorities). Each role carries different legal obligations under the Procurement Act 2023.",
+    "framework_roles": {
+      "customer": {
+        "description": "GCC is a named contracting authority permitted to call off from a framework established by a central purchasing body or another contracting authority.",
+        "gcc_obligations": [
+          "Verify GCC is a named or eligible contracting authority before calling off",
+          "Call off in accordance with framework-specific rules (direct award vs mini-competition)",
+          "Publish UK6 and UK7 notices for each call-off contract",
+          "Verify framework has not expired before calling off",
+          "Verify supplier remains on framework lot at point of call-off",
+          "Check supplier against debarment list at call-off stage"
+        ],
+        "compliance_risks": [
+          "Calling off from an expired framework",
+          "Calling off from a lot GCC is not named on",
+          "Direct awarding when framework terms require mini-competition",
+          "Calling off a supplier who has been removed from the framework"
+        ]
+      },
+      "host": {
+        "description": "GCC establishes and manages a framework agreement. GCC acts as the contracting authority and central purchasing body. Other contracting authorities may be named as entitled to call off.",
+        "gcc_obligations": [
+          "Run compliant competitive procurement to establish framework (open or competitive flexible procedure)",
+          "Publish full notice lifecycle: UK4, UK6, UK7 at establishment",
+          "Define call-off rules clearly in framework terms",
+          "Maintain supplier list and manage additions/removals",
+          "For open frameworks: reopen to new suppliers at least once within 3 years and once within 5 years (s.34-40 PA 2023)",
+          "Publish UK10 Contract Change Notice for qualifying framework modifications",
+          "Notify entitled contracting authorities of any material changes",
+          "Manage framework expiry and succession planning",
+          "Publish UK11 Contract Termination Notice on framework closure",
+          "Consider cost recovery model if other authorities call off"
+        ],
+        "entitled_authority_management": {
+          "description": "If other contracting authorities are entitled to call off, GCC must maintain a list of entitled authorities and communicate framework terms and changes to them.",
+          "fields": [
+            "entitled_authority_name",
+            "entitled_authority_type",
+            "date_added",
+            "lots_accessible",
+            "call_off_spend_to_date_gbp"
+          ]
+        },
+        "cost_recovery": {
+          "description": "GCC may charge entitled authorities a management fee or percentage levy on call-off spend. Must be transparent and agreed in framework terms.",
+          "models": [
+            "No charge",
+            "Fixed annual fee",
+            "Percentage of call-off spend",
+            "Per-transaction fee"
+          ],
+          "notes": "Cost recovery model must be set at framework establishment. Cannot be introduced retrospectively."
+        },
+        "lgr_implications": {
+          "description": "Frameworks hosted by GCC as a district council may need to be novated to the new unitary authority on vesting day. Entitled authorities using GCC-hosted frameworks must be notified. Legal advice required.",
+          "actions": [
+            "Identify all GCC-hosted frameworks before vesting day",
+            "Seek legal advice on novation or re-establishment requirement",
+            "Notify entitled authorities of LGR transition",
+            "Assess whether framework terms permit novation or require fresh procurement"
+          ]
+        }
+      },
+      "joint_host": {
+        "description": "GCC co-establishes a framework with one or more other contracting authorities. One authority typically acts as lead contracting authority for notice publication purposes. All joint hosts share governance obligations.",
+        "gcc_obligations": [
+          "All obligations under host role apply",
+          "Agree governance arrangements with co-hosts in a collaboration agreement",
+          "Identify lead contracting authority for notice publication",
+          "Agree cost sharing and liability arrangements",
+          "Maintain alignment with co-hosts on framework changes and supplier management"
+        ],
+        "collaboration_agreement_fields": [
+          "lead_contracting_authority",
+          "co_host_authorities",
+          "governance_arrangements",
+          "cost_sharing_model",
+          "liability_apportionment",
+          "decision_making_process"
+        ]
+      }
+    },
+    "framework_record": {
+      "description": "Data model for a framework agreement record. Applicable to all three roles. Role-specific fields are conditional.",
+      "required_fields": [
+        "framework_id",
+        "name",
+        "role",
+        "category",
+        "status",
+        "start_date",
+        "expiry_date",
+        "responsible_officer"
+      ],
+      "fields": {
+        "framework_id": {
+          "type": "string",
+          "format": "FWK-[PROVIDER_CODE]-[REFERENCE]-[YEAR]",
+          "example": "FWK-CCS-RM1557-14",
+          "notes": "Internal unique identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the framework agreement"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "customer",
+            "host",
+            "joint_host"
+          ],
+          "description": "GCC's role in relation to this framework"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "goods",
+            "services",
+            "works",
+            "light_touch_services",
+            "mixed"
+          ],
+          "description": "Nature of what the framework covers"
+        },
+        "subject_matter": {
+          "type": "string",
+          "description": "Plain English description of what the framework covers"
+        },
+        "cpv_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "provider": {
+          "type": "object",
+          "description": "The authority that established the framework. For host/joint_host role this is GCC.",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "central_purchasing_body",
+                "contracting_authority",
+                "gcc_hosted",
+                "joint_hosted",
+                "consortium"
+              ]
+            },
+            "url": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            }
+          }
+        },
+        "reference_number": {
+          "type": "string",
+          "description": "Provider's reference number e.g. RM1557.14"
+        },
+        "established_under": {
+          "type": "string",
+          "enum": [
+            "PA2023",
+            "PCR2015",
+            "PCR2006",
+            "Other"
+          ],
+          "description": "Procurement rules under which framework was established. PCR2015 frameworks remain valid for their duration."
+        },
+        "framework_type": {
+          "type": "string",
+          "enum": [
+            "closed",
+            "open"
+          ],
+          "description": "Closed frameworks have a fixed supplier list. Open frameworks must admit new suppliers periodically under PA2023."
+        },
+        "open_framework_reopen_obligations": {
+          "type": "object",
+          "description": "Required for open frameworks established under PA2023",
+          "properties": {
+            "first_reopen_due": {
+              "type": "string",
+              "format": "date"
+            },
+            "second_reopen_due": {
+              "type": "string",
+              "format": "date"
+            },
+            "first_reopen_completed": {
+              "type": "boolean"
+            },
+            "second_reopen_completed": {
+              "type": "boolean"
+            }
+          }
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "expiry_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "maximum_duration_months": {
+          "type": "integer",
+          "description": "Maximum 48 months for most frameworks, 96 months for open frameworks under PA2023"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pipeline",
+            "being_established",
+            "active",
+            "suspended",
+            "expired",
+            "superseded",
+            "terminated"
+          ]
+        },
+        "successor_framework_id": {
+          "type": "string",
+          "description": "Framework ID of successor framework if this one has been superseded"
+        },
+        "lots": {
+          "type": "array",
+          "description": "Lot structure of the framework",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lot_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "gcc_approved_to_use": {
+                "type": "boolean"
+              },
+              "suppliers": {
+                "type": "array",
+                "description": "Suppliers on this lot. Required for host/joint_host role. Optional but useful for customer role.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "company_number": {
+                      "type": "string"
+                    },
+                    "is_sme": {
+                      "type": "boolean"
+                    },
+                    "date_added": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "date_removed": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "suspended",
+                        "removed"
+                      ]
+                    }
+                  }
+                }
+              },
+              "call_off_rules": {
+                "type": "object",
+                "description": "Rules governing how call-offs must be made from this lot",
+                "properties": {
+                  "direct_award_permitted": {
+                    "type": "boolean"
+                  },
+                  "direct_award_threshold_gbp": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "Maximum value for direct award. Null means no cap."
+                  },
+                  "mini_competition_required_above_gbp": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "Mini-competition mandatory above this value. Null means always permitted to direct award."
+                  },
+                  "minimum_quotes_for_direct_award": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "description": "Some frameworks require minimum number of supplier quotes even for direct award"
+                  },
+                  "evaluation_criteria": {
+                    "type": "string"
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gcc_access": {
+          "type": "object",
+          "description": "GCC-specific access details. Required for customer role.",
+          "properties": {
+            "gcc_named_contracting_authority": {
+              "type": "boolean"
+            },
+            "gcc_approval_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "lots_accessible": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "gcc_spend_to_date_gbp": {
+              "type": "number"
+            },
+            "gcc_spend_cap_gbp": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "contracts_called_off": {
+              "type": "array",
+              "description": "Contract IDs of GCC call-off contracts under this framework",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "entitled_authorities": {
+          "type": "array",
+          "description": "Other contracting authorities entitled to call off. Required for host/joint_host role.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "date_added": {
+                "type": "string",
+                "format": "date"
+              },
+              "lots_accessible": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "call_off_spend_to_date_gbp": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "cost_recovery": {
+          "type": "object",
+          "description": "Cost recovery model for hosted frameworks",
+          "properties": {
+            "model": {
+              "type": "string",
+              "enum": [
+                "none",
+                "fixed_annual_fee",
+                "percentage_of_spend",
+                "per_transaction"
+              ]
+            },
+            "rate": {
+              "type": "string",
+              "description": "Fee amount or percentage as applicable"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "joint_host_details": {
+          "type": "object",
+          "description": "Required for joint_host role",
+          "properties": {
+            "lead_contracting_authority": {
+              "type": "string"
+            },
+            "co_host_authorities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "collaboration_agreement_reference": {
+              "type": "string"
+            },
+            "gcc_lead": {
+              "type": "boolean",
+              "description": "True if GCC is the lead contracting authority"
+            }
+          }
+        },
+        "notices": {
+          "type": "object",
+          "description": "Find a Tender notices associated with this framework. Primarily relevant for host/joint_host role.",
+          "properties": {
+            "ocid": {
+              "type": "string"
+            },
+            "uk1_pipeline": {
+              "type": "string",
+              "format": "date"
+            },
+            "uk2_market_engagement": {
+              "type": "string",
+              "format": "date"
+            },
+            "uk4_tender": {
+              "type": "string",
+              "format": "date"
+            },
+            "uk6_award": {
+              "type": "string",
+              "format": "date"
+            },
+            "uk7_details": {
+              "type": "string",
+              "format": "date"
+            },
+            "uk11_termination": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        },
+        "responsible_officer": {
+          "type": "object",
+          "description": "Officer responsible for managing GCC's relationship with this framework",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "job_title": {
+              "type": "string"
+            },
+            "service_area": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "lgr_risk": {
+          "type": "object",
+          "description": "LGR transition risk assessment for this framework",
+          "properties": {
+            "risk_level": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "description": "Low: customer frameworks with no transition impact. Medium: active call-offs in flight at vesting day. High: hosted frameworks with entitled authorities."
+            },
+            "notes": {
+              "type": "string"
+            },
+            "action_required": {
+              "type": "string"
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "framework_risk_flags": {
+      "description": "Risk flags specific to framework management, extending the contract-level risk flags.",
+      "flags": [
+        {
+          "flag_id": "F01",
+          "label": "Framework expired \u2014 active call-offs may be non-compliant",
+          "logic": "framework.status = expired AND any linked contract.status in [live, extension_active]",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F02",
+          "label": "Framework expiring within 6 months",
+          "logic": "framework.expiry_date within 180 days and framework.status = active",
+          "severity": "amber"
+        },
+        {
+          "flag_id": "F03",
+          "label": "Framework expiring within 3 months",
+          "logic": "framework.expiry_date within 90 days and framework.status = active",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F04",
+          "label": "Non-compliant call-off \u2014 direct award above threshold",
+          "logic": "contract.procurement_route = framework_call_off_direct AND contract.value_actual_gbp > lot.call_off_rules.mini_competition_required_above_gbp",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F05",
+          "label": "Call-off from lot GCC not approved to use",
+          "logic": "contract.framework_lot not in framework.gcc_access.lots_accessible",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F06",
+          "label": "Hosted framework \u2014 open reopen obligation overdue",
+          "logic": "framework.role in [host, joint_host] AND framework.framework_type = open AND open_framework_reopen_obligations.first_reopen_due < today AND first_reopen_completed = false",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F07",
+          "label": "Hosted framework \u2014 no successor identified with <6 months to expiry",
+          "logic": "framework.role in [host, joint_host] AND framework.expiry_date within 180 days AND successor_framework_id is null",
+          "severity": "amber"
+        },
+        {
+          "flag_id": "F08",
+          "label": "Hosted framework \u2014 LGR high risk, no action recorded",
+          "logic": "framework.role in [host, joint_host] AND lgr_risk.risk_level = high AND lgr_risk.action_required is null",
+          "severity": "red"
+        },
+        {
+          "flag_id": "F09",
+          "label": "Call-off from PCR2015 framework \u2014 verify framework still valid",
+          "logic": "framework.established_under = PCR2015 AND framework.status = active",
+          "severity": "amber",
+          "notes": "PCR2015 frameworks remain valid for their duration but cannot be extended or re-opened under PA2023. Worth confirming expiry date."
+        },
+        {
+          "flag_id": "F10",
+          "label": "Supplier called off is no longer on framework lot",
+          "logic": "contract.supplier matches a supplier record on the lot where supplier.status != active at contract.start_date",
+          "severity": "red"
+        }
+      ]
+    },
+    "known_framework_providers": {
+      "description": "Reference list of commonly used framework providers for local authorities. Not exhaustive. Used to validate framework_record.provider entries.",
+      "providers": [
+        {
+          "code": "CCS",
+          "name": "Crown Commercial Service",
+          "type": "central_purchasing_body",
+          "url": "https://www.crowncommercial.gov.uk",
+          "notes": "Central government CPB. Wide range of frameworks covering IT, professional services, fleet, facilities, HR. Most accessible to local authorities."
+        },
+        {
+          "code": "ESPO",
+          "name": "Eastern Shires Purchasing Organisation",
+          "type": "central_purchasing_body",
+          "url": "https://www.espo.org",
+          "notes": "Local authority owned CPB. Strong on facilities, cleaning, catering, stationery, energy."
+        },
+        {
+          "code": "YPO",
+          "name": "Yorkshire Purchasing Organisation",
+          "type": "central_purchasing_body",
+          "url": "https://www.ypo.co.uk",
+          "notes": "Local authority owned CPB. Education, facilities, HR, IT."
+        },
+        {
+          "code": "NEUPC",
+          "name": "North Eastern Universities Purchasing Consortium",
+          "type": "consortium",
+          "url": "https://www.neupc.ac.uk",
+          "notes": "Primarily HE sector but some frameworks open to public sector."
+        },
+        {
+          "code": "EMC",
+          "name": "East Midlands Councils",
+          "type": "consortium",
+          "url": "https://www.emcouncils.gov.uk",
+          "notes": "Regional consortium. Legal services, HR, ICT. Used in register sample (GCC-2021-0003)."
+        },
+        {
+          "code": "LP",
+          "name": "Local Partnerships",
+          "type": "contracting_authority",
+          "url": "https://www.localpartnerships.org.uk",
+          "notes": "LGA and HM Treasury joint venture. Frameworks for commercial and project management services."
+        },
+        {
+          "code": "LGA",
+          "name": "Local Government Association",
+          "type": "contracting_authority",
+          "url": "https://www.local.gov.uk",
+          "notes": "Some frameworks and commercial arrangements available to member authorities."
+        },
+        {
+          "code": "NHS-WFA",
+          "name": "NHS Workforce Alliance",
+          "type": "central_purchasing_body",
+          "url": "https://www.nhsworkforcealliance.com",
+          "notes": "Primarily NHS but non-clinical staffing frameworks open to wider public sector. Used in register sample (GCC-2025-0044)."
+        },
+        {
+          "code": "GCC-HOST",
+          "name": "Gloucester City Council (hosted frameworks)",
+          "type": "gcc_hosted",
+          "url": "https://www.gloucester.gov.uk",
+          "notes": "Placeholder for any frameworks established and hosted by GCC. No active hosted frameworks at schema v0.1."
+        }
+      ]
+    }
+  },
+  "lgr_considerations": {
+    "description": "Specific considerations relevant to Local Government Reorganisation in Gloucestershire. TODO - expand as LGR programme develops.",
+    "issues": [
+      {
+        "issue_id": "LGR-01",
+        "label": "Contract novation on transfer",
+        "description": "Where functions transfer to a new unitary authority, contracts held by district councils may need to be novated to the new authority. Novation requires supplier consent. Early engagement recommended.",
+        "action": "Identify all contracts that would transfer, assess novation risk, engage suppliers early"
+      },
+      {
+        "issue_id": "LGR-02",
+        "label": "Harmonisation of procurement frameworks",
+        "description": "District councils may use different frameworks and standing orders. The new authority will need a single procurement policy from vesting day.",
+        "action": "Map current framework usage across districts; identify gaps and conflicts"
+      },
+      {
+        "issue_id": "LGR-03",
+        "label": "Contract register completeness",
+        "description": "Each district must have a complete, accurate contract register before LGR transition. Incomplete registers create legal and financial risk for the new authority.",
+        "action": "Audit contract registers across all districts; standardise on common schema"
+      },
+      {
+        "issue_id": "LGR-04",
+        "label": "In-flight procurements",
+        "description": "Procurements that straddle the LGR vesting date create legal uncertainty about which authority is contracting.",
+        "action": "Review procurement pipeline; consider pausing non-urgent procurements or using county / national frameworks instead"
+      },
+      {
+        "issue_id": "LGR-05",
+        "label": "Supplier notification",
+        "description": "Suppliers with existing contracts will need to be notified of the change of contracting authority.",
+        "action": "Plan supplier communications as part of LGR transition programme"
+      }
+    ],
+    "source": "No single constitutional source \u2014 derived from application of PA2023, ART13, PART3E and CONTRACT-RULES to LGR context."
+  },
+  "schema_todos": [
+    "COMPLIANCE QUESTION (C3): Contracts \u00a3100k-\u00a3250k \u2014 Forward Plan requirement not currently applied in practice. Discuss with MO and s151 Officer. See source_documents.known_conflicts.C3 and risk flag R11.",
+    "DOCUMENT UPDATE (C1 and C2): Contract Rules Rules 18.1 and 18.4 conflict with Article 13. Update Contract Rules at next constitutional review.",
+    "LGR RISK: Director of One Legal (Tewkesbury s.101) \u2014 Tewkesbury itself subject to LGR. This arrangement requires urgent legal and constitutional review before vesting day.",
+    "Populate known_framework_providers with Gloucestershire-specific regional frameworks",
+    "Add GCC-hosted framework instances when established \u2014 currently none",
+    "Add framework_id foreign key to contract_record to replace flat framework_reference object",
+    "Build framework instance document as peer to contracts register",
+    "Assess LGR risk level for all active customer frameworks with call-offs in flight at vesting day",
+    "Add council-specific CPV code taxonomy if preferred categories exist",
+    "Consider integration with finance system purchase order data",
+    "Consider integration with Find a Tender API for automated notice tracking",
+    "Consider social value scoring framework as sub-schema",
+    "Expand LGR considerations as programme develops",
+    "Review Director of One Legal (Tewkesbury s.101) arrangement under LGR \u2014 continuation uncertain",
+    "Add Appendix 1 (PCR2015) rules once populated \u2014 currently blank in source document"
+  ],
+  "source_documents": {
+    "description": "Constitutional and legislative documents from which this schema is derived. Every rule, threshold, role and obligation in this schema is traceable to one or more of these sources. Where documents conflict the higher authority source takes precedence as noted.",
+    "documents": [
+      {
+        "doc_id": "PA2023",
+        "title": "Procurement Act 2023",
+        "reference": "c.54",
+        "commencement": "2025-02-24",
+        "authority_level": "Primary legislation",
+        "notes": "Primary legislation governing public procurement. Superseded PCR 2015 for procurements commenced on or after 24 February 2025."
+      },
+      {
+        "doc_id": "PA2023-REGS",
+        "title": "Procurement Act 2023 (Threshold Amounts) (Amendment) Regulations 2025",
+        "reference": "SI 2025/1200",
+        "in_force": "2026-01-01",
+        "authority_level": "Secondary legislation",
+        "notes": "Updated financial thresholds. First revision since Act came into force."
+      },
+      {
+        "doc_id": "LGA1972-S135",
+        "title": "Local Government Act 1972, s.135",
+        "authority_level": "Primary legislation",
+        "notes": "Requires councils to make standing orders for contracts."
+      },
+      {
+        "doc_id": "NPPS2024",
+        "title": "National Procurement Policy Statement 2024",
+        "authority_level": "Statutory guidance",
+        "notes": "s.13(9) PA2023 requires contracting authorities to have regard to the NPPS."
+      },
+      {
+        "doc_id": "SV2012",
+        "title": "Public Services (Social Value) Act 2012",
+        "reference": "c.3",
+        "authority_level": "Primary legislation",
+        "notes": "Requires consideration of economic, social and environmental wellbeing in service procurement above threshold."
+      },
+      {
+        "doc_id": "ART12",
+        "title": "Article 12 \u2014 Decision Making",
+        "reference": "GCC Constitution",
+        "authority_level": "Constitutional \u2014 Article",
+        "notes": "Sets out key decision thresholds and decision-making principles. Source for KD1-KD4 triggers and key decision definition."
+      },
+      {
+        "doc_id": "ART13",
+        "title": "Article 13 \u2014 Finance, Contracts and Legal Matters",
+        "reference": "GCC Constitution",
+        "authority_level": "Constitutional \u2014 Article",
+        "notes": "Sets out contract execution authority by value. Takes precedence over Contract Rule 18 where they conflict. Source for execution tiers (\u00a325k/\u00a350k thresholds) and Common Seal provisions.",
+        "conflicts": [
+          "Contract Rule 18 states lower signing tier at \u00a330,000 \u2014 Article 13.02 states \u00a325,000. Article 13 takes precedence.",
+          "Contract Rule 18.4 lists Monitoring Officer as electronic signature approver \u2014 Article 13.06 does not. Article 13 takes precedence."
+        ]
+      },
+      {
+        "doc_id": "PART3E",
+        "title": "Part 3E \u2014 Executive Functions (Table 4 and Appendix A)",
+        "reference": "GCC Constitution Part 3",
+        "authority_level": "Constitutional \u2014 Delegation",
+        "notes": "Leader's scheme of delegation of executive functions. Table 4 is the definitive source for tender acceptance authority by tier (officer/Cabinet Member/Cabinet). Appendix A sets Cabinet Member decision limits. 3E.11 establishes the rule that officers cannot take key decisions without Leader authorisation.",
+        "key_rules": [
+          "3E.11 \u2014 Officers cannot take key decisions without specific Leader authorisation",
+          "Table 4 \u2014 Accept tenders not exceeding \u00a3250,000: MD/D (Officer)",
+          "Table 4 \u2014 Accept tenders exceeding \u00a3250,000: Cabinet Member",
+          "Table 4 \u2014 Waiver not exceeding \u00a3250,000: MD/D",
+          "Table 4 \u2014 Waiver exceeding \u00a3250,000: Cabinet Member (or MD urgent)",
+          "Appendix A para 2(3) \u2014 Cabinet Members cannot make decisions exceeding \u00a3250,000 expenditure"
+        ]
+      },
+      {
+        "doc_id": "PROPER-OFFICERS",
+        "title": "Proper Officers",
+        "reference": "GCC Constitution",
+        "authority_level": "Constitutional \u2014 Proper Officer designations",
+        "notes": "Statutory proper officer designations. Source for Head of Paid Service, s151 Officer, and Corporate Director procurement-relevant functions."
+      },
+      {
+        "doc_id": "CONTRACT-RULES",
+        "title": "Contract Rules (PA2023 regime)",
+        "reference": "GCC Constitution Part 4",
+        "effective_date": "2025-02-24",
+        "authority_level": "Constitutional \u2014 Procedural Rules",
+        "notes": "Detailed procurement procedure rules. Applies to all contracts entered into on or after 24 February 2025. Contracts and procurements commenced before this date governed by PCR2015 rules at Appendix 1 (not yet populated in source document).",
+        "key_sections": {
+          "Rule 3": "Calculation of contract values \u2014 inclusive of VAT, whole life including extensions",
+          "Rule 4": "Authorised Officer responsibilities",
+          "Rule 5": "Contract value tiers and procurement routes",
+          "Rule 6": "Waivers \u2014 grounds and approval authority",
+          "Rule 7": "Conflicts of interest",
+          "Rule 8": "Preliminary market engagement",
+          "Rules 9-17": "Tendering and quotation process",
+          "Rules 18-21": "Contract formalities \u2014 execution, records, bonds, embedded leases",
+          "Rules 22-25": "Specific methods \u2014 frameworks, collaborative procurement, consultants",
+          "Rules 26-27": "Contract management \u2014 amendments, extensions, performance"
+        }
+      },
+      {
+        "doc_id": "SUB-DELEGATION",
+        "title": "Scheme of Sub-Delegation",
+        "reference": "GCC Constitution Part 3",
+        "authority_level": "Constitutional \u2014 Sub-delegation",
+        "notes": "Managing Director's sub-delegations to Heads of Service. Source for \u00a3250,000 Head of Service award limit, Head of Finance and Resources waiver approval authority, and service area responsibilities.",
+        "key_provisions": {
+          "all_heads": "Accept tenders and quotations within budget and not exceeding \u00a3250,000",
+          "head_of_finance_only": "Approve waiver to Contract Rules where value does not exceed \u00a3250,000",
+          "head_of_finance_procurement": "Operational control of Procurement function"
+        }
+      }
+    ],
+    "precedence_order": [
+      "1. Primary legislation (PA2023, LGA1972 etc.)",
+      "2. Secondary legislation (SI 2025/1200 etc.)",
+      "3. Statutory guidance (NPPS 2024)",
+      "4. Constitutional Articles (Art 12, Art 13)",
+      "5. Constitutional delegation schemes (Part 3E, Scheme of Sub-Delegation)",
+      "6. Constitutional procedural rules (Contract Rules)"
+    ],
+    "known_conflicts": [
+      {
+        "conflict_id": "C1",
+        "between": [
+          "ART13",
+          "CONTRACT-RULES Rule 18"
+        ],
+        "issue": "Contract execution lower tier threshold: Article 13.02 says \u00a325,000, Contract Rule 18.1 says \u00a330,000",
+        "resolution": "Article 13 takes precedence. Schema reflects \u00a325,000.",
+        "action_required": "Contract Rules to be updated at next review"
+      },
+      {
+        "conflict_id": "C2",
+        "between": [
+          "ART13",
+          "CONTRACT-RULES Rule 18.4"
+        ],
+        "issue": "Electronic signature approvers: Article 13.06 requires s151 consent having obtained Council Solicitor advice. Contract Rule 18.4 also lists Monitoring Officer.",
+        "resolution": "Article 13 takes precedence. Schema reflects Article 13.06.",
+        "action_required": "Contract Rules to be updated at next review"
+      },
+      {
+        "conflict_id": "C3",
+        "between": [
+          "ART12-KD3",
+          "PART3E-3E11",
+          "SUB-DELEGATION"
+        ],
+        "issue": "Contracts \u00a3100k-\u00a3250k are key decisions under Article 12 KD3 requiring Leader authorisation (3E.11), but the Scheme of Sub-Delegation treats \u00a3250k as a simple officer award ceiling without reference to key decision status. In practice GCC may not be applying Forward Plan requirements to contracts in this range.",
+        "resolution": "All three documents apply simultaneously. Forward Plan entry is the mechanism by which Leader authorises officer award of key decisions (3E.11). Schema reflects this. Practice may not currently match constitutional requirement.",
+        "action_required": "Live compliance question \u2014 discuss with Monitoring Officer and s151 Officer. Consider whether constitution needs updating to reflect actual practice, or whether practice needs to change.",
+        "risk_flag": "R11"
+      },
+      {
+        "conflict_id": "C4",
+        "between": [
+          "PART3E Table 4",
+          "PART3E Appendix A para 2(3)"
+        ],
+        "issue": "Table 4 delegates tender acceptance above \u00a3250,000 to Cabinet Member. Appendix A para 2(3) states Cabinet Members cannot make decisions involving expenditure exceeding \u00a3250,000. These appear contradictory.",
+        "resolution": "Resolved by lex specialis: Table 4 specific delegation overrides Appendix A general ceiling. Cabinet Members may accept tenders above \u00a3250,000 (up to \u00a3500,000 KD4 threshold) under the specific Table 4 Commissioning and Contracts delegation. Schema reflects this resolved position.",
+        "action_required": "None \u2014 resolved constitutionally. Consider requesting MO opinion to formally confirm interpretation if this is ever challenged."
+      }
+    ]
+  },
+  "procurement_case": {
+    "description": "Models the full procurement lifecycle from need definition through to contract award. Every contract_record should have a parent procurement_case. Source: CONTRACT-RULES Rules 3-17, ART12, PART3E.",
+    "source": "CONTRACT-RULES Rules 3-17, ART12, PART3E Table 4, SUB-DELEGATION",
+    "schema": {
+      "case_id": {
+        "type": "string",
+        "description": "Unique procurement case identifier.",
+        "example": "GCC-PROC-2026-0042"
+      },
+      "title": {
+        "type": "string",
+        "description": "Short descriptive title of the procurement"
+      },
+      "service_area": {
+        "type": "string",
+        "description": "Council service area initiating the procurement"
+      },
+      "service_id": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Cross-reference to services schema service_id. Enables service to procurement to contract linkage.",
+        "cross_schema_ref": "services-schema"
+      },
+      "authorised_officer": {
+        "type": "string",
+        "description": "Post title of Authorised Officer responsible for the procurement. Source: CONTRACT-RULES Rule 4.1."
+      },
+      "budget_holder": {
+        "type": "string",
+        "description": "Post title of Budget Holder. Must confirm sufficient budget for full contract life before procurement commences. Source: CONTRACT-RULES Rule 4.2.9."
+      },
+      "value_estimated_gbp": {
+        "type": "number",
+        "description": "Estimated whole-life contract value inclusive of VAT including all options and extensions. Source: CONTRACT-RULES Rule 3.4.",
+        "inclusive_of_vat": true,
+        "includes": [
+          "extensions",
+          "options",
+          "premiums",
+          "fees"
+        ]
+      },
+      "contract_type": {
+        "type": "string",
+        "enum": [
+          "goods",
+          "services",
+          "works",
+          "light_touch",
+          "concession",
+          "mixed"
+        ],
+        "description": "Contract type determines applicable threshold. Source: PA2023, SI 2025/1200."
+      },
+      "procurement_tier": {
+        "type": "integer",
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "description": "Computed from decision authority matrix using value_estimated_gbp. Determines route, authority and Forward Plan requirement."
+      },
+      "procurement_route": {
+        "type": "string",
+        "enum": [
+          "budget_holder_discretion",
+          "quotes_below_threshold",
+          "itt_below_threshold",
+          "open_procedure",
+          "competitive_flexible",
+          "direct_award",
+          "framework_calloff",
+          "dynamic_market_calloff"
+        ],
+        "description": "Procurement route. Must be appropriate for tier and value. Source: CONTRACT-RULES Rule 5."
+      },
+      "decision_type": {
+        "type": "string",
+        "enum": [
+          "officer_decision",
+          "key_decision_officer",
+          "cabinet_member_decision",
+          "cabinet_decision"
+        ],
+        "description": "Derived from tier. Determines Forward Plan and approval requirements. Source: ART12, PART3E."
+      },
+      "key_decision_triggers": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "KD1",
+            "KD2",
+            "KD3",
+            "KD4"
+          ]
+        },
+        "description": "Applicable key decision triggers. KD1 and KD2 require qualitative assessment by Authorised Officer. KD3 and KD4 are monetary. Source: ART12 12.03(b)."
+      },
+      "forward_plan_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Forward Plan entry reference. Required before procurement commences where key_decision is true. Absence is a constitutional compliance failure under 3E.11. Source: PART3E Appendix A, ART12, 3E.11."
+      },
+      "tupe_applies": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether TUPE applies. If true and above threshold, must be referred to Cabinet before proceeding. Source: CONTRACT-RULES Rules 4.3, 4.4."
+      },
+      "social_value_assessed": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether social value assessment completed. Required for above-threshold service contracts. Source: CONTRACT-RULES Rule 4.2.8, Public Services (Social Value) Act 2012."
+      },
+      "conflicts_assessment_completed": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether conflicts of interest assessment completed before tender notice publication. Source: CONTRACT-RULES Rule 7.3."
+      },
+      "lots_considered": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether lot structure considered to reduce SME barriers. Must be documented. Source: CONTRACT-RULES Rule 12.1."
+      },
+      "existing_framework_checked": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether existing frameworks checked before proceeding with standalone procurement. Source: CONTRACT-RULES Rule 4.2.7."
+      },
+      "direct_award_justification_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reference to Direct Award Justification Report. Required where route is direct_award. Kept by Director of One Legal. Source: CONTRACT-RULES Rule 5.4."
+      },
+      "waiver_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Reference to approved waiver record. Kept by Director of One Legal with copy to Procurement Adviser. Source: CONTRACT-RULES Rule 6.4."
+      },
+      "notices": {
+        "type": "array",
+        "description": "Notices published during this procurement. Each references the notice_types taxonomy (UK1-UK17).",
+        "items": {
+          "notice_type": "string \u2014 from notice_types taxonomy",
+          "published_date": "date",
+          "find_a_tender_reference": "string",
+          "url": "string"
+        }
+      },
+      "stages_completed": {
+        "type": "array",
+        "description": "Procurement lifecycle stages completed. References procurement_lifecycle_stages S1-S8.",
+        "items": {
+          "stage_id": "string \u2014 S1 through S8",
+          "completed_date": "date",
+          "officer": "string",
+          "notes": "string"
+        }
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "pipeline",
+          "needs_definition",
+          "market_engagement",
+          "tender_open",
+          "evaluation",
+          "standstill",
+          "awarded",
+          "cancelled",
+          "abandoned"
+        ]
+      },
+      "contract_id": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Cross-reference to contract_record.contract_id on award. Null until award completed.",
+        "cross_schema_ref": "contract_record"
+      },
+      "cabinet_member_decision_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Cabinet Member decision record reference. Required for tier 5 (\u00a3250k-\u00a3500k). Source: PART3E Table 4, Appendix A."
+      },
+      "cabinet_decision_reference": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Cabinet minute reference. Required for tier 6 (above \u00a3500k). Source: PART3E Table 4, ART12 KD4."
+      },
+      "compliance_confirmed_items": {
+        "type": "array",
+        "description": "Affirmative audit record \u2014 items confirmed as compliant. Populated in validate_case PASS and WARNINGS responses alongside any flags. Ensures a PASS response contains an explicit audit trail, not just silence. Each item: { check_id, description, evidence_reference, source }",
+        "items": {
+          "check_id": "string \u2014 e.g. FP-OK, CM-OK, CT-OK",
+          "description": "string \u2014 what was confirmed",
+          "evidence_reference": "string \u2014 the reference value that satisfied the check",
+          "source": "string \u2014 constitutional source"
+        },
+        "examples": [
+          {
+            "check_id": "FP-OK",
+            "description": "Forward Plan reference present",
+            "evidence_reference": "FP-2026-042",
+            "source": "PART3E 3E.11, ART12 KD3"
+          },
+          {
+            "check_id": "CM-OK",
+            "description": "Cabinet Member decision reference present",
+            "evidence_reference": "CMD-2026-018",
+            "source": "PART3E Table 4"
+          },
+          {
+            "check_id": "SV-OK",
+            "description": "Social value assessed",
+            "evidence_reference": "true",
+            "source": "SV2012, CONTRACT-RULES Rule 4.2.8"
+          }
+        ]
+      }
+    },
+    "lifecycle_flow": {
+      "description": "Canonical flow from need to contract. Each arrow is a stage gate.",
+      "flow": [
+        "need_identified -> S1_needs_definition",
+        "S1_complete -> S2_market_engagement (optional)",
+        "S2_complete -> S3_tender_publication",
+        "S3_complete -> S4_evaluation",
+        "S4_complete -> S5_award_decision",
+        "S5_complete [above threshold] -> standstill_period (8 working days from UK6)",
+        "standstill_clear -> S6_contract_execution",
+        "S6_complete -> contract_record_created",
+        "contract_record -> S7_contract_management",
+        "S7_ongoing -> S8_expiry_or_termination"
+      ],
+      "key_decision_gate": "Where forward_plan_required is true: Forward Plan entry must exist before S3_tender_publication. Without it the officer lacks authority to proceed under PART3E 3E.11."
+    },
+    "validate_case_output_shape": {
+      "description": "Expected output shape for validate_case tool. PASS responses must include affirmative audit summary \u2014 not just absence of flags.",
+      "fields": {
+        "overall_status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "WARNINGS",
+            "FAIL"
+          ],
+          "logic": "FAIL if any HIGH risk flags triggered. WARNINGS if medium flags or missing assessments only. PASS if no flags and all required checks confirmed."
+        },
+        "triggered_flags": {
+          "type": "array",
+          "description": "Risk flags that fired. Each: flag_id, label, description, source, recommended_action."
+        },
+        "missing_assessments": {
+          "type": "array",
+          "description": "Required assessments not yet completed. Each: check, required_when, source."
+        },
+        "constitutional_conflicts_relevant": {
+          "type": "array",
+          "description": "Known constitutional conflicts relevant to this procurement. See ISS-003.",
+          "items": "conflict_id from source_documents.known_conflicts"
+        },
+        "next_actions": {
+          "type": "array",
+          "description": "Recommended actions in priority order."
+        },
+        "verified_checks": {
+          "type": "array",
+          "description": "Affirmative audit record \u2014 checks that passed. REQUIRED on all responses including PASS. An empty verified_checks on a PASS response is a schema violation \u2014 silence is not a valid audit output. Shape defined in validate_case_verified_checks_spec.verified_checks_output_shape.",
+          "required_on": [
+            "PASS",
+            "WARNINGS",
+            "FAIL"
+          ]
+        }
+      }
+    },
+    "validate_case_conflict_logic": {
+      "description": "Logic for determining which constitutional conflicts to surface in validate_case output.",
+      "rules": [
+        {
+          "conflict_id": "C3",
+          "surface_when": "value_estimated_gbp > 100000 AND value_estimated_gbp <= 250000",
+          "reason": "C3 is the Forward Plan / officer authority compliance question that applies to all tier 4 contracts. Must be surfaced in validate output regardless of whether R11 fires.",
+          "source": "source_documents.known_conflicts.C3"
+        },
+        {
+          "conflict_id": "C4",
+          "surface_when": "value_estimated_gbp > 250000 AND value_estimated_gbp <= 500000",
+          "reason": "C4 is the lex specialis resolution of Cabinet Member tender acceptance authority. Relevant to all tier 5 contracts.",
+          "source": "source_documents.known_conflicts.C4"
+        },
+        {
+          "conflict_id": "C1",
+          "surface_when": "execution required (value > 25000)",
+          "reason": "C1 is the execution threshold conflict between Article 13 and Contract Rule 18. Relevant when contract execution is being determined.",
+          "source": "source_documents.known_conflicts.C1"
+        }
+      ]
+    },
+    "validate_case_verified_checks_spec": {
+      "description": "Declarative specification of all compliance checks evaluated by validate_case. Used to generate the verified_checks array in PASS and WARNINGS responses. Every check must be evaluated and emitted \u2014 either as a triggered flag (triggered_flags) or as a confirmed item (verified_checks). Silence is not a valid audit output.",
+      "checks": [
+        {
+          "check_id": "FP",
+          "label": "Forward Plan reference",
+          "required_when": "value_estimated_gbp > 100000",
+          "input_field": "forward_plan_reference",
+          "passes_if": "forward_plan_reference is not null and not empty",
+          "fail_flag": "R11",
+          "source": "PART3E 3E.11, ART12 KD3",
+          "constitutional_conflict_if_100k_to_250k": "C3"
+        },
+        {
+          "check_id": "CMD",
+          "label": "Cabinet Member decision reference",
+          "required_when": "value_estimated_gbp > 250000 AND value_estimated_gbp <= 500000",
+          "input_field": "cabinet_member_decision_reference",
+          "passes_if": "cabinet_member_decision_reference is not null and not empty",
+          "fail_flag": "R12",
+          "source": "PART3E Table 4, ART12 KD4"
+        },
+        {
+          "check_id": "CAB",
+          "label": "Cabinet decision reference",
+          "required_when": "value_estimated_gbp > 500000",
+          "input_field": "cabinet_decision_reference",
+          "passes_if": "cabinet_decision_reference is not null and not empty",
+          "fail_flag": "R13",
+          "source": "PART3E Table 4, ART12 KD4"
+        },
+        {
+          "check_id": "CT",
+          "label": "Conflicts assessment",
+          "required_when": "always (before tender notice publication)",
+          "input_field": "conflicts_assessment_completed",
+          "passes_if": "conflicts_assessment_completed === true",
+          "fail_flag": null,
+          "source": "CONTRACT-RULES Rule 4.2.6"
+        },
+        {
+          "check_id": "SV",
+          "label": "Social value assessed",
+          "required_when": "above threshold AND contract_type in [services, light_touch, mixed]",
+          "input_field": "social_value_assessed",
+          "passes_if": "social_value_assessed === true",
+          "fail_flag": null,
+          "source": "SV2012, CONTRACT-RULES Rule 4.2.8, NPPS2024"
+        },
+        {
+          "check_id": "TUPE",
+          "label": "TUPE assessed",
+          "required_when": "above threshold AND contract_type in [services, light_touch, mixed]",
+          "input_field": "tupe_assessed",
+          "passes_if": "tupe_assessed === true",
+          "fail_flag": null,
+          "source": "CONTRACT-RULES Rule 4.2.9"
+        },
+        {
+          "check_id": "LOTS",
+          "label": "Lots considered",
+          "required_when": "above threshold",
+          "input_field": "lots_considered",
+          "passes_if": "lots_considered === true",
+          "fail_flag": null,
+          "source": "PA2023 s.53, CONTRACT-RULES Rule 4.2.7"
+        },
+        {
+          "check_id": "FWK",
+          "label": "Existing framework checked",
+          "required_when": "above threshold",
+          "input_field": "existing_framework_checked",
+          "passes_if": "existing_framework_checked === true",
+          "fail_flag": null,
+          "source": "CONTRACT-RULES Rule 4.2.3"
+        },
+        {
+          "check_id": "DA",
+          "label": "Direct award justification",
+          "required_when": "procurement_route === direct_award",
+          "input_field": "direct_award_justification_reference",
+          "passes_if": "direct_award_justification_reference is not null and not empty",
+          "fail_flag": "R05",
+          "source": "PA2023 s.41-43, CONTRACT-RULES Rule 18"
+        },
+        {
+          "check_id": "WVR",
+          "label": "Waiver reference",
+          "required_when": "procurement_route === waiver",
+          "input_field": "waiver_reference",
+          "passes_if": "waiver_reference is not null and not empty",
+          "fail_flag": "R06",
+          "source": "CONTRACT-RULES Rule 4.2.12"
+        }
+      ],
+      "verified_checks_output_shape": {
+        "description": "Shape of each item in the verified_checks array. Emitted for every check that passed \u2014 required on PASS and WARNINGS responses.",
+        "fields": {
+          "check_id": "string \u2014 e.g. FP, CMD, CAB, CT, SV, TUPE, LOTS, FWK, DA, WVR",
+          "label": "string \u2014 human-readable label",
+          "status": "string \u2014 always 'verified'",
+          "evidence": "string \u2014 the value from the input field that satisfied the check, or 'true' for boolean checks",
+          "source": "string \u2014 constitutional source"
+        },
+        "example_full_pass_600k_services": [
+          {
+            "check_id": "FP",
+            "label": "Forward Plan reference",
+            "status": "verified",
+            "evidence": "FP-2026-022",
+            "source": "PART3E 3E.11, ART12 KD3"
+          },
+          {
+            "check_id": "CAB",
+            "label": "Cabinet decision reference",
+            "status": "verified",
+            "evidence": "CAB-2026-002",
+            "source": "PART3E Table 4, ART12 KD4"
+          },
+          {
+            "check_id": "CT",
+            "label": "Conflicts assessment",
+            "status": "verified",
+            "evidence": "true",
+            "source": "CONTRACT-RULES Rule 4.2.6"
+          },
+          {
+            "check_id": "SV",
+            "label": "Social value assessed",
+            "status": "verified",
+            "evidence": "true",
+            "source": "SV2012, CONTRACT-RULES Rule 4.2.8"
+          },
+          {
+            "check_id": "TUPE",
+            "label": "TUPE assessed",
+            "status": "verified",
+            "evidence": "true",
+            "source": "CONTRACT-RULES Rule 4.2.9"
+          },
+          {
+            "check_id": "LOTS",
+            "label": "Lots considered",
+            "status": "verified",
+            "evidence": "true",
+            "source": "PA2023 s.53"
+          },
+          {
+            "check_id": "FWK",
+            "label": "Existing framework checked",
+            "status": "verified",
+            "evidence": "true",
+            "source": "CONTRACT-RULES Rule 4.2.3"
+          }
+        ]
+      }
+    }
+  },
+  "schema_incomplete_flags": {
+    "description": "Fields marked as incomplete that affect decisioning or automation. These must be resolved before the schema is used operationally. Items here are removed from rule-bearing nodes to avoid poisoning automation.",
+    "flags": [
+      {
+        "flag_id": "I01",
+        "location": "thresholds.sub_central_authorities",
+        "issue": "De minimis threshold for below-threshold standing orders not confirmed from GCC financial regulations",
+        "impact": "Tier 1 lower bound is assumed 0 \u2014 if a de minimis exists, tier 1 ceiling may differ",
+        "resolution": "Obtain GCC Financial Regulations and confirm de minimis threshold"
+      },
+      {
+        "flag_id": "I02",
+        "location": "contract_register.platform",
+        "issue": "Publication platform for contract register not confirmed",
+        "impact": "Transparency compliance cannot be fully verified",
+        "resolution": "Confirm whether GCC publishes on council website, Contracts Finder, or both"
+      },
+      {
+        "flag_id": "I03",
+        "location": "approvals_and_governance.key_officers.procurement_adviser",
+        "issue": "Current post-holder for Procurement Adviser not named",
+        "impact": "Informational only \u2014 does not affect decisioning",
+        "resolution": "Confirm current Procurement Adviser post-holder"
+      },
+      {
+        "flag_id": "I04",
+        "location": "source_documents \u2014 CONTRACT-RULES Appendix 1",
+        "issue": "PCR2015 rules (Appendix 1 of Contract Rules) not yet populated in source document",
+        "impact": "Pre-24 February 2025 contracts not covered by schema",
+        "resolution": "Obtain populated Appendix 1 when available"
+      }
+    ],
+    "schema_status_note": "schema_status remains 'draft' until all I-flags resolved and C3 compliance question addressed"
+  },
+  "derived_fields": {
+    "description": "Fields that can be computed from other schema values. Named here to stabilise the contract with future tooling even before computation is implemented. All derivations are rule-based and traceable to constitutional or legislative sources.",
+    "fields": {
+      "is_above_threshold": {
+        "derived_from": [
+          "value_estimated_gbp",
+          "contract_type"
+        ],
+        "logic": "value_estimated_gbp >= thresholds[contract_type]",
+        "thresholds_ref": "thresholds.sub_central_authorities",
+        "source": "PA2023, SI 2025/1200"
+      },
+      "procurement_tier": {
+        "derived_from": [
+          "value_estimated_gbp"
+        ],
+        "logic": "first tier in decision_authority_matrix where min_value_gbp <= value_estimated_gbp <= (max_value_gbp or infinity)",
+        "source": "approvals_and_governance.decision_making.procurement_decision_authority_matrix"
+      },
+      "requires_forward_plan": {
+        "derived_from": [
+          "procurement_tier",
+          "key_decision_triggers"
+        ],
+        "logic": "procurement_tier >= 4 OR any KD1/KD2 trigger assessed as true",
+        "source": "ART12 12.03(b), PART3E 3E.11"
+      },
+      "required_award_authority": {
+        "derived_from": [
+          "procurement_tier"
+        ],
+        "logic": "matrix[procurement_tier].award_authority",
+        "values": [
+          "budget_holder",
+          "officer",
+          "cabinet_member",
+          "full_cabinet"
+        ],
+        "source": "PART3E Table 4, SUB-DELEGATION"
+      },
+      "required_notices": {
+        "derived_from": [
+          "procurement_tier",
+          "procurement_route",
+          "is_above_threshold",
+          "value_estimated_gbp"
+        ],
+        "logic": {
+          "below_30000_non_framework": [],
+          "30000_to_threshold": [
+            "BT-TENDER",
+            "BT-AWARD"
+          ],
+          "above_threshold_competitive": [
+            "UK4_tender_notice",
+            "UK6_contract_award_notice",
+            "UK7_contract_details_notice"
+          ],
+          "above_threshold_direct_award": [
+            "UK5_transparency_notice",
+            "UK7_contract_details_notice"
+          ],
+          "above_5m_contract": [
+            "UK9_performance_notice_annual"
+          ],
+          "pipeline_above_100m_annual_spend": [
+            "UK1_pipeline_notice"
+          ]
+        },
+        "source": "PA2023, CONTRACT-RULES Rules 9, 16, 27",
+        "code_format_note": "Above-threshold notices use UK-prefix codes (UK1-UK17) per PA2023. Below-threshold notices use BT-prefix codes per GCC Contract Rules and Local Government Transparency Code 2015. These are distinct code spaces."
+      },
+      "requires_one_legal_contract": {
+        "derived_from": [
+          "value_estimated_gbp"
+        ],
+        "logic": "value_estimated_gbp > 30000",
+        "source": "CONTRACT-RULES Rule 4.2.11"
+      },
+      "requires_deed": {
+        "derived_from": [
+          "value_estimated_gbp"
+        ],
+        "logic": "value_estimated_gbp > 50000 (subject to Council Solicitor discretion to sign instead)",
+        "source": "ART13 13.02"
+      },
+      "requires_bond_or_pcg": {
+        "derived_from": [
+          "value_estimated_gbp",
+          "contract_type"
+        ],
+        "logic": "contract_type == 'works' AND value_estimated_gbp > 1000000 (unless s151 Officer determines inappropriate)",
+        "source": "CONTRACT-RULES Rule 20.1"
+      },
+      "requires_financial_check": {
+        "derived_from": [
+          "value_estimated_gbp"
+        ],
+        "logic": "value_estimated_gbp > 10000",
+        "source": "CONTRACT-RULES Rule 15.5"
+      },
+      "requires_kpi_reporting": {
+        "derived_from": [
+          "value_actual_gbp"
+        ],
+        "logic": "value_actual_gbp > 5000000",
+        "source": "PA2023 s.70, CONTRACT-RULES Rule 27.2"
+      }
+    }
+  }
+}
