@@ -13,7 +13,8 @@
 const path = require('path');
 const fs   = require('fs');
 
-const SCHEMA_PATH = path.resolve(__dirname, '../../schemas/procurement-contracts-schema-v0.9.2.json');
+const SCHEMA_FILE = process.env.GCC_PROCUREMENT_SCHEMA_FILE || 'procurement-contracts-schema-v0.9.2.json';
+const SCHEMA_PATH = path.resolve(__dirname, `../../schemas/${SCHEMA_FILE}`);
 
 let schema;
 try {
@@ -125,6 +126,7 @@ function findNotice(code) {
 
 module.exports = {
     schema,
+    SCHEMA_FILE,
     MATRIX,
     WAIVER_MATRIX,
     THRESHOLDS,

@@ -5,12 +5,12 @@
  * and SERVER_INFO for use by the mcpProcurement Azure Function.
  *
  * All five tools are read-only constitutional rules engines derived from
- * procurement-contracts-schema-v0.9.1.json. No external calls are made.
+ * procurement-contracts-schema-v0.9.2.json. No external calls are made.
  */
 
 'use strict';
 
-const { SCHEMA_VERSION } = require('./schema-loader');
+const { SCHEMA_VERSION, SCHEMA_FILE } = require('./schema-loader');
 
 const determineRoute = require('./tools/determine-route');
 const checkSupplier  = require('./tools/check-supplier');
@@ -53,7 +53,7 @@ Given a whole-life contract value (inc. VAT) and type, returns:
 - Lex specialis delegation note (tier 5)
 
 All rules sourced from GCC Constitution, Contract Rules, and PA2023.
-Source: procurement-contracts-schema-v0.9.1.json`,
+Source: procurement-contracts-schema-v0.9.2.json`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',
@@ -98,7 +98,7 @@ Provides a schema-derived checklist of required supplier checks including:
 - Beneficial ownership check (Subsidy Control Act 2022)
 
 Note: Companies House live lookup is not yet implemented.
-All rules sourced from procurement-contracts-schema-v0.9.1.json.`,
+All rules sourced from procurement-contracts-schema-v0.9.2.json.`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',
@@ -132,7 +132,7 @@ Evaluates the case against risk flags from the schema and checks for missing req
 - Missing required assessments (social value, TUPE, conflicts, lots, framework check)
 - Recommended next actions in priority order
 
-All rules sourced from procurement-contracts-schema-v0.9.1.json.`,
+All rules sourced from procurement-contracts-schema-v0.9.2.json.`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',
@@ -211,7 +211,7 @@ Derives the ordered list of UK procurement notices required under PA2023 based o
 
 Returns each notice with: code, name, timing, mandatory status, publication platform, and legal basis.
 
-Source: derived_fields.fields.required_notices.logic — procurement-contracts-schema-v0.9.1.json`,
+Source: derived_fields.fields.required_notices.logic — procurement-contracts-schema-v0.9.2.json`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',
@@ -258,7 +258,7 @@ Supports queries about:
 - Risk flags R01–R13
 
 Every explanation includes source doc_id citations.
-Source: procurement-contracts-schema-v0.9.1.json`,
+Source: procurement-contracts-schema-v0.9.2.json`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',
@@ -288,9 +288,9 @@ const TOOL_HANDLERS = {
 const SERVER_INFO = {
     name: 'gcc-procurement-mcp',
     version: '1.0.0',
-    description: 'Gloucester City Council Procurement Rules Engine — constitutional authority matrix, risk flags, and notice obligations derived from procurement-contracts-schema-v0.9.1.json',
+    description: 'Gloucester City Council Procurement Rules Engine — constitutional authority matrix, risk flags, and notice obligations derived from procurement-contracts-schema-v0.9.2.json',
     schemaVersion: SCHEMA_VERSION,
-    schemaFile: 'procurement-contracts-schema-v0.9.1.json',
+    schemaFile: SCHEMA_FILE,
     readOnly: true,
 };
 
