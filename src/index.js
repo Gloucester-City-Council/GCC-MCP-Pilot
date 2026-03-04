@@ -8,5 +8,6 @@ require('./functions/mcp');
 require('./functions/test-soap');
 require('./functions/mcpSchema');
 require('./functions/healthzSchema');
+require('./functions/mcpProcurement');
 
-console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema');
+console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement');
