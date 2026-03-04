@@ -81,8 +81,105 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.cabinet_recommendation_text).toContain('the recommended new structure for the Finance Team in Appendix 2 be noted');
         expect(result.sections.recommendation_extraction.confidence).toBe('high');
         expect(result.sections.recommendation_extraction.heading_detected).toBe('2.0 Recommendations');
-        expect(result.sections.recommendation_extraction.decision_trigger).toBe('Cabinet is asked to RESOLVE that:');
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/Cabinet\s+is\s+asked\s+to\s+RESOLVE\s+that/i);
         expect(result.sections.recommendation_extraction.evidence_pages).toContain(1);
+    });
+
+    it('matches trigger text split across lines and non-breaking spaces', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Resource Requirements for GCC Finance Team',
+                '2.0   Recommendations',
+                'Cabinet\u00A0is asked',
+                'to   RESOLVE',
+                'that:',
+                '(1) the review findings be noted;',
+                '(2) the recommended structure be noted.',
+                '3.0 Background and Key Issues'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=5', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.cabinet_recommendation_text).toContain('the review findings be noted');
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/cabinet is asked to resolve that/i);
+    });
+
+
+    it('matches Council is asked to RESOLVE that trigger across line breaks', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Council Report',
+                'Recommendations',
+                'Council is asked to',
+                'RESOLVE that:',
+                '1. the policy be approved.',
+                '2. the delivery plan be noted.',
+                'Background',
+                'Context'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=7', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/council\s+is\s+asked\s+to\s+resolve\s+that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
+
+    it('matches Committee is asked to resolve trigger with messy spacing', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Committee Report',
+                '2.0 Recommendations',
+                'Committee\u00A0is asked   to',
+                'resolve   that:',
+                '(1) the draft action plan be endorsed;',
+                '(2) officers proceed with procurement.',
+                '3.0 Financial Implications',
+                'Contained within existing budget.'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=8', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/committee\s+is\s+asked\s+to\s+resolve\s+that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
+    it('supports RESOLVED that trigger under Recommendations heading', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Cabinet Report',
+                'Recommendations',
+                'RESOLVED',
+                'that:',
+                '1. the strategy be approved.',
+                '2. officers report back in six months.',
+                'Background',
+                'Context'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=6', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/resolved that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
     });
 
     it('returns low confidence and null cabinet recommendation text when no formal wording exists', async () => {
