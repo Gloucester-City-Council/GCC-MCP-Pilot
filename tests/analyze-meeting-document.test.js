@@ -9,7 +9,7 @@ jest.mock('../lib/council-config', () => ({
 
 const axios = require('axios');
 const pdfParse = require('pdf-parse');
-const { analyzeMeetingDocument } = require('../lib/tools/analyze-meeting-document');
+const { analyzeMeetingDocument, _internal } = require('../lib/tools/analyze-meeting-document');
 
 describe('analyzeMeetingDocument recommendation extraction', () => {
     it('extracts formal cabinet recommendation text and narrative lines from Recommendations section', async () => {
@@ -250,5 +250,20 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.recommendation_extraction.confidence).toBe('low');
         expect(result.sections.recommendation_extraction.message).toMatch(/No formal Cabinet\/Council recommendation wording detected/i);
         expect(result.warnings).toContain('No formal Cabinet/Council recommendation wording detected');
+    });
+});
+
+
+describe('extractCabinetRecommendationData input hardening', () => {
+    it('handles non-string extracted text inputs without throwing', () => {
+        const result = _internal.extractCabinetRecommendationData(Buffer.from([
+            0x52, 0x65, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x0a,
+            0x52, 0x45, 0x43, 0x4f, 0x4d, 0x4d, 0x45, 0x4e, 0x44, 0x45, 0x44, 0x20, 0x74, 0x68, 0x61, 0x74, 0x3a, 0x0a,
+            0x31, 0x2e, 0x20, 0x54, 0x68, 0x61, 0x74, 0x20, 0x43, 0x6f, 0x75, 0x6e, 0x63, 0x69, 0x6c, 0x20, 0x61, 0x70, 0x70, 0x72, 0x6f, 0x76, 0x65, 0x73
+        ]), 10);
+
+        expect(result.recommendations).toHaveLength(1);
+        expect(result.recommendations[0]).toMatch(/That Council approves/i);
+        expect(result.extraction.confidence).toBe('high');
     });
 });
