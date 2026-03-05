@@ -85,6 +85,32 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.recommendation_extraction.evidence_pages).toContain(1);
     });
 
+
+    it('extracts recommendations when blank lines separate trigger and list items', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Resource Requirements for GCC Finance Team',
+                '2.0 Recommendations',
+                '',
+                '2.1 Cabinet is asked to RESOLVE that:',
+                '',
+                '(1) the review findings be noted, and officers be supported to address the recommendations therein;',
+                '',
+                '(2) the recommended new structure for the Finance Team in Appendix 2 be noted.',
+                '3.0 Background and Key Issues'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=4', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendations[0]).toContain('the review findings be noted');
+        expect(result.sections.recommendations[1]).toContain('the recommended new structure for the Finance Team in Appendix 2 be noted');
+    });
+
     it('matches trigger text split across lines and non-breaking spaces', async () => {
         axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
         pdfParse.mockResolvedValue({
