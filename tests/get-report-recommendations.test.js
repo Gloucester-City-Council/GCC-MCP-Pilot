@@ -1,14 +1,35 @@
 'use strict';
 
 jest.mock('../lib/tools/analyze-meeting-document', () => ({
-    analyzeMeetingDocument: jest.fn()
+    analyzeMeetingDocument: jest.fn(),
+    _internal: {
+        extractCabinetRecommendationData: jest.fn()
+    }
 }));
 
-const { analyzeMeetingDocument } = require('../lib/tools/analyze-meeting-document');
+const { analyzeMeetingDocument, _internal } = require('../lib/tools/analyze-meeting-document');
 const { getReportRecommendations } = require('../lib/tools/get-report-recommendations');
 
 describe('getReportRecommendations', () => {
-    it('returns only recommendation-focused payload when analysis succeeds', async () => {
+    it('extracts recommendations from report_text input', async () => {
+        _internal.extractCabinetRecommendationData.mockReturnValueOnce({
+            recommendations: ['the review findings be noted'],
+            cabinet_recommendation_text: '(1) the review findings be noted',
+            extraction: { confidence: 'high', heading_detected: '2.0 Recommendations' }
+        });
+
+        const result = await getReportRecommendations({
+            report_text: '2.0 Recommendations\n(1) the review findings be noted',
+            max_items: 10
+        });
+
+        expect(_internal.extractCabinetRecommendationData).toHaveBeenCalledWith('2.0 Recommendations\n(1) the review findings be noted', 10);
+        expect(result.success).toBe(true);
+        expect(result.recommendations).toEqual(['the review findings be noted']);
+        expect(result.metadata.extraction_confidence).toBe('high');
+    });
+
+    it('uses URL analysis path when url is provided', async () => {
         analyzeMeetingDocument.mockResolvedValueOnce({
             success: true,
             title: 'Finance Report',
@@ -29,7 +50,7 @@ describe('getReportRecommendations', () => {
             is_official_record: true
         });
 
-        const result = await getReportRecommendations('https://example.com/report.pdf', 10);
+        const result = await getReportRecommendations({ url: 'https://example.com/report.pdf', max_items: 10 });
 
         expect(analyzeMeetingDocument).toHaveBeenCalledWith('https://example.com/report.pdf', ['recommendations'], 10);
         expect(result.success).toBe(true);
@@ -38,17 +59,10 @@ describe('getReportRecommendations', () => {
         expect(result.metadata.extraction_confidence).toBe('high');
     });
 
-    it('passes through error payload from analyzeMeetingDocument', async () => {
-        analyzeMeetingDocument.mockResolvedValueOnce({
-            success: false,
-            error: 'Document not found'
-        });
+    it('returns invalid input when neither report_text nor url is provided', async () => {
+        const result = await getReportRecommendations({ max_items: 10 });
 
-        const result = await getReportRecommendations('https://example.com/missing.pdf');
-
-        expect(result).toEqual({
-            success: false,
-            error: 'Document not found'
-        });
+        expect(result.success).toBe(false);
+        expect(result.error_type).toBe('invalid_input');
     });
 });

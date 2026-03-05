@@ -147,9 +147,11 @@ describe('handleMcpRequest - tools/list', () => {
         expect(tool.inputSchema.required).toContain('url');
     });
 
-    it('get_report_recommendations requires url', () => {
+    it('get_report_recommendations accepts report_text or url', () => {
         const tool = TOOLS.find(t => t.name === 'get_report_recommendations');
-        expect(tool.inputSchema.required).toContain('url');
+        expect(tool.inputSchema.required).toEqual([]);
+        expect(tool.inputSchema.properties.report_text).toBeDefined();
+        expect(tool.inputSchema.properties.url).toBeDefined();
     });
 
     it('get_meetings requires council_name and committee_id', () => {
@@ -249,7 +251,11 @@ describe('handleMcpRequest - tools/call', () => {
 
         const payload = JSON.parse(result.result.content[0].text);
         expect(payload.data.recommendations).toEqual(['a']);
-        expect(getReportRecommendations).toHaveBeenCalledWith('https://example.com/report.pdf', 20);
+        expect(getReportRecommendations).toHaveBeenCalledWith({
+            url: 'https://example.com/report.pdf',
+            report_text: undefined,
+            max_items: 20
+        });
     });
 
     it('preserves request id in response', async () => {
