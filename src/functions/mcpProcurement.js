@@ -49,6 +49,7 @@ async function handleMcpRequest(request, context) {
     }
 
     const { jsonrpc, method, params, id } = request;
+    const requestId = Object.prototype.hasOwnProperty.call(request, 'id') && id !== undefined ? id : null;
 
     if (jsonrpc !== '2.0') {
         return {
@@ -57,7 +58,7 @@ async function handleMcpRequest(request, context) {
                 code: -32600,
                 message: 'Invalid Request: jsonrpc must be "2.0"',
             },
-            id: id || null,
+            id: requestId,
         };
     }
 

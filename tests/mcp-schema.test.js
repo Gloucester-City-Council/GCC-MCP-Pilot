@@ -46,6 +46,24 @@ describe('mcpSchema request handling', () => {
         expect(body.error.code).toBe(-32600);
     });
 
+
+    it('preserves id=0 for invalid JSON-RPC version', async () => {
+        const httpMock = jest.fn();
+        mockSchemaModules(httpMock);
+
+        require('../src/functions/mcpSchema');
+
+        const [, registration] = httpMock.mock.calls[0];
+        const response = await registration.handler(
+            { json: jest.fn().mockResolvedValue({ jsonrpc: '1.0', method: 'initialize', id: 0 }) },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        expect(body.error.code).toBe(-32600);
+        expect(body.id).toBe(0);
+    });
+
     it('awaits async schema tool handlers', async () => {
         const httpMock = jest.fn();
         mockSchemaModules(httpMock, jest.fn().mockResolvedValue({ asyncOk: true }));
