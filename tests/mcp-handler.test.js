@@ -44,6 +44,9 @@ jest.mock('../lib/tools/get-attachment', () => ({
 jest.mock('../lib/tools/analyze-meeting-document', () => ({
     analyzeMeetingDocument: jest.fn().mockResolvedValue({ success: true })
 }));
+jest.mock('../lib/tools/get-report-recommendations', () => ({
+    getReportRecommendations: jest.fn().mockResolvedValue({ success: true, recommendations: [] })
+}));
 
 const { handleMcpRequest, TOOLS } = require('../lib/mcp-handler');
 
@@ -127,7 +130,7 @@ describe('handleMcpRequest - tools/list', () => {
             mockContext
         );
         expect(Array.isArray(result.result.tools)).toBe(true);
-        expect(result.result.tools.length).toBe(8);
+        expect(result.result.tools.length).toBe(9);
     });
 
     it('each tool has name, description, and inputSchema', () => {
@@ -141,6 +144,11 @@ describe('handleMcpRequest - tools/list', () => {
 
     it('analyze_meeting_document requires url', () => {
         const tool = TOOLS.find(t => t.name === 'analyze_meeting_document');
+        expect(tool.inputSchema.required).toContain('url');
+    });
+
+    it('get_report_recommendations requires url', () => {
+        const tool = TOOLS.find(t => t.name === 'get_report_recommendations');
         expect(tool.inputSchema.required).toContain('url');
     });
 
@@ -222,6 +230,26 @@ describe('handleMcpRequest - tools/call', () => {
         const payload = JSON.parse(result.result.content[0].text);
         expect(payload.error).not.toContain('<?xml');
         expect(payload.error).toContain('SOAP request failed');
+    });
+
+
+    it('routes get_report_recommendations tool calls', async () => {
+        const { getReportRecommendations } = require('../lib/tools/get-report-recommendations');
+        getReportRecommendations.mockResolvedValueOnce({ success: true, recommendations: ['a'] });
+
+        const result = await handleMcpRequest(
+            {
+                jsonrpc: '2.0',
+                method: 'tools/call',
+                params: { name: 'get_report_recommendations', arguments: { url: 'https://example.com/report.pdf' } },
+                id: 41
+            },
+            mockContext
+        );
+
+        const payload = JSON.parse(result.result.content[0].text);
+        expect(payload.data.recommendations).toEqual(['a']);
+        expect(getReportRecommendations).toHaveBeenCalledWith('https://example.com/report.pdf', 20);
     });
 
     it('preserves request id in response', async () => {
