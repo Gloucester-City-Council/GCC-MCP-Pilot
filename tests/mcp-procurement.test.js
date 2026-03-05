@@ -82,6 +82,35 @@ describe('mcpProcurement request handling', () => {
         expect(body.error.code).toBe(-32600);
     });
 
+
+    it('preserves id=0 for invalid JSON-RPC payload', async () => {
+        const httpMock = jest.fn();
+
+        jest.doMock('@azure/functions', () => ({
+            app: { http: httpMock }
+        }));
+
+        jest.doMock('../src/gcc-procurement/index', () => ({
+            TOOLS: [],
+            TOOL_HANDLERS: {},
+            SERVER_INFO: { name: 'gcc-procurement-mcp', version: '1.0.0', schemaVersion: 'test' }
+        }));
+
+        require('../src/functions/mcpProcurement');
+
+        const [, registration] = httpMock.mock.calls[0];
+        const response = await registration.handler(
+            {
+                json: jest.fn().mockResolvedValue({ jsonrpc: '1.0', method: 'initialize', id: 0 })
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        expect(body.error.code).toBe(-32600);
+        expect(body.id).toBe(0);
+    });
+
     it('awaits async procurement tool handlers', async () => {
         const httpMock = jest.fn();
 
