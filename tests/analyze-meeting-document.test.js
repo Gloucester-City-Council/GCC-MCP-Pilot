@@ -182,6 +182,51 @@ describe('analyzeMeetingDocument recommendation extraction', () => {
         expect(result.sections.recommendation_extraction.confidence).toBe('high');
     });
 
+    it('supports The Committee is recommended to trigger', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Committee Report',
+                '2.0 Recommendations',
+                'The Committee is recommended to:',
+                'a) approve the draft scheme;',
+                'b) delegate final wording to officers.',
+                '3.0 Legal Implications'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=9', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/the\s+committee\s+is\s+recommended\s+to/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
+
+    it('supports RECOMMENDED that trigger with control characters and tight bullets', async () => {
+        axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
+        pdfParse.mockResolvedValue({
+            numpages: 1,
+            text: [
+                'Council Report',
+                'Recommendations',
+                'RECOMMENDED\u0007 that:',
+                '(1)the budget be approved;',
+                '(2)the implementation plan be noted.',
+                'Background',
+                'Context'
+            ].join('\n')
+        });
+
+        const result = await analyzeMeetingDocument('https://democracy.gloucester.gov.uk/mgConvert2PDF.aspx?ID=10', ['recommendations'], 20);
+
+        expect(result.success).toBe(true);
+        expect(result.sections.recommendations).toHaveLength(2);
+        expect(result.sections.recommendation_extraction.decision_trigger).toMatch(/recommended\s+that/i);
+        expect(result.sections.recommendation_extraction.confidence).toBe('high');
+    });
+
     it('returns low confidence and null cabinet recommendation text when no formal wording exists', async () => {
         axios.get.mockResolvedValue({ data: Buffer.from('fake pdf') });
         pdfParse.mockResolvedValue({
