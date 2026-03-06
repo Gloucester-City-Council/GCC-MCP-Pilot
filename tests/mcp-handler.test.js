@@ -47,9 +47,6 @@ jest.mock('../lib/tools/analyze-meeting-document', () => ({
 jest.mock('../lib/tools/get-report-recommendations', () => ({
     getReportRecommendations: jest.fn().mockResolvedValue({ success: true, recommendations: [] })
 }));
-jest.mock('../lib/tools/get-meeting-briefing', () => ({
-    getMeetingBriefing: jest.fn().mockResolvedValue({ agenda_item_briefings: [] })
-}));
 
 const { handleMcpRequest, TOOLS } = require('../lib/mcp-handler');
 
@@ -142,10 +139,7 @@ describe('handleMcpRequest - tools/list', () => {
             mockContext
         );
         expect(Array.isArray(result.result.tools)).toBe(true);
-        expect(result.result.tools.length).toBe(10);
-
-        const toolNames = result.result.tools.map(tool => tool.name);
-        expect(toolNames).toContain('get_meeting_briefing');
+        expect(result.result.tools.length).toBe(9);
     });
 
     it('each tool has name, description, and inputSchema', () => {
