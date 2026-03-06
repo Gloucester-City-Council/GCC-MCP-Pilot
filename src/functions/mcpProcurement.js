@@ -76,7 +76,7 @@ async function handleMcpRequest(request, context) {
                         ...getDateContext(),
                         instructions: `🏛️ GLOUCESTER CITY COUNCIL PROCUREMENT RULES ENGINE MCP
 
-This MCP is a read-only constitutional rules engine for GCC procurement governance.
+This MCP is a read-only constitutional rules engine for Gloucester City Council procurement governance.
 All rules are derived from ${SERVER_INFO.schemaFile || 'procurement-contracts-schema-v0.9.3.json'} (v${SERVER_INFO.schemaVersion}).
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

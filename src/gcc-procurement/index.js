@@ -40,7 +40,7 @@ const RESPONSE_FORMAT_PARAM = {
 const TOOLS = [
     {
         name: 'gcc_procurement_determine_route',
-        description: `Determine the full procurement route and constitutional authority for a GCC contract.
+        description: `Determine the full procurement route and constitutional authority for a Gloucester City Council contract.
 
 Given a whole-life contract value (inc. VAT) and type, returns:
 - Procurement tier (1–6) with award authority
@@ -52,7 +52,7 @@ Given a whole-life contract value (inc. VAT) and type, returns:
 - Live compliance warnings (C3 if tier 4)
 - Lex specialis delegation note (tier 5)
 
-All rules sourced from GCC Constitution, Contract Rules, and PA2023.
+All rules sourced from Gloucester City Council Constitution, Contract Rules, and PA2023.
 Source: procurement-contracts-schema-v0.9.3.json`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
@@ -87,7 +87,7 @@ Source: procurement-contracts-schema-v0.9.3.json`,
 
     {
         name: 'gcc_procurement_check_supplier',
-        description: `Return the supplier compliance checklist for a GCC contract.
+        description: `Return the supplier compliance checklist for a Gloucester City Council contract.
 
 Provides a schema-derived checklist of required supplier checks including:
 - Financial standing check (CONTRACT-RULES Rule 15.5)
@@ -124,7 +124,7 @@ All rules sourced from procurement-contracts-schema-v0.9.3.json.`,
 
     {
         name: 'gcc_procurement_validate_case',
-        description: `Validate a GCC procurement case against constitutional rules.
+        description: `Validate a Gloucester City Council procurement case against constitutional rules.
 
 Evaluates the case against risk flags from the schema and checks for missing required assessments. Returns:
 - Overall status: PASS / WARNINGS / FAIL
@@ -202,7 +202,7 @@ All rules sourced from procurement-contracts-schema-v0.9.3.json.`,
 
     {
         name: 'gcc_procurement_get_notices',
-        description: `Return the required notice sequence for a GCC procurement.
+        description: `Return the required notice sequence for a Gloucester City Council procurement.
 
 Derives the ordered list of UK procurement notices required under PA2023 based on:
 - Contract value and type (threshold determination)
@@ -242,7 +242,7 @@ Source: derived_fields.fields.required_notices.logic — procurement-contracts-s
 
     {
         name: 'gcc_procurement_explain_rule',
-        description: `Explain a GCC constitutional procurement rule, threshold, or known conflict in plain English.
+        description: `Explain a Gloucester City Council constitutional procurement rule, threshold, or known conflict in plain English.
 
 Supports queries about:
 - Decision matrix tiers 1–6 (e.g. "tier 4", "tier 3")
@@ -288,7 +288,7 @@ const TOOL_HANDLERS = {
 const SERVER_INFO = {
     name: 'gcc-procurement-mcp',
     version: '1.0.0',
-    description: 'Gloucester City Council Procurement Rules Engine — constitutional authority matrix, risk flags, and notice obligations derived from procurement-contracts-schema-v0.9.3.json',
+    description: 'Gloucester City Council Procurement Rules Engine — constitutional authority matrix, risk flags, and notice obligations derived from procurement-contracts-schema-v0.9.3.json. This is specific to Gloucester City Council, not Gloucestershire County Council.',
     schemaVersion: SCHEMA_VERSION,
     schemaFile: SCHEMA_FILE,
     readOnly: true,
