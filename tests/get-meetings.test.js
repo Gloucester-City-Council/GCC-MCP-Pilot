@@ -34,7 +34,7 @@ describe('getMeetings', () => {
             '16/02/2026' // inclusive-to exclusive conversion (+1 day)
         );
         expect(result.date_range.from).toBe('14/02/2026');
-        expect(result.date_range.to).toBe('16/02/2026');
+        expect(result.date_range.to).toBe('15/02/2026');
 
         jest.useRealTimers();
     });
@@ -50,5 +50,25 @@ describe('getMeetings', () => {
             '01/03/2026',
             '01/04/2026'
         );
+    });
+
+    it('supports "last day" alias and validates impossible calendar dates', async () => {
+        const fixed = new Date('2026-02-15T10:00:00.000Z');
+        jest.useFakeTimers().setSystemTime(fixed);
+
+        moderngovClient.getMeetings.mockResolvedValueOnce({ meetings: [] });
+        await getMeetings('Gloucester City Council', 544, 'last day', 'today');
+
+        expect(moderngovClient.getMeetings).toHaveBeenLastCalledWith(
+            'Gloucester City Council',
+            544,
+            '14/02/2026',
+            '16/02/2026'
+        );
+
+        const invalid = await getMeetings('Gloucester City Council', 544, '31/02/2026', '01/03/2026');
+        expect(invalid.error).toBe('Invalid from_date format');
+
+        jest.useRealTimers();
     });
 });
