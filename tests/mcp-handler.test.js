@@ -143,6 +143,9 @@ describe('handleMcpRequest - tools/list', () => {
         );
         expect(Array.isArray(result.result.tools)).toBe(true);
         expect(result.result.tools.length).toBe(10);
+
+        const toolNames = result.result.tools.map(tool => tool.name);
+        expect(toolNames).toContain('get_meeting_briefing');
     });
 
     it('each tool has name, description, and inputSchema', () => {
