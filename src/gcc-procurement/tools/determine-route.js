@@ -57,7 +57,9 @@ function deriveNotices(value, isAbove, procurementRoute) {
         return notice
             ? { code: notice.code, name: notice.name, timing: notice.timing, section: notice.section }
             : {
-                code,
+                code: code === 'BT-TENDER' ? 'Below Threshold-TENDER'
+                    : code === 'BT-AWARD' ? 'Below Threshold-AWARD'
+                    : code,
                 name: code === 'BT-TENDER'
                     ? 'Below-Threshold Tender Notice'
                     : code === 'BT-AWARD'

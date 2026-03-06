@@ -135,7 +135,7 @@ function explainForwardPlan(topic) {
             '',
             tier4 && tier4.forward_plan_note ? `**Application (Tier 4, £100k–£250k):** ${tier4.forward_plan_note}` : null,
             '',
-            '**Compliance question (C3):** GCC may not currently be applying the Forward Plan requirement to contracts in the £100k–£250k range (Tier 4). This is a live governance issue — see conflict C3.',
+            '**Compliance question (C3):** Gloucester City Council may not currently be applying the Forward Plan requirement to contracts in the £100k–£250k range (Tier 4). This is a live governance issue — see conflict C3.',
             '',
             '**Forward Plan content:** Must be published by the Leader at least monthly, showing the 12-month programme of key decisions. Source: PART3E Appendix A para 2.',
         ].filter(Boolean).join('\n'),
@@ -195,7 +195,7 @@ function explainThreshold() {
     return {
         topic: 'PA2023 procurement thresholds (sub-central authorities)',
         explanation: [
-            '**GCC is a sub-central authority.** The following thresholds apply:',
+            '**Gloucester City Council is a sub-central authority.** The following thresholds apply:',
             '',
             `- Goods and services: £${THRESHOLDS.goods_and_services.toLocaleString()}`,
             `- Works: £${THRESHOLDS.works.toLocaleString()}`,
@@ -279,7 +279,7 @@ function explainOfficerAuthority() {
             '',
             '**Key point:** Officer authority requires the Forward Plan entry as Leader authorisation for key decisions (value > £100,000, KD3). Without it, the officer lacks authority even within the financial ceiling. See 3E.11.',
             '',
-            subDel ? `**Source document:** ${subDel.title} (${subDel.reference || 'GCC Constitution Part 3'})` : null,
+            subDel ? `**Source document:** ${subDel.title} (${subDel.reference || 'Gloucester City Council Constitution Part 3'})` : null,
             `**Key provisions:** ${subDel && subDel.key_provisions ? JSON.stringify(subDel.key_provisions) : 'see SUB-DELEGATION'}`,
         ].filter(Boolean).join('\n'),
         sources: [

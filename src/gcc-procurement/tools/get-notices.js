@@ -60,11 +60,11 @@ function resolveNotice(codeOrKey) {
     }
 
     // Below-threshold notices — published on CDP (Contracts Data Platform), not Find a Tender
-    // v0.9.2 codes: BT-TENDER (below-threshold tender notice), BT-AWARD (below-threshold award/details)
+    // v0.9.2 codes: BT-TENDER (below-threshold tender notice), BT-AWARD (below-threshold award/details) — displayed as "Below Threshold" prefix
     // v0.9.1 legacy codes also handled for robustness
     if (codeOrKey === 'BT-TENDER' || codeOrKey.includes('below_threshold_tender')) {
         return {
-            code: 'BT-TENDER',
+            code: 'Below Threshold-TENDER',
             name: 'Below-Threshold Tender Notice',
             timing: 'Before tender documents issued',
             mandatory: true,
@@ -75,7 +75,7 @@ function resolveNotice(codeOrKey) {
     }
     if (codeOrKey === 'BT-AWARD' || codeOrKey === 'contract_details_notice') {
         return {
-            code: 'BT-AWARD',
+            code: 'Below Threshold-AWARD',
             name: 'Below-Threshold Award / Contract Details Notice',
             timing: 'After contract award',
             mandatory: true,
