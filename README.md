@@ -8,7 +8,7 @@ Azure Functions v4 MCP (Model Context Protocol) server for accessing democratic 
 |-----------|--------|-------|
 | MCP protocol implementation | ✅ Complete | `initialize`, `tools/list`, `tools/call` |
 | Multi-council support | ✅ Complete | All 7 Gloucestershire councils |
-| Tool schemas defined | ✅ Complete | 10 tools with full JSON Schema & enum validation |
+| Tool schemas defined | ✅ Complete | 8 tools with full JSON Schema & enum validation |
 | Tool routing | ✅ Complete | End-to-end flow working |
 | Council discovery | ✅ Complete | `list_available_councils` tool |
 | ModernGov SOAP client | ✅ Complete | Multi-endpoint support with fallback to knowledge base |
@@ -78,8 +78,6 @@ GCC-MCP-Pilot/
 | `get_meetings` | `council_name`, `committee_id` | Get meetings for a committee |
 | `get_meeting_details` | `council_name`, `meeting_id` | Get detailed meeting information |
 | `get_attachment` | `council_name`, `attachment_id` | Get document metadata and URL |
-| `get_report_recommendations` | `url` or `report_text` | Extract formal recommendations with confidence metadata |
-| `get_meeting_briefing` | `council_name`, `meeting_id`, `include_document_analysis` (optional) | Build full accountability-focused briefings for each agenda item |
 | `analyze_meeting_document` | `url` | Extract structured content from PDFs |
 
 ### Required Parameters
@@ -314,7 +312,7 @@ This server implements the Model Context Protocol (MCP) JSON-RPC interface:
 ### Methods
 
 - `initialize` - Returns server capabilities, council list, and instructions
-- `tools/list` - Returns 10 available tools with JSON Schema validation
+- `tools/list` - Returns 8 available tools with JSON Schema validation
 - `tools/call` - Executes a tool and returns results
 - `ping` - Health check
 
