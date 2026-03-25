@@ -1,0 +1,879 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/gloucester-householder-application-facts.v2.2.schema.json",
+  "title": "Gloucester Householder Planning Case Facts v2.2",
+  "description": "Canonical case facts for Gloucester householder workflows. Separates route selection, validation facts, planning merits facts, consultation facts and CIL facts so consumers can tell which checks apply where. Field names in the proposal and neighbour_context sections are aligned with the predicate references used in the policy ruleset. This schema is the canonical typed fact model. For extraction workflows, use #/$defs/extractedFactsProjection for a partial-but-typed normalised fact object, and keep any unconstrained ingestion artefacts outside this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "application",
+    "site",
+    "proposal"
+  ],
+  "$defs": {
+    "routeEnum": {
+      "type": "string",
+      "enum": [
+        "householder_planning_permission",
+        "householder_planning_permission_and_listed_building_consent",
+        "pre_application_householder",
+        "prior_notification_larger_home_extension"
+      ]
+    },
+    "processEnum": {
+      "type": "string",
+      "enum": [
+        "validation_only",
+        "validation_and_policy_assessment",
+        "pre_application_advice",
+        "prior_notification_screening"
+      ]
+    },
+    "yesNoUnknown": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unknown"
+      ]
+    },
+    "sourceStatusEnum": {
+      "type": "string",
+      "enum": [
+        "adopted",
+        "live_checklist",
+        "local_practice",
+        "draft_or_provisional"
+      ],
+      "description": "Provenance of the source that established a fact or requirement."
+    },
+    "extractedFactsProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Partial but typed projection of the canonical facts schema for use in facts extraction. Mirrors the top-level structure of the canonical facts model but does not require every field to be present.",
+      "properties": {
+        "application": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Route and consent context. Main switchboard for deciding which modules apply.",
+          "properties": {
+            "application_reference": {
+              "type": "string"
+            },
+            "application_route": {
+              "$ref": "#/$defs/routeEnum",
+              "description": "Determines which assessment modules run. Policy A1 merits rules apply to planning-permission routes and pre-application advice but not to larger home extension prior notification."
+            },
+            "decision_process": {
+              "$ref": "#/$defs/processEnum",
+              "description": "What the assistant or tool is being asked to do for this case."
+            },
+            "consent_tracks": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "planning_permission",
+                  "listed_building_consent",
+                  "prior_approval_larger_home_extension"
+                ]
+              },
+              "description": "Explicit consent tracks in scope. Used to decide whether heritage-only or prior-notification-only checks apply."
+            },
+            "description": {
+              "type": "string"
+            },
+            "submitted_documents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Identifiers or document names supplied with the submission. Used mainly by validation modules."
+            },
+            "site_address_matches_documents": {
+              "$ref": "#/$defs/yesNoUnknown",
+              "description": "Data-integrity field. Set to 'no' if the address on the form does not match the address in supporting documents."
+            },
+            "lawful_use_as_single_dwelling_confirmed": {
+              "$ref": "#/$defs/yesNoUnknown",
+              "description": "Data-integrity field. Set to 'no' or 'unknown' if the property may not qualify for the householder route (e.g. commercial use class)."
+            }
+          }
+        },
+        "site": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Site and designation facts. Used by validation, consultation and assessment modules.",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "dwelling_type": {
+              "type": "string",
+              "enum": [
+                "detached",
+                "semi_detached",
+                "terrace",
+                "end_terrace",
+                "bungalow",
+                "flat",
+                "other"
+              ],
+              "description": "Ruleset predicate field: dwelling_type"
+            },
+            "street_character": {
+              "type": "string",
+              "enum": [
+                "continuous_frontage",
+                "uniform_or_planned",
+                "varied_setbacks",
+                "suburban_spacious",
+                "mixed",
+                "unknown"
+              ],
+              "description": "Ruleset predicate field: street_character. Note: 'uniform_or_planned' is the value tested by rule A1.4.3."
+            },
+            "plot_width_mm": {
+              "type": "number",
+              "minimum": 0
+            },
+            "conservation_area": {
+              "type": "boolean",
+              "description": "Ruleset predicate field: conservation_area. Triggers DAS requirement, heritage review, and Conservation Officer consultation."
+            },
+            "listed_building": {
+              "type": "boolean",
+              "description": "Ruleset predicate field: listed_building. If true, listed building consent track should normally also be in scope."
+            },
+            "listed_building_within_setting": {
+              "type": "boolean",
+              "description": "Ruleset predicate field: or_listed_building_within_setting (mapped from this field)."
+            },
+            "known_or_potential_archaeological_interest": {
+              "type": "boolean"
+            },
+            "flood_zone": {
+              "type": "string",
+              "enum": [
+                "1",
+                "2",
+                "3a",
+                "3b",
+                "unknown"
+              ],
+              "description": "Ruleset predicate field: flood_zone"
+            },
+            "within_8m_of_watercourse": {
+              "type": "boolean",
+              "description": "Ruleset predicate field: within_8m_of_watercourse"
+            },
+            "distance_to_watercourse_m": {
+              "type": "number",
+              "minimum": 0
+            },
+            "within_aqma": {
+              "type": "boolean"
+            },
+            "classified_road": {
+              "type": "boolean"
+            }
+          }
+        },
+        "proposal": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Proposal facts. Field names are aligned with ruleset predicate references where possible. Some fields are only meaningful on certain routes; see field descriptions.",
+          "properties": {
+            "proposal_type": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "single_storey_rear_extension",
+                  "two_storey_rear_extension",
+                  "single_storey_side_extension",
+                  "two_storey_side_extension",
+                  "front_extension",
+                  "front_porch",
+                  "roof_extension",
+                  "dormer",
+                  "conservatory",
+                  "wraparound_extension",
+                  "annexe",
+                  "outbuilding",
+                  "garage",
+                  "loft_conversion",
+                  "balcony_or_roof_terrace"
+                ]
+              },
+              "description": "Normalised proposal categories. Ruleset predicate field: extension_type (mapped from proposal_type items via the predicate_mapping table). Prior notification route should normally only use single_storey_rear_extension."
+            },
+            "setback_from_front_building_line_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: setback_from_front_building_line. Policy A1 design rule input."
+            },
+            "extension_ridge_height_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: extension_ridge_height"
+            },
+            "existing_ridge_height_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: existing_ridge_height"
+            },
+            "extension_eaves_height_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: extension_eaves_height"
+            },
+            "existing_eaves_height_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: existing_eaves_height"
+            },
+            "extension_width_percent_of_existing": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000,
+              "description": "Ruleset predicate: extension_width_as_percentage_of_existing"
+            },
+            "extension_depth_from_existing_rear_wall_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Depth of rear extension measured from existing rear wall. Used by both planning-permission and larger-home-extension workflows."
+            },
+            "extension_depth_from_existing_front_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Depth of front extension/porch measured from existing front wall. Ruleset predicate: extension_depth_from_existing_front. Only relevant for front_extension and front_porch proposal types."
+            },
+            "remaining_rear_garden_depth_m": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: remaining_rear_garden_depth"
+            },
+            "distance_to_boundary_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: distance_to_boundary"
+            },
+            "close_to_boundary": {
+              "type": "boolean",
+              "description": "Ruleset predicate: close_to_boundary. True if the extension is near enough to a boundary to trigger overbearing assessment."
+            },
+            "has_habitable_room_windows": {
+              "type": "boolean"
+            },
+            "windows_facing_boundary": {
+              "type": "boolean"
+            },
+            "rear_facing_windows_or_openings": {
+              "type": "boolean"
+            },
+            "side_window_to_boundary_distance_mm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: side_window_to_boundary_distance"
+            },
+            "distance_to_facing_habitable_window_m": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: distance_to_facing_habitable_window"
+            },
+            "overlooking_distance_to_garden_m": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: overlooking_distance_to_garden"
+            },
+            "parking_affected": {
+              "type": "boolean"
+            },
+            "parking_spaces_retained": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "access_changes": {
+              "type": "boolean"
+            },
+            "additional_bedrooms_created": {
+              "type": "boolean"
+            },
+            "impermeable_area_increase_sqm": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Ruleset predicate: impermeable_area_increase_sqm"
+            },
+            "materials_compatibility": {
+              "type": "string",
+              "enum": [
+                "match",
+                "compatible",
+                "incompatible",
+                "unknown"
+              ],
+              "description": "Ruleset predicate: materials_compatibility"
+            },
+            "roof_pitch_compatibility": {
+              "type": "string",
+              "enum": [
+                "match",
+                "compatible",
+                "incompatible",
+                "flat_roof",
+                "unknown"
+              ],
+              "description": "Ruleset predicate: roof_pitch_compatibility"
+            },
+            "detail_compatibility": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low",
+                "unknown"
+              ],
+              "description": "Ruleset predicate: detail_compatibility"
+            },
+            "perceived_enclosure_impact": {
+              "type": "string",
+              "enum": [
+                "low",
+                "moderate",
+                "high",
+                "unknown"
+              ],
+              "description": "Ruleset predicate: perceived_enclosure_impact"
+            },
+            "neighbour_amenity_main_issue": {
+              "type": "string",
+              "description": "Free-text summary of the primary neighbour amenity concern if any."
+            }
+          }
+        },
+        "neighbour_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Neighbour-amenity facts. Used by planning merits and prior-notification amenity checks.",
+          "properties": {
+            "extension_orientation": {
+              "type": "string",
+              "enum": [
+                "north",
+                "north_east",
+                "east",
+                "south_east",
+                "south",
+                "south_west",
+                "west",
+                "north_west",
+                "unknown"
+              ],
+              "description": "Ruleset predicate: extension_orientation (used in exception A1.2.1.E2)."
+            },
+            "forty_five_degree_rule_passed": {
+              "type": "boolean",
+              "description": "Ruleset predicate: 45_degree_line_from_neighbor_window (mapped as a boolean pass/fail from the geometric test)."
+            },
+            "outlook_assessment": {
+              "type": "string"
+            },
+            "privacy_assessment": {
+              "type": "string"
+            },
+            "prior_notification_neighbour_objections_received": {
+              "$ref": "#/$defs/yesNoUnknown",
+              "description": "Only meaningful for larger home extension prior notification route."
+            }
+          }
+        },
+        "submission": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Submission artefacts. These fields are for validation, not planning merits. A biodiversity small sites statement here refers to the local validation expectation (B11), not to mandatory statutory BNG which does not apply to householder applications.",
+          "properties": {
+            "design_and_access_statement_submitted": {
+              "type": "boolean",
+              "description": "Relevant where conservation area or listed building triggers apply (requirement A7)."
+            },
+            "historic_impact_statement_submitted": {
+              "type": "boolean"
+            },
+            "drainage_strategy_submitted": {
+              "type": "boolean"
+            },
+            "biodiversity_small_sites_statement_submitted": {
+              "type": "boolean",
+              "description": "Local validation requirement B11. This is a Gloucester-specific expectation for biodiversity improvement information, distinct from statutory BNG (from which householder apps are exempt)."
+            },
+            "cil_additional_information_form_submitted": {
+              "type": "boolean"
+            },
+            "site_specific_existing_and_proposed_drawings_submitted": {
+              "type": "boolean",
+              "description": "True only if actual site-specific drawings (not generic examples) have been provided."
+            },
+            "dimensions_clearly_stated": {
+              "type": "boolean",
+              "description": "True if the submission includes explicit measurements (depth, width, height, distances) for the proposed development."
+            },
+            "recent_site_photographs_submitted": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "application_route"
+      ],
+      "description": "Route and consent context. Main switchboard for deciding which modules apply.",
+      "properties": {
+        "application_reference": {
+          "type": "string"
+        },
+        "application_route": {
+          "$ref": "#/$defs/routeEnum",
+          "description": "Determines which assessment modules run. Policy A1 merits rules apply to planning-permission routes and pre-application advice but not to larger home extension prior notification."
+        },
+        "decision_process": {
+          "$ref": "#/$defs/processEnum",
+          "description": "What the assistant or tool is being asked to do for this case."
+        },
+        "consent_tracks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "planning_permission",
+              "listed_building_consent",
+              "prior_approval_larger_home_extension"
+            ]
+          },
+          "description": "Explicit consent tracks in scope. Used to decide whether heritage-only or prior-notification-only checks apply."
+        },
+        "description": {
+          "type": "string"
+        },
+        "submitted_documents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Identifiers or document names supplied with the submission. Used mainly by validation modules."
+        },
+        "site_address_matches_documents": {
+          "$ref": "#/$defs/yesNoUnknown",
+          "description": "Data-integrity field. Set to 'no' if the address on the form does not match the address in supporting documents."
+        },
+        "lawful_use_as_single_dwelling_confirmed": {
+          "$ref": "#/$defs/yesNoUnknown",
+          "description": "Data-integrity field. Set to 'no' or 'unknown' if the property may not qualify for the householder route (e.g. commercial use class)."
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "address"
+      ],
+      "description": "Site and designation facts. Used by validation, consultation and assessment modules.",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "dwelling_type": {
+          "type": "string",
+          "enum": [
+            "detached",
+            "semi_detached",
+            "terrace",
+            "end_terrace",
+            "bungalow",
+            "flat",
+            "other"
+          ],
+          "description": "Ruleset predicate field: dwelling_type"
+        },
+        "street_character": {
+          "type": "string",
+          "enum": [
+            "continuous_frontage",
+            "uniform_or_planned",
+            "varied_setbacks",
+            "suburban_spacious",
+            "mixed",
+            "unknown"
+          ],
+          "description": "Ruleset predicate field: street_character. Note: 'uniform_or_planned' is the value tested by rule A1.4.3."
+        },
+        "plot_width_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "conservation_area": {
+          "type": "boolean",
+          "description": "Ruleset predicate field: conservation_area. Triggers DAS requirement, heritage review, and Conservation Officer consultation."
+        },
+        "listed_building": {
+          "type": "boolean",
+          "description": "Ruleset predicate field: listed_building. If true, listed building consent track should normally also be in scope."
+        },
+        "listed_building_within_setting": {
+          "type": "boolean",
+          "description": "Ruleset predicate field: or_listed_building_within_setting (mapped from this field)."
+        },
+        "known_or_potential_archaeological_interest": {
+          "type": "boolean"
+        },
+        "flood_zone": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3a",
+            "3b",
+            "unknown"
+          ],
+          "description": "Ruleset predicate field: flood_zone"
+        },
+        "within_8m_of_watercourse": {
+          "type": "boolean",
+          "description": "Ruleset predicate field: within_8m_of_watercourse"
+        },
+        "distance_to_watercourse_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "within_aqma": {
+          "type": "boolean"
+        },
+        "classified_road": {
+          "type": "boolean"
+        }
+      }
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_type"
+      ],
+      "description": "Proposal facts. Field names are aligned with ruleset predicate references where possible. Some fields are only meaningful on certain routes; see field descriptions.",
+      "properties": {
+        "proposal_type": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "single_storey_rear_extension",
+              "two_storey_rear_extension",
+              "single_storey_side_extension",
+              "two_storey_side_extension",
+              "front_extension",
+              "front_porch",
+              "roof_extension",
+              "dormer",
+              "conservatory",
+              "wraparound_extension",
+              "annexe",
+              "outbuilding",
+              "garage",
+              "loft_conversion",
+              "balcony_or_roof_terrace"
+            ]
+          },
+          "description": "Normalised proposal categories. Ruleset predicate field: extension_type (mapped from proposal_type items via the predicate_mapping table). Prior notification route should normally only use single_storey_rear_extension."
+        },
+        "setback_from_front_building_line_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: setback_from_front_building_line. Policy A1 design rule input."
+        },
+        "extension_ridge_height_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: extension_ridge_height"
+        },
+        "existing_ridge_height_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: existing_ridge_height"
+        },
+        "extension_eaves_height_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: extension_eaves_height"
+        },
+        "existing_eaves_height_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: existing_eaves_height"
+        },
+        "extension_width_percent_of_existing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000,
+          "description": "Ruleset predicate: extension_width_as_percentage_of_existing"
+        },
+        "extension_depth_from_existing_rear_wall_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Depth of rear extension measured from existing rear wall. Used by both planning-permission and larger-home-extension workflows."
+        },
+        "extension_depth_from_existing_front_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Depth of front extension/porch measured from existing front wall. Ruleset predicate: extension_depth_from_existing_front. Only relevant for front_extension and front_porch proposal types."
+        },
+        "remaining_rear_garden_depth_m": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: remaining_rear_garden_depth"
+        },
+        "distance_to_boundary_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: distance_to_boundary"
+        },
+        "close_to_boundary": {
+          "type": "boolean",
+          "description": "Ruleset predicate: close_to_boundary. True if the extension is near enough to a boundary to trigger overbearing assessment."
+        },
+        "has_habitable_room_windows": {
+          "type": "boolean"
+        },
+        "windows_facing_boundary": {
+          "type": "boolean"
+        },
+        "rear_facing_windows_or_openings": {
+          "type": "boolean"
+        },
+        "side_window_to_boundary_distance_mm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: side_window_to_boundary_distance"
+        },
+        "distance_to_facing_habitable_window_m": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: distance_to_facing_habitable_window"
+        },
+        "overlooking_distance_to_garden_m": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: overlooking_distance_to_garden"
+        },
+        "parking_affected": {
+          "type": "boolean"
+        },
+        "parking_spaces_retained": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "access_changes": {
+          "type": "boolean"
+        },
+        "additional_bedrooms_created": {
+          "type": "boolean"
+        },
+        "impermeable_area_increase_sqm": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Ruleset predicate: impermeable_area_increase_sqm"
+        },
+        "materials_compatibility": {
+          "type": "string",
+          "enum": [
+            "match",
+            "compatible",
+            "incompatible",
+            "unknown"
+          ],
+          "description": "Ruleset predicate: materials_compatibility"
+        },
+        "roof_pitch_compatibility": {
+          "type": "string",
+          "enum": [
+            "match",
+            "compatible",
+            "incompatible",
+            "flat_roof",
+            "unknown"
+          ],
+          "description": "Ruleset predicate: roof_pitch_compatibility"
+        },
+        "detail_compatibility": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "unknown"
+          ],
+          "description": "Ruleset predicate: detail_compatibility"
+        },
+        "perceived_enclosure_impact": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "unknown"
+          ],
+          "description": "Ruleset predicate: perceived_enclosure_impact"
+        },
+        "neighbour_amenity_main_issue": {
+          "type": "string",
+          "description": "Free-text summary of the primary neighbour amenity concern if any."
+        }
+      }
+    },
+    "neighbour_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Neighbour-amenity facts. Used by planning merits and prior-notification amenity checks.",
+      "properties": {
+        "extension_orientation": {
+          "type": "string",
+          "enum": [
+            "north",
+            "north_east",
+            "east",
+            "south_east",
+            "south",
+            "south_west",
+            "west",
+            "north_west",
+            "unknown"
+          ],
+          "description": "Ruleset predicate: extension_orientation (used in exception A1.2.1.E2)."
+        },
+        "forty_five_degree_rule_passed": {
+          "type": "boolean",
+          "description": "Ruleset predicate: 45_degree_line_from_neighbor_window (mapped as a boolean pass/fail from the geometric test)."
+        },
+        "outlook_assessment": {
+          "type": "string"
+        },
+        "privacy_assessment": {
+          "type": "string"
+        },
+        "prior_notification_neighbour_objections_received": {
+          "$ref": "#/$defs/yesNoUnknown",
+          "description": "Only meaningful for larger home extension prior notification route."
+        }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Submission artefacts. These fields are for validation, not planning merits. A biodiversity small sites statement here refers to the local validation expectation (B11), not to mandatory statutory BNG which does not apply to householder applications.",
+      "properties": {
+        "design_and_access_statement_submitted": {
+          "type": "boolean",
+          "description": "Relevant where conservation area or listed building triggers apply (requirement A7)."
+        },
+        "historic_impact_statement_submitted": {
+          "type": "boolean"
+        },
+        "drainage_strategy_submitted": {
+          "type": "boolean"
+        },
+        "biodiversity_small_sites_statement_submitted": {
+          "type": "boolean",
+          "description": "Local validation requirement B11. This is a Gloucester-specific expectation for biodiversity improvement information, distinct from statutory BNG (from which householder apps are exempt)."
+        },
+        "cil_additional_information_form_submitted": {
+          "type": "boolean"
+        },
+        "site_specific_existing_and_proposed_drawings_submitted": {
+          "type": "boolean",
+          "description": "True only if actual site-specific drawings (not generic examples) have been provided."
+        },
+        "dimensions_clearly_stated": {
+          "type": "boolean",
+          "description": "True if the submission includes explicit measurements (depth, width, height, distances) for the proposed development."
+        },
+        "recent_site_photographs_submitted": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "predicate_mapping": {
+    "_description": "Maps ruleset predicate field names to facts schema field paths. Consumers should use this to resolve predicate references in applicability conditions.",
+    "extension_type": "proposal.proposal_type[]",
+    "dwelling_type": "site.dwelling_type",
+    "street_character": "site.street_character",
+    "conservation_area": "site.conservation_area",
+    "listed_building": "site.listed_building",
+    "or_listed_building_within_setting": "site.listed_building_within_setting",
+    "known_or_potential_archaeological_interest": "site.known_or_potential_archaeological_interest",
+    "flood_zone": "site.flood_zone",
+    "within_8m_of_watercourse": "site.within_8m_of_watercourse",
+    "distance_to_watercourse": "site.distance_to_watercourse_m",
+    "setback_from_front_building_line": "proposal.setback_from_front_building_line_mm",
+    "extension_ridge_height": "proposal.extension_ridge_height_mm",
+    "existing_ridge_height": "proposal.existing_ridge_height_mm",
+    "extension_eaves_height": "proposal.extension_eaves_height_mm",
+    "existing_eaves_height": "proposal.existing_eaves_height_mm",
+    "extension_width_as_percentage_of_existing": "proposal.extension_width_percent_of_existing",
+    "extension_depth_from_existing_front": "proposal.extension_depth_from_existing_front_mm",
+    "remaining_rear_garden_depth": "proposal.remaining_rear_garden_depth_m",
+    "distance_to_boundary": "proposal.distance_to_boundary_mm",
+    "close_to_boundary": "proposal.close_to_boundary",
+    "has_habitable_room_windows": "proposal.has_habitable_room_windows",
+    "windows_facing_boundary": "proposal.windows_facing_boundary",
+    "rear_facing_windows_or_openings": "proposal.rear_facing_windows_or_openings",
+    "side_window_to_boundary_distance": "proposal.side_window_to_boundary_distance_mm",
+    "distance_to_facing_habitable_window": "proposal.distance_to_facing_habitable_window_m",
+    "overlooking_distance_to_garden": "proposal.overlooking_distance_to_garden_m",
+    "parking_affected": "proposal.parking_affected",
+    "parking_spaces_retained": "proposal.parking_spaces_retained",
+    "access_changes": "proposal.access_changes",
+    "additional_bedrooms_created": "proposal.additional_bedrooms_created",
+    "impermeable_area_increase_sqm": "proposal.impermeable_area_increase_sqm",
+    "materials_compatibility": "proposal.materials_compatibility",
+    "roof_pitch_compatibility": "proposal.roof_pitch_compatibility",
+    "detail_compatibility": "proposal.detail_compatibility",
+    "perceived_enclosure_impact": "proposal.perceived_enclosure_impact",
+    "extension_orientation": "neighbour_context.extension_orientation",
+    "45_degree_line_from_neighbor_window": "neighbour_context.forty_five_degree_rule_passed"
+  },
+  "extension_type_mapping": {
+    "_description": "Maps normalised proposal_type enum values to the short-form extension_type values used in ruleset applicability predicates.",
+    "single_storey_rear_extension": "single_storey_rear",
+    "two_storey_rear_extension": "two_storey_rear",
+    "single_storey_side_extension": "single_storey_side",
+    "two_storey_side_extension": "two_storey_side",
+    "front_extension": "front_extension",
+    "front_porch": "front_porch",
+    "roof_extension": "roof_extension",
+    "dormer": "dormer",
+    "conservatory": "conservatory",
+    "wraparound_extension": "wraparound",
+    "annexe": "annexe",
+    "outbuilding": "outbuilding",
+    "garage": "garage",
+    "loft_conversion": "loft_conversion",
+    "balcony_or_roof_terrace": [
+      "balcony",
+      "roof_terrace",
+      "raised_platform"
+    ]
+  }
+}

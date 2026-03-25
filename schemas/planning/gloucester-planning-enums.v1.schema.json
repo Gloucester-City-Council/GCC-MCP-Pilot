@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/gloucester-planning-enums.v1.schema.json",
+  "title": "Gloucester Planning MCP Canonical Enums",
+  "description": "Single source of truth for all enum values used across the facts schema, result schema, ruleset, and MCP tool contracts. If an enum value is not in this file, it is not a valid value anywhere in the system. Version-controlled alongside the implementation plan.",
+  "type": "object",
+  "properties": {
+    "processing_state": {
+      "type": "string",
+      "enum": [
+        "schema_invalid",
+        "data_compromised",
+        "validation_blocked",
+        "partial_assessment",
+        "full_assessment"
+      ],
+      "description": "Internal pipeline state. Exposed in diagnostics block, not in the main result schema. Governs gating logic and downstream authority scope."
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "valid",
+        "invalid",
+        "incomplete",
+        "manual_review_required",
+        "not_run"
+      ],
+      "description": "The validation.status field in the result object."
+    },
+    "planning_merits_status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "concerns",
+        "fail",
+        "cannot_assess",
+        "manual_review_required",
+        "not_run"
+      ],
+      "description": "The planning_merits.status field in the result object."
+    },
+    "decision_mode": {
+      "type": "string",
+      "enum": [
+        "invalid",
+        "insufficient_information",
+        "manual_officer_review",
+        "likely_support",
+        "balanced_judgement",
+        "likely_refusal",
+        "prior_approval_not_required",
+        "prior_approval_granted",
+        "prior_approval_refused",
+        "unknown"
+      ],
+      "description": "The recommendation.decision_mode field. Computed exclusively by build_assessment_result via the ResultAssembler."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "The recommendation.confidence field."
+    },
+    "data_quality_status": {
+      "type": "string",
+      "enum": [
+        "clean",
+        "warnings",
+        "conflicted",
+        "insufficient"
+      ],
+      "description": "The data_quality.status field in the result object."
+    },
+    "data_quality_issue_severity": {
+      "type": "string",
+      "enum": [
+        "warning",
+        "blocking"
+      ],
+      "description": "Severity of individual data quality issues."
+    },
+    "applicability": {
+      "type": "string",
+      "enum": [
+        "applies",
+        "does_not_apply",
+        "uncertain_manual_review"
+      ],
+      "description": "Whether a requirement, rule, or consultation applies to this case."
+    },
+    "rule_status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "concern",
+        "fail",
+        "cannot_assess",
+        "not_applicable",
+        "manual_review_required"
+      ],
+      "description": "Individual rule outcome status in planning_merits.rule_outcomes."
+    },
+    "requirement_status": {
+      "type": "string",
+      "enum": [
+        "met",
+        "missing",
+        "not_met",
+        "cannot_assess",
+        "not_checked"
+      ],
+      "description": "Individual validation requirement outcome status."
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "must",
+        "must_not",
+        "should",
+        "should_not",
+        "may",
+        "informative_only"
+      ],
+      "description": "Rule severity from the ruleset."
+    },
+    "legal_basis": {
+      "type": "string",
+      "enum": [
+        "statutory",
+        "development_plan_policy",
+        "local_validation",
+        "local_practice",
+        "guidance_only"
+      ],
+      "description": "Source basis for a requirement or rule."
+    },
+    "effect_type": {
+      "type": "string",
+      "enum": [
+        "validation",
+        "planning_merit",
+        "advisory"
+      ],
+      "description": "Operational effect in the workflow."
+    },
+    "threshold_status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "unconfirmed",
+        "case_by_case",
+        "not_applicable"
+      ],
+      "description": "Certainty of any numeric or heuristic threshold used by a rule."
+    },
+    "policy_source_status": {
+      "type": "string",
+      "enum": [
+        "adopted",
+        "local_practice",
+        "adopted_or_established_local_practice",
+        "draft_or_provisional"
+      ],
+      "description": "Provenance of the policy source for a rule."
+    },
+    "source_status_validation": {
+      "type": "string",
+      "enum": [
+        "adopted",
+        "live_checklist",
+        "mixed_live_and_provisional",
+        "draft_or_provisional"
+      ],
+      "description": "Provenance of a validation requirement source document."
+    },
+    "application_route": {
+      "type": "string",
+      "enum": [
+        "householder_planning_permission",
+        "householder_planning_permission_and_listed_building_consent",
+        "pre_application_householder",
+        "prior_notification_larger_home_extension"
+      ],
+      "description": "Application route enum."
+    },
+    "decision_process": {
+      "type": "string",
+      "enum": [
+        "validation_only",
+        "validation_and_policy_assessment",
+        "pre_application_advice",
+        "prior_notification_screening"
+      ],
+      "description": "What the tool is being asked to do."
+    },
+    "processing_mode": {
+      "type": "string",
+      "enum": [
+        "strict",
+        "advisory",
+        "pre_application"
+      ],
+      "description": "Mode parameter for build_assessment_result. Controls gating behaviour."
+    },
+    "module": {
+      "type": "string",
+      "enum": [
+        "national_validation",
+        "local_validation_householder",
+        "plans_validation",
+        "flood_risk_validation",
+        "policy_A1_design_and_amenity",
+        "heritage_review",
+        "consultations",
+        "cil",
+        "prior_notification_larger_home_extension"
+      ],
+      "description": "Assessment module identifiers."
+    },
+    "evidence_source": {
+      "type": "string",
+      "enum": [
+        "form_field",
+        "document_extraction",
+        "gis_lookup",
+        "ai_inference",
+        "drawing_measurement",
+        "photograph_analysis"
+      ],
+      "description": "Source of an extracted fact, recorded in facts_extracted_raw."
+    },
+    "rerun_reason": {
+      "type": "string",
+      "enum": [
+        "revised_documents",
+        "corrected_facts",
+        "ruleset_update",
+        "officer_requested",
+        "schema_update"
+      ],
+      "description": "Reason for re-running an assessment."
+    },
+    "report_style": {
+      "type": "string",
+      "enum": [
+        "officer_determination",
+        "preapp_advice",
+        "validation_request",
+        "officer_note",
+        "committee_summary"
+      ],
+      "description": "Report style for build_report_payload."
+    }
+  },
+  "evidence_precedence": {
+    "_description": "Hard precedence order for resolving conflicting evidence sources. Higher-ranked sources take precedence. When sources at the same rank conflict, the canonical value is set to 'unknown' and a data quality issue is raised.",
+    "precedence_ranks": [
+      {
+        "rank": 1,
+        "source": "Official spatial/statutory data",
+        "examples": [
+          "GIS designation lookups",
+          "Environment Agency flood data",
+          "Historic England listings"
+        ],
+        "authority": "Authoritative for statutory designations (listed_building, conservation_area, flood_zone, SSSI, SAC, etc). Overrides applicant-stated values.",
+        "fallback_on_conflict": "GIS value used. Warning raised noting form discrepancy."
+      },
+      {
+        "rank": 2,
+        "source": "Scaled technical drawings",
+        "examples": [
+          "Site plans with dimensions",
+          "Elevation drawings with measurements",
+          "Block plans"
+        ],
+        "authority": "Authoritative for dimensional facts (depths, heights, distances, areas). Overrides narrative text.",
+        "fallback_on_conflict": "Drawing value used. Warning raised if D&A text differs."
+      },
+      {
+        "rank": 3,
+        "source": "Application form fields",
+        "examples": [
+          "Typed form responses",
+          "Dropdown selections",
+          "Address fields"
+        ],
+        "authority": "Authoritative for applicant-stated information (address, description, applicant details). Used as canonical address even if documents differ.",
+        "fallback_on_conflict": "Form value used for address. For other fields, if drawings or GIS contradict, those higher-ranked sources win."
+      },
+      {
+        "rank": 4,
+        "source": "Supporting document text",
+        "examples": [
+          "Design and Access Statement prose",
+          "Planning statement text",
+          "Cover letter"
+        ],
+        "authority": "Supporting evidence. Subordinate to form, drawings, and GIS where they conflict.",
+        "fallback_on_conflict": "If no higher-ranked source exists, document text is used. If it conflicts with form or drawings, set to 'unknown' and raise warning."
+      },
+      {
+        "rank": 5,
+        "source": "AI inference from photographs or documents",
+        "examples": [
+          "Dwelling type inferred from photo",
+          "Materials identified from image",
+          "Room count estimated from floor plan"
+        ],
+        "authority": "Lowest authority. Used only when no stated or measured source exists.",
+        "fallback_on_conflict": "If any stated or measured source conflicts, AI inference loses. Set to 'unknown' and raise warning."
+      }
+    ],
+    "special_cases": {
+      "address": "Form address is canonical. If documents use a different address, site_address_matches_documents = 'no' and a blocking data quality issue is raised.",
+      "lawful_use": "If form says residential but GIS says commercial, set to 'unknown'. Blocking data quality issue. Route-blocking rule applies (Section 3.3 of implementation plan).",
+      "drawing_title_block_vs_form": "If the title block on drawings shows a different address or description than the form, the form is canonical for administrative purposes but a warning is raised."
+    }
+  },
+  "route_authority_note": {
+    "_description": "Clarification on what 'route detection authoritative' means in the data_compromised state.",
+    "meaning": "The system can authoritatively report the route the applicant submitted. It cannot always confirm the route is correct. Where lawful use is uncertain, the system reports the submitted route but flags that the route may not be valid if the property does not qualify for householder treatment.",
+    "implication": "A decision_mode derived from a data_compromised assessment with uncertain lawful use must carry confidence = 'low' and reason_summary must note the route uncertainty."
+  }
+}

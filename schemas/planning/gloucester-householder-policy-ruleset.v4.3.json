@@ -1,0 +1,3012 @@
+{
+  "model_type": "planning_policy_ruleset",
+  "model_version": "4.3.0",
+  "model_name": "Gloucester Householder Planning Policy Ruleset",
+  "jurisdiction": "Gloucester City Council",
+  "runtime_status": "mixed_adopted_and_provisional_sources",
+  "status_notes": [
+    "Policy A1 assessment logic is intended for householder planning permission and pre-application advice on equivalent proposals.",
+    "It is not the decision rule pack for larger home extension prior notification. That route is distinct and has its own neighbour-consultation style assessment.",
+    "National/local validation content combines live Gloucester submission guidance, adopted policy context and some provisional draft-2026 local validation material. Consumers must preserve source status when reporting outcomes.",
+    "Predicate field names in applicability conditions map to the facts schema via the predicate_mapping table in the facts schema.",
+    "v4.3 adds machine-readable legal_basis and effect_type fields to validation requirements and assessment rules.",
+    "v4.3 adds threshold_status for rules that rely on locally-applied thresholds without an adopted published source."
+  ],
+  "schema_refs": {
+    "facts_schema": "gloucester-householder-application-facts.v2.schema.json",
+    "result_schema": "gloucester-householder-assessment-result.v2.schema.json"
+  },
+  "provenance": {
+    "verified_on": "2026-03-24",
+    "verified_sources": [
+      {
+        "id": "gcc_submitting_planning_application",
+        "title": "Submitting a planning application",
+        "url": "https://www.gloucester.gov.uk/planning-development/planning-applications/submitting-a-planning-application/",
+        "status": "official_webpage",
+        "notes": "Confirms invalid application process and that website still points applicants to current checklist plus October 2023 addendum."
+      },
+      {
+        "id": "gcc_lvc_public_consultation_2026",
+        "title": "Local Validation Checklist Public Consultation",
+        "url": "https://democracy.gloucester.gov.uk/documents/s66344/Local%20Validation%20Checklist%20Public%20Consultation.pdf",
+        "status": "official_cabinet_report",
+        "notes": "Confirms revised 2026 LVC was placed on public consultation, not yet adopted."
+      },
+      {
+        "id": "gcc_lvc_draft_2026",
+        "title": "Draft Local Validation Checklist January 2026",
+        "url": "https://democracy.gloucester.gov.uk/documents/s66345/Appendix%201%20Draft%20Local%20Validation%20Checklist.pdf",
+        "status": "official_draft_pdf",
+        "notes": "Provides draft validation content and appendices used here as provisional local validation rules."
+      },
+      {
+        "id": "gcc_city_plan_2023",
+        "title": "Gloucester City Plan 2011-2031",
+        "url": "https://www.gloucester.gov.uk/media/nwxjergj/city-plan-final-adopted-clean.pdf",
+        "status": "official_adopted_pdf",
+        "notes": "Adopted on 26 January 2023."
+      },
+      {
+        "id": "gcc_cil_page",
+        "title": "Community Infrastructure Levy (CIL)",
+        "url": "https://www.gloucester.gov.uk/planning-development/planning-policy/community-infrastructure-levy-cil/",
+        "status": "official_webpage",
+        "notes": "Confirms extension/annexe threshold and relief availability."
+      },
+      {
+        "id": "gcc_cil_2026_rate_summary",
+        "title": "Annual CIL Rate Summary Statement 2026",
+        "url": "https://www.gloucester.gov.uk/media/aeygt4sn/cil-rate-summary-dec-2025-final-gcic-publish-17122025.pdf",
+        "status": "official_pdf",
+        "notes": "Confirms 2026 indexed rates."
+      },
+      {
+        "id": "govuk_bng_exemptions",
+        "title": "Biodiversity net gain: exempt developments",
+        "url": "https://www.gov.uk/guidance/biodiversity-net-gain-exempt-developments",
+        "status": "official_guidance",
+        "notes": "Used to mark householder applications as exempt from mandatory BNG."
+      }
+    ]
+  },
+  "decision_semantics": {
+    "must": "Mandatory requirement or strong legal/policy constraint.",
+    "must_not": "Outcome should be treated as non-compliant unless strong contrary basis exists.",
+    "should": "Normal policy expectation; departures need justification and officer judgement.",
+    "should_not": "Normally unacceptable; departures need strong justification and officer judgement.",
+    "may": "Potentially acceptable factor requiring context-based judgement.",
+    "informative_only": "Not a decision rule; information or good practice only.",
+    "manual_review_required": "Automation should stop and request human review."
+  },
+  "application_scope": {
+    "primary_scope": [
+      "householder_planning_permission",
+      "householder_planning_permission_and_listed_building_consent",
+      "pre_application_householder"
+    ],
+    "secondary_scope": [
+      "prior_notification_larger_home_extension"
+    ],
+    "proposal_types_covered_by_policy_A1": [
+      "single_storey_rear_extension",
+      "two_storey_rear_extension",
+      "single_storey_side_extension",
+      "two_storey_side_extension",
+      "front_extension",
+      "front_porch",
+      "roof_extension",
+      "dormer",
+      "conservatory",
+      "wraparound_extension",
+      "annexe",
+      "outbuilding",
+      "garage",
+      "loft_conversion",
+      "balcony_or_roof_terrace"
+    ],
+    "excluded_from_policy_A1": [
+      "new_dwellings",
+      "major_development",
+      "standalone_change_of_use",
+      "advertisement_consent",
+      "non_householder_prior_approvals"
+    ],
+    "route_notes": [
+      "Prior notification for larger home extensions is deliberately separated because it is not a normal planning-permission merits exercise.",
+      "Where listed building consent is also needed, Policy A1 does not displace listed-building statutory duties; it runs alongside a heritage review."
+    ]
+  },
+  "validation_modules": {
+    "national_requirements": {
+      "_description": "Statutory national requirements. Applications without any one of these are likely to be invalidated.",
+      "A1_completed_application_form": {
+        "requirement_id": "A1",
+        "name": "Completed Application Form",
+        "policy_driver": "Part 3, Article 7, DMPO 2015 (as amended)",
+        "applies_to": "All applications for planning permission and associated consents",
+        "mandatory": true,
+        "validation_rule": "All sections of the relevant application form must be completed",
+        "further_info_url": "https://www.planningportal.co.uk/applications",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A2_ownership_certificate": {
+        "requirement_id": "A2",
+        "name": "Ownership Certificate and Agricultural Land Declaration",
+        "policy_driver": "Part 3, Article 13, DMPO 2015 (as amended)",
+        "applies_to": "All applications for planning permission",
+        "mandatory": true,
+        "certificates": {
+          "A": {
+            "when": "Applicant has sole ownership and no agricultural tenants"
+          },
+          "B": {
+            "when": "Applicant is not sole owner, or there are agricultural tenants, but names/addresses of all others are known",
+            "additional_requirement": "Serve notice on known owners"
+          },
+          "C": {
+            "when": "Applicant does not own all land and does not know all owners/agricultural tenants",
+            "additional_requirements": [
+              "Serve notice on known owners",
+              "Advertise in local press",
+              "Submit copy of published notice with application"
+            ]
+          },
+          "D": {
+            "when": "Applicant does not own all land and knows none of the owners/agricultural tenants",
+            "additional_requirements": [
+              "Advertise in local press",
+              "Submit copy of published notice with application"
+            ]
+          }
+        },
+        "further_info_url": "https://www.gov.uk/guidance/making-an-application",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A3_planning_application_fee": {
+        "requirement_id": "A3",
+        "name": "Planning Application Fee",
+        "policy_driver": "Part 3, Article 11, DMPO 2015 (as amended); Town and Country Planning (Fees) (England) (Amendment) Regulations 2023",
+        "applies_to": "Most applications (concessions exist for LBC, conservation area demolition, tree works)",
+        "mandatory": true,
+        "exemption_rule": "If seeking exemption, reasons must be clearly stated in submission",
+        "fee_calculator_url": "https://www.planningportal.co.uk/planning/planning-applications/how-to-apply/what-it-costs",
+        "further_info_url": "https://www.gov.uk/guidance/fees-for-planning-applications",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A4_biodiversity_net_gain_strategy": {
+        "requirement_id": "A4",
+        "name": "Biodiversity Net Gain Strategy",
+        "policy_driver": "Schedule 7A, TCPA 1990 (as inserted by Schedule 14, Environment Act 2021)",
+        "applies_to_householder": false,
+        "householder_exempt": true,
+        "notes": "Householder applications are exempt from BNG Strategy requirement",
+        "scope_note": "Mandatory statutory BNG does not apply to householder applications. Do not treat this item as a required householder validation document.",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A5_environmental_impact_statement": {
+        "requirement_id": "A5",
+        "name": "Environmental Impact Statement",
+        "policy_driver": "Town and Country Planning (Environmental Impact Assessment) Regulations 2017",
+        "applies_to_householder": false,
+        "notes": "Not applicable to householder applications in normal circumstances",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A6_fire_statement": {
+        "requirement_id": "A6",
+        "name": "Fire Statement",
+        "policy_driver": "Part 3, Article 9A, DMPO 2015 (as amended)",
+        "applies_to_householder": false,
+        "trigger": "Buildings 18m+ height or 7+ storeys with 2+ dwellings or educational accommodation",
+        "notes": "Not applicable to standard householder applications",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A7_design_and_access_statement": {
+        "requirement_id": "A7",
+        "name": "Design and Access Statement",
+        "policy_driver": "Part 2, Article 9, DMPO 2015 (as amended); Planning (Listed Buildings and Conservation Areas) Regulations 1990; NPPF 137-139, 167",
+        "applies_to_householder": "conditional",
+        "required_when": {
+          "conservation_area_dwelling": true,
+          "listed_building_consent": true
+        },
+        "not_required_when": {
+          "standard_householder_outside_conservation_area": true
+        },
+        "content_requirements": {
+          "standard": [
+            "Explain design principles and concepts applied to the proposed development",
+            "Demonstrate steps taken to appraise context and how design takes context into account"
+          ],
+          "listed_building": [
+            "Explanation of design principles applied to the proposed works",
+            "How they have taken account of the special architectural or historic importance of the building",
+            "How they have taken account of the particular physical features justifying the listing",
+            "How they have taken account of the building's setting"
+          ]
+        },
+        "further_info_urls": [
+          "https://www.designcouncil.org.uk/sites/default/files/asset/document/design-and-access-statements.pdf",
+          "https://www.gov.uk/guidance/making-an-application#Design-and-Access-Statement"
+        ],
+        "scope_note": "For this ruleset, DAS is relevant to planning-permission routes in designated areas and to listed-building consent. It is not a generic householder requirement.",
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "A8_site_location_plan": {
+        "requirement_id": "A8",
+        "name": "Site Location Plan",
+        "policy_driver": "Part 3, Article 7, DMPO 2015 (as amended)",
+        "applies_to": "All applications except S73 variation/discharge of condition and non-material amendment",
+        "mandatory": true,
+        "specification": {
+          "base_map": "Up-to-date Ordnance Survey based map",
+          "scale": [
+            "1:1250",
+            "1:2500"
+          ],
+          "paper_size_preference": [
+            "A4",
+            "A3"
+          ],
+          "required_content": [
+            "Sufficient roads (usually 2 road names) and/or buildings on adjoining land to identify exact location",
+            "Direction of North",
+            "Scale bar",
+            "Red line around application site boundary (including all land for access, visibility splays, landscaping, parking, open areas)",
+            "Blue line around any other land owned by applicant close to or adjoining the site"
+          ]
+        },
+        "further_info_urls": [
+          "https://www.planningportal.co.uk/homepage/4/buy_a_planning_map",
+          "https://ecab.planningportal.co.uk/uploads/1app/maps_plans_and_planning_apps.pdf"
+        ],
+        "legal_basis": "statutory",
+        "effect_type": "validation"
+      },
+      "_module_scope": {
+        "stage": "validation",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "prior_notification_larger_home_extension"
+        ],
+        "source_status": "adopted",
+        "notes": [
+          "National administrative / statutory validation items."
+        ]
+      },
+      "_module_legal_basis": "statutory",
+      "_module_effect_type": "validation"
+    },
+    "local_requirements_householder": {
+      "_description": "Local validation requirements applicable to householder applications. These are conditional \u2014 triggered by site characteristics, proposal type, or location.",
+      "B8_annexe_statement": {
+        "item_number": 8,
+        "name": "Annexe Statement",
+        "policy_drivers": [
+          "GCP A10",
+          "JCS SD4"
+        ],
+        "trigger": {
+          "proposal_type": "annexe"
+        },
+        "mandatory_when_triggered": true,
+        "required_content": {
+          "policy_tests": [
+            {
+              "test_number": 1,
+              "description": "Functional link with the principal dwelling; accommodation is ancillary with reliance on connection with main dwelling"
+            },
+            {
+              "test_number": 2,
+              "description": "Subservient design and scale to the existing dwelling"
+            },
+            {
+              "test_number": 3,
+              "description": "Same ownership as the principal dwelling"
+            },
+            {
+              "test_number": 4,
+              "description": "No boundary demarcation or sub-division of garden areas between annexe and principal dwelling"
+            },
+            {
+              "test_number": 5,
+              "description": "Clear need to accommodate a relative, dependant or full-time carer"
+            }
+          ],
+          "annexe_functional_link_table": {
+            "_description": "Appendix 2 of the Local Validation Checklist. Must be completed and submitted prior to validation.",
+            "services": [
+              {
+                "service": "Full kitchen",
+                "column_a": "Contained in annexe itself or separate to/not shared with main dwelling?",
+                "column_b": "Contained in or shared with main dwelling?"
+              },
+              {
+                "service": "Kitchenette",
+                "column_a": "Contained in annexe itself or separate to/not shared with main dwelling?",
+                "column_b": "Contained in or shared with main dwelling?",
+                "note": "Specify what kitchenette consists of"
+              },
+              {
+                "service": "Living room/sitting area"
+              },
+              {
+                "service": "Bedroom"
+              },
+              {
+                "service": "Bathroom"
+              },
+              {
+                "service": "Laundry facilities"
+              },
+              {
+                "service": "New address"
+              },
+              {
+                "service": "Post box"
+              },
+              {
+                "service": "Utility meters"
+              },
+              {
+                "service": "Services (TV, phone, internet)"
+              },
+              {
+                "service": "Parking"
+              },
+              {
+                "service": "Garden"
+              },
+              {
+                "service": "Access"
+              },
+              {
+                "service": "Cycle storage"
+              },
+              {
+                "service": "Bins/waste storage"
+              },
+              {
+                "service": "EV charger point"
+              }
+            ]
+          }
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B9_bin_store": {
+        "item_number": 9,
+        "name": "Bin Store",
+        "policy_drivers": [
+          "NPPF",
+          "JCS SD4",
+          "JCS SD14",
+          "GCP A1"
+        ],
+        "trigger": {
+          "proposal_creates_new_dwelling": true,
+          "note": "All proposals involving development that would require bin storage, including all new dwellings. For householder extensions this is generally relevant only where the extension affects existing bin storage arrangements."
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Bin storage shown on block plan (separate plan for major schemes - not typical for householder)",
+          "Drawings should clearly show appropriate bin storage and identify collection points",
+          "Scale: 1:100, 1:200 or 1:500 depending on size/context",
+          "Statement confirming compliance with Gloucester City Council Waste and Recycling Guidance for New Residential Development"
+        ],
+        "critical_note": "Bins and recycling boxes cannot be collected by the local authority where a collection vehicle or member of collection staff is required to enter private property including stepping onto private drives",
+        "guidance_urls": {
+          "guidance_pdf": "https://www.gloucester.gov.uk/media/trqgrqer/waste-storage-and-collection-guidance-february-2020.pdf",
+          "landing_page": "https://www.gloucester.gov.uk/environment-waste-recycling/waste-recycling-street-cleaning/bins-recycling/bin-storage-guidance-for-new-developments/",
+          "_resolved": "2026-03-24"
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B11_biodiversity_small_sites_statement": {
+        "item_number": 11,
+        "name": "Biodiversity Small Sites Statement",
+        "policy_drivers": [
+          "GCP A1",
+          "GCP E1",
+          "GCP E2",
+          "GCP E3"
+        ],
+        "trigger": {
+          "application_type": [
+            "householder",
+            "HMO",
+            "small_site"
+          ]
+        },
+        "mandatory_when_triggered": true,
+        "required_content": "Short statement outlining how the applicant will improve biodiversity",
+        "examples_of_measures": [
+          "Insect hotels",
+          "Rain gardens",
+          "Artificial nests for birds (swift bricks or bird boxes)",
+          "Bat bricks",
+          "Roosting pockets",
+          "Hedgehog holes",
+          "Tree and hedge planting"
+        ],
+        "guidance_url": "https://www.gloucester.gov.uk/media/k0ppalty/biodiversity-net-gain-small-developments-guide-march-2024-1.pdf",
+        "legal_basis": "local_validation",
+        "effect_type": "validation",
+        "notes": [
+          "This item is a local validation expectation for biodiversity information. It is not the statutory mandatory Biodiversity Net Gain regime."
+        ]
+      },
+      "B12_biodiversity_survey_and_report": {
+        "item_number": 12,
+        "name": "Biodiversity Survey and Report",
+        "policy_drivers": [
+          "GCP A1",
+          "GCP E1",
+          "GCP E2",
+          "GCP E3"
+        ],
+        "trigger": {
+          "important_wildlife_site_affected": true,
+          "protected_habitat_affected": true,
+          "natural_feature_affected": true,
+          "protected_species_potentially_present": true
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Current habitat assessment and impact assessment",
+          "Effect on any protected species",
+          "Considerations and mitigation techniques",
+          "Summary of all recent surveys required with confirmation they have been undertaken at appropriate times of year"
+        ],
+        "survey_validity": {
+          "less_than_12_months": "Valid",
+          "12_to_18_months": "Valid provided site conditions have not changed",
+          "over_18_months": "Will not be validated"
+        },
+        "habitats_regulations_assessment": {
+          "trigger": "Application may be connected to or potentially impact European/Internationally designated site (Ramsar, SAC, SPA, or candidate status)",
+          "required": true
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B16_condition_survey": {
+        "item_number": 16,
+        "name": "Condition Survey",
+        "policy_drivers": [
+          "NPPF",
+          "JCS SD8",
+          "GCP D1"
+        ],
+        "trigger": {
+          "partial_or_total_demolition_based_on_condition": true,
+          "conversion_to_residential_requiring_significant_works": true
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Fabric deterioration assessment",
+          "Materials decay assessment",
+          "Weathering assessment",
+          "Assessment of structural condition (where required)",
+          "Prognosis of likely effects of deterioration processes",
+          "Repair strategy or schedule of works to restore"
+        ],
+        "preparer": "Appropriately qualified specialist familiar with heritage assets",
+        "note": "Also required for conversion of existing building to residential where significant alterations/repair/works are needed",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B17_cordon_sanitaire": {
+        "item_number": 17,
+        "name": "Cordon Sanitaire \u2013 Netheridge Sewage Treatment Works",
+        "policy_drivers": [
+          "GCP C6"
+        ],
+        "trigger": {
+          "within_cordon_sanitaire_boundary": true
+        },
+        "mandatory_when_triggered": true,
+        "required_content": "Odour Assessment with comprehensive detailed odour dispersion modelling, source monitoring and ground based observations",
+        "standard": "Institute of Air Quality Management (IAQM) guidance",
+        "policy_map_url": null,
+        "_LOCK_TODO_002": "AWAITING: No interactive policy map with Cordon Sanitaire boundary found online. Evidence study PDF at https://www.gloucester.gov.uk/media/xd1j01oe/8693-odour-final.pdf \u2014 boundary data may need GIS extract from Environmental Health or Planning Policy team.",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B18_daylight_sunlight_assessment": {
+        "item_number": 18,
+        "name": "Daylight/Sunlight Assessment",
+        "policy_drivers": [
+          "NPPF",
+          "JCS SD4",
+          "JCS SD14"
+        ],
+        "trigger": {
+          "potential_adverse_impact_on_adjoining_daylight_sunlight": true,
+          "potential_adverse_impact_on_future_occupiers": true,
+          "note": "Includes impact on associated gardens or amenity space"
+        },
+        "mandatory_when_triggered": true,
+        "required_content": {
+          "reference_standards": "BRE BR 209 (2022) and BS EN 17037",
+          "scope_statement": "Identify whether assessment covers impact on neighbouring properties, quality of light in proposed development, and amenity spaces",
+          "model_and_methodology": [
+            "Modelling software details, assumptions and parameters",
+            "Existing and proposed buildings, ground levels, tree cover (leaf-on/off)",
+            "Surface reflectance and glass transmittance values"
+          ],
+          "neighbouring_properties_analysis": [
+            "Vertical Sky Component (VSC) results for affected windows",
+            "No-Sky Line (NSL) analysis for internal daylight distribution",
+            "Annual Probable Sunlight Hours (APSH) for main living rooms (annual and winter)",
+            "Sunlight to gardens/open spaces on 21 March"
+          ],
+          "proposed_development_analysis": [
+            "Internal daylight compliance using SDA, Median Daylight Factor, or lux levels per BS EN 17037",
+            "Internal sunlight hours for habitable rooms",
+            "Sun-On-Ground (SOG) for amenity spaces"
+          ],
+          "shadow_diagrams": "21 March, 21 June, and 21 December",
+          "results": [
+            "Tabulated results for all tests",
+            "Floorplans and diagrams showing compliance/non-compliance",
+            "Weighted averages for rooms with multiple windows"
+          ],
+          "flexibility_and_justification": "Statement explaining any deviations from BRE targets and contextual justification",
+          "executive_summary": "Clear summary of compliance, impacts, and any mitigation measures"
+        },
+        "guidance_reference": "Site Planning for Daylight and Sunlight: a guide to good practice. BRE Guidance",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B20_drainage_strategy": {
+        "item_number": 20,
+        "name": "Drainage Strategy Including Sustainable Urban Drainage (SUDS)",
+        "policy_drivers": [
+          "JCS SD4",
+          "JCS SD14",
+          "JCS INF2",
+          "JCS INF3",
+          "JCS INF6",
+          "JCS INF7",
+          "GCP E4"
+        ],
+        "trigger": {
+          "surface_water_implications": true,
+          "impermeable_area_increase_sqm": {
+            "operator": ">=",
+            "threshold": 50
+          }
+        },
+        "mandatory_when_triggered": true,
+        "also_required": "Flood Risk & Drainage Validation Checklist (see flood_risk_drainage_checklist section)",
+        "householder_guidance_urls": {
+          "submitting_page": "https://www.gloucester.gov.uk/planning-development/planning-applications/submitting-a-planning-application/",
+          "flood_zone_1_checklist": "https://www.gloucester.gov.uk/media/flood-zone-1-checklist.pdf",
+          "flood_zone_2_checklist": "https://www.gloucester.gov.uk/media/flood-zone-2-checklist.pdf",
+          "flood_zone_3_checklist": "https://www.gloucester.gov.uk/media/flood-zone-3-checklist.pdf",
+          "_LOCK_TODO_003": "PARTIAL: Individual flood zone checklist PDFs are linked from the submitting page. No single householder-specific FRA guidance document found. Confirm with Planning team whether a standalone householder FRA guide exists or whether the checklists are the complete requirement."
+        },
+        "required_content": [
+          "Suitable consideration has been given to surface water drainage",
+          "Appropriate arrangements for attenuating surface water run-off as close as possible to its source can be accommodated within the site",
+          "Issues of ownership and maintenance are addressed"
+        ],
+        "further_guidance_urls": {
+          "defra_national_standards": "https://www.gov.uk/government/publications/sustainable-drainage-systems-non-statutory-technical-standards",
+          "ciria_suds_manual_c753": "https://www.ciria.org/CIRIA/CIRIA/Item_Detail.aspx?iProductCode=C753",
+          "gloucestershire_county_suds_guide": "https://www.gloucestershire.gov.uk/media/ym2endrp/gloucestershire_suds_design_and_maintenance_guide_-dec_2015-compressed-63334.pdf",
+          "gcc_suds_design_adoption_guide": "https://www.gloucester.gov.uk/media/x03fmyt5/suds-for-gcc-final-july-2013-document.pdf",
+          "gloucestershire_county_suds_page": "https://www.gloucestershire.gov.uk/planning-and-environment/flood-risk-management/flooding-information/information-for-developers/surface-water-drainage-and-major-planning-applications/guidance-to-local-planning-authorities-on-development-and-flood-risks/suds-sustainable-drainage-system/",
+          "_resolved": "2026-03-24"
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B25_flood_risk_assessment": {
+        "item_number": 25,
+        "name": "Flood Risk Assessment",
+        "policy_drivers": [
+          "NPPF",
+          "JCS SD4",
+          "JCS SD14",
+          "JCS INF2",
+          "JCS INF3",
+          "JCS INF6",
+          "JCS INF7",
+          "GCP E4"
+        ],
+        "trigger": {
+          "any_of": [
+            "Site in Flood Zone 2 or 3",
+            "Site in Flood Zone 1 with area >= 1 hectare",
+            "Site in Flood Zones plus Climate Change showing increased risk",
+            "Site in Flood Zone 1 with high surface water flood risk",
+            "Site in area with critical drainage problems",
+            "Site in Flood Zone 1 where SFRA shows increased risk during lifetime",
+            "Development increases vulnerability classification and may be subject to flooding"
+          ]
+        },
+        "mandatory_when_triggered": true,
+        "also_required": "Flood Risk & Drainage Validation Checklist",
+        "householder_guidance_url": "https://www.gloucester.gov.uk/planning-development/planning-applications/submitting-a-planning-application/",
+        "sequential_test": {
+          "required": "For all development in flood risk areas except exemptions",
+          "exemptions_for_householder": [
+            "Minor development for flood risk (householder development and small non-residential extensions with footprint < 250sqm)"
+          ],
+          "note": "Most householder applications are exempt from the sequential test as they are classified as minor development for flood risk purposes"
+        },
+        "exception_test": {
+          "required_when": [
+            "Highly vulnerable development in Flood Zone 2",
+            "Essential infrastructure in Flood Zone 3a or 3b",
+            "More vulnerable development in Flood Zone 3a"
+          ],
+          "criteria": [
+            "Development provides wider sustainability benefits that outweigh flood risk",
+            "Development will be safe for its lifetime without increasing flood risk elsewhere, and where possible will reduce flood risk overall"
+          ]
+        },
+        "key_constraint": "Only water compatible and essential infrastructure development is permitted in Flood Zone 3b",
+        "climate_change_allowances": "FRAs must incorporate the most up-to-date climate change allowances",
+        "sfra_urls": {
+          "gcc_level_2_sfra": "https://www.gloucester.gov.uk/media/sfipiyaj/gloucester-sfra-level2-final-report-v3.pdf",
+          "gcc_level_2_site_summaries": "https://www.gloucester.gov.uk/media/dqzgvesu/appendix-a1-site-summary-tables.pdf",
+          "county_level_1_sfra": "https://www.gloucestershire.gov.uk/planning-and-environment/flood-risk-management/flooding-information/information-for-developers/strategic-flood-risk-assessment-sfra/",
+          "jcs_sfra": "https://www.jointcorestrategy.org/strategic-flood-risk-assessment",
+          "gov_uk_flood_risk_checker": "https://www.gov.uk/check-flood-risk",
+          "_resolved": "2026-03-24"
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B28_historic_impact_statement": {
+        "item_number": 28,
+        "name": "Historic Impact Statement",
+        "policy_drivers": [
+          "NPPF",
+          "JCS SD4",
+          "JCS SD8",
+          "GCP"
+        ],
+        "trigger": {
+          "any_of": [
+            "Listed building affected",
+            "Building in conservation area affected",
+            "Scheduled monument affected",
+            "Registered park or garden affected",
+            "Registered battlefield affected",
+            "Unlisted historic building or structure affected",
+            "Undesignated archaeological site affected",
+            "Heritage asset identified during development preparation"
+          ]
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Description of the significance of any heritage assets affected, including contribution made by their setting",
+          "Demonstration that historic character and distinctiveness of the locality has been assessed and taken into account",
+          "Consultation of the Historic Environment Record as a minimum"
+        ],
+        "proportionality": "Scope shall be proportionate to the importance of the heritage asset(s) and no more than sufficient to understand the impact",
+        "archaeological_interest": {
+          "may_require": [
+            "Desk-based assessment",
+            "Report on field evaluation"
+          ]
+        },
+        "pre_application_advice": "Applicants strongly advised to submit pre-application for guidance on extent of information required",
+        "guidance_url": "https://historicengland.org.uk/images-books/publications/statements-heritage-significance-advice-note-12/",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B34_lighting_assessment": {
+        "item_number": 34,
+        "name": "Lighting Assessment",
+        "policy_drivers": [
+          "NPPF 198",
+          "JCS SD14",
+          "JCS SD4",
+          "GCP A1"
+        ],
+        "trigger": {
+          "external_lighting_proposed": true,
+          "involves_areas_of_public_access": true
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Light spillage assessment",
+          "Hours of illumination",
+          "Light levels",
+          "Column heights",
+          "Specification and colour treatment for lamps and luminaries",
+          "Need for full horizontal cut off",
+          "No distraction to highway",
+          "Levels of impact on nearby dwellings",
+          "Use of demountable columns",
+          "Retention of screening vegetation",
+          "Use of planting and bunding to contain lighting effects",
+          "Details of lighting covers or cowling",
+          "Other mitigation measures"
+        ],
+        "effects_to_assess": [
+          "Visual amenity",
+          "Local character and distinctiveness",
+          "Neighbouring amenity",
+          "Heritage assets if present",
+          "Nature conservation"
+        ],
+        "standard": "Institute of Lighting Professionals GN01 For the reduction of obtrusive light 2021",
+        "note": "Unlikely to be triggered for most householder applications but included for completeness",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B37_nationally_described_space_standards": {
+        "item_number": 37,
+        "name": "Nationally Described Space Standards Statement",
+        "policy_drivers": [
+          "GCP F6"
+        ],
+        "trigger": {
+          "any_new_dwelling": true,
+          "note": "Only applies to householder applications where an annexe constitutes a new dwelling - otherwise not triggered for extensions"
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Floor plans with all dimensions including internal floor space, storage areas, areas of reduced ceiling height",
+          "Table (preferably excel/csv) showing gross internal floorspace, room dimensions, and storage provision of each property",
+          "Whether or not it meets the NDSS standard and the amount by which it exceeds or falls short",
+          "Which NDSS criteria applied (e.g. 1b1p, 3b5p, 5b8p)"
+        ],
+        "guidance_url": "https://www.gov.uk/government/publications/technical-housing-standards-nationally-described-space-standard",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B38_newts": {
+        "item_number": 38,
+        "name": "Newts",
+        "policy_drivers": [
+          "Natural England Standing Advice",
+          "GCP E1"
+        ],
+        "trigger": {
+          "within_500m_of_pond": true
+        },
+        "mandatory_when_triggered": true,
+        "required_content": {
+          "licensing_route_choice": "State whether National England Licensing Route or District Licensing Route",
+          "if_district_licensing": [
+            "Evidence of joining the scheme",
+            "Nature Space metric"
+          ]
+        },
+        "guidance_urls": [
+          "https://www.gloucester.gov.uk/planning-development/planning-applications/district-licence-for-great-crested-newts/",
+          "https://www.gov.uk/guidance/great-crested-newts-advice-for-making-planning-decisions"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B52_regulation_77_permitted_development": {
+        "item_number": 52,
+        "name": "Regulation 77 Application for Permitted Development",
+        "policy_drivers": [
+          "Conservation of Habitats and Species Regulations 2017 (as amended)",
+          "Paragraph 3, GPDO 2015 (as amended)"
+        ],
+        "trigger": {
+          "permitted_development_or_prior_approval": true,
+          "creates_new_dwelling_or_tourist_accommodation_or_annexe": true,
+          "likely_significant_effect_on_SAC": true,
+          "note": "Development types deemed to have a Likely Significant Effect on a Special Area of Conservation (Cotswold Beechwoods)"
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Details of intended development",
+          "Optional: Copy of any relevant notification by appropriate nature conservation body under Regulation 76",
+          "Application Fee",
+          "Site location plan",
+          "Existing and proposed block/site plans, elevational drawings",
+          "Reference number of any Prior Approval application",
+          "Appropriate long or short form S106 Unilateral Undertaking legal agreement"
+        ],
+        "guidance_url": "https://www.gloucester.gov.uk/planning-development/planning-applications/cotswold-beechwoods-mitigation/",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "B62_trees_survey_and_protection": {
+        "item_number": 62,
+        "name": "Trees Survey and Tree Protection Plan",
+        "policy_drivers": [
+          "GCP E7"
+        ],
+        "trigger": {
+          "any_of": [
+            "Proposals affecting trees covered by a Tree Preservation Order",
+            "Proposals within a Conservation Area where trees within or adjacent the site are affected",
+            "All sites with trees and hedges growing within or bounding them with stem diameter > 75mm at 1.5m above ground level where proposals affect them"
+          ]
+        },
+        "mandatory_when_triggered": true,
+        "required_content": [
+          "Tree survey",
+          "Tree works method statement",
+          "Tree Protection Plan"
+        ],
+        "standards": "BS5837:2012 'Trees in relation to design, demolition and construction \u2013 recommendations' or subsequent revisions",
+        "surveyor_requirement": "Competent arboriculturist",
+        "arboricultural_impact_assessment": {
+          "may_be_required": true,
+          "content": [
+            "Tree protection plan",
+            "Plan indicating trees for retention and removal",
+            "Evaluation of impact of proposed tree losses",
+            "Specialist issues addressable by arboricultural method statement"
+          ]
+        },
+        "replacement_planting": {
+          "required_when": "Trees are to be removed",
+          "details_needed": [
+            "Location, species, size and canopy volume",
+            "Measurement of new canopy volume compared to previous canopy volume (CAVAT value)"
+          ]
+        },
+        "householder_simplified": "For householder applications, any proposals involving development within 2m of the canopy spread of any tree(s) within or adjoining the site should indicate the position and spread of the tree(s) on the application plans",
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "_module_scope": {
+        "stage": "validation",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent"
+        ],
+        "source_status": "mixed_live_and_provisional",
+        "notes": [
+          "Module scope for local_requirements_householder."
+        ]
+      },
+      "_module_legal_basis": "local_validation",
+      "_module_effect_type": "validation"
+    },
+    "householder_plans_requirements": {
+      "_description": "Drawing requirements for householder applications derived from Appendix 1 and Part B items 43-47 of the Local Validation Checklist.",
+      "existing_and_proposed_block_plan": {
+        "item_number": 43,
+        "name": "Site/Block Plan Existing and Proposed",
+        "policy_drivers": [
+          "Part 3, Article 7, DMPO 2015",
+          "NPPF 109-114",
+          "JCS SD4",
+          "GCP G1"
+        ],
+        "mandatory": true,
+        "scale": [
+          "1:200",
+          "1:500"
+        ],
+        "existing_plan_must_show": [
+          "Footprint of all existing buildings on site with written dimensions and distances to site boundaries"
+        ],
+        "proposed_plan_must_show": [
+          "Footprint of proposed development and all buildings to be retained with written dimensions and distances to site boundaries",
+          "All buildings, roads and footpaths on adjoining land including access arrangements",
+          "All public rights of way crossing or adjoining the site",
+          "Position of all proposed trees and those retained on site, and those on adjacent land",
+          "Extent and type of hard surfacing and boundary treatment including type and height of walls or fencing"
+        ],
+        "parking_requirements": {
+          "trigger": "Loss or gain in parking provision, increase in parking demand, or change to vehicular/pedestrian access",
+          "must_show": [
+            "Parking arrangements including dimensions of spaces",
+            "Secure cycle parking (location and size)",
+            "Pedestrian access if appropriate"
+          ],
+          "note": "If any spaces have smaller dimensions than adopted G1 policy sizes, justification must be provided"
+        },
+        "general_requirements": [
+          "Up to date",
+          "Direction of North",
+          "Scale bar"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "elevation_drawings": {
+        "item_number": 44,
+        "name": "Elevation Drawings \u2013 Existing and Proposed",
+        "policy_driver": "Part 3, Article 7, DMPO 2015",
+        "mandatory": true,
+        "trigger": "All applications proposing new buildings, extensions or alterations to the exterior of an existing building",
+        "quantity": "Two sets required: one existing, one proposed",
+        "must_show": [
+          "Where existing buildings or walls are to be demolished (if applicable)",
+          "Details of existing building(s) and proposed development",
+          "Written dimensions showing overall size of new buildings or extensions",
+          "Direction of North",
+          "Scale bar"
+        ],
+        "scale": [
+          "1:50",
+          "1:100"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "floor_plans": {
+        "item_number": 45,
+        "name": "Floor Plans \u2013 Existing and Proposed",
+        "policy_driver": "Part 3, Article 7, DMPO 2015",
+        "mandatory": true,
+        "trigger": "All applications proposing new or amended floor space and/or proposals to alter existing buildings",
+        "quantity": "Two sets required: one existing, one proposed",
+        "must_show": [
+          "Where existing buildings or walls are to be demolished (if applicable)",
+          "Details of existing building(s) and proposed development",
+          "Written dimensions (width and depth) showing overall size of new buildings or extensions",
+          "Scale bar"
+        ],
+        "scale": [
+          "1:50",
+          "1:100"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "site_sections_and_levels": {
+        "item_number": 46,
+        "name": "Site Sections, Finished Floor and Site Levels \u2013 Existing and Proposed",
+        "policy_driver": "Part 3, Article 7, DMPO 2015",
+        "mandatory_when_triggered": true,
+        "trigger": "Applications involving a change in ground levels or development next to changing ground levels",
+        "must_show": [
+          "Existing and proposed finished ground levels",
+          "Details of floor levels, building height and relationship to site boundaries",
+          "On sloping sites: how proposals relate to existing ground levels where ground levels may be modified"
+        ],
+        "scale": [
+          "1:50",
+          "1:100"
+        ],
+        "requirements": [
+          "Written dimensions",
+          "Direction of North",
+          "Scale bar"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "roof_plans": {
+        "item_number": 47,
+        "name": "Roof Plans \u2013 Existing and Proposed",
+        "policy_driver": "Part 3, Article 7, DMPO 2015",
+        "mandatory_when_triggered": true,
+        "trigger": "Where a roof would be created or altered by the proposed development",
+        "must_show": [
+          "Shape of the roof",
+          "Roofing materials",
+          "Features such as chimney positions or windows"
+        ],
+        "scale": [
+          "1:50",
+          "1:100",
+          "1:200"
+        ],
+        "note": "May be possible to combine with proposed block plan where the roof plan is simple and clearly conveyed",
+        "requirements": [
+          "Scale bar",
+          "Direction of North"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "_module_scope": {
+        "stage": "validation",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent"
+        ],
+        "source_status": "live_checklist",
+        "notes": [
+          "Module scope for householder_plans_requirements."
+        ]
+      },
+      "_module_legal_basis": "local_validation",
+      "_module_effect_type": "validation"
+    },
+    "flood_risk_drainage_checklist": {
+      "_description": "Appendix 3 of the Local Validation Checklist. Required where the application needs a Flood Risk Assessment or Drainage Strategy.",
+      "householder_checklist": {
+        "H1_flood_risk_assessment": {
+          "trigger": "Development in Flood Zone 2 or 3 (taking into account climate change)",
+          "items": {
+            "H1.1": {
+              "description": "Simple Flood Risk Assessment report following Government Flood Risk Standing Advice Guidance",
+              "mandatory": true
+            },
+            "H1.2": {
+              "description": "Identification of the flood zone within which the site is located",
+              "data_source": "Flood maps for planning (dataset: flood zones 2 and 3; climate change - 2070 to 2125)",
+              "mandatory": true
+            },
+            "H1.3": {
+              "description": "Up-to-date design flood level for the site",
+              "specification": "100yr (or 1%) flood level with a 37% climate change allowance",
+              "reference": "Section 1.8 of detailed guidance",
+              "mandatory": true
+            },
+            "H1.4": {
+              "description": "Finished floor level (FFL) related to Ordnance Datum (m AOD)",
+              "rule": "For extensions: floor level should be no lower than existing floor level, preferably no less than 300mm above design flood level",
+              "mandatory": true
+            },
+            "H1.5": {
+              "description": "External ground levels of the site to Ordnance Datum (m AOD)",
+              "mandatory": true
+            },
+            "H1.6": {
+              "description": "Brief assessment of flooding risk from other sources",
+              "sources": [
+                "Surface water",
+                "Ground water",
+                "Sewer",
+                "Reservoir",
+                "Historic flooding"
+              ],
+              "reference": "Section 1.11 of detailed guidance",
+              "mandatory": true
+            },
+            "H1.7": {
+              "description": "Details of flood resilience / flood resistance proposals",
+              "specification": "Required to a height of 600mm above the design flood level",
+              "reference": "Section 1.12 of detailed guidance",
+              "mandatory": true
+            },
+            "H1.8": {
+              "description": "Flood Zone 3 Only: Floodplain storage volume compensation",
+              "trigger": "Development displaces more than 5 cubic metres of flood plain storage volume",
+              "reference": "Section 2.8 of detailed guidance",
+              "mandatory_when_triggered": true,
+              "flood_zone_3_only": true
+            }
+          }
+        },
+        "H2_impermeable_area_increase": {
+          "trigger": "Increase in impermeable area (building footprint + hard surfacing) of 50 sqm or more",
+          "items": {
+            "H2.1": {
+              "description": "Outline drainage layout plan",
+              "must_show": [
+                "All proposed new roof / driveway / paving areas marked with sizes in sqm",
+                "Proposed drainage layout including location/size of flow control, surface water attenuation/storage, soakaways"
+              ],
+              "mandatory": true
+            },
+            "H2.2": {
+              "description": "Where soakaways are proposed: BRE 365 infiltration testing results and soakaway sizing calculations",
+              "mandatory_when_triggered": true
+            }
+          }
+        },
+        "H3_other": {
+          "items": {
+            "H3.1": {
+              "description": "Identify any areas within 8m of a watercourse (from top of bank), including culverted watercourses (8m from edge of culvert)",
+              "constraint": "No built development within 8m of watercourses (both main river and ordinary watercourses)",
+              "mandatory": true
+            }
+          }
+        },
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "signoff": {
+        "declaration": "I confirm that I have included the required information and have accurately completed this checklist",
+        "understanding": [
+          "Failure to include required information will result in delays to validation",
+          "If inaccuracies are found, the LPA will not make further requests for information and the application will be determined on submitted information"
+        ],
+        "requires": [
+          "Signature",
+          "Date"
+        ],
+        "legal_basis": "local_validation",
+        "effect_type": "validation"
+      },
+      "_module_scope": {
+        "stage": "validation",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent"
+        ],
+        "source_status": "live_checklist",
+        "notes": [
+          "Module scope for flood_risk_drainage_checklist."
+        ]
+      },
+      "_module_legal_basis": "local_validation",
+      "_module_effect_type": "validation"
+    }
+  },
+  "assessment_tests": [
+    {
+      "test_id": "A1.1",
+      "test_name": "Design Subordination",
+      "description": "Extensions should be clearly subordinate to the main dwelling and not dominate its appearance",
+      "assessment_type": "dimensional_and_qualitative",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.1.1",
+          "rule_name": "Side Extension Setback",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_side",
+                  "two_storey_side"
+                ]
+              },
+              {
+                "field": "dwelling_type",
+                "op": "in",
+                "value": [
+                  "semi_detached",
+                  "detached",
+                  "end_terrace"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Side extensions set back from the main front building line appear subordinate and avoid creating a 'terracing effect' on pairs or groups of dwellings",
+          "assessment_guidance": "Measure from the furthest forward point of the existing front elevation to the front face of the proposed side extension. A setback of 1m is the minimum expected; 1.5m is preferred for two-storey extensions on semi-detached dwellings.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "setback_from_front_building_line",
+              "unit": "mm",
+              "operator": ">=",
+              "threshold": 1000,
+              "preferred": 1500
+            }
+          },
+          "exceptions": [
+            {
+              "exception_id": "A1.1.1.E1",
+              "description": "No setback required where existing pattern shows continuous front building line (e.g., terraced streets)",
+              "applicability": {
+                "all": [],
+                "notes": [
+                  "See expression_text for manual interpretation."
+                ],
+                "expression_text": "street_character == 'continuous_frontage'"
+              }
+            },
+            {
+              "exception_id": "A1.1.1.E2",
+              "description": "Reduced setback may be acceptable on detached dwellings with significant plot width",
+              "applicability": {
+                "all": [],
+                "notes": [
+                  "See expression_text for manual interpretation."
+                ],
+                "expression_text": "plot_width > 15000 AND dwelling_type == 'detached'"
+              }
+            }
+          ],
+          "suggested_condition_templates": [
+            "The development shall be carried out in accordance with the approved plans, which show the side extension set back [X]mm from the front building line of the main dwelling."
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.1.2",
+          "rule_name": "Ridge Height Relationship",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_side",
+                  "two_storey_rear",
+                  "roof_extension"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Extensions with ridge heights lower than or equal to the existing dwelling appear subordinate and respect the hierarchy of built form",
+          "assessment_guidance": "Compare the proposed ridge height with the existing main dwelling ridge. Two-storey side extensions should typically have a lower ridge. Matching ridge height may be acceptable if other subordination features are present (setback, reduced width, secondary materials).",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "extension_ridge_height",
+              "unit": "mm",
+              "operator": "<=",
+              "comparison": "existing_ridge_height",
+              "tolerance": 0
+            }
+          },
+          "exceptions": [
+            {
+              "exception_id": "A1.1.2.E1",
+              "description": "Matching ridge height acceptable if strong subordination achieved through other means",
+              "applicability": {
+                "all": [],
+                "notes": [
+                  "See expression_text for manual interpretation."
+                ],
+                "expression_text": "setback >= 1500 AND extension_width < (existing_width * 0.5)"
+              }
+            }
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.1.3",
+          "rule_name": "Eaves Height Relationship",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_side",
+                  "two_storey_rear"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "may",
+          "policy_rationale": "Matching or slightly lower eaves heights create visual continuity while maintaining overall subordination",
+          "assessment_guidance": "Eaves may match the existing dwelling where this creates better proportions and design coherence. This is particularly acceptable where ridge height is lower or other subordination features are present.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "extension_eaves_height",
+              "unit": "mm",
+              "operator": "<=",
+              "comparison": "existing_eaves_height",
+              "tolerance": 150
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.1.4",
+          "rule_name": "Extension Width Proportion",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_side",
+                  "two_storey_side"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Extensions narrower than the main dwelling appear subordinate and maintain the character of the original building",
+          "assessment_guidance": "Calculate extension width as a percentage of the existing main dwelling width. Extensions should not overwhelm the proportions of the original building.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "extension_width_as_percentage_of_existing",
+              "unit": "percentage",
+              "operator": "<",
+              "threshold": 60,
+              "preferred": 50
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.1.5",
+          "rule_name": "Front Extension Depth",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "front_extension",
+                  "front_porch"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Front extensions should be modest additions that do not dominate the front elevation or harm street scene character",
+          "assessment_guidance": "Porches and front extensions should be clearly subordinate features. Single-storey depth of up to 1.5m is typically acceptable; deeper extensions require strong design justification.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "extension_depth_from_existing_front",
+              "unit": "mm",
+              "operator": "<=",
+              "threshold": 2000,
+              "preferred": 1500
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.2",
+      "test_name": "Neighbour Amenity Protection",
+      "description": "Extensions must not cause unacceptable harm to the amenities of neighbouring properties through loss of light, overlooking, or overbearing impact",
+      "assessment_type": "dimensional_and_site_specific",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.2.1",
+          "rule_name": "45-Degree Rule (Daylight)",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_side",
+                  "two_storey_side",
+                  "single_storey_rear",
+                  "two_storey_rear"
+                ]
+              },
+              {
+                "field": "distance_to_boundary",
+                "op": "<=",
+                "value": 2000
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": "The 45-degree rule is a standard test for ensuring extensions do not cause unacceptable loss of daylight to neighboring properties",
+          "assessment_guidance": "Identify the nearest habitable room window (living room, kitchen, bedroom - not bathroom or hallway) on the adjoining property. Plot a 45-degree line from its center point. Extensions breaching this line may cause unacceptable loss of light. Site-specific factors (orientation, existing obstructions, room usage) should be considered.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "45_degree_line_from_neighbor_window",
+              "assessment_method": "elevation_analysis",
+              "description": "Draw a 45-degree line from the center point of the nearest ground floor habitable room window of the adjoining property. The extension should not breach this line in elevation view."
+            }
+          },
+          "exceptions": [
+            {
+              "exception_id": "A1.2.1.E1",
+              "description": "Breach may be acceptable if window serves a secondary room and other windows are unaffected",
+              "applicability": {
+                "all": [],
+                "notes": []
+              }
+            },
+            {
+              "exception_id": "A1.2.1.E2",
+              "description": "North-facing extensions have lower impact on light than south-facing",
+              "applicability": {
+                "all": [],
+                "notes": [
+                  "See expression_text for manual interpretation."
+                ],
+                "expression_text": "extension_orientation == 'north' OR extension_orientation == 'north_west'"
+              }
+            }
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.2.2",
+          "rule_name": "Window-to-Window Distances (Overlooking)",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_side",
+                  "two_storey_rear",
+                  "dormer",
+                  "roof_extension"
+                ]
+              },
+              {
+                "field": "has_habitable_room_windows",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Adequate separation prevents mutual overlooking between habitable room windows",
+          "assessment_guidance": "Measure the distance between the proposed habitable room window and the nearest habitable room window on the facing property. 21m is the standard for directly facing windows; oblique views may allow reduced distances.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "distance_to_facing_habitable_window",
+              "unit": "mm",
+              "operator": ">=",
+              "threshold": 21000,
+              "note": "21m is a standard separation distance for rear-to-rear; side-to-side may be less depending on context"
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.2.3",
+          "rule_name": "Side Boundary Windows",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_side",
+                  "two_storey_side",
+                  "single_storey_rear",
+                  "two_storey_rear"
+                ]
+              },
+              {
+                "field": "windows_facing_boundary",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": "Windows in side elevations close to boundaries create potential for future overlooking, particularly if the neighbouring site is developed",
+          "assessment_guidance": "Side elevation windows serving habitable rooms should be avoided where they would overlook neighbouring properties. Where they are necessary, obscure glazing and non-opening below 1.7m conditions should be applied.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "side_window_to_boundary_distance",
+              "unit": "mm",
+              "assessment_method": "case_by_case"
+            }
+          },
+          "suggested_condition_templates": [
+            "COND_004"
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.2.4",
+          "rule_name": "Rear Garden Overlooking",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_rear",
+                  "dormer",
+                  "roof_extension",
+                  "balcony"
+                ]
+              },
+              {
+                "field": "rear_facing_windows_or_openings",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": null,
+          "assessment_guidance": "Consider whether new upper-floor windows would introduce materially greater overlooking of neighbouring gardens than the existing situation. Raised terraces and balconies require particular scrutiny.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "overlooking_distance_to_garden",
+              "unit": "mm",
+              "operator": ">=",
+              "threshold": 10500,
+              "note": "Half the standard 21m separation is typically applied to garden boundaries"
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.2.5",
+          "rule_name": "Balcony/Terrace Restrictions",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "balcony_or_roof_terrace",
+                  "balcony",
+                  "roof_terrace",
+                  "raised_platform"
+                ]
+              }
+            ],
+            "notes": [
+              "Maps to proposal_type 'balcony_or_roof_terrace' via extension_type_mapping.",
+              "Also applies to flat_roof_extension_with_potential_access (manual check)."
+            ],
+            "any": [
+              {
+                "expression_text": "flat_roof_extension_with_potential_access"
+              }
+            ]
+          },
+          "severity": "should_not",
+          "policy_rationale": "Balconies, terraces and raised platforms can cause significant overlooking that is disproportionate to the scale of development",
+          "assessment_guidance": "Balconies and roof terraces on extensions are generally resisted unless they can be demonstrated not to cause unacceptable overlooking. Flat roofs on extensions should not be used as balconies or sitting-out areas without appropriate screening.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.2.6",
+          "rule_name": "Overbearing Impact Assessment",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_side",
+                  "two_storey_rear",
+                  "wraparound"
+                ]
+              },
+              {
+                "field": "close_to_boundary",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": null,
+          "assessment_guidance": "Consider the combined effect of height, length and proximity on the neighbouring property. A tall, long extension close to a boundary with a small neighbouring garden oriented to the north will have a significantly greater overbearing impact than a modest extension next to a large south-facing garden.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "perceived_enclosure_impact",
+              "assessment_method": "qualitative_site_specific",
+              "factors": [
+                "Height of extension relative to boundary",
+                "Length of extension along boundary",
+                "Distance from boundary",
+                "Orientation relative to neighbour",
+                "Existing level differences",
+                "Existing boundary treatment height",
+                "Size and aspect of neighbouring garden"
+              ]
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.2.7",
+          "rule_name": "Minimum Garden Depth Retention",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_rear",
+                  "two_storey_rear",
+                  "conservatory",
+                  "wraparound"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Adequate private amenity space must be retained for the occupiers of the dwelling",
+          "assessment_guidance": "Measure from the rear wall of the proposed extension to the rear boundary. Less than 10m should be carefully justified. The quality and usability of the remaining space matters as much as the raw measurement.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "remaining_rear_garden_depth",
+              "unit": "mm",
+              "operator": ">=",
+              "threshold": 10000,
+              "preferred": 12000,
+              "note": "10m minimum remaining garden depth is a widely applied standard"
+            }
+          },
+          "authoring_locks": {
+            "_LOCK_TODO_008": "AWAITING OFFICER CONFIRMATION: No published SPD or adopted standard for minimum garden depth found. The 10m figure appears to be common officer practice across similar authorities. Confirm with Development Management team whether this is formal policy, informal guidance, or case-by-case. If formal, cite the source document."
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "local_practice",
+          "legal_basis": "local_practice",
+          "effect_type": "planning_merit",
+          "threshold_status": "unconfirmed"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.3",
+      "test_name": "Materials and Design Quality",
+      "description": "Extensions should use appropriate materials and architectural details that complement the host dwelling",
+      "assessment_type": "qualitative",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.3.1",
+          "rule_name": "Materials Matching",
+          "applicability": {
+            "all": [],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Matching materials ensure the extension appears as a coherent part of the dwelling rather than an incongruous addition",
+          "assessment_guidance": null,
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "materials_compatibility",
+              "assessment_method": "visual_comparison",
+              "factors": [
+                "Type",
+                "Colour",
+                "Texture",
+                "Bond pattern (brick)",
+                "Mortar colour"
+              ]
+            }
+          },
+          "suggested_condition_templates": [
+            "COND_003"
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.3.2",
+          "rule_name": "Architectural Details",
+          "applicability": {
+            "all": [],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": null,
+          "assessment_guidance": "Architectural details should either match the existing dwelling or provide a clearly contemporary but complementary approach. Poor-quality pastiche or obviously cheap imitation details should be avoided.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "detail_compatibility",
+              "factors": [
+                "Window proportions",
+                "Lintel/sill details",
+                "Eaves detail",
+                "Verge detail",
+                "Rainwater goods"
+              ]
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.3.3",
+          "rule_name": "Roof Form and Pitch",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "two_storey_side",
+                  "two_storey_rear",
+                  "single_storey_side",
+                  "single_storey_rear",
+                  "dormer"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": "Roof forms and pitches that match or complement the existing dwelling create visual harmony",
+          "assessment_guidance": "Pitched roofs should generally match the pitch of the existing dwelling. Flat roofs on single-storey extensions are acceptable where they would not be visible from the public realm or where a pitched roof would create an unacceptable eaves height.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "roof_pitch_compatibility",
+              "assessment_method": "comparison_with_existing"
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.4",
+      "test_name": "Street Scene and Character",
+      "description": "Extensions must not harm the character and appearance of the street scene",
+      "assessment_type": "qualitative",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.4.1",
+          "rule_name": "Terracing Effect Prevention",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "single_storey_side",
+                  "two_storey_side"
+                ]
+              },
+              {
+                "field": "dwelling_type",
+                "op": "in",
+                "value": [
+                  "semi_detached",
+                  "end_terrace"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": "Side extensions on semi-detached and end-terrace dwellings can create a 'terracing effect' that harms the character of the pair or row",
+          "assessment_guidance": "Consider whether the extension would close the visual gap between dwellings and create the appearance of a continuous terrace. Setback from front building line, lower ridge, and distinct materials/detailing can mitigate this effect.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.4.2",
+          "rule_name": "Front Elevation Prominence",
+          "applicability": {
+            "all": [
+              {
+                "field": "extension_type",
+                "op": "in",
+                "value": [
+                  "front_extension",
+                  "front_porch",
+                  "single_storey_side",
+                  "two_storey_side"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": null,
+          "assessment_guidance": "Consider the extension's impact on the front elevation as seen from the street. Extensions that are clearly visible from the public realm require greater design care.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.4.3",
+          "rule_name": "Uniform Street Character",
+          "applicability": {
+            "all": [
+              {
+                "field": "street_character",
+                "op": "=",
+                "value": "uniform_or_planned"
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": null,
+          "assessment_guidance": "In streets with a strong, consistent character (e.g., estate developments, conservation areas, planned Victorian/Edwardian streets), extensions should be particularly sensitive to maintaining the rhythm and proportions of the streetscape.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.5",
+      "test_name": "Parking and Access",
+      "description": "Extensions must maintain adequate parking provision and safe access",
+      "assessment_type": "dimensional",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.5.1",
+          "rule_name": "Parking Space Retention/Provision",
+          "applicability": {
+            "all": [
+              {
+                "field": "parking_affected",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should",
+          "policy_rationale": null,
+          "assessment_guidance": "Check that the extension does not result in the loss of required parking spaces. Where spaces are lost, consider whether the remaining provision meets the adopted standards.",
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "parking_spaces_retained",
+              "assessment_method": "count_and_dimension_check",
+              "policy_reference": "GCP G1",
+              "parking_space_dimensions": {
+                "minimum_car_space": {
+                  "width_m": 2.4,
+                  "length_m": 4.8
+                },
+                "source": "GCC HMO Guide (September 2023) referencing Policy G1; confirmed minimum car parking space is 2.4m x 4.8m",
+                "source_url": "https://www.gloucester.gov.uk/media/cj1jbtez/hmo-guide-sept-2023.pdf",
+                "city_plan_url": "https://www.gloucester.gov.uk/planning-development/planning-policy/gloucester-city-plan/",
+                "_LOCK_TODO_009": "PARTIAL: Minimum space dimensions confirmed via HMO Guide. Full Policy G1 text in adopted City Plan PDF may contain additional requirements for parallel spaces, disabled bays, or garage internal dimensions. Confirm with Highways whether any supplementary parking standards document exists."
+              }
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        },
+        {
+          "rule_id": "A1.5.2",
+          "rule_name": "Vehicle Access Safety",
+          "applicability": {
+            "all": [
+              {
+                "field": "access_changes",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "should_not",
+          "policy_rationale": null,
+          "assessment_guidance": "Where the extension affects vehicle access or changes visibility at the access point, highway safety must be maintained.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.5.3",
+          "rule_name": "Cycle Parking",
+          "applicability": {
+            "all": [
+              {
+                "field": "additional_bedrooms_created",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "may",
+          "policy_rationale": null,
+          "assessment_guidance": "Consider whether the extension creates additional bedrooms that would generate cycle parking demand. Secure cycle storage should be available.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "authoring_locks": {
+            "_LOCK_TODO_010": "AWAITING: No householder-specific cycle parking standard found. Policy G1 defers to Gloucestershire County Council guidance (Cycle Facility Guidelines March 2012, Manual for Streets 4th Ed April 2016). Unlikely to be triggered for standard householder extensions unless additional bedrooms are created."
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "local_practice",
+          "legal_basis": "local_practice",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.6",
+      "test_name": "Environmental Considerations",
+      "description": "Extensions should address surface water drainage, biodiversity, and energy efficiency",
+      "assessment_type": "compliance_check",
+      "new_in_version": false,
+      "rules": [
+        {
+          "rule_id": "A1.6.1",
+          "rule_name": "Surface Water Drainage",
+          "applicability": {
+            "all": [
+              {
+                "field": "impermeable_area_increase_sqm",
+                "op": ">=",
+                "value": 50
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must",
+          "policy_rationale": "Increased impermeable area can increase surface water runoff and flood risk",
+          "assessment_guidance": "Where the extension and associated hard surfacing increases the impermeable area by 50sqm or more, a drainage strategy is required. See validation requirement B20 and the Flood Risk & Drainage Checklist.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "cross_reference": "validation_requirements.part_b_local_requirements_householder.B20_drainage_strategy",
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.6.2",
+          "rule_name": "Biodiversity Net Gain (Small Sites)",
+          "applicability": {
+            "all": [],
+            "notes": [
+              "always: True"
+            ]
+          },
+          "severity": "should",
+          "policy_rationale": "All developments are required to improve biodiversity",
+          "assessment_guidance": "A Biodiversity Small Sites Statement is a validation requirement for householder applications. Measures should be proportionate - e.g., integrated bird boxes, bat bricks, native planting.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "cross_reference": "validation_requirements.part_b_local_requirements_householder.B11_biodiversity_small_sites_statement",
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable",
+          "notes": [
+            "This rule addresses biodiversity enhancement in planning merits. It does not create or imply statutory mandatory BNG for householder applications, which are exempt."
+          ]
+        },
+        {
+          "rule_id": "A1.6.3",
+          "rule_name": "Energy Efficiency",
+          "applicability": {
+            "all": [],
+            "notes": [
+              "always: False",
+              "note: No specific householder energy efficiency requirement in current policy but good practice"
+            ]
+          },
+          "severity": "informative_only",
+          "policy_rationale": null,
+          "assessment_guidance": "Applicants are encouraged to incorporate energy efficiency measures. This is not a validation requirement for householder applications.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "authoring_locks": {
+            "_LOCK_TODO_011": "AWAITING: No current adopted energy efficiency requirement for householder applications. Check emerging JCS Review and any future SPD or Building Regulations alignment. This rule is informative-only until a policy requirement is adopted."
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "local_practice",
+          "legal_basis": "guidance_only",
+          "effect_type": "advisory",
+          "threshold_status": "not_applicable"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.7",
+      "test_name": "Heritage Impact",
+      "description": "Extensions affecting heritage assets must preserve or enhance their significance",
+      "assessment_type": "qualitative_and_compliance",
+      "new_in_version": true,
+      "rules": [
+        {
+          "rule_id": "A1.7.1",
+          "rule_name": "Listed Building Impact",
+          "applicability": {
+            "all": [
+              {
+                "field": "listed_building",
+                "op": "=",
+                "value": true
+              },
+              {
+                "field": "or_listed_building_within_setting",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must",
+          "policy_rationale": null,
+          "assessment_guidance": "Extensions to listed buildings or within their setting require a Historic Impact Statement. The extension must preserve the special architectural or historic interest of the building. Listed building consent will be required for internal and external alterations.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "cross_reference": "validation_requirements.part_b_local_requirements_householder.B28_historic_impact_statement",
+          "policy_drivers": [
+            "NPPF",
+            "JCS SD8",
+            "GCP D1"
+          ],
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.7.2",
+          "rule_name": "Conservation Area Impact",
+          "applicability": {
+            "all": [
+              {
+                "field": "conservation_area",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must",
+          "policy_rationale": null,
+          "assessment_guidance": "Extensions in conservation areas must preserve or enhance the character or appearance of the area. Design and Access Statement required for development consisting of one or more dwellings or buildings with floor space of 100sqm or more.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "additional_requirement": "A Design and Access Statement may be required - see A7",
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.7.3",
+          "rule_name": "Archaeological Potential",
+          "applicability": {
+            "all": [
+              {
+                "field": "known_or_potential_archaeological_interest",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "may",
+          "policy_rationale": null,
+          "assessment_guidance": "Where the site has known or potential archaeological interest, a desk-based assessment or field evaluation may be required as part of the Historic Impact Statement.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    {
+      "test_id": "A1.8",
+      "test_name": "Flood Risk and Drainage",
+      "description": "Extensions must be safe from flooding and must not increase flood risk elsewhere",
+      "assessment_type": "compliance_check",
+      "new_in_version": true,
+      "rules": [
+        {
+          "rule_id": "A1.8.1",
+          "rule_name": "Flood Zone Compliance",
+          "applicability": {
+            "all": [
+              {
+                "field": "flood_zone",
+                "op": "in",
+                "value": [
+                  "2",
+                  "3a",
+                  "3b"
+                ]
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must",
+          "policy_rationale": null,
+          "assessment_guidance": "Development in flood zones must comply with the sequential approach and (where applicable) exception test. Householder development is generally exempt from the sequential test as minor development for flood risk. However, a site-specific Flood Risk Assessment is required.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "cross_reference": "validation_requirements.flood_risk_drainage_checklist.householder_checklist",
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.8.2",
+          "rule_name": "Surface Water Management",
+          "applicability": {
+            "all": [
+              {
+                "field": "impermeable_area_increase_sqm",
+                "op": ">=",
+                "value": 50
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must",
+          "policy_rationale": null,
+          "assessment_guidance": "Where the development increases impermeable area by 50sqm or more, a drainage strategy following the SuDS hierarchy is required.",
+          "evaluation": {
+            "kind": "qualitative"
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "not_applicable"
+        },
+        {
+          "rule_id": "A1.8.3",
+          "rule_name": "Watercourse Buffer",
+          "applicability": {
+            "all": [
+              {
+                "field": "within_8m_of_watercourse",
+                "op": "=",
+                "value": true
+              }
+            ],
+            "notes": []
+          },
+          "severity": "must_not",
+          "policy_rationale": null,
+          "assessment_guidance": null,
+          "evaluation": {
+            "kind": "measurement",
+            "metric": {
+              "parameter": "distance_to_watercourse",
+              "unit": "m",
+              "operator": ">=",
+              "threshold": 8,
+              "measured_from": "Top of bank, or edge of culvert for culverted watercourses"
+            }
+          },
+          "route_scope": {
+            "applies_to_routes": [
+              "householder_planning_permission",
+              "householder_planning_permission_and_listed_building_consent",
+              "pre_application_householder"
+            ],
+            "does_not_apply_to_routes": [
+              "prior_notification_larger_home_extension"
+            ]
+          },
+          "policy_source_status": "adopted_or_established_local_practice",
+          "legal_basis": "development_plan_policy",
+          "effect_type": "planning_merit",
+          "threshold_status": "confirmed"
+        }
+      ],
+      "test_scope": {
+        "stage": "planning_merits",
+        "applies_to_routes": [
+          "householder_planning_permission",
+          "householder_planning_permission_and_listed_building_consent",
+          "pre_application_householder"
+        ],
+        "does_not_apply_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    }
+  ],
+  "consultation_matrix": {
+    "automatic_consultations": [
+      {
+        "trigger": "loss_of_parking OR access_changes",
+        "consultee": "Gloucestershire Highways",
+        "response_time_days": 21,
+        "mandatory": false
+      },
+      {
+        "trigger": "conservation_area == true",
+        "consultee": "Conservation Officer",
+        "response_time_days": 21,
+        "mandatory": true
+      },
+      {
+        "trigger": "flood_zone_2_or_3 == true",
+        "consultee": "Environment Agency / LLFA",
+        "response_time_days": 21,
+        "mandatory": true
+      },
+      {
+        "trigger": "listed_building_within_30m == true",
+        "consultee": "Conservation Officer",
+        "response_time_days": 21,
+        "mandatory": true
+      },
+      {
+        "trigger": "tree_works_required == true OR TPO == true",
+        "consultee": "Tree Officer",
+        "response_time_days": 21,
+        "mandatory": false
+      },
+      {
+        "trigger": "within_cordon_sanitaire == true",
+        "consultee": "Environmental Health",
+        "response_time_days": 21,
+        "mandatory": true,
+        "_new_in_v2": true
+      },
+      {
+        "trigger": "within_500m_of_pond == true AND newt_survey_required == true",
+        "consultee": "Ecology Officer / Natural England",
+        "response_time_days": 21,
+        "mandatory": true,
+        "_new_in_v2": true
+      },
+      {
+        "trigger": "within_AQMA == true",
+        "consultee": "Environmental Health (Air Quality)",
+        "response_time_days": 21,
+        "mandatory": true,
+        "_new_in_v2": true
+      }
+    ],
+    "neighbour_notification": {
+      "method": "letter_and_site_notice",
+      "radius_meters": 20,
+      "response_time_days": 21,
+      "properties_to_notify": [
+        "adjoining_properties",
+        "properties_within_20m_affected_by_extension"
+      ]
+    },
+    "_module_scope": {
+      "stage": "consultation",
+      "applies_to_routes": [
+        "householder_planning_permission",
+        "householder_planning_permission_and_listed_building_consent",
+        "pre_application_householder"
+      ],
+      "separate_route_note": "Larger home extension prior notification uses its own neighbour consultation process rather than this normal planning consultation matrix."
+    },
+    "prior_notification_larger_home_extension": {
+      "route_scope": {
+        "applies_to_routes": [
+          "prior_notification_larger_home_extension"
+        ]
+      },
+      "assessment_focus": [
+        "adjoining neighbour consultation",
+        "amenity impact on adjoining properties"
+      ],
+      "notes": [
+        "This route is not determined under Policy A1 as a standard planning-permission assessment.",
+        "Use the larger home extension prior approval workflow instead of the full consultation matrix."
+      ]
+    }
+  },
+  "conditions_library": [
+    {
+      "condition_id": "COND_001",
+      "condition_type": "time_limit",
+      "condition_text": "The development hereby permitted shall be begun before the expiration of three years from the date of this permission.",
+      "reason": "To comply with Section 91 of the Town and Country Planning Act 1990 as amended by Section 51 of the Planning and Compulsory Purchase Act 2004.",
+      "mandatory": true
+    },
+    {
+      "condition_id": "COND_002",
+      "condition_type": "approved_plans",
+      "condition_text": "The development hereby permitted shall be carried out in accordance with the approved plans listed in the schedule attached to this decision notice.",
+      "reason": "To ensure that the development is carried out in accordance with the approved documents, for the avoidance of doubt.",
+      "mandatory": true
+    },
+    {
+      "condition_id": "COND_003",
+      "condition_type": "materials_matching",
+      "condition_text": "The external materials to be used in the construction of the extension hereby permitted shall match those of the existing building in type, color, and texture.",
+      "reason": "To ensure a satisfactory appearance in the interests of visual amenity and to comply with Policy A1 of the Gloucester City Plan.",
+      "trigger": "materials_match_required == true"
+    },
+    {
+      "condition_id": "COND_004",
+      "condition_type": "obscure_glazing",
+      "condition_text": "The window(s) in the [specify elevation] of the extension hereby permitted serving [specify room] shall be glazed with obscure glass to Level 4 on the Pilkington scale or equivalent and shall be non-opening below 1.7m from finished floor level. The window(s) shall be permanently retained in that condition thereafter.",
+      "reason": "To protect the privacy and amenity of the occupiers of the adjoining property in accordance with Policy SD14 of the Gloucester City Plan.",
+      "trigger": "side_windows_near_boundary == true"
+    },
+    {
+      "condition_id": "COND_005",
+      "condition_type": "parking_retention",
+      "condition_text": "Notwithstanding the provisions of the Town and Country Planning (General Permitted Development) Order 2015 (or any order revoking and re-enacting that Order), the parking spaces shown on the approved plans shall be retained for the parking of vehicles at all times and shall not be used for any other purpose.",
+      "reason": "To ensure adequate parking provision is retained in the interests of highway safety and to comply with Policy INF2 of the Gloucester City Plan.",
+      "trigger": "parking_critical == true"
+    },
+    {
+      "condition_id": "COND_006",
+      "condition_type": "permitted_development_removal",
+      "condition_text": "Notwithstanding the provisions of the Town and Country Planning (General Permitted Development) Order 2015 (or any order revoking and re-enacting that Order with or without modification), no further extensions, alterations, or additions to the dwelling or outbuildings within the curtilage shall be carried out without the prior written consent of the Local Planning Authority.",
+      "reason": "To enable the Local Planning Authority to retain control over future development in the interests of amenity and to comply with Policy A1 of the Gloucester City Plan.",
+      "trigger": "pd_removal_justified == true",
+      "guidance": "Use sparingly - only where further PD extensions would definitely cause harm"
+    },
+    {
+      "condition_id": "COND_007",
+      "condition_type": "flood_resilience",
+      "condition_text": "The development hereby permitted shall incorporate the flood resilience and resistance measures detailed in the approved Flood Risk Assessment [reference] to a height of 600mm above the design flood level. These measures shall be maintained in perpetuity.",
+      "reason": "To reduce the impact of flooding on the development and its occupants in accordance with Policy E4 of the Gloucester City Plan.",
+      "trigger": "flood_zone_2_or_3 == true",
+      "_new_in_v2": true
+    },
+    {
+      "condition_id": "COND_008",
+      "condition_type": "drainage",
+      "condition_text": "The development hereby permitted shall not be occupied until the surface water drainage scheme as detailed on [approved drawing reference] has been completed in accordance with the approved details. The drainage scheme shall be maintained in perpetuity.",
+      "reason": "To ensure satisfactory drainage of the site and to reduce the risk of flooding in accordance with Policy E4 of the Gloucester City Plan.",
+      "trigger": "impermeable_area_increase >= 50",
+      "_new_in_v2": true
+    },
+    {
+      "condition_id": "COND_009",
+      "condition_type": "biodiversity_enhancement",
+      "condition_text": "Prior to the first occupation of the extension hereby permitted, the biodiversity enhancement measures set out in the approved Biodiversity Small Sites Statement shall be implemented and thereafter maintained.",
+      "reason": "To enhance biodiversity in accordance with Policies E1, E2 and E3 of the Gloucester City Plan.",
+      "trigger": "biodiversity_measures_proposed == true",
+      "_new_in_v2": true
+    },
+    {
+      "condition_id": "COND_010",
+      "condition_type": "annexe_restriction",
+      "condition_text": "The annexe hereby permitted shall not be occupied at any time other than for purposes ancillary to the residential use of the dwelling known as [address]. The annexe shall not be severed from, sold, let or otherwise disposed of separately from the main dwelling.",
+      "reason": "The site is not considered suitable for a separate unit of residential accommodation, and to accord with Policy A10 of the Gloucester City Plan.",
+      "trigger": "proposal_type == 'annexe'",
+      "_new_in_v2": true
+    }
+  ],
+  "informatives_library": [
+    {
+      "informative_id": "INFO_001",
+      "informative_text": "The applicant is advised that this planning permission does not convey any approval under the Building Regulations. Separate approval under the Building Regulations will be required for the proposed works. The applicant should contact the Building Control team at Gloucester City Council for further information.",
+      "always_include": true
+    },
+    {
+      "informative_id": "INFO_002",
+      "informative_text": "The applicant's attention is drawn to the need to comply with all other relevant legislation, including the Party Wall etc. Act 1996, which may be applicable to this development. This is a civil matter between the parties and is separate from the planning process.",
+      "trigger": "extension_on_or_near_boundary == true"
+    },
+    {
+      "informative_id": "INFO_003",
+      "informative_text": "The applicant is advised that surface water from the development should be disposed of via sustainable drainage systems (SuDS) in accordance with the drainage hierarchy. Guidance is available from the Lead Local Flood Authority and in the Council's SuDS guidance note.",
+      "trigger": "impermeable_area_increase > 10"
+    },
+    {
+      "informative_id": "INFO_004",
+      "informative_text": "The applicant is encouraged to incorporate features to enhance biodiversity, such as integrated bird boxes, bat bricks, or native planting, in accordance with the Council's commitment to environmental enhancement.",
+      "always_include": false,
+      "optional": true
+    },
+    {
+      "informative_id": "INFO_005",
+      "informative_text": "This permission relates solely to the plans and documents submitted with the application as listed in the Decision Notice. Any variation from these approved plans may constitute a breach of planning control and may require a further planning application or amendment to the approved plans.",
+      "always_include": true
+    },
+    {
+      "informative_id": "INFO_006",
+      "informative_text": "The applicant is advised that an 8 metre undeveloped buffer strip should be maintained alongside any watercourse (including culverted watercourses) on or adjacent to the site. Consent from the Environment Agency or Lead Local Flood Authority may be required for works within 8 metres of a main river or ordinary watercourse respectively.",
+      "trigger": "within_8m_of_watercourse == true",
+      "_new_in_v2": true
+    },
+    {
+      "informative_id": "INFO_007",
+      "informative_text": "The applicant is reminded that this planning permission does not grant listed building consent. A separate application for listed building consent will be/has been required for the proposed works.",
+      "trigger": "listed_building == true AND listed_building_consent_not_yet_granted == true",
+      "_new_in_v2": true
+    },
+    {
+      "informative_id": "INFO_008",
+      "informative_text": "The applicant is advised that any works to trees covered by a Tree Preservation Order or within a Conservation Area will require a separate application for consent. The applicant should contact the Council's Tree Officer before carrying out any tree works.",
+      "trigger": "tree_works_required == true",
+      "_new_in_v2": true
+    }
+  ],
+  "cil_assessment": {
+    "applies_to_householder": true,
+    "calculation_method": "net_additional_gross_internal_area",
+    "exemptions": [
+      "extensions_less_than_100sqm_GIA",
+      "self_build_exemption"
+    ],
+    "rates": {
+      "gloucester_city_cil": "check_current_charging_schedule",
+      "notes": "CIL rates vary by zone and are subject to indexation. Check current charging schedule.",
+      "todo": null,
+      "rates": {
+        "residential_large_scale_11_to_449_dwellings": {
+          "rate_per_sqm_base": 45,
+          "currency": "GBP",
+          "note": "Subject to annual indexation - check CIL Rate Summary Statement"
+        },
+        "residential_very_large_scale_450_plus_dwellings": {
+          "rate_per_sqm_base": 0,
+          "note": "Nil rated"
+        },
+        "residential_small_scale_1_to_10_dwellings": {
+          "rate_per_sqm_base": 0,
+          "note": "Nil rated - but householder extensions over 100sqm GIA are CIL liable at the applicable rate"
+        },
+        "all_other_uses": {
+          "rate_per_sqm_base": 0
+        },
+        "householder_exemption": {
+          "description": "Extensions and annexes under 100sqm GIA are exempt from CIL",
+          "threshold_sqm": 100,
+          "self_build_exemption_available": true
+        },
+        "charging_schedule_url": "https://www.gloucester.gov.uk/planning-development/planning-policy/community-infrastructure-levy-cil/",
+        "cil_calculator_url": "https://pfm.exacom.co.uk/gloucester/calccil.php",
+        "cil_adopted": "2018-10-25",
+        "charging_from": "2019-01-01",
+        "indexation": "CIL payments must be index linked from 2019 to the year planning permission is granted. Annual CIL Rate Summary Statement published each December.",
+        "_resolved": "2026-03-24"
+      }
+    },
+    "_module_scope": {
+      "stage": "cil",
+      "applies_to_routes": [
+        "householder_planning_permission",
+        "householder_planning_permission_and_listed_building_consent"
+      ],
+      "does_not_apply_to_routes": [
+        "prior_notification_larger_home_extension"
+      ]
+    },
+    "applicability_note": "Use only for planning-permission routes. Prior notification / permitted development larger home extensions are outside this CIL screening workflow."
+  },
+  "authoring_notes": {
+    "source_file": "policy A1 householder schema v2.1",
+    "migration_notes": [
+      "Converted hybrid schema into separate facts schema, ruleset, and result schema.",
+      "Preserved narrative rule content while normalising applicability into predicate arrays where possible.",
+      "Retained unresolved TODO markers from source material; these should be managed in authoring workflow, not runtime logic."
+    ]
+  },
+  "applicability_framework": {
+    "application_routes": {
+      "householder_planning_permission": {
+        "description": "Full householder planning permission for works or extension to a dwelling.",
+        "modules_normally_applied": [
+          "national_validation",
+          "local_validation_householder",
+          "plans_validation",
+          "flood_risk_validation",
+          "policy_A1_design_and_amenity",
+          "consultations",
+          "cil"
+        ]
+      },
+      "householder_planning_permission_and_listed_building_consent": {
+        "description": "Parallel householder planning permission and listed building consent workflow.",
+        "modules_normally_applied": [
+          "national_validation",
+          "local_validation_householder",
+          "plans_validation",
+          "flood_risk_validation",
+          "policy_A1_design_and_amenity",
+          "heritage_review",
+          "consultations",
+          "cil"
+        ]
+      },
+      "pre_application_householder": {
+        "description": "Officer-style advisory review using the same merits logic where enough facts exist. Validation outputs are advisory only.",
+        "modules_normally_applied": [
+          "policy_A1_design_and_amenity",
+          "heritage_review",
+          "consultations",
+          "cil"
+        ]
+      },
+      "prior_notification_larger_home_extension": {
+        "description": "Separate larger single-storey rear extension prior notification / prior approval route.",
+        "modules_normally_applied": [
+          "national_validation",
+          "prior_notification_larger_home_extension"
+        ]
+      }
+    },
+    "module_purposes": {
+      "national_validation": "Administrative and statutory submission requirements.",
+      "local_validation_householder": "Local Gloucester validation items for householder planning applications only.",
+      "plans_validation": "Drawing and plan standards used at validation stage.",
+      "flood_risk_validation": "Flood/drainage submission triggers at validation stage.",
+      "policy_A1_design_and_amenity": "Planning merits assessment for design, scale, neighbour amenity and related householder issues.",
+      "heritage_review": "Extra heritage review where listed building or conservation-area heritage content is engaged.",
+      "consultations": "Consultee and neighbour notification triggers.",
+      "cil": "Community Infrastructure Levy screening and notes.",
+      "prior_notification_larger_home_extension": "Route-specific larger home extension prior approval workflow."
+    },
+    "assessment_sequencing": {
+      "_description": "Recommended processing order for MCP consumers.",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Extract facts from submission into facts schema"
+        },
+        {
+          "step": 2,
+          "action": "Run data quality checks (address consistency, lawful use confirmation, drawing specificity)"
+        },
+        {
+          "step": 3,
+          "action": "Determine application_route and select modules_considered"
+        },
+        {
+          "step": 4,
+          "action": "Run validation modules; populate blocking_issues"
+        },
+        {
+          "step": 5,
+          "action": "If blocking_issues exist and route is not pre_application, set planning_merits.status to not_run"
+        },
+        {
+          "step": 6,
+          "action": "Run planning merits rules where prerequisite facts exist; set cannot_assess where facts are missing"
+        },
+        {
+          "step": 7,
+          "action": "Run consultation triggers"
+        },
+        {
+          "step": 8,
+          "action": "Run CIL screening"
+        },
+        {
+          "step": 9,
+          "action": "Populate recommendation based on aggregate outcomes"
+        }
+      ]
+    }
+  }
+}
