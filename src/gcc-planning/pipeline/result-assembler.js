@@ -125,12 +125,12 @@ function computeRecommendation({ processingState, dataQuality, validation, merit
 
     // Row 1 — schema_invalid
     if (processingState === 'schema_invalid') {
-        return { decision_mode: 'invalid', confidence: 'high', reason_summary: 'Facts object does not conform to the application facts schema.' };
+        return recommendation('invalid', 'high', 'Facts object does not conform to the application facts schema.');
     }
 
     // Row 2 — insufficient data quality
     if (dqStatus === 'insufficient') {
-        return { decision_mode: 'insufficient_information', confidence: 'high', reason_summary: 'Data quality is insufficient to proceed with assessment.' };
+        return recommendation('insufficient_information', 'high', 'Data quality is insufficient to proceed with assessment.');
     }
 
     // Row 3 — conflicted + blocking issues
@@ -140,26 +140,27 @@ function computeRecommendation({ processingState, dataQuality, validation, merit
             const note = dataQuality.isLawfulUseRouteBlocked
                 ? 'Lawful use as single dwelling is unconfirmed. The submitted route is reported but its correctness cannot be confirmed (plan Section 3.3).'
                 : 'Conflicting data with blocking issues prevents reliable assessment.';
-            return { decision_mode: 'insufficient_information', confidence: 'high', reason_summary: note };
+            return recommendation('insufficient_information', 'high', note);
         }
     }
 
     // Row 4 — validation invalid + strict mode
     if (valStatus === 'invalid' && mode === 'strict') {
-        return { decision_mode: 'invalid', confidence: 'high', reason_summary: 'Application fails validation in strict mode. Required documents or information are missing.' };
+        return recommendation('invalid', 'high', 'Application fails validation in strict mode. Required documents or information are missing.');
     }
 
     // Row 5 — merits not run
     if (mStatus === 'not_run') {
-        return { decision_mode: 'insufficient_information', confidence: 'medium', reason_summary: 'Planning merits assessment has not been run.' };
+        return recommendation('insufficient_information', 'medium', 'Planning merits assessment has not been run.');
     }
 
     // Row 6 — cannot_assess
     if (mStatus === 'cannot_assess') {
-        return {
-            decision_mode: 'insufficient_information', confidence: 'low',
-            reason_summary: 'One or more material rules could not be assessed due to missing facts. Insufficient information to determine a reliable outcome.',
-        };
+        return recommendation(
+            'insufficient_information',
+            'low',
+            'One or more material rules could not be assessed due to missing facts. Insufficient information to determine a reliable outcome.',
+        );
     }
 
     // Row 7 — must/must_not rule = fail
@@ -171,11 +172,11 @@ function computeRecommendation({ processingState, dataQuality, validation, merit
         const failedRules = ruleOutcomes
             .filter(r => r.status === 'fail' && (r.severity === 'must' || r.severity === 'must_not'))
             .map(r => r.rule_id);
-        return {
-            decision_mode: 'likely_refusal',
+        return recommendation(
+            'likely_refusal',
             confidence,
-            reason_summary: `One or more mandatory policy requirements are not met: ${failedRules.join(', ')}.`,
-        };
+            `One or more mandatory policy requirements are not met: ${failedRules.join(', ')}.`,
+        );
     }
 
     // Row 8 — 2+ should/should_not concerns = balanced_judgement (plan Section 3.5)
@@ -183,11 +184,11 @@ function computeRecommendation({ processingState, dataQuality, validation, merit
         r.status === 'concern' && (r.severity === 'should' || r.severity === 'should_not')
     );
     if (shouldConcerns.length >= 2) {
-        return {
-            decision_mode: 'balanced_judgement',
-            confidence: 'medium',
-            reason_summary: `${shouldConcerns.length} policy concerns identified (${shouldConcerns.map(r => r.rule_id).join(', ')}). Balanced judgement required.`,
-        };
+        return recommendation(
+            'balanced_judgement',
+            'medium',
+            `${shouldConcerns.length} policy concerns identified (${shouldConcerns.map(r => r.rule_id).join(', ')}). Balanced judgement required.`,
+        );
     }
 
     // Row 9 — manual review flags (includes single concern)
@@ -195,11 +196,19 @@ function computeRecommendation({ processingState, dataQuality, validation, merit
         const note = shouldConcerns.length === 1
             ? `Single policy concern (${shouldConcerns[0].rule_id}) requires officer judgement.`
             : `Manual review flags raised: ${manualFlags.length}.`;
-        return { decision_mode: 'manual_officer_review', confidence: 'medium', reason_summary: note };
+        return recommendation('manual_officer_review', 'medium', note);
     }
 
     // Row 10 — all pass
-    return { decision_mode: 'likely_support', confidence: 'high', reason_summary: 'All applicable policy rules pass with no material concerns.' };
+    return recommendation('likely_support', 'high', 'All applicable policy rules pass with no material concerns.');
+}
+
+function recommendation(decisionMode, confidence, reasonSummary) {
+    return {
+        decision_mode: decisionMode,
+        confidence,
+        reason_summary: [reasonSummary],
+    };
 }
 
 /**

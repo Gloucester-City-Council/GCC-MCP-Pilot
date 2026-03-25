@@ -161,7 +161,7 @@ function buildSchemaInvalidResult(rawFacts, reason) {
         planning_merits: { status: 'not_run', rule_outcomes: [], manual_review_flags: [] },
         consultations: { consultees: [] },
         cil_screening: { status: 'not_assessed' },
-        recommendation: { decision_mode: 'invalid', confidence: 'high', reason_summary: reason },
+        recommendation: { decision_mode: 'invalid', confidence: 'high', reason_summary: [reason] },
     };
 }
 
