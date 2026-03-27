@@ -228,9 +228,9 @@ function mapProposalTypeToExtensionType(pt) {
         two_storey_rear_extension:    'two_storey_rear',
         single_storey_side_extension: 'single_storey_side',
         two_storey_side_extension:    'two_storey_side',
-        front_extension:              'front',
+        front_extension:              'front_extension',
         front_porch:                  'front_porch',
-        roof_extension:               'roof',
+        roof_extension:               'roof_extension',
         dormer:                       'dormer',
         conservatory:                 'conservatory',
         wraparound_extension:         'wraparound',
@@ -279,6 +279,7 @@ function evaluateCondition(cond, predicates) {
     switch (cond.op) {
         case 'eq':
         case '==':
+        case '=':   // ruleset uses single = throughout (13 conditions)
             return fieldVal === cond.value;
         case 'ne':
         case '!=':
