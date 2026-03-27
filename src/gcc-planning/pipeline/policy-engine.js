@@ -173,8 +173,14 @@ function buildPredicates(facts) {
     const proposal = facts.proposal    || {};
     const proposalTypes = Array.isArray(proposal.proposal_type) ? proposal.proposal_type : [];
 
-    // Map proposal_type array to ruleset extension_type predicates
-    const extensionTypes = proposalTypes.map(pt => mapProposalTypeToExtensionType(pt));
+    // Map proposal_type array to ruleset extension_type predicates.
+    // Also accept proposal.extension_types (short-form) submitted directly —
+    // some callers populate this instead of or in addition to proposal_type.
+    const mappedExtTypes = proposalTypes.map(pt => mapProposalTypeToExtensionType(pt));
+    const directExtTypes = Array.isArray(proposal.extension_types) ? proposal.extension_types : [];
+    const extensionTypes = directExtTypes.length > 0 && mappedExtTypes.length === 0
+        ? directExtTypes
+        : mappedExtTypes;
 
     return {
         // Site
