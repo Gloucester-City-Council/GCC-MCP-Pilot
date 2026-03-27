@@ -354,6 +354,157 @@ describe('execute — tool wrapper', () => {
     });
 });
 
+// ─── Bug regression: designation intersects handling ─────────────────────────
+
+describe('designation intersects handling (bug regressions)', () => {
+
+    // Bug 1: listed:false false positive
+    it('does NOT set listed_building when designations has listed with intersects:false', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'listed', intersects: false },
+                            { value: 'conservation-area', intersects: true },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.listed_building).toBeUndefined();
+        expect(result.mapped_facts.site.conservation_area).toBe(true);
+    });
+
+    // Bug 1: secondary listed check — planning.designated.listed.intersects:false
+    it('does NOT set listed_building when planning.designated.listed.intersects is false', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designated: {
+                            listed: { intersects: false },
+                            conservationArea: { intersects: true, entities: [{ name: 'Eastgate' }] },
+                        },
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.listed_building).toBeUndefined();
+    });
+
+    // Bug 1: should set listed_building when intersects is true
+    it('sets listed_building when planning.designated.listed.intersects is true', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designated: {
+                            listed: { intersects: true },
+                        },
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.listed_building).toBe(true);
+    });
+
+    // Bug 2: conservation area miss — planning.designated.conservationArea.intersects
+    it('sets conservation_area when planning.designated.conservationArea.intersects is true', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designated: {
+                            listed: { intersects: false },
+                            conservationArea: {
+                                intersects: true,
+                                entities: [{ name: 'Eastgate and St Michaels' }],
+                            },
+                        },
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.conservation_area).toBe(true);
+        expect(result.mapped_facts.site.listed_building).toBeUndefined();
+    });
+
+    // Bug 2: no false positive when conservationArea.intersects is false
+    it('does NOT set conservation_area when planning.designated.conservationArea.intersects is false', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designated: {
+                            conservationArea: { intersects: false },
+                        },
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.conservation_area).toBeUndefined();
+    });
+});
+
+// ─── Bug regression: address singleLine ──────────────────────────────────────
+
+describe('address singleLine handling (bug regression)', () => {
+
+    // Bug 3: address truncated — singleLine not used
+    it('uses singleLine when present instead of constructing from parts', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: {
+                        singleLine: '12 Eastgate Street, Gloucester, GL1 1HG',
+                        title: '12 Eastgate Street',
+                        town: 'GLOUCESTER',
+                        postcode: 'GL1 1HG',
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.address).toBe('12 Eastgate Street, Gloucester, GL1 1HG');
+    });
+
+    // Fallback: no singleLine — uses title + town + postcode
+    it('falls back to title + town + postcode when singleLine is absent', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: {
+                        title: '5 Cathedral Close',
+                        town: 'GLOUCESTER',
+                        postcode: 'GL1 2LR',
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.address).toContain('Cathedral Close');
+        expect(result.mapped_facts.site.address).toContain('GL1 2LR');
+    });
+});
+
 // ─── PLANX_TYPE_TO_ROUTE completeness ────────────────────────────────────────
 
 describe('PLANX_TYPE_TO_ROUTE coverage', () => {

@@ -230,14 +230,21 @@ function mapApplicationSection(planx, routeInfo) {
 
 /**
  * Map PlanX planning designations to GCC site boolean flags.
- * PlanX stores designations as an array of { value: string } objects.
+ * PlanX stores designations as an array of { value: string, intersects: boolean } objects.
+ * Only designations where intersects is not explicitly false are treated as active.
  * @param {Array} designations
  * @returns {object} partial site object
  */
 function mapDesignations(designations) {
     if (!Array.isArray(designations)) return {};
 
-    const vals = new Set(designations.map(d => (d.value || d).toLowerCase()));
+    // Only include designations that actually intersect with the site.
+    // intersects may be boolean or string; absent means unknown (include).
+    const vals = new Set(
+        designations
+            .filter(d => d.intersects !== false && d.intersects !== 'false')
+            .map(d => (d.value || d).toLowerCase())
+    );
     const site = {};
 
     if (vals.has('listed') || vals.has('listed-building') || vals.has('listedbuilding')) {
@@ -306,12 +313,16 @@ function mapSiteSection(planx) {
     const addr = propAddress || applicantAddress;
 
     if (addr) {
-        // PlanX address may be a string or an object with line1, town, postcode
+        // PlanX address may be a string or an object.
+        // Prefer singleLine (full formatted address) over constructing from parts,
+        // as PlanX commonly omits line1 and only populates title + town + postcode.
         if (typeof addr === 'string') {
             site.address = addr;
+        } else if (addr.singleLine) {
+            site.address = addr.singleLine;
         } else {
             const parts = [
-                addr.line1, addr.line2, addr.town, addr.county, addr.postcode,
+                addr.line1 || addr.title, addr.line2, addr.town, addr.county, addr.postcode,
             ].filter(Boolean);
             if (parts.length > 0) site.address = parts.join(', ');
         }
@@ -337,25 +348,44 @@ function mapSiteSection(planx) {
     const designationFlags = mapDesignations(designations);
     Object.assign(site, designationFlags);
 
-    // Listed building — also check property.planning.listed directly
+    // Listed building — check property.planning.designated.listed.intersects
+    // and the legacy direct property.planning.listed path.
+    // Must check intersects explicitly — a truthy object with intersects:false is NOT listed.
     if (!site.listed_building) {
-        const listed = coalesce(
+        const listedObj = coalesce(
+            get(planning, ['designated', 'listed']),
             get(planning, ['listed']),
             get(property, ['listed']),
         );
-        if (listed && listed !== 'false' && listed !== false) {
-            site.listed_building = true;
+        if (listedObj != null) {
+            if (typeof listedObj === 'object') {
+                // { intersects: true/false } form
+                if (listedObj.intersects === true || listedObj.intersects === 'true') {
+                    site.listed_building = true;
+                }
+            } else if (listedObj !== false && listedObj !== 'false') {
+                // plain boolean/string form
+                site.listed_building = true;
+            }
         }
     }
 
-    // Conservation area — also check property.planning.conservationArea
+    // Conservation area — check property.planning.designated.conservationArea.intersects
+    // and legacy direct paths.
     if (!site.conservation_area) {
-        const ca = coalesce(
+        const caObj = coalesce(
+            get(planning, ['designated', 'conservationArea']),
             get(planning, ['conservationArea']),
             get(planning, ['conservation_area']),
         );
-        if (ca && ca !== 'false' && ca !== false) {
-            site.conservation_area = true;
+        if (caObj != null) {
+            if (typeof caObj === 'object') {
+                if (caObj.intersects === true || caObj.intersects === 'true') {
+                    site.conservation_area = true;
+                }
+            } else if (caObj !== false && caObj !== 'false') {
+                site.conservation_area = true;
+            }
         }
     }
 
