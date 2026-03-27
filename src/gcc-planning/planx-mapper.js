@@ -262,24 +262,35 @@ function mapDesignations(designations) {
     );
     const site = {};
 
-    if (vals.has('listed') || vals.has('listed-building') || vals.has('listedbuilding')) {
+    if (vals.has('listed') || vals.has('listed-building') || vals.has('listedbuilding') ||
+        vals.has('designated.listed')) {
         site.listed_building = true;
     }
-    if (vals.has('conservation-area') || vals.has('conservation_area') || vals.has('conservationarea') || vals.has('conservation area')) {
+    // PlanX canonical value: "designated.conservationArea" → after toLowerCase: "designated.conservationarea"
+    if (vals.has('designated.conservationarea') ||
+        vals.has('conservation-area') || vals.has('conservation_area') ||
+        vals.has('conservationarea') || vals.has('conservation area')) {
         site.conservation_area = true;
     }
-    if (vals.has('listed-building-setting') || vals.has('setting-of-listed-building')) {
+    if (vals.has('listed-building-setting') || vals.has('setting-of-listed-building') ||
+        vals.has('designated.listed.setting')) {
         site.listed_building_within_setting = true;
     }
-    if (vals.has('article-4') || vals.has('article4') || vals.has('article_4_direction')) {
-        // stored as application-level fact in GCC — flag as note
+    // PlanX canonical: "articleFour" / "articleFour.caz" → "articlefour" / "articlefour.caz"
+    if (vals.has('articlefour') || vals.has('article-4') || vals.has('article4') ||
+        vals.has('article_4_direction') || [...vals].some(v => v.startsWith('articlefour.'))) {
         site._article_4_detected = true;
     }
-    if (vals.has('scheduled-monument') || vals.has('archaeological-priority')) {
+    // PlanX canonical: "monument" → scheduled monument / archaeological interest
+    if (vals.has('monument') || vals.has('scheduled-monument') || vals.has('archaeological-priority')) {
         site.known_or_potential_archaeological_interest = true;
     }
     if (vals.has('aqma') || vals.has('air-quality-management-area')) {
         site.within_aqma = true;
+    }
+    // PlanX canonical: "road.classified"
+    if (vals.has('road.classified') || vals.has('classified_road') || vals.has('classified-road')) {
+        site.classified_road = true;
     }
 
     return site;
