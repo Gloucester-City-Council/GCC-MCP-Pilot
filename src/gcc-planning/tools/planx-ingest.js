@@ -119,25 +119,35 @@ function buildNextSteps(result) {
         steps.push({
             step: 1,
             tool: 'planning_validate_application_facts',
-            note: 'Validate mapped_facts against the Gloucester householder facts schema to catch any missing or invalid fields.',
+            note: 'Validate mapped_facts against the Gloucester householder facts schema to identify any missing fields.',
             args_hint: { facts: '<use mapped_facts above>' },
         });
+
+        if (result.unmapped_fields && result.unmapped_fields.length > 0) {
+            steps.push({
+                step: 2,
+                action: 'analyse_submitted_drawings',
+                note: `${result.unmapped_fields.length} policy-specific dimension(s) were not present in the PlanX data and should be extracted by analysing the submitted planning drawings. ` +
+                      'From the elevation drawings and site plan, extract: extension depth (rear wall to new wall), ridge height (proposed and existing), eaves height, distance to side boundary, ' +
+                      'remaining rear garden depth, and distance to any facing habitable windows. ' +
+                      'Add these measurements (in metres — the mapper converts to mm) into mapped_facts.proposal before proceeding.',
+                fields_to_extract: result.unmapped_fields,
+            });
+        }
+
         steps.push({
-            step: 2,
-            tool: 'planning_detect_case_route',
-            note: 'Confirm the detected application route and consent tracks.',
-            args_hint: { facts: '<use mapped_facts above>' },
-        });
-        steps.push({
-            step: 3,
+            step: result.unmapped_fields && result.unmapped_fields.length > 0 ? 3 : 2,
             tool: 'planning_build_assessment_result',
-            note: 'Run the full planning assessment pipeline to get a recommendation.',
-            args_hint: { facts: '<use mapped_facts above>', mode: 'strict' },
+            note: 'Run the full planning assessment pipeline to get a recommendation. Use mapped_facts enriched with any dimensions extracted from the drawings.',
+            args_hint: { facts: '<use mapped_facts above, enriched with drawing measurements>', mode: 'strict' },
         });
     }
 
     return {
-        summary: `Mapped from PlanX "${result.planx_application_type}" → GCC route "${result.suggested_route}". Pass mapped_facts to planning_validate_application_facts first.`,
+        summary: `Mapped from PlanX "${result.planx_application_type}" → GCC route "${result.suggested_route}". ` +
+                 (result.unmapped_fields && result.unmapped_fields.length > 0
+                    ? `${result.unmapped_fields.length} dimension(s) not in PlanX data — extract from submitted drawings before assessment.`
+                    : 'Pass mapped_facts to planning_validate_application_facts first.'),
         tools: steps,
     };
 }

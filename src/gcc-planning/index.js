@@ -98,8 +98,13 @@ Returns:
   next_steps           — Suggested tool sequence
 
 ⚠️ Non-householder PlanX types (pp.full.major, enforcement, minerals, etc.) return not_supported.
-⚠️ Many GCC policy-specific facts (45-degree distances, ridge heights, garden depths) are not
-   present in PlanX data — they must be measured/added by the assessing officer after ingestion.`,
+
+📐 Policy-specific dimensions not present in PlanX data (45-degree distances, distance to facing
+   windows, side window setbacks, garden depth, ridge/eaves heights) should be extracted by
+   analysing the submitted planning drawings attached to the application. Review the unmapped_fields
+   list in the response — each missing dimension can typically be scaled from the submitted
+   elevation drawings, floor plans, or site plan. Once extracted, add them to mapped_facts before
+   calling planning_build_assessment_result.`,
         annotations: READ_ONLY_ANNOTATIONS,
         inputSchema: {
             type: 'object',

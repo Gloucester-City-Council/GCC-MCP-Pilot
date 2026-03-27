@@ -408,7 +408,7 @@ function mapProjectTypes(projectTypes, unmapped, warnings) {
         if (mapped === null) {
             // Too vague or not a householder extension
             unmapped.push(`data.proposal.projectType[${ptValue}]`);
-            warnings.push(`PlanX projectType "${ptValue}" could not be mapped to a GCC proposal_type — it may be too broad or not a householder extension.`);
+            warnings.push(`PlanX projectType "${ptValue}" is too broad to map automatically — review the submitted drawings to confirm the specific proposal type and set proposal.proposal_type accordingly.`);
         } else if (mapped === undefined) {
             unmapped.push(`data.proposal.projectType[${ptValue}]`);
             warnings.push(`PlanX projectType "${ptValue}" has no GCC proposal_type equivalent. Known types: ${Object.keys(PLANX_PROJECT_TYPE_MAP).join(', ')}.`);
@@ -630,7 +630,7 @@ function mapPlanxToGccFacts(planx) {
 
     // Flood zone default warning
     if (!site.flood_zone) {
-        warnings.push('Flood zone not found in PlanX data — site.flood_zone is not set. Assessment tools will treat flood zone as unknown.');
+        warnings.push('Flood zone not found in PlanX data — site.flood_zone is not set. Check the submitted site location plan or the Environment Agency flood map for the site address.');
         unmapped.push('data.property.planning.flood.zone');
     }
 
