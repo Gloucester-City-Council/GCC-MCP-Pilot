@@ -2,7 +2,7 @@
  * Azure Functions v4 HTTP Trigger — Raw HTML Fetch MCP
  *
  * Exposes a single MCP tool: fetch_raw_html
- * Endpoint: GET /api/mcp-raw-html (manifest), POST /api/mcp-raw-html (tool execution)
+ * Endpoint: POST /api/mcp-raw-html
  *
  * Respects robots.txt, enforces per-domain rate limiting, and blocks SSRF
  * attempts against private IP ranges.
@@ -15,15 +15,13 @@
 const { app } = require('@azure/functions');
 
 const USER_AGENT = 'RawHTMLMCP/1.0 (Azure Function MCP; respects robots.txt)';
-const FETCH_TIMEOUT_MS = 10_000;
-const MIN_CRAWL_DELAY_MS = 2_000;
-const ROBOTS_CACHE_TTL_MS = 3_600_000; // 1 hour
+const FETCH_TIMEOUT_MS = 10000;
+const MIN_CRAWL_DELAY_MS = 2000;
+const ROBOTS_CACHE_TTL_MS = 3600000; // 1 hour
 
 // Module-scope caches — reset on cold start, good enough for personal/internal use
-/** @type {Map<string, { fetchedAt: number, rules: object }>} */
-const robotsCache = new Map();
-/** @type {Map<string, number>} domain → last fetch timestamp (ms) */
-const rateLimitMap = new Map();
+const robotsCache = new Map();  // origin → { fetchedAt, rules }
+const rateLimitMap = new Map(); // domain → last fetch timestamp (ms)
 
 // ─── SSRF guard ───────────────────────────────────────────────────────────────
 const PRIVATE_HOSTNAME_RE = /^(localhost|.*\.local)$/i;
@@ -40,58 +38,60 @@ function validateUrl(rawUrl) {
     if (!rawUrl || typeof rawUrl !== 'string') {
         return { ok: false, reason: 'url is required and must be a string' };
     }
-    let parsed;
+    var parsed;
     try {
         parsed = new URL(rawUrl);
-    } catch {
+    } catch (err) {
         return { ok: false, reason: 'Malformed URL — could not parse' };
     }
     if (!['http:', 'https:'].includes(parsed.protocol)) {
-        return { ok: false, reason: `URL protocol must be http or https, got: ${parsed.protocol}` };
+        return { ok: false, reason: 'URL protocol must be http or https, got: ' + parsed.protocol };
     }
     if (isPrivateHost(parsed.hostname)) {
-        return { ok: false, reason: `Requests to private/internal hosts are not permitted (${parsed.hostname})` };
+        return { ok: false, reason: 'Requests to private/internal hosts are not permitted (' + parsed.hostname + ')' };
     }
-    return { ok: true, parsed };
+    return { ok: true, parsed: parsed };
 }
 
 // ─── robots.txt helpers ───────────────────────────────────────────────────────
 function parseRobots(text) {
-    const rules = { agents: {} };
-    let currentAgents = [];
+    var rules = { agents: {} };
+    var currentAgents = [];
 
-    for (const rawLine of text.split(/\r?\n/)) {
-        const line = rawLine.replace(/#.*$/, '').trim();
+    var lines = text.split(/\r?\n/);
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].replace(/#.*$/, '').trim();
         if (!line) {
             currentAgents = [];
             continue;
         }
 
-        const colonIdx = line.indexOf(':');
+        var colonIdx = line.indexOf(':');
         if (colonIdx === -1) continue;
 
-        const field = line.slice(0, colonIdx).trim().toLowerCase();
-        const value = line.slice(colonIdx + 1).trim();
+        var field = line.slice(0, colonIdx).trim().toLowerCase();
+        var value = line.slice(colonIdx + 1).trim();
 
         if (field === 'user-agent') {
-            const agent = value.toLowerCase();
+            var agent = value.toLowerCase();
             if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
             currentAgents.push(agent);
         } else if (field === 'disallow') {
-            for (const agent of currentAgents) {
-                if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
-                rules.agents[agent].disallow.push(value);
+            for (var j = 0; j < currentAgents.length; j++) {
+                var a = currentAgents[j];
+                if (!rules.agents[a]) rules.agents[a] = { disallow: [], crawlDelay: 0 };
+                rules.agents[a].disallow.push(value);
             }
         } else if (field === 'crawl-delay') {
-            const delay = parseFloat(value);
+            var delay = parseFloat(value);
             if (!isNaN(delay) && delay > 0) {
-                for (const agent of currentAgents) {
-                    if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
-                    rules.agents[agent].crawlDelay = delay * 1000;
+                for (var k = 0; k < currentAgents.length; k++) {
+                    var b = currentAgents[k];
+                    if (!rules.agents[b]) rules.agents[b] = { disallow: [], crawlDelay: 0 };
+                    rules.agents[b].crawlDelay = delay * 1000;
                 }
             }
         } else {
-            // Any non-agent-block directive resets current agent scope
             currentAgents = [];
         }
     }
@@ -99,7 +99,8 @@ function parseRobots(text) {
 }
 
 function isPathDisallowed(path, disallowList) {
-    for (const rule of disallowList) {
+    for (var i = 0; i < disallowList.length; i++) {
+        var rule = disallowList[i];
         if (!rule) continue; // empty Disallow means allow all
         if (path.startsWith(rule)) return true;
     }
@@ -107,62 +108,55 @@ function isPathDisallowed(path, disallowList) {
 }
 
 function getRulesForBot(rules) {
-    // Prefer specific agent match, fall back to wildcard
     return rules.agents['rawhtmlmcp'] || rules.agents['*'] || { disallow: [], crawlDelay: 0 };
 }
 
 async function fetchRobotsRules(origin) {
-    const cached = robotsCache.get(origin);
-    if (cached && Date.now() - cached.fetchedAt < ROBOTS_CACHE_TTL_MS) {
+    var cached = robotsCache.get(origin);
+    if (cached && (Date.now() - cached.fetchedAt) < ROBOTS_CACHE_TTL_MS) {
         return cached.rules;
     }
 
     try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 5_000);
-        const res = await fetch(`${origin}/robots.txt`, {
+        var controller = new AbortController();
+        var timer = setTimeout(function() { controller.abort(); }, 5000);
+        var res = await fetch(origin + '/robots.txt', {
             headers: { 'User-Agent': USER_AGENT },
             signal: controller.signal,
         });
         clearTimeout(timer);
 
         if (res.ok) {
-            const text = await res.text();
-            const rules = parseRobots(text);
-            robotsCache.set(origin, { fetchedAt: Date.now(), rules });
+            var text = await res.text();
+            var rules = parseRobots(text);
+            robotsCache.set(origin, { fetchedAt: Date.now(), rules: rules });
             return rules;
         }
-    } catch {
-        // Unreachable robots.txt → treat as allow-all
+    } catch (err) {
+        // Unreachable robots.txt — treat as allow-all
     }
 
-    const empty = { agents: {} };
+    var empty = { agents: {} };
     robotsCache.set(origin, { fetchedAt: Date.now(), rules: empty });
     return empty;
 }
 
 // ─── Rate limiter ─────────────────────────────────────────────────────────────
 async function applyRateLimit(domain, crawlDelayMs) {
-    const minDelay = Math.max(MIN_CRAWL_DELAY_MS, crawlDelayMs);
-    const last = rateLimitMap.get(domain) || 0;
-    const wait = last + minDelay - Date.now();
+    var minDelay = Math.max(MIN_CRAWL_DELAY_MS, crawlDelayMs || 0);
+    var last = rateLimitMap.get(domain) || 0;
+    var wait = last + minDelay - Date.now();
     if (wait > 0) {
-        await new Promise(r => setTimeout(r, wait));
+        await new Promise(function(resolve) { setTimeout(resolve, wait); });
     }
     rateLimitMap.set(domain, Date.now());
 }
 
 // ─── Tool definition ──────────────────────────────────────────────────────────
-const TOOLS = [
+var TOOLS = [
     {
         name: 'fetch_raw_html',
-        description: [
-            'Fetches the raw HTML source of a URL.',
-            'Respects robots.txt (checks * and RawHTMLMCP user-agent rules).',
-            'Enforces a minimum 2-second per-domain rate limit (or crawl-delay if longer).',
-            'Blocks requests to private/internal IP ranges to prevent SSRF.',
-            'Returns: statusCode, contentType, bodyLength, body, and optionally response headers.',
-        ].join(' '),
+        description: 'Fetches the raw HTML source of a URL. Respects robots.txt (checks * and RawHTMLMCP user-agent rules). Enforces a minimum 2-second per-domain rate limit (or crawl-delay if longer). Blocks requests to private/internal IP ranges to prevent SSRF. Returns: statusCode, contentType, bodyLength, body, and optionally response headers.',
         inputSchema: {
             type: 'object',
             properties: {
@@ -182,25 +176,28 @@ const TOOLS = [
 ];
 
 // ─── Tool handler ─────────────────────────────────────────────────────────────
-async function handleFetchRawHtml({ url, include_headers = false }, context) {
+async function handleFetchRawHtml(args, context) {
+    var url = args.url;
+    var include_headers = args.include_headers === true;
+
     // 1. Validate URL
-    const validation = validateUrl(url);
+    var validation = validateUrl(url);
     if (!validation.ok) {
         return { blocked: true, reason: validation.reason };
     }
-    const { parsed } = validation;
-    const origin = `${parsed.protocol}//${parsed.host}`;
+    var parsed = validation.parsed;
+    var origin = parsed.protocol + '//' + parsed.host;
 
     // 2. Fetch and parse robots.txt
-    const rules = await fetchRobotsRules(origin);
-    const agentRules = getRulesForBot(rules);
+    var rules = await fetchRobotsRules(origin);
+    var agentRules = getRulesForBot(rules);
 
     // 3. Check path against disallow rules
-    const path = parsed.pathname || '/';
+    var path = parsed.pathname || '/';
     if (isPathDisallowed(path, agentRules.disallow)) {
         return {
             blocked: true,
-            reason: `Path "${path}" is disallowed by robots.txt`,
+            reason: 'Path "' + path + '" is disallowed by robots.txt',
             robotsOrigin: origin,
         };
     }
@@ -209,10 +206,10 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
     await applyRateLimit(parsed.hostname, agentRules.crawlDelay);
 
     // 5. Fetch the target URL
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); }, FETCH_TIMEOUT_MS);
 
-    let response;
+    var response;
     try {
         response = await fetch(url, {
             headers: { 'User-Agent': USER_AGENT },
@@ -221,52 +218,42 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         });
     } catch (err) {
         clearTimeout(timer);
-        const reason = err.name === 'AbortError'
+        var reason = err.name === 'AbortError'
             ? 'Request timed out after 10 seconds'
-            : `Fetch failed: ${err.message}`;
-        return { error: true, reason };
+            : 'Fetch failed: ' + err.message;
+        return { error: true, reason: reason };
     }
     clearTimeout(timer);
 
-    const body = await response.text();
-    const contentType = response.headers.get('content-type') || '';
+    var body = await response.text();
+    var contentType = response.headers.get('content-type') || '';
 
-    const result = {
-        url: response.url, // may differ from input if redirected
+    var result = {
+        url: response.url,
         statusCode: response.status,
-        contentType,
+        contentType: contentType,
         bodyLength: body.length,
-        body,
+        body: body,
     };
 
     if (include_headers) {
-        const headers = {};
-        response.headers.forEach((value, key) => { headers[key] = value; });
+        var headers = {};
+        response.headers.forEach(function(value, key) { headers[key] = value; });
         result.headers = headers;
     }
 
-    context.log(`fetch_raw_html: ${response.status} ${response.url} (${body.length} bytes)`);
+    context.log('fetch_raw_html: ' + response.status + ' ' + response.url + ' (' + body.length + ' bytes)');
     return result;
 }
 
 // ─── MCP manifest ─────────────────────────────────────────────────────────────
-const MANIFEST = {
+var MANIFEST = {
     protocolVersion: '2024-11-05',
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-raw-html-mcp',
         version: '1.0.0',
-        instructions: `🌐 RAW HTML FETCH MCP
-
-Fetches the raw HTML source of any public URL.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 TOOLS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- fetch_raw_html — Fetch raw HTML source from a URL
-
-⚠️  Respects robots.txt. Private/internal IP ranges are blocked (SSRF protection).
-Rate limited to one request per domain per 2 seconds (or crawl-delay if longer).`,
+        instructions: '🌐 RAW HTML FETCH MCP\n\nFetches the raw HTML source of any public URL.\n\n- fetch_raw_html — Fetch raw HTML source from a URL\n\nRespects robots.txt. Private/internal IP ranges are blocked (SSRF protection). Rate limited to one request per domain per 2 seconds.',
     },
 };
 
@@ -280,8 +267,11 @@ async function handleMcpRequest(request, context) {
         };
     }
 
-    const { jsonrpc, method, params, id } = request;
-    const requestId = Object.prototype.hasOwnProperty.call(request, 'id') && id !== undefined ? id : null;
+    var jsonrpc = request.jsonrpc;
+    var method = request.method;
+    var params = request.params;
+    var id = request.id;
+    var requestId = Object.prototype.hasOwnProperty.call(request, 'id') && id !== undefined ? id : null;
 
     if (jsonrpc !== '2.0') {
         return {
@@ -291,71 +281,69 @@ async function handleMcpRequest(request, context) {
         };
     }
 
-    context.log(`Processing MCP Raw HTML method: ${method}`);
+    context.log('Processing MCP Raw HTML method: ' + method);
 
     switch (method) {
         case 'initialize':
-            return { jsonrpc: '2.0', result: MANIFEST, id };
+            return { jsonrpc: '2.0', result: MANIFEST, id: id };
 
         case 'notifications/initialized':
             return null;
 
         case 'tools/list':
-            return { jsonrpc: '2.0', result: { tools: TOOLS }, id };
+            return { jsonrpc: '2.0', result: { tools: TOOLS }, id: id };
 
         case 'tools/call': {
-            const { name, arguments: args } = params || {};
+            var name = params && params.name;
+            var args = (params && params.arguments) || {};
 
             if (!name) {
                 return {
                     jsonrpc: '2.0',
                     error: { code: -32602, message: 'Invalid params: tool name is required' },
-                    id,
+                    id: id,
                 };
             }
 
             if (name !== 'fetch_raw_html') {
                 return {
                     jsonrpc: '2.0',
-                    error: {
-                        code: -32602,
-                        message: `Unknown tool: ${name}. Available: fetch_raw_html`,
-                    },
-                    id,
+                    error: { code: -32602, message: 'Unknown tool: ' + name + '. Available: fetch_raw_html' },
+                    id: id,
                 };
             }
 
             try {
-                context.log(`Executing tool: ${name} url=${args?.url}`);
-                const result = await handleFetchRawHtml(args || {}, context);
+                context.log('Executing tool: ' + name + ' url=' + args.url);
+                var result = await handleFetchRawHtml(args, context);
                 return {
                     jsonrpc: '2.0',
                     result: {
                         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
                     },
-                    id,
+                    id: id,
                 };
             } catch (error) {
-                context.log.error(`Raw HTML tool error: ${error.message}`);
+                context.log.error('Raw HTML tool error: ' + error.message);
                 return {
                     jsonrpc: '2.0',
                     result: {
                         content: [{ type: 'text', text: JSON.stringify({ error: error.message }) }],
                         isError: true,
                     },
-                    id,
+                    id: id,
                 };
             }
         }
 
         case 'ping':
-            return { jsonrpc: '2.0', result: {}, id };
+            return { jsonrpc: '2.0', result: {}, id: id };
 
         default:
             return {
                 jsonrpc: '2.0',
-                error: { code: -32601, message: `Method not found: ${method}` },
-                id,
+                error: { code: -32601, message: 'Method not found: ' + method },
+                id: id,
             };
     }
 }
@@ -365,11 +353,11 @@ app.http('mcpRawHtml', {
     methods: ['POST'],
     authLevel: 'anonymous',
     route: 'mcp-raw-html',
-    handler: async (request, context) => {
+    handler: async function(request, context) {
         context.log('MCP Raw HTML request received');
 
         try {
-            let body;
+            var body;
             try {
                 body = await request.json();
             } catch (parseError) {
@@ -384,7 +372,7 @@ app.http('mcpRawHtml', {
                 };
             }
 
-            const response = await handleMcpRequest(body, context);
+            var response = await handleMcpRequest(body, context);
 
             if (response === null) {
                 return { status: 204 };
