@@ -89,6 +89,7 @@ const PLANX_PROJECT_TYPE_MAP = {
 // ─── Dwelling type mapping ────────────────────────────────────────────────────
 
 const PLANX_DWELLING_TYPE_MAP = {
+    // Simple string form (application.json)
     'detached':     'detached',
     'semiDetached': 'semi_detached',
     'semi-detached':'semi_detached',
@@ -99,6 +100,15 @@ const PLANX_DWELLING_TYPE_MAP = {
     'flat':         'flat',
     'bungalow':     'bungalow',
     'maisonette':   'flat',
+    // Full dot-notation paths (preApplication.json property.type.value)
+    'residential.dwelling.house.detached':          'detached',
+    'residential.dwelling.house.semiDetached':      'semi_detached',
+    'residential.dwelling.house.terraced':          'terrace',
+    'residential.dwelling.house.endTerrace':        'end_terrace',
+    'residential.dwelling.house.bungalow':          'bungalow',
+    'residential.dwelling.flat':                    'flat',
+    'residential.dwelling.flat.maisonette':         'flat',
+    'residential.dwelling':                         'detached',   // generic fallback
 };
 
 // ─── Flood zone mapping ───────────────────────────────────────────────────────
@@ -145,10 +155,15 @@ function coalesce(...candidates) {
  * @returns {{ route: string|null, consentTracks: string[], routeWarning: string|null }}
  */
 function resolveRoute(planx) {
-    const typeValue = get(planx, ['applicationType', 'value']);
+    // applicationType.value is the standard path (application.json).
+    // preApplication.json stores the type at data.application.type.value instead.
+    const typeValue = coalesce(
+        get(planx, ['applicationType', 'value']),
+        get(planx, ['data', 'application', 'type', 'value']),
+    );
 
     if (!typeValue) {
-        return { route: null, consentTracks: [], routeWarning: 'PlanX applicationType.value is missing' };
+        return { route: null, consentTracks: [], routeWarning: 'PlanX applicationType.value and data.application.type.value are both missing' };
     }
 
     if (UNSUPPORTED_PLANX_TYPES.has(typeValue)) {
@@ -230,14 +245,21 @@ function mapApplicationSection(planx, routeInfo) {
 
 /**
  * Map PlanX planning designations to GCC site boolean flags.
- * PlanX stores designations as an array of { value: string } objects.
+ * PlanX stores designations as an array of { value: string, intersects: boolean } objects.
+ * Only designations where intersects is not explicitly false are treated as active.
  * @param {Array} designations
  * @returns {object} partial site object
  */
 function mapDesignations(designations) {
     if (!Array.isArray(designations)) return {};
 
-    const vals = new Set(designations.map(d => (d.value || d).toLowerCase()));
+    // Only include designations that actually intersect with the site.
+    // intersects may be boolean or string; absent means unknown (include).
+    const vals = new Set(
+        designations
+            .filter(d => d.intersects !== false && d.intersects !== 'false')
+            .map(d => (d.value || d).toLowerCase())
+    );
     const site = {};
 
     if (vals.has('listed') || vals.has('listed-building') || vals.has('listedbuilding')) {
@@ -291,9 +313,10 @@ function mapFloodZone(data) {
 /**
  * Map the PlanX property/site data to GCC site section.
  * @param {object} planx
+ * @param {string[]} warnings - accumulator for data quality warnings
  * @returns {object} GCC site section
  */
-function mapSiteSection(planx) {
+function mapSiteSection(planx, warnings) {
     const data = planx.data || {};
     const property = data.property || {};
     const planning = property.planning || {};
@@ -306,27 +329,46 @@ function mapSiteSection(planx) {
     const addr = propAddress || applicantAddress;
 
     if (addr) {
-        // PlanX address may be a string or an object with line1, town, postcode
+        // PlanX address may be a string or an object.
+        // Prefer singleLine (full formatted address) over constructing from parts,
+        // as PlanX commonly omits line1 and only populates title + town + postcode.
         if (typeof addr === 'string') {
             site.address = addr;
+        } else if (addr.singleLine) {
+            site.address = addr.singleLine;
         } else {
             const parts = [
-                addr.line1, addr.line2, addr.town, addr.county, addr.postcode,
+                addr.line1 || addr.title, addr.line2, addr.town, addr.county, addr.postcode,
             ].filter(Boolean);
             if (parts.length > 0) site.address = parts.join(', ');
         }
     }
 
-    // Dwelling type
+    // Dwelling type.
+    // preApplication.json stores type as { value: string } under data.property.type.value.
+    // application.json stores it as a plain string under data.property.type.
     const dwellingRaw = coalesce(
-        get(property, ['type']),
+        get(property, ['type', 'value']),   // preApp object form
+        get(property, ['type']),            // application string form
         get(data, ['property', 'dwellingType']),
         get(data, ['proposal', 'existingUse', 'dwellingType']),
     );
     if (dwellingRaw) {
-        const mapped = PLANX_DWELLING_TYPE_MAP[dwellingRaw] ||
-                       PLANX_DWELLING_TYPE_MAP[String(dwellingRaw).toLowerCase()];
-        if (mapped) site.dwelling_type = mapped;
+        const dwellingStr = String(dwellingRaw).toLowerCase();
+
+        // Commercial property type — known residential/commercial misclassification risk.
+        // Flag as data quality warning rather than silently dropping the value.
+        if (dwellingStr.startsWith('commercial.') || dwellingStr === 'commercial') {
+            warnings.push(
+                `PlanX data.property.type is "${dwellingRaw}" — this appears to be a commercial use class. ` +
+                'The householder pipeline applies only to dwellings. Check whether the property is lawfully used as a single dwelling before proceeding. ' +
+                'If the lawful use is uncertain, set application.lawful_use_as_single_dwelling_confirmed to "unknown" in mapped_facts.'
+            );
+            // Do not set dwelling_type — leave unset so validation flags it
+        } else {
+            const mapped = PLANX_DWELLING_TYPE_MAP[dwellingStr] || PLANX_DWELLING_TYPE_MAP[dwellingRaw];
+            if (mapped) site.dwelling_type = mapped;
+        }
     }
 
     // Planning designations
@@ -337,25 +379,44 @@ function mapSiteSection(planx) {
     const designationFlags = mapDesignations(designations);
     Object.assign(site, designationFlags);
 
-    // Listed building — also check property.planning.listed directly
+    // Listed building — check property.planning.designated.listed.intersects
+    // and the legacy direct property.planning.listed path.
+    // Must check intersects explicitly — a truthy object with intersects:false is NOT listed.
     if (!site.listed_building) {
-        const listed = coalesce(
+        const listedObj = coalesce(
+            get(planning, ['designated', 'listed']),
             get(planning, ['listed']),
             get(property, ['listed']),
         );
-        if (listed && listed !== 'false' && listed !== false) {
-            site.listed_building = true;
+        if (listedObj != null) {
+            if (typeof listedObj === 'object') {
+                // { intersects: true/false } form
+                if (listedObj.intersects === true || listedObj.intersects === 'true') {
+                    site.listed_building = true;
+                }
+            } else if (listedObj !== false && listedObj !== 'false') {
+                // plain boolean/string form
+                site.listed_building = true;
+            }
         }
     }
 
-    // Conservation area — also check property.planning.conservationArea
+    // Conservation area — check property.planning.designated.conservationArea.intersects
+    // and legacy direct paths.
     if (!site.conservation_area) {
-        const ca = coalesce(
+        const caObj = coalesce(
+            get(planning, ['designated', 'conservationArea']),
             get(planning, ['conservationArea']),
             get(planning, ['conservation_area']),
         );
-        if (ca && ca !== 'false' && ca !== false) {
-            site.conservation_area = true;
+        if (caObj != null) {
+            if (typeof caObj === 'object') {
+                if (caObj.intersects === true || caObj.intersects === 'true') {
+                    site.conservation_area = true;
+                }
+            } else if (caObj !== false && caObj !== 'false') {
+                site.conservation_area = true;
+            }
         }
     }
 
@@ -608,7 +669,7 @@ function mapPlanxToGccFacts(planx) {
 
     // Map each section
     const application = mapApplicationSection(planx, routeInfo);
-    const site        = mapSiteSection(planx);
+    const site        = mapSiteSection(planx, warnings);
     const proposal    = mapProposalSection(planx, unmapped, warnings);
 
     const mappedFacts = { application, site, proposal };
