@@ -462,6 +462,106 @@ describe('designation intersects handling (bug regressions)', () => {
     });
 });
 
+// ─── PlanX canonical dot-notation designation values ─────────────────────────
+
+describe('PlanX canonical dot-notation designation values', () => {
+    // Real PlanX submissions use dot-notation: "designated.conservationArea", "road.classified", etc.
+    // Previous code only checked hyphenated/underscore forms and missed these.
+    it('sets conservation_area from "designated.conservationArea" with intersects:true', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'designated.conservationArea', description: 'Conservation area', intersects: true,
+                              entities: [{ name: 'Eastgate' }] },
+                            { value: 'listed', intersects: false },
+                            { value: 'road.classified', intersects: false },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.conservation_area).toBe(true);
+        expect(result.mapped_facts.site.listed_building).toBeUndefined();
+    });
+
+    it('does NOT set conservation_area from "designated.conservationArea" with intersects:false', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'designated.conservationArea', intersects: false },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.conservation_area).toBeUndefined();
+    });
+
+    it('sets classified_road from "road.classified" designation with intersects:true', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'road.classified', intersects: true },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.classified_road).toBe(true);
+    });
+
+    it('sets known_or_potential_archaeological_interest from "monument" designation', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'monument', intersects: true },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site.known_or_potential_archaeological_interest).toBe(true);
+    });
+
+    it('sets _article_4_detected from "articleFour" designation', () => {
+        const planx = {
+            applicationType: { value: 'pp.full.householder' },
+            data: {
+                property: {
+                    address: '1 Test St, Gloucester, GL1 1AA',
+                    planning: {
+                        designations: [
+                            { value: 'articleFour', intersects: true },
+                        ],
+                    },
+                },
+            },
+        };
+        const result = mapPlanxToGccFacts(planx);
+        expect(result.mapped_facts.site._article_4_detected).toBe(true);
+    });
+});
+
 // ─── Bug regression: address singleLine ──────────────────────────────────────
 
 describe('address singleLine handling (bug regression)', () => {
