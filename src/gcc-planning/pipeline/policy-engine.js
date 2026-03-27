@@ -279,6 +279,7 @@ function evaluateCondition(cond, predicates) {
     switch (cond.op) {
         case 'eq':
         case '==':
+        case '=':   // ruleset uses single = throughout (13 conditions)
             return fieldVal === cond.value;
         case 'ne':
         case '!=':
