@@ -362,22 +362,12 @@ async function handleMcpRequest(request, context) {
 
 // ─── HTTP trigger registration ────────────────────────────────────────────────
 app.http('mcpRawHtml', {
-    methods: ['GET', 'POST'],
+    methods: ['POST'],
     authLevel: 'function',
     route: 'mcp-raw-html',
     handler: async (request, context) => {
         context.log('MCP Raw HTML request received');
 
-        // GET → return manifest for MCP discovery
-        if (request.method === 'GET') {
-            return {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(MANIFEST),
-            };
-        }
-
-        // POST → JSON-RPC tool execution
         try {
             let body;
             try {
