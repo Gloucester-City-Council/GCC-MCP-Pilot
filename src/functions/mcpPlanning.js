@@ -1,7 +1,7 @@
 /**
  * Azure Functions v4 HTTP Trigger — GCC Planning Assist MCP
  *
- * Exposes 8 read-only MCP tools for the Gloucester householder planning
+ * Exposes 9 read-only MCP tools for the Gloucester householder planning
  * assessment pipeline at POST /api/mcp-planning.
  *
  * Implements the Gloucester City Council Planning Assist MCP Server per
@@ -11,6 +11,7 @@
  * endpoints. All tool logic is in src/gcc-planning/.
  *
  * Tools:
+ *   Phase 0: planning_ingest_planx_schema (PlanX → GCC facts mapping)
  *   Phase 1: planning_validate_application_facts, planning_detect_case_route
  *   Phase 2: planning_list_applicable_modules, planning_check_validation_requirements, planning_explain_rule
  *   Phase 3: planning_assess_planning_merits, planning_build_assessment_result
@@ -191,6 +192,9 @@ All rules are derived from the Gloucester planning schemas:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 TOOLS BY PHASE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PHASE 0 — PlanX Ingestion (optional — for applications submitted via PlanX)
+  planning_ingest_planx_schema         — Map PlanX application JSON → GCC facts (pass mapped_facts to Phase 1)
 
 PHASE 1 — Foundation (Schema validation + route detection)
   planning_validate_application_facts  — Validate facts object structure and enum values

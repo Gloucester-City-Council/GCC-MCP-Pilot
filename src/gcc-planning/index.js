@@ -4,7 +4,8 @@
  * Exports TOOLS (MCP tool definitions), TOOL_HANDLERS (execute functions),
  * and SERVER_INFO for use by the mcpPlanning Azure Function.
  *
- * Implements 8 tools across 4 phases (plan Section 5 and Section 14):
+ * Implements 9 tools across 4 phases (plan Section 5 and Section 14):
+ *   Phase 0: planx_ingest_schema (PlanX ingestion — maps PlanX application JSON to GCC facts)
  *   Phase 1: validate_application_facts, detect_case_route
  *   Phase 2: list_applicable_modules, check_validation_requirements, explain_rule
  *   Phase 3: assess_planning_merits, build_assessment_result
@@ -21,6 +22,7 @@
 
 const { SCHEMA_VERSIONS } = require('./schema-loader');
 
+const planxIngest           = require('./tools/planx-ingest');
 const validateFacts         = require('./tools/validate-application-facts');
 const detectRoute           = require('./tools/detect-case-route');
 const listModules           = require('./tools/list-applicable-modules');
@@ -58,6 +60,68 @@ const FACTS_PARAM = {
 
 // ─── Tool definitions ─────────────────────────────────────────────────────────
 const TOOLS = [
+
+    // ── Phase 0 — PlanX ingestion ─────────────────────────────────────────────
+
+    {
+        name: 'planning_ingest_planx_schema',
+        description: `Ingest a PlanX digital planning application JSON and map it to Gloucester Householder Application Facts, ready for the GCC assessment pipeline.
+
+Phase 0 tool — data ingestion only. No planning assessment is performed here.
+
+PlanX schemas: https://github.com/theopensystemslab/digital-planning-data-schemas
+Input: a PlanX application.json or preApplication.json conforming object.
+Output: mapped_facts conforming to gloucester-householder-application-facts.v2.2.schema.json.
+
+Supported PlanX → GCC route mappings:
+  pp.full.householder          → householder_planning_permission
+  lbc                         → householder_planning_permission_and_listed_building_consent
+  pa.part1.classA              → prior_notification_larger_home_extension
+  preApp / preApp.householder  → pre_application_householder
+
+Fields mapped:
+  applicationType.value        → application.application_route + consent_tracks
+  metadata.id / planningApp.reference → application.application_reference
+  data.description             → application.description
+  data.property.address        → site.address
+  data.property.type           → site.dwelling_type
+  data.property.planning.designations → site.conservation_area, listed_building, flood_zone, etc.
+  data.proposal.projectType    → proposal.proposal_type
+  data.proposal.extension.*   → proposal dimension fields (depths, heights — metres → mm)
+  data.proposal.materials      → proposal.materials_compatibility
+
+Returns:
+  mapped_facts         — GCC facts object (pass directly to other tools)
+  mapping_confidence   — high / partial / low
+  unmapped_fields      — PlanX fields that could not be mapped
+  mapping_warnings     — Issues to review before assessment
+  next_steps           — Suggested tool sequence
+
+⚠️ Non-householder PlanX types (pp.full.major, enforcement, minerals, etc.) return not_supported.
+
+📐 Policy-specific dimensions not present in PlanX data (45-degree distances, distance to facing
+   windows, side window setbacks, garden depth, ridge/eaves heights) should be extracted by
+   analysing the submitted planning drawings attached to the application. Review the unmapped_fields
+   list in the response — each missing dimension can typically be scaled from the submitted
+   elevation drawings, floor plans, or site plan. Once extracted, add them to mapped_facts before
+   calling planning_build_assessment_result.`,
+        annotations: READ_ONLY_ANNOTATIONS,
+        inputSchema: {
+            type: 'object',
+            required: ['planx_application'],
+            properties: {
+                planx_application: {
+                    type: 'object',
+                    description: 'PlanX application JSON object conforming to theopensystemslab/digital-planning-data-schemas application.json or preApplication.json. Must have an applicationType.value field.',
+                },
+                include_next_steps: {
+                    type: 'boolean',
+                    description: 'Include suggested next tool calls in the response (default: true).',
+                    default: true,
+                },
+            },
+        },
+    },
 
     // ── Phase 1 ──────────────────────────────────────────────────────────────
 
@@ -333,6 +397,7 @@ Payload includes:
 
 // ─── Tool handler map ─────────────────────────────────────────────────────────
 const TOOL_HANDLERS = {
+    planning_ingest_planx_schema:        planxIngest.execute,
     planning_validate_application_facts: validateFacts.execute,
     planning_detect_case_route:          detectRoute.execute,
     planning_list_applicable_modules:    listModules.execute,
