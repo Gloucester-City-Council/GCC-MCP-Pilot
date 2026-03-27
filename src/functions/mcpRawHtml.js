@@ -363,7 +363,7 @@ async function handleMcpRequest(request, context) {
 // ─── HTTP trigger registration ────────────────────────────────────────────────
 app.http('mcpRawHtml', {
     methods: ['POST'],
-    authLevel: 'function',
+    authLevel: 'anonymous',
     route: 'mcp-raw-html',
     handler: async (request, context) => {
         context.log('MCP Raw HTML request received');
