@@ -1,7 +1,9 @@
-import { app } from "@azure/functions";
-import { BlobServiceClient } from "@azure/storage-blob";
-import { DefaultAzureCredential } from "@azure/identity";
-import { ulid } from "ulid";
+'use strict';
+
+const { app } = require('@azure/functions');
+const { BlobServiceClient } = require('@azure/storage-blob');
+const { DefaultAzureCredential } = require('@azure/identity');
+const { ulid } = require('ulid');
 
 // ---------------------------------------------------------------------------
 // Blob client (module scope — reused across invocations)
@@ -12,7 +14,7 @@ const blobServiceClient = new BlobServiceClient(
   new DefaultAzureCredential()
 );
 
-const containerClient = blobServiceClient.getContainerClient("mcp-notes");
+const containerClient = blobServiceClient.getContainerClient('mcp-notes');
 
 // Create the container on first use if it doesn't already exist.
 // Resolves once per function instance — all requests await this promise.
@@ -22,7 +24,7 @@ const containerReady = containerClient.createIfNotExists();
 // Constants
 // ---------------------------------------------------------------------------
 
-const VALID_CATEGORIES = ["schema", "build", "architecture", "decision", "idea", "reference"];
+const VALID_CATEGORIES = ['schema', 'build', 'architecture', 'decision', 'idea', 'reference'];
 
 // ---------------------------------------------------------------------------
 // Tool manifest
@@ -31,69 +33,59 @@ const VALID_CATEGORIES = ["schema", "build", "architecture", "decision", "idea",
 const TOOL_MANIFEST = {
   tools: [
     {
-      name: "add_note",
+      name: 'add_note',
       description:
-        "Add a note to the personal store. For ideas, schema decisions, build notes and architectural thinking only. Do not store case-specific information, resident data, or commercially sensitive material.",
+        'Add a note to the personal store. For ideas, schema decisions, build notes and architectural thinking only. Do not store case-specific information, resident data, or commercially sensitive material.',
       inputSchema: {
-        type: "object",
+        type: 'object',
         properties: {
-          content: { type: "string" },
-          category: {
-            type: "string",
-            enum: VALID_CATEGORIES,
-          },
-          tags: { type: "array", items: { type: "string" } },
-          related: { type: "array", items: { type: "string" } },
-          supersedes: { type: "string" },
+          content: { type: 'string' },
+          category: { type: 'string', enum: VALID_CATEGORIES },
+          tags: { type: 'array', items: { type: 'string' } },
+          related: { type: 'array', items: { type: 'string' } },
+          supersedes: { type: 'string' },
         },
-        required: ["content", "category"],
+        required: ['content', 'category'],
       },
     },
     {
-      name: "get_notes",
-      description: "List notes, optionally filtered by category, tag, or date.",
+      name: 'get_notes',
+      description: 'List notes, optionally filtered by category, tag, or date.',
       inputSchema: {
-        type: "object",
+        type: 'object',
         properties: {
-          category: { type: "string" },
-          tag: { type: "string" },
-          since: { type: "string", description: "ISO8601 date" },
+          category: { type: 'string' },
+          tag: { type: 'string' },
+          since: { type: 'string', description: 'ISO8601 date' },
         },
       },
     },
     {
-      name: "get_note",
-      description: "Retrieve a single note by ID.",
+      name: 'get_note',
+      description: 'Retrieve a single note by ID.',
       inputSchema: {
-        type: "object",
-        properties: {
-          id: { type: "string" },
-        },
-        required: ["id"],
+        type: 'object',
+        properties: { id: { type: 'string' } },
+        required: ['id'],
       },
     },
     {
-      name: "get_related",
+      name: 'get_related',
+      description: 'Retrieve a note and all its directly linked notes in one call.',
+      inputSchema: {
+        type: 'object',
+        properties: { id: { type: 'string' } },
+        required: ['id'],
+      },
+    },
+    {
+      name: 'delete_note',
       description:
-        "Retrieve a note and all its directly linked notes in one call.",
+        'Permanently delete a note. Consider superseding instead if you want to preserve the chain.',
       inputSchema: {
-        type: "object",
-        properties: {
-          id: { type: "string" },
-        },
-        required: ["id"],
-      },
-    },
-    {
-      name: "delete_note",
-      description:
-        "Permanently delete a note. Consider superseding instead if you want to preserve the chain.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          id: { type: "string" },
-        },
-        required: ["id"],
+        type: 'object',
+        properties: { id: { type: 'string' } },
+        required: ['id'],
       },
     },
   ],
@@ -111,9 +103,9 @@ async function readNote(id) {
     for await (const chunk of download.readableStreamBody) {
       chunks.push(chunk);
     }
-    return JSON.parse(Buffer.concat(chunks).toString("utf-8"));
+    return JSON.parse(Buffer.concat(chunks).toString('utf-8'));
   } catch (err) {
-    if (err.statusCode === 404 || err.code === "BlobNotFound") return null;
+    if (err.statusCode === 404 || err.code === 'BlobNotFound') return null;
     throw err;
   }
 }
@@ -122,7 +114,7 @@ async function writeNote(note) {
   const blobClient = containerClient.getBlockBlobClient(`notes/${note.id}.json`);
   const content = JSON.stringify(note, null, 2);
   await blobClient.upload(content, Buffer.byteLength(content), {
-    blobHTTPHeaders: { blobContentType: "application/json" },
+    blobHTTPHeaders: { blobContentType: 'application/json' },
   });
 }
 
@@ -132,15 +124,15 @@ async function deleteBlob(id) {
     await blobClient.delete();
     return true;
   } catch (err) {
-    if (err.statusCode === 404 || err.code === "BlobNotFound") return false;
+    if (err.statusCode === 404 || err.code === 'BlobNotFound') return false;
     throw err;
   }
 }
 
 async function listAllNotes() {
   const notes = [];
-  for await (const blob of containerClient.listBlobsFlat({ prefix: "notes/" })) {
-    const id = blob.name.replace(/^notes\//, "").replace(/\.json$/, "");
+  for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
+    const id = blob.name.replace(/^notes\//, '').replace(/\.json$/, '');
     const note = await readNote(id);
     if (note) notes.push(note);
   }
@@ -156,28 +148,19 @@ async function listAllNotes() {
 async function addNote(input) {
   const { content, category, tags = [], related = [], supersedes = null } = input;
 
-  if (!content) return { status: 400, body: { error: "content is required" } };
-  if (!category) return { status: 400, body: { error: "category is required" } };
+  if (!content) return { status: 400, body: { error: 'content is required' } };
+  if (!category) return { status: 400, body: { error: 'category is required' } };
   if (!VALID_CATEGORIES.includes(category)) {
     return {
       status: 400,
-      body: { error: `category must be one of: ${VALID_CATEGORIES.join(", ")}` },
+      body: { error: `category must be one of: ${VALID_CATEGORIES.join(', ')}` },
     };
   }
 
   const id = ulid();
   const created_at = new Date().toISOString();
 
-  const note = {
-    id,
-    content,
-    category,
-    tags,
-    related,
-    supersedes,
-    created_at,
-    source: "conversation",
-  };
+  const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
 
   await writeNote(note);
   return { status: 200, body: { id, created_at } };
@@ -193,38 +176,36 @@ async function getNotes(input) {
   if (tag) notes = notes.filter((n) => Array.isArray(n.tags) && n.tags.includes(tag));
   if (sinceDate) notes = notes.filter((n) => new Date(n.created_at) >= sinceDate);
 
-  const summaries = notes.map((n) => ({
-    id: n.id,
-    category: n.category,
-    tags: n.tags,
-    created_at: n.created_at,
-    preview: (n.content || "").slice(0, 100),
-  }));
-
-  return { status: 200, body: summaries };
+  return {
+    status: 200,
+    body: notes.map((n) => ({
+      id: n.id,
+      category: n.category,
+      tags: n.tags,
+      created_at: n.created_at,
+      preview: (n.content || '').slice(0, 100),
+    })),
+  };
 }
 
 async function getNote(input) {
   const { id } = input;
-  if (!id) return { status: 400, body: { error: "id is required" } };
+  if (!id) return { status: 400, body: { error: 'id is required' } };
 
   const note = await readNote(id);
-  if (!note) return { status: 404, body: { error: "Note not found", id } };
+  if (!note) return { status: 404, body: { error: 'Note not found', id } };
 
   return { status: 200, body: note };
 }
 
 async function getRelated(input) {
   const { id } = input;
-  if (!id) return { status: 400, body: { error: "id is required" } };
+  if (!id) return { status: 400, body: { error: 'id is required' } };
 
   const root = await readNote(id);
-  if (!root) return { status: 404, body: { error: "Note not found", id } };
+  if (!root) return { status: 404, body: { error: 'Note not found', id } };
 
-  const relatedNotes = await Promise.all(
-    (root.related || []).map((rid) => readNote(rid))
-  );
-
+  const relatedNotes = await Promise.all((root.related || []).map((rid) => readNote(rid)));
   const supersededNote = root.supersedes ? await readNote(root.supersedes) : null;
 
   return {
@@ -239,10 +220,10 @@ async function getRelated(input) {
 
 async function deleteNote(input) {
   const { id } = input;
-  if (!id) return { status: 400, body: { error: "id is required" } };
+  if (!id) return { status: 400, body: { error: 'id is required' } };
 
   const deleted = await deleteBlob(id);
-  if (!deleted) return { status: 404, body: { error: "Note not found", id } };
+  if (!deleted) return { status: 404, body: { error: 'Note not found', id } };
 
   return { status: 200, body: { deleted: id } };
 }
@@ -263,17 +244,17 @@ const HANDLERS = {
 // Azure Function HTTP trigger
 // ---------------------------------------------------------------------------
 
-app.http("mcp", {
-  methods: ["GET", "POST"],
-  authLevel: "anonymous",
-  route: "mcp-notes",
+app.http('mcpNotes', {
+  methods: ['GET', 'POST'],
+  authLevel: 'anonymous',
+  route: 'mcp-notes',
   handler: async (request, context) => {
     await containerReady;
 
-    if (request.method === "GET") {
+    if (request.method === 'GET') {
       return {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(TOOL_MANIFEST),
       };
     }
@@ -284,8 +265,8 @@ app.http("mcp", {
     } catch {
       return {
         status: 400,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Invalid JSON body" }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'Invalid JSON body' }),
       };
     }
 
@@ -294,8 +275,8 @@ app.http("mcp", {
     if (!tool) {
       return {
         status: 400,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "tool is required" }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'tool is required' }),
       };
     }
 
@@ -303,11 +284,8 @@ app.http("mcp", {
     if (!handler) {
       return {
         status: 404,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          error: `Unknown tool: ${tool}`,
-          available: Object.keys(HANDLERS),
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: `Unknown tool: ${tool}`, available: Object.keys(HANDLERS) }),
       };
     }
 
@@ -315,15 +293,15 @@ app.http("mcp", {
       const result = await handler(input);
       return {
         status: result.status,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(result.body),
       };
     } catch (err) {
-      context.error("Tool execution error", { tool, error: err.message });
+      context.error('Tool execution error', { tool, error: err.message });
       return {
         status: 500,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Internal error", tool }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'Internal error', tool }),
       };
     }
   },
