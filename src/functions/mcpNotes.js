@@ -1,29 +1,42 @@
 'use strict';
 
 const { app } = require('@azure/functions');
-const { BlobServiceClient } = require('@azure/storage-blob');
-const { DefaultAzureCredential } = require('@azure/identity');
-const { ulid } = require('ulid');
+
+// Wrap dependency loads so a missing package returns 503 rather than
+// crashing the entire Azure Functions worker process.
+let BlobServiceClient, DefaultAzureCredential, ulid;
+let _moduleLoadError = null;
+
+try {
+    ({ BlobServiceClient } = require('@azure/storage-blob'));
+    ({ DefaultAzureCredential } = require('@azure/identity'));
+    ({ ulid } = require('ulid'));
+} catch (err) {
+    _moduleLoadError = err;
+    console.error('MCP Notes: dependency load failed —', err.message);
+}
 
 // ---------------------------------------------------------------------------
 // Blob client (module scope — reused across invocations)
 // ---------------------------------------------------------------------------
 
-const blobServiceClient = new BlobServiceClient(
+const blobServiceClient = !_moduleLoadError ? new BlobServiceClient(
     `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
     new DefaultAzureCredential()
-);
+) : null;
 
-const containerClient = blobServiceClient.getContainerClient('mcp-notes');
+const containerClient = blobServiceClient ? blobServiceClient.getContainerClient('mcp-notes') : null;
 
 // Create the container on first use if it doesn't already exist.
 // Capture any init error so a rejection doesn't crash the worker process —
 // the handler checks _initError and returns 503 if setup failed.
 let _initError = null;
-const containerReady = containerClient.createIfNotExists().catch((err) => {
-    _initError = err;
-    console.error('MCP Notes: container init failed —', err.message);
-});
+const containerReady = containerClient
+    ? containerClient.createIfNotExists().catch((err) => {
+        _initError = err;
+        console.error('MCP Notes: container init failed —', err.message);
+    })
+    : Promise.resolve();
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -332,14 +345,15 @@ app.http('mcpNotes', {
 
         context.log('MCP Notes request received');
 
-        if (_initError) {
-            context.log.error('Notes MCP unavailable — container init error:', _initError.message);
+        const startupError = _moduleLoadError || _initError;
+        if (startupError) {
+            context.log.error('Notes MCP unavailable:', startupError.message);
             return {
                 status: 503,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     jsonrpc: '2.0',
-                    error: { code: -32603, message: `Notes MCP unavailable: ${_initError.message}` },
+                    error: { code: -32603, message: `Notes MCP unavailable: ${startupError.message}` },
                     id: null,
                 }),
             };
