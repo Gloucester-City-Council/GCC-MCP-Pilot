@@ -14,10 +14,18 @@ const { ulid } = require('ulid');
 let _blobServiceClient = null;
 
 function getContainerClient() {
+    console.log('[mcpNotes] getContainerClient called');
     if (!_blobServiceClient) {
         const cs = process.env.StorageConnection;
+        console.log('[mcpNotes] StorageConnection set:', !!cs);
         if (!cs) throw new Error('StorageConnection environment variable is not set');
-        _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
+        try {
+            _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
+            console.log('[mcpNotes] BlobServiceClient created');
+        } catch (err) {
+            console.error('[mcpNotes] BlobServiceClient.fromConnectionString failed:', err.message);
+            throw err;
+        }
     }
     return _blobServiceClient.getContainerClient('mcp-notes');
 }
@@ -111,9 +119,12 @@ function getDateContext() {
 // ---------------------------------------------------------------------------
 
 async function ensureContainer(containerClient) {
+    console.log('[mcpNotes] ensureContainer called');
     try {
         await containerClient.createIfNotExists();
+        console.log('[mcpNotes] ensureContainer succeeded');
     } catch (err) {
+        console.error('[mcpNotes] ensureContainer failed:', err.code, err.message);
         if (err.code !== 'ContainerAlreadyExists') throw err;
     }
 }
@@ -299,6 +310,7 @@ async function handleMcpRequest(request, context) {
             try {
                 context.log(`Executing notes tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
+                context.log(`Notes tool succeeded: ${name}`);
 
                 return {
                     jsonrpc: '2.0',
@@ -309,6 +321,7 @@ async function handleMcpRequest(request, context) {
                 };
             } catch (err) {
                 context.log.error(`Notes tool error [${name}]: ${err.message}`);
+                context.log.error(`Notes tool error stack: ${err.stack}`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -362,7 +375,8 @@ app.http('mcpNotes', {
                 body: JSON.stringify(response),
             };
         } catch (err) {
-            context.log.error('MCP Notes unhandled error:', err);
+            context.log.error('MCP Notes unhandled error:', err.message);
+            context.log.error('MCP Notes unhandled stack:', err.stack);
             return {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
