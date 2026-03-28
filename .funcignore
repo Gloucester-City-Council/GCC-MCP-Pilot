@@ -2,8 +2,8 @@
 .git*
 .github/
 
-# Node - node_modules is now deployed (built locally in GitHub Actions)
-# node_modules/
+# Node - built by Azure during deployment
+node_modules/
 
 # MCP Server (not needed for Azure Functions)
 server.js
