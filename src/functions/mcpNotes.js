@@ -188,17 +188,32 @@ async function listAllNotes() {
 // ---------------------------------------------------------------------------
 
 async function addNote(args) {
-    const { content, category, tags = [], related = [], supersedes = null } = args;
+    process.stdout.write('[mcpNotes] addNote called\n');
+    try {
+        const { content, category, tags = [], related = [], supersedes = null } = args;
 
-    if (!VALID_CATEGORIES.includes(category)) {
-        throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
+        if (!VALID_CATEGORIES.includes(category)) {
+            throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
+        }
+
+        process.stdout.write('[mcpNotes] generating id\n');
+        const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
+        const random = crypto.randomBytes(10).toString('hex').toUpperCase();
+        const id = timestamp + random;
+        process.stdout.write(`[mcpNotes] id=${id}\n`);
+        const created_at = new Date().toISOString();
+        const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
+
+        process.stdout.write('[mcpNotes] calling writeNote\n');
+        await writeNote(note);
+        process.stdout.write('[mcpNotes] writeNote done\n');
+        return { id, created_at };
+    } catch (err) {
+        process.stderr.write(`[mcpNotes] addNote ERROR: ${err && err.message ? err.message : String(err)}\n`);
+        process.stderr.write(`[mcpNotes] addNote STACK: ${err && err.stack ? err.stack : 'none'}\n`);
+        throw err;
     }
-
-    const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
-    const random = crypto.randomBytes(10).toString('hex').toUpperCase();
-    const id = timestamp + random;
-    const created_at = new Date().toISOString();
-    const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
+}
 
     await writeNote(note);
     return { id, created_at };
