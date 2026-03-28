@@ -266,7 +266,7 @@ const HANDLERS = {
 app.http("mcp", {
   methods: ["GET", "POST"],
   authLevel: "anonymous",
-  route: "mcp",
+  route: "mcp-notes",
   handler: async (request, context) => {
     await containerReady;
 
