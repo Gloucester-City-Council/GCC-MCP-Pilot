@@ -381,6 +381,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
 
         case 'tools/call': {
             const { name, arguments: args } = params || {};
+            const toolStart = Date.now();
 
             if (!name) {
                 return {
@@ -408,6 +409,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
             try {
                 context.log(`Executing schema tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
+                context.log(`Schema tool completed [${name}] in ${Date.now() - toolStart}ms`);
 
                 const wrappedResult = {
                     ...getDateContext(),
@@ -429,6 +431,10 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                 };
             } catch (error) {
                 context.log.error(`Schema tool error [${name}]: ${error.message}`);
+                if (error && error.stack) {
+                    context.log.error(`Schema tool error stack [${name}]: ${error.stack}`);
+                }
+                context.log.error(`Schema tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -476,6 +482,7 @@ app.http('mcpSchema', {
     authLevel: 'anonymous',
     route: 'mcp-schema',
     handler: async (request, context) => {
+        const requestStart = Date.now();
         context.log('MCP Schema request received');
 
         try {
@@ -484,6 +491,9 @@ app.http('mcpSchema', {
                 body = await request.json();
             } catch (parseError) {
                 context.log.error('Failed to parse request body:', parseError);
+                if (parseError && parseError.stack) {
+                    context.log.error('MCP Schema parse error stack:', parseError.stack);
+                }
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -502,11 +512,13 @@ app.http('mcpSchema', {
 
             // Notifications return null - respond with 204
             if (response === null) {
+                context.log(`MCP Schema request completed with 204 in ${Date.now() - requestStart}ms`);
                 return {
                     status: 204
                 };
             }
 
+            context.log(`MCP Schema request completed with 200 in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
@@ -514,6 +526,9 @@ app.http('mcpSchema', {
             };
         } catch (error) {
             context.log.error('MCP Schema error:', error);
+            if (error && error.stack) {
+                context.log.error('MCP Schema unhandled error stack:', error.stack);
+            }
 
             return {
                 status: 500,
