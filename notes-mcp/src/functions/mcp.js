@@ -265,7 +265,7 @@ const HANDLERS = {
 
 app.http("mcp", {
   methods: ["GET", "POST"],
-  authLevel: "function",
+  authLevel: "anonymous",
   route: "mcp",
   handler: async (request, context) => {
     await containerReady;
