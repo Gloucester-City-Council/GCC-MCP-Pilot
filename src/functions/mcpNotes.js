@@ -181,12 +181,28 @@ async function deleteBlob(id) {
 async function listAllNotes() {
     const containerClient = getContainerClient();
     await ensureContainer(containerClient);
-    const notes = [];
+
+    const noteIds = [];
     for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
         const id = blob.name.replace(/^notes\//, '').replace(/\.json$/, '');
-        const note = await readNote(id, containerClient);
-        if (note) notes.push(note);
+        noteIds.push(id);
     }
+
+    if (noteIds.length === 0) {
+        return [];
+    }
+
+    // Blob reads are network-bound; bounded concurrency materially reduces
+    // tail latency for larger note sets without overwhelming the storage API.
+    const READ_CONCURRENCY = Math.max(1, Number(process.env.MCP_NOTES_READ_CONCURRENCY || 8));
+    const notes = [];
+
+    for (let i = 0; i < noteIds.length; i += READ_CONCURRENCY) {
+        const batch = noteIds.slice(i, i + READ_CONCURRENCY);
+        const batchNotes = await Promise.all(batch.map((id) => readNote(id, containerClient)));
+        notes.push(...batchNotes.filter(Boolean));
+    }
+
     // ULIDs are lexicographically sortable — ascending = chronological
     notes.sort((a, b) => a.id.localeCompare(b.id));
     return notes;
