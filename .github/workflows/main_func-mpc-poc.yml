@@ -34,3 +34,4 @@ jobs:
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6D602EA7A714F8A8B9A13B7DFD7BB4C }}
           scm-do-build-during-deployment: true
+          respect-funcignore: true
