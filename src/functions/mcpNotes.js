@@ -124,6 +124,7 @@ async function ensureContainer(containerClient) {
 
 async function readNote(id) {
     const containerClient = getContainerClient();
+    await ensureContainer(containerClient);
     const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
     try {
         const download = await blobClient.download();
@@ -150,6 +151,7 @@ async function writeNote(note) {
 
 async function deleteBlob(id) {
     const containerClient = getContainerClient();
+    await ensureContainer(containerClient);
     const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
     try {
         await blobClient.delete();
@@ -162,6 +164,7 @@ async function deleteBlob(id) {
 
 async function listAllNotes() {
     const containerClient = getContainerClient();
+    await ensureContainer(containerClient);
     const notes = [];
     for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
         const id = blob.name.replace(/^notes\//, '').replace(/\.json$/, '');
