@@ -14,18 +14,10 @@ const crypto = require('crypto');
 let _blobServiceClient = null;
 
 function getContainerClient() {
-    console.log('[mcpNotes] getContainerClient called');
     if (!_blobServiceClient) {
         const cs = process.env.STORAGE_CONNECTION;
-        console.log('[mcpNotes] STORAGE_CONNECTION set:', !!cs);
         if (!cs) throw new Error('STORAGE_CONNECTION environment variable is not set');
-        try {
-            _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
-            console.log('[mcpNotes] BlobServiceClient created');
-        } catch (err) {
-            console.error('[mcpNotes] BlobServiceClient.fromConnectionString failed:', err.message);
-            throw err;
-        }
+        _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
     }
     return _blobServiceClient.getContainerClient('mcp-notes');
 }
@@ -137,20 +129,19 @@ function getDateContext() {
 // ---------------------------------------------------------------------------
 
 async function ensureContainer(containerClient) {
-    console.log('[mcpNotes] ensureContainer called');
     try {
         await containerClient.createIfNotExists();
-        console.log('[mcpNotes] ensureContainer succeeded');
     } catch (err) {
-        console.error('[mcpNotes] ensureContainer failed:', err.code, err.message);
         if (err.code !== 'ContainerAlreadyExists') throw err;
     }
 }
 
-async function readNote(id) {
-    const containerClient = getContainerClient();
-    await ensureContainer(containerClient);
-    const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
+async function readNote(id, containerClient = null) {
+    const resolvedContainerClient = containerClient || getContainerClient();
+    if (!containerClient) {
+        await ensureContainer(resolvedContainerClient);
+    }
+    const blobClient = resolvedContainerClient.getBlobClient(`notes/${id}.json`);
     try {
         const download = await blobClient.download();
         const chunks = [];
@@ -193,7 +184,7 @@ async function listAllNotes() {
     const notes = [];
     for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
         const id = blob.name.replace(/^notes\//, '').replace(/\.json$/, '');
-        const note = await readNote(id);
+        const note = await readNote(id, containerClient);
         if (note) notes.push(note);
     }
     // ULIDs are lexicographically sortable — ascending = chronological
@@ -206,31 +197,20 @@ async function listAllNotes() {
 // ---------------------------------------------------------------------------
 
 async function addNote(args) {
-    console.log('[mcpNotes] addNote called');
-    try {
-        const { content, category, tags = [], related = [], supersedes = null } = args;
+    const { content, category, tags = [], related = [], supersedes = null } = args;
 
-        if (!VALID_CATEGORIES.includes(category)) {
-            throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
-        }
-
-        console.log('[mcpNotes] generating id');
-        const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
-        const random = crypto.randomBytes(10).toString('hex').toUpperCase();
-        const id = timestamp + random;
-        console.log(`[mcpNotes] id=${id}`);
-        const created_at = new Date().toISOString();
-        const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
-
-        console.log('[mcpNotes] calling writeNote');
-        await writeNote(note);
-        console.log('[mcpNotes] writeNote done');
-        return { id, created_at };
-    } catch (err) {
-        console.error(`[mcpNotes] addNote ERROR: ${err && err.message ? err.message : String(err)}`);
-        console.error(`[mcpNotes] addNote STACK: ${err && err.stack ? err.stack : 'none'}`);
-        throw err;
+    if (!VALID_CATEGORIES.includes(category)) {
+        throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
     }
+
+    const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
+    const random = crypto.randomBytes(10).toString('hex').toUpperCase();
+    const id = timestamp + random;
+    const created_at = new Date().toISOString();
+    const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
+
+    await writeNote(note);
+    return { id, created_at };
 }
 
 async function getNotes(args) {
@@ -341,8 +321,6 @@ async function handleMcpRequest(request, context) {
             try {
                 context.log(`Executing notes tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
-                context.log(`Notes tool succeeded: ${name}`);
-
                 return {
                     jsonrpc: '2.0',
                     result: {
