@@ -4,6 +4,7 @@
 
 # Node - built by Azure during deployment
 node_modules/
+package-lock.json
 
 # MCP Server (not needed for Azure Functions)
 server.js
