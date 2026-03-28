@@ -93,6 +93,18 @@ const TOOLS = [
 ];
 
 // ---------------------------------------------------------------------------
+// Date context helper
+// ---------------------------------------------------------------------------
+
+function getDateContext() {
+    const now = new Date();
+    return {
+        generatedAt: now.toISOString(),
+        date: now.toISOString().split('T')[0],
+    };
+}
+
+// ---------------------------------------------------------------------------
 // Blob helpers
 // ---------------------------------------------------------------------------
 
@@ -143,7 +155,7 @@ async function listAllNotes() {
 }
 
 // ---------------------------------------------------------------------------
-// Tool handlers — return plain data objects; errors thrown or returned with error key
+// Tool handlers
 // ---------------------------------------------------------------------------
 
 async function addNote(args) {
@@ -202,7 +214,13 @@ async function deleteNote(args) {
     return { deleted: args.id };
 }
 
-const TOOL_HANDLERS = { add_note: addNote, get_notes: getNotes, get_note: getNote, get_related: getRelated, delete_note: deleteNote };
+const TOOL_HANDLERS = {
+    add_note: addNote,
+    get_notes: getNotes,
+    get_note: getNote,
+    get_related: getRelated,
+    delete_note: deleteNote,
+};
 
 // ---------------------------------------------------------------------------
 // JSON-RPC handler
@@ -210,17 +228,17 @@ const TOOL_HANDLERS = { add_note: addNote, get_notes: getNotes, get_note: getNot
 
 async function handleMcpRequest(request, context) {
     if (!request || typeof request !== 'object' || Array.isArray(request)) {
-        return { jsonrpc: '2.0', error: { code: -32600, message: 'Invalid Request' }, id: null };
+        return { jsonrpc: '2.0', error: { code: -32600, message: 'Invalid Request: body must be a JSON object' }, id: null };
     }
 
     const { jsonrpc, method, params, id } = request;
-    const requestId = Object.prototype.hasOwnProperty.call(request, 'id') ? id : null;
+    const requestId = Object.prototype.hasOwnProperty.call(request, 'id') && id !== undefined ? id : null;
 
     if (jsonrpc !== '2.0') {
-        return { jsonrpc: '2.0', error: { code: -32600, message: 'jsonrpc must be "2.0"' }, id: requestId };
+        return { jsonrpc: '2.0', error: { code: -32600, message: 'Invalid Request: jsonrpc must be "2.0"' }, id: requestId };
     }
 
-    context.log(`MCP Notes method: ${method}`);
+    context.log(`Processing MCP Notes method: ${method}`);
 
     switch (method) {
         case 'initialize':
@@ -229,7 +247,11 @@ async function handleMcpRequest(request, context) {
                 result: {
                     protocolVersion: '2024-11-05',
                     capabilities: { tools: {} },
-                    serverInfo: SERVER_INFO,
+                    serverInfo: {
+                        ...SERVER_INFO,
+                        ...getDateContext(),
+                        instructions: 'Personal note store for build and architectural thinking. Use add_note to record ideas, decisions, and references. Notes are immutable — supersede rather than update. All notes are scoped to this project only; do not store resident data or commercially sensitive material.',
+                    },
                 },
                 id,
             };
@@ -244,7 +266,7 @@ async function handleMcpRequest(request, context) {
             const { name, arguments: args } = params || {};
 
             if (!name) {
-                return { jsonrpc: '2.0', error: { code: -32602, message: 'tool name is required' }, id };
+                return { jsonrpc: '2.0', error: { code: -32602, message: 'Invalid params: tool name is required' }, id };
             }
 
             const handler = TOOL_HANDLERS[name];
@@ -257,10 +279,18 @@ async function handleMcpRequest(request, context) {
             }
 
             try {
-                const result = await handler(args || {});
+                context.log(`Executing notes tool: ${name}`);
+                const result = await Promise.resolve(handler(args || {}));
+
+                const wrappedResult = {
+                    ...getDateContext(),
+                    tool: name,
+                    data: result,
+                };
+
                 return {
                     jsonrpc: '2.0',
-                    result: { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] },
+                    result: { content: [{ type: 'text', text: JSON.stringify(wrappedResult, null, 2) }] },
                     id,
                 };
             } catch (err) {
@@ -268,7 +298,7 @@ async function handleMcpRequest(request, context) {
                 return {
                     jsonrpc: '2.0',
                     result: {
-                        content: [{ type: 'text', text: JSON.stringify({ error: err.message, tool: name }) }],
+                        content: [{ type: 'text', text: JSON.stringify({ error: err.message, tool: name, note: 'An unexpected error occurred executing the notes tool.' }, null, 2) }],
                         isError: true,
                     },
                     id,
@@ -301,7 +331,8 @@ app.http('mcpNotes', {
             let body;
             try {
                 body = await request.json();
-            } catch {
+            } catch (parseError) {
+                context.log.error('Failed to parse request body:', parseError);
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
