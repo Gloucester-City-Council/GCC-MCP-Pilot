@@ -103,6 +103,24 @@ const TOOLS = [
 ];
 
 // ---------------------------------------------------------------------------
+// Safe error logger — context.log.error may not exist in all runtime versions
+// ---------------------------------------------------------------------------
+
+function logError(context, ...args) {
+    try {
+        if (typeof context.log.error === 'function') {
+            context.log.error(...args);
+        } else if (typeof context.error === 'function') {
+            context.error(...args);
+        } else {
+            console.error(...args);
+        }
+    } catch (_) {
+        console.error(...args);
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Date context helper
 // ---------------------------------------------------------------------------
 
@@ -188,17 +206,32 @@ async function listAllNotes() {
 // ---------------------------------------------------------------------------
 
 async function addNote(args) {
-    const { content, category, tags = [], related = [], supersedes = null } = args;
+    process.stdout.write('[mcpNotes] addNote called\n');
+    try {
+        const { content, category, tags = [], related = [], supersedes = null } = args;
 
-    if (!VALID_CATEGORIES.includes(category)) {
-        throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
+        if (!VALID_CATEGORIES.includes(category)) {
+            throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
+        }
+
+        process.stdout.write('[mcpNotes] generating id\n');
+        const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
+        const random = crypto.randomBytes(10).toString('hex').toUpperCase();
+        const id = timestamp + random;
+        process.stdout.write(`[mcpNotes] id=${id}\n`);
+        const created_at = new Date().toISOString();
+        const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
+
+        process.stdout.write('[mcpNotes] calling writeNote\n');
+        await writeNote(note);
+        process.stdout.write('[mcpNotes] writeNote done\n');
+        return { id, created_at };
+    } catch (err) {
+        process.stderr.write(`[mcpNotes] addNote ERROR: ${err && err.message ? err.message : String(err)}\n`);
+        process.stderr.write(`[mcpNotes] addNote STACK: ${err && err.stack ? err.stack : 'none'}\n`);
+        throw err;
     }
-
-    const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
-    const random = crypto.randomBytes(10).toString('hex').toUpperCase();
-    const id = timestamp + random;
-    const created_at = new Date().toISOString();
-    const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
+}
 
     await writeNote(note);
     return { id, created_at };
@@ -322,8 +355,8 @@ async function handleMcpRequest(request, context) {
                     id,
                 };
             } catch (err) {
-                context.log.error(`Notes tool error [${name}]: ${err.message}`);
-                context.log.error(`Notes tool error stack: ${err.stack}`);
+                logError(context,`Notes tool error [${name}]: ${err.message}`);
+                logError(context,`Notes tool error stack: ${err.stack}`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -359,7 +392,7 @@ app.http('mcpNotes', {
             try {
                 body = await request.json();
             } catch (parseError) {
-                context.log.error('Failed to parse request body:', parseError);
+                logError(context,'Failed to parse request body:', parseError);
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -377,8 +410,8 @@ app.http('mcpNotes', {
                 body: JSON.stringify(response),
             };
         } catch (err) {
-            context.log.error('MCP Notes unhandled error:', err.message);
-            context.log.error('MCP Notes unhandled stack:', err.stack);
+            logError(context,'MCP Notes unhandled error:', err.message);
+            logError(context,'MCP Notes unhandled stack:', err.stack);
             return {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
