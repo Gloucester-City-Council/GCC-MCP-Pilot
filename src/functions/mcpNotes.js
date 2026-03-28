@@ -69,10 +69,15 @@ const TOOLS = [
         inputSchema: {
             type: 'object',
             properties: {
-                category: { type: 'string' },
-                tag: { type: 'string' },
-                since: { type: 'string', description: 'ISO8601 date' },
+                category: { type: 'string', enum: VALID_CATEGORIES },
+                tag: { type: 'string', minLength: 1 },
+                since: {
+                    type: 'string',
+                    format: 'date-time',
+                    description: 'ISO8601 timestamp. Only notes created on/after this time are returned.',
+                },
             },
+            additionalProperties: false,
         },
     },
     {
@@ -242,6 +247,14 @@ async function addNote(args) {
 async function getNotes(args) {
     const { category, tag, since } = args || {};
     const sinceDate = since ? new Date(since) : null;
+
+    if (category && !VALID_CATEGORIES.includes(category)) {
+        throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
+    }
+
+    if (since && Number.isNaN(sinceDate.getTime())) {
+        throw new Error('since must be a valid ISO8601 date-time string');
+    }
 
     let notes = await listAllNotes();
 
