@@ -11,7 +11,6 @@ require('./functions/healthzSchema');
 require('./functions/mcpProcurement');
 require('./functions/mcpPlanning');
 require('./functions/mcpRawHtml');
-// mcpNotes temporarily disabled — dependency install issue under investigation
-// require('./functions/mcpNotes');
+require('./functions/mcpNotes');
 
-console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml');
+console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml, mcpNotes');
