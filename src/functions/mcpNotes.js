@@ -1,42 +1,26 @@
 'use strict';
 
 const { app } = require('@azure/functions');
+const { BlobServiceClient } = require('@azure/storage-blob');
+const { ulid } = require('ulid');
 
-// Wrap dependency loads so a missing package returns 503 rather than
-// crashing the entire Azure Functions worker process.
-let BlobServiceClient, DefaultAzureCredential, ulid;
-let _moduleLoadError = null;
+// ---------------------------------------------------------------------------
+// Blob client — lazy-initialised, never at module load time.
+// Eager initialisation at the top level will crash the function app on cold
+// start if the env var is missing. Always call getContainerClient() inside
+// a function, never at module scope.
+// ---------------------------------------------------------------------------
 
-try {
-    ({ BlobServiceClient } = require('@azure/storage-blob'));
-    ({ DefaultAzureCredential } = require('@azure/identity'));
-    ({ ulid } = require('ulid'));
-} catch (err) {
-    _moduleLoadError = err;
-    console.error('MCP Notes: dependency load failed —', err.message);
+let _blobServiceClient = null;
+
+function getContainerClient() {
+    if (!_blobServiceClient) {
+        const cs = process.env.NOTES_STORAGE_CONNECTION;
+        if (!cs) throw new Error('NOTES_STORAGE_CONNECTION environment variable is not set');
+        _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
+    }
+    return _blobServiceClient.getContainerClient('mcp-notes');
 }
-
-// ---------------------------------------------------------------------------
-// Blob client (module scope — reused across invocations)
-// ---------------------------------------------------------------------------
-
-const blobServiceClient = !_moduleLoadError ? new BlobServiceClient(
-    `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
-    new DefaultAzureCredential()
-) : null;
-
-const containerClient = blobServiceClient ? blobServiceClient.getContainerClient('mcp-notes') : null;
-
-// Create the container on first use if it doesn't already exist.
-// Capture any init error so a rejection doesn't crash the worker process —
-// the handler checks _initError and returns 503 if setup failed.
-let _initError = null;
-const containerReady = containerClient
-    ? containerClient.createIfNotExists().catch((err) => {
-        _initError = err;
-        console.error('MCP Notes: container init failed —', err.message);
-    })
-    : Promise.resolve();
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -126,7 +110,16 @@ function getDateContext() {
 // Blob helpers
 // ---------------------------------------------------------------------------
 
+async function ensureContainer(containerClient) {
+    try {
+        await containerClient.createIfNotExists();
+    } catch (err) {
+        if (err.code !== 'ContainerAlreadyExists') throw err;
+    }
+}
+
 async function readNote(id) {
+    const containerClient = getContainerClient();
     const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
     try {
         const download = await blobClient.download();
@@ -142,6 +135,8 @@ async function readNote(id) {
 }
 
 async function writeNote(note) {
+    const containerClient = getContainerClient();
+    await ensureContainer(containerClient);
     const blobClient = containerClient.getBlockBlobClient(`notes/${note.id}.json`);
     const content = JSON.stringify(note, null, 2);
     await blobClient.upload(content, Buffer.byteLength(content), {
@@ -150,6 +145,7 @@ async function writeNote(note) {
 }
 
 async function deleteBlob(id) {
+    const containerClient = getContainerClient();
     const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
     try {
         await blobClient.delete();
@@ -161,6 +157,7 @@ async function deleteBlob(id) {
 }
 
 async function listAllNotes() {
+    const containerClient = getContainerClient();
     const notes = [];
     for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
         const id = blob.name.replace(/^notes\//, '').replace(/\.json$/, '');
@@ -300,15 +297,11 @@ async function handleMcpRequest(request, context) {
                 context.log(`Executing notes tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
 
-                const wrappedResult = {
-                    ...getDateContext(),
-                    tool: name,
-                    data: result,
-                };
-
                 return {
                     jsonrpc: '2.0',
-                    result: { content: [{ type: 'text', text: JSON.stringify(wrappedResult, null, 2) }] },
+                    result: {
+                        content: [{ type: 'text', text: JSON.stringify({ ...getDateContext(), tool: name, data: result }, null, 2) }],
+                    },
                     id,
                 };
             } catch (err) {
@@ -341,23 +334,7 @@ app.http('mcpNotes', {
     authLevel: 'anonymous',
     route: 'mcp-notes',
     handler: async (request, context) => {
-        await containerReady;
-
         context.log('MCP Notes request received');
-
-        const startupError = _moduleLoadError || _initError;
-        if (startupError) {
-            context.log.error('Notes MCP unavailable:', startupError.message);
-            return {
-                status: 503,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    jsonrpc: '2.0',
-                    error: { code: -32603, message: `Notes MCP unavailable: ${startupError.message}` },
-                    id: null,
-                }),
-            };
-        }
 
         try {
             let body;
