@@ -38,6 +38,7 @@ try {
     _moduleLoadError = err;
     console.error('GCC Planning MCP: module load failed —', err.message);
 }
+const AVAILABLE_TOOL_NAMES = () => Object.keys(TOOL_HANDLERS).join(', ');
 
 // ─── Date context helper ──────────────────────────────────────────────────────
 function getDateContext() {
@@ -99,6 +100,7 @@ async function handleMcpRequest(request, context) {
 
         case 'tools/call': {
             const { name, arguments: args } = params || {};
+            const toolStart = Date.now();
 
             if (!name) {
                 return {
@@ -114,7 +116,7 @@ async function handleMcpRequest(request, context) {
                     jsonrpc: '2.0',
                     error: {
                         code: -32602,
-                        message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`,
+                        message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES()}`,
                     },
                     id,
                 };
@@ -123,6 +125,7 @@ async function handleMcpRequest(request, context) {
             try {
                 context.log(`Executing planning tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
+                context.log(`Planning tool completed [${name}] in ${Date.now() - toolStart}ms`);
 
                 const wrappedResult = {
                     ...getDateContext(),
@@ -146,6 +149,10 @@ async function handleMcpRequest(request, context) {
                 };
             } catch (error) {
                 context.log.error(`Planning tool error [${name}]: ${error.message}`);
+                if (error && error.stack) {
+                    context.log.error(`Planning tool error stack [${name}]: ${error.stack}`);
+                }
+                context.log.error(`Planning tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -233,6 +240,7 @@ app.http('mcpPlanning', {
     authLevel: 'anonymous',
     route: 'mcp-planning',
     handler: async (request, context) => {
+        const requestStart = Date.now();
         context.log('MCP Planning request received');
 
         // Schema failed to load at startup — surface the error
@@ -258,6 +266,9 @@ app.http('mcpPlanning', {
                 body = await request.json();
             } catch (parseError) {
                 context.log.error('Failed to parse request body:', parseError);
+                if (parseError && parseError.stack) {
+                    context.log.error('MCP Planning parse error stack:', parseError.stack);
+                }
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -273,9 +284,11 @@ app.http('mcpPlanning', {
 
             // Notifications return null — respond with 204
             if (response === null) {
+                context.log(`MCP Planning request completed with 204 in ${Date.now() - requestStart}ms`);
                 return { status: 204 };
             }
 
+            context.log(`MCP Planning request completed with 200 in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
@@ -283,6 +296,9 @@ app.http('mcpPlanning', {
             };
         } catch (error) {
             context.log.error('MCP Planning unhandled error:', error);
+            if (error && error.stack) {
+                context.log.error('MCP Planning unhandled error stack:', error.stack);
+            }
             return {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },

@@ -6,6 +6,7 @@ app.http('mcp', {
     authLevel: 'anonymous',
     route: 'mcp',
     handler: async (request, context) => {
+        const requestStart = Date.now();
         context.log('MCP request received');
 
         let requestId = null;
@@ -19,11 +20,13 @@ app.http('mcp', {
 
             // For notifications, return 204 No Content
             if (response === null) {
+                context.log(`MCP request completed with 204 in ${Date.now() - requestStart}ms`);
                 return {
                     status: 204
                 };
             }
 
+            context.log(`MCP request completed with 200 in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: {
@@ -33,6 +36,9 @@ app.http('mcp', {
             };
         } catch (error) {
             context.log.error('MCP error:', error);
+            if (error && error.stack) {
+                context.log.error('MCP error stack:', error.stack);
+            }
 
             // JSON parse errors: the request body was malformed
             if (error instanceof SyntaxError) {
@@ -53,6 +59,7 @@ app.http('mcp', {
             // All other unexpected errors: return 200 with a structured MCP result so
             // the AI client receives our message rather than an infrastructure-level
             // generic error wrapper (which gives no actionable context).
+            context.log(`MCP request completed with structured 200 error in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: {

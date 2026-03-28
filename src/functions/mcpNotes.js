@@ -287,6 +287,7 @@ const TOOL_HANDLERS = {
     get_related: getRelated,
     delete_note: deleteNote,
 };
+const AVAILABLE_TOOL_NAMES = Object.keys(TOOL_HANDLERS).join(', ');
 
 // ---------------------------------------------------------------------------
 // JSON-RPC handler
@@ -330,6 +331,7 @@ async function handleMcpRequest(request, context) {
 
         case 'tools/call': {
             const { name, arguments: args } = params || {};
+            const toolStart = Date.now();
 
             if (!name) {
                 return { jsonrpc: '2.0', error: { code: -32602, message: 'Invalid params: tool name is required' }, id };
@@ -339,7 +341,7 @@ async function handleMcpRequest(request, context) {
             if (!handler) {
                 return {
                     jsonrpc: '2.0',
-                    error: { code: -32602, message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}` },
+                    error: { code: -32602, message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES}` },
                     id,
                 };
             }
@@ -347,6 +349,7 @@ async function handleMcpRequest(request, context) {
             try {
                 context.log(`Executing notes tool: ${name}`);
                 const result = await Promise.resolve(handler(args || {}));
+                context.log(`Notes tool completed [${name}] in ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -357,6 +360,7 @@ async function handleMcpRequest(request, context) {
             } catch (err) {
                 logError(context,`Notes tool error [${name}]: ${err.message}`);
                 logError(context,`Notes tool error stack: ${err.stack}`);
+                logError(context,`Notes tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -385,6 +389,7 @@ app.http('mcpNotes', {
     authLevel: 'anonymous',
     route: 'mcp-notes',
     handler: async (request, context) => {
+        const requestStart = Date.now();
         context.log('MCP Notes request received');
 
         try {
@@ -393,6 +398,7 @@ app.http('mcpNotes', {
                 body = await request.json();
             } catch (parseError) {
                 logError(context,'Failed to parse request body:', parseError);
+                logError(context,'MCP Notes parse error stack:', parseError.stack);
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -402,8 +408,12 @@ app.http('mcpNotes', {
 
             const response = await handleMcpRequest(body, context);
 
-            if (response === null) return { status: 204 };
+            if (response === null) {
+                context.log(`MCP Notes request completed with 204 in ${Date.now() - requestStart}ms`);
+                return { status: 204 };
+            }
 
+            context.log(`MCP Notes request completed with 200 in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },

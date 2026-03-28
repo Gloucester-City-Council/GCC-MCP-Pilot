@@ -305,6 +305,7 @@ async function handleMcpRequest(request, context) {
 
         case 'tools/call': {
             const { name, arguments: args } = params || {};
+            const toolStart = Date.now();
 
             if (!name) {
                 return {
@@ -328,6 +329,7 @@ async function handleMcpRequest(request, context) {
             try {
                 context.log(`Executing tool: ${name} url=${args?.url}`);
                 const result = await handleFetchRawHtml(args || {}, context);
+                context.log(`Raw HTML tool completed [${name}] in ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -337,6 +339,10 @@ async function handleMcpRequest(request, context) {
                 };
             } catch (error) {
                 context.log.error(`Raw HTML tool error: ${error.message}`);
+                if (error && error.stack) {
+                    context.log.error(`Raw HTML tool error stack [${name}]: ${error.stack}`);
+                }
+                context.log.error(`Raw HTML tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -366,6 +372,7 @@ app.http('mcpRawHtml', {
     authLevel: 'anonymous',
     route: 'mcp-raw-html',
     handler: async (request, context) => {
+        const requestStart = Date.now();
         context.log('MCP Raw HTML request received');
 
         try {
@@ -373,6 +380,10 @@ app.http('mcpRawHtml', {
             try {
                 body = await request.json();
             } catch (parseError) {
+                context.log.error('MCP Raw HTML parse error:', parseError);
+                if (parseError && parseError.stack) {
+                    context.log.error('MCP Raw HTML parse error stack:', parseError.stack);
+                }
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -387,9 +398,11 @@ app.http('mcpRawHtml', {
             const response = await handleMcpRequest(body, context);
 
             if (response === null) {
+                context.log(`MCP Raw HTML request completed with 204 in ${Date.now() - requestStart}ms`);
                 return { status: 204 };
             }
 
+            context.log(`MCP Raw HTML request completed with 200 in ${Date.now() - requestStart}ms`);
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
@@ -397,6 +410,9 @@ app.http('mcpRawHtml', {
             };
         } catch (error) {
             context.log.error('MCP Raw HTML unhandled error:', error);
+            if (error && error.stack) {
+                context.log.error('MCP Raw HTML unhandled error stack:', error.stack);
+            }
             return {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
