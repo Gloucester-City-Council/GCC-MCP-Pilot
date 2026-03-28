@@ -14,6 +14,10 @@ const blobServiceClient = new BlobServiceClient(
 
 const containerClient = blobServiceClient.getContainerClient("mcp-notes");
 
+// Create the container on first use if it doesn't already exist.
+// Resolves once per function instance — all requests await this promise.
+const containerReady = containerClient.createIfNotExists();
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -264,6 +268,8 @@ app.http("mcp", {
   authLevel: "function",
   route: "mcp",
   handler: async (request, context) => {
+    await containerReady;
+
     if (request.method === "GET") {
       return {
         status: 200,
