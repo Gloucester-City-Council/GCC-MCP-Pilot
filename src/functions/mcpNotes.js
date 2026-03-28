@@ -287,6 +287,7 @@ const TOOL_HANDLERS = {
     get_related: getRelated,
     delete_note: deleteNote,
 };
+const AVAILABLE_TOOL_NAMES = Object.keys(TOOL_HANDLERS).join(', ');
 
 // ---------------------------------------------------------------------------
 // JSON-RPC handler
@@ -340,7 +341,7 @@ async function handleMcpRequest(request, context) {
             if (!handler) {
                 return {
                     jsonrpc: '2.0',
-                    error: { code: -32602, message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}` },
+                    error: { code: -32602, message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES}` },
                     id,
                 };
             }

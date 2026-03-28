@@ -25,6 +25,7 @@ try {
     // Log at startup so the error appears in Azure Application Insights / Log Stream
     console.error('GCC Procurement MCP: module load failed —', err.message);
 }
+const AVAILABLE_TOOL_NAMES = () => Object.keys(TOOL_HANDLERS).join(', ');
 
 // ─── Date context helper (matches mcpSchema.js pattern) ──────────────────────
 function getDateContext() {
@@ -126,7 +127,7 @@ For live procurement decisions always verify with the Head of Procurement and On
                     jsonrpc: '2.0',
                     error: {
                         code: -32602,
-                        message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`,
+                        message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES()}`,
                     },
                     id,
                 };

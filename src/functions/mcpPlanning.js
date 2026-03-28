@@ -38,6 +38,7 @@ try {
     _moduleLoadError = err;
     console.error('GCC Planning MCP: module load failed —', err.message);
 }
+const AVAILABLE_TOOL_NAMES = () => Object.keys(TOOL_HANDLERS).join(', ');
 
 // ─── Date context helper ──────────────────────────────────────────────────────
 function getDateContext() {
@@ -115,7 +116,7 @@ async function handleMcpRequest(request, context) {
                     jsonrpc: '2.0',
                     error: {
                         code: -32602,
-                        message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`,
+                        message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES()}`,
                     },
                     id,
                 };

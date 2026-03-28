@@ -247,15 +247,18 @@ const TOOL_HANDLERS = {
     'heritage_get': heritageGet.execute,
     'heritage_search': heritageSearch.execute
 };
+const AVAILABLE_TOOL_NAMES = Object.keys(TOOL_HANDLERS).join(', ');
 
 /**
  * Get current date context
  */
+const UK_DATE_FORMATTER = new Intl.DateTimeFormat('en-GB');
+
 function getDateContext() {
     const now = new Date();
     return {
         current_date: now.toISOString().split('T')[0],
-        current_date_uk: now.toLocaleDateString('en-GB'),
+        current_date_uk: UK_DATE_FORMATTER.format(now),
         timestamp: now.toISOString()
     };
 }
@@ -400,7 +403,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                     jsonrpc: '2.0',
                     error: {
                         code: -32602,
-                        message: `Unknown tool: ${name}. Available: ${Object.keys(TOOL_HANDLERS).join(', ')}`
+                        message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES}`
                     },
                     id
                 };
