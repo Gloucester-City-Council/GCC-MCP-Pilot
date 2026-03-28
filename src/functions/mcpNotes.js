@@ -16,9 +16,9 @@ let _blobServiceClient = null;
 function getContainerClient() {
     console.log('[mcpNotes] getContainerClient called');
     if (!_blobServiceClient) {
-        const cs = process.env.StorageConnection;
-        console.log('[mcpNotes] StorageConnection set:', !!cs);
-        if (!cs) throw new Error('StorageConnection environment variable is not set');
+        const cs = process.env.STORAGE_CONNECTION;
+        console.log('[mcpNotes] STORAGE_CONNECTION set:', !!cs);
+        if (!cs) throw new Error('STORAGE_CONNECTION environment variable is not set');
         try {
             _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
             console.log('[mcpNotes] BlobServiceClient created');
