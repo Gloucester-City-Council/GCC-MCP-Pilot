@@ -118,6 +118,8 @@ Tool responses include metadata to identify official content:
 }
 ```
 
+See [docs/NOTES_BLOB_CLIENT_PERFORMANCE.md](docs/NOTES_BLOB_CLIENT_PERFORMANCE.md) for blob client reuse and latency guidance for `mcp-notes`.
+
 ## Local Development
 
 ### Prerequisites
