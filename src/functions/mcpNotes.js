@@ -5,13 +5,18 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const crypto = require('crypto');
 
 // ---------------------------------------------------------------------------
-// Blob client — lazy-initialised, never at module load time.
-// Eager initialisation at the top level will crash the function app on cold
-// start if the env var is missing. Always call getContainerClient() inside
-// a function, never at module scope.
+// Blob client / container singletons
+//
+// Keep SDK clients at module scope so requests reuse connection pools and
+// avoid repeated client construction costs. Initialisation remains safe for
+// cold starts because we only construct clients when needed.
 // ---------------------------------------------------------------------------
 
+const NOTES_CONTAINER = process.env.MCP_NOTES_CONTAINER || 'mcp-notes';
+
 let _blobServiceClient = null;
+let _containerClient = null;
+let _containerReadyPromise = null;
 
 function getContainerClient() {
     if (!_blobServiceClient) {
@@ -19,7 +24,12 @@ function getContainerClient() {
         if (!cs) throw new Error('STORAGE_CONNECTION environment variable is not set');
         _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
     }
-    return _blobServiceClient.getContainerClient('mcp-notes');
+
+    if (!_containerClient) {
+        _containerClient = _blobServiceClient.getContainerClient(NOTES_CONTAINER);
+    }
+
+    return _containerClient;
 }
 
 // ---------------------------------------------------------------------------
@@ -128,19 +138,22 @@ function getDateContext() {
 // Blob helpers
 // ---------------------------------------------------------------------------
 
-async function ensureContainer(containerClient) {
-    try {
-        await containerClient.createIfNotExists();
-    } catch (err) {
-        if (err.code !== 'ContainerAlreadyExists') throw err;
+async function ensureContainerReady(containerClient = null) {
+    const resolvedContainerClient = containerClient || getContainerClient();
+
+    if (!_containerReadyPromise) {
+        _containerReadyPromise = resolvedContainerClient.createIfNotExists().catch((err) => {
+            _containerReadyPromise = null;
+            if (err.code !== 'ContainerAlreadyExists') throw err;
+        });
     }
+
+    await _containerReadyPromise;
+    return resolvedContainerClient;
 }
 
 async function readNote(id, containerClient = null) {
-    const resolvedContainerClient = containerClient || getContainerClient();
-    if (!containerClient) {
-        await ensureContainer(resolvedContainerClient);
-    }
+    const resolvedContainerClient = await ensureContainerReady(containerClient);
     const blobClient = resolvedContainerClient.getBlobClient(`notes/${id}.json`);
     try {
         const download = await blobClient.download();
@@ -156,8 +169,7 @@ async function readNote(id, containerClient = null) {
 }
 
 async function writeNote(note) {
-    const containerClient = getContainerClient();
-    await ensureContainer(containerClient);
+    const containerClient = await ensureContainerReady();
     const blobClient = containerClient.getBlockBlobClient(`notes/${note.id}.json`);
     const content = JSON.stringify(note, null, 2);
     await blobClient.upload(content, Buffer.byteLength(content), {
@@ -166,8 +178,7 @@ async function writeNote(note) {
 }
 
 async function deleteBlob(id) {
-    const containerClient = getContainerClient();
-    await ensureContainer(containerClient);
+    const containerClient = await ensureContainerReady();
     const blobClient = containerClient.getBlobClient(`notes/${id}.json`);
     try {
         await blobClient.delete();
@@ -179,8 +190,7 @@ async function deleteBlob(id) {
 }
 
 async function listAllNotes() {
-    const containerClient = getContainerClient();
-    await ensureContainer(containerClient);
+    const containerClient = await ensureContainerReady();
 
     const noteIds = [];
     for await (const blob of containerClient.listBlobsFlat({ prefix: 'notes/' })) {
