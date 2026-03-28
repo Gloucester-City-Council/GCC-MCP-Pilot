@@ -17,8 +17,13 @@ const blobServiceClient = new BlobServiceClient(
 const containerClient = blobServiceClient.getContainerClient('mcp-notes');
 
 // Create the container on first use if it doesn't already exist.
-// Resolves once per function instance — all requests await this promise.
-const containerReady = containerClient.createIfNotExists();
+// Capture any init error so a rejection doesn't crash the worker process —
+// the handler checks _initError and returns 503 if setup failed.
+let _initError = null;
+const containerReady = containerClient.createIfNotExists().catch((err) => {
+    _initError = err;
+    console.error('MCP Notes: container init failed —', err.message);
+});
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -326,6 +331,19 @@ app.http('mcpNotes', {
         await containerReady;
 
         context.log('MCP Notes request received');
+
+        if (_initError) {
+            context.log.error('Notes MCP unavailable — container init error:', _initError.message);
+            return {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    error: { code: -32603, message: `Notes MCP unavailable: ${_initError.message}` },
+                    id: null,
+                }),
+            };
+        }
 
         try {
             let body;
