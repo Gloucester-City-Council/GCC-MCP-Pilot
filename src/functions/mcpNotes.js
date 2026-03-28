@@ -2,7 +2,7 @@
 
 const { app } = require('@azure/functions');
 const { BlobServiceClient } = require('@azure/storage-blob');
-const { ulid } = require('ulid');
+const crypto = require('crypto');
 
 // ---------------------------------------------------------------------------
 // Blob client — lazy-initialised, never at module load time.
@@ -194,7 +194,9 @@ async function addNote(args) {
         throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
     }
 
-    const id = ulid();
+    const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
+    const random = crypto.randomBytes(10).toString('hex').toUpperCase();
+    const id = timestamp + random;
     const created_at = new Date().toISOString();
     const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
 
