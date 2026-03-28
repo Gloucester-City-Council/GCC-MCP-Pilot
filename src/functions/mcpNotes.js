@@ -103,6 +103,24 @@ const TOOLS = [
 ];
 
 // ---------------------------------------------------------------------------
+// Safe error logger — context.log.error may not exist in all runtime versions
+// ---------------------------------------------------------------------------
+
+function logError(context, ...args) {
+    try {
+        if (typeof context.log.error === 'function') {
+            context.log.error(...args);
+        } else if (typeof context.error === 'function') {
+            context.error(...args);
+        } else {
+            console.error(...args);
+        }
+    } catch (_) {
+        console.error(...args);
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Date context helper
 // ---------------------------------------------------------------------------
 
@@ -337,8 +355,8 @@ async function handleMcpRequest(request, context) {
                     id,
                 };
             } catch (err) {
-                context.log.error(`Notes tool error [${name}]: ${err.message}`);
-                context.log.error(`Notes tool error stack: ${err.stack}`);
+                logError(context,`Notes tool error [${name}]: ${err.message}`);
+                logError(context,`Notes tool error stack: ${err.stack}`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -374,7 +392,7 @@ app.http('mcpNotes', {
             try {
                 body = await request.json();
             } catch (parseError) {
-                context.log.error('Failed to parse request body:', parseError);
+                logError(context,'Failed to parse request body:', parseError);
                 return {
                     status: 400,
                     headers: { 'Content-Type': 'application/json' },
@@ -392,8 +410,8 @@ app.http('mcpNotes', {
                 body: JSON.stringify(response),
             };
         } catch (err) {
-            context.log.error('MCP Notes unhandled error:', err.message);
-            context.log.error('MCP Notes unhandled stack:', err.stack);
+            logError(context,'MCP Notes unhandled error:', err.message);
+            logError(context,'MCP Notes unhandled stack:', err.stack);
             return {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
