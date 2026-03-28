@@ -206,7 +206,7 @@ async function listAllNotes() {
 // ---------------------------------------------------------------------------
 
 async function addNote(args) {
-    process.stdout.write('[mcpNotes] addNote called\n');
+    console.log('[mcpNotes] addNote called');
     try {
         const { content, category, tags = [], related = [], supersedes = null } = args;
 
@@ -214,27 +214,23 @@ async function addNote(args) {
             throw new Error(`category must be one of: ${VALID_CATEGORIES.join(', ')}`);
         }
 
-        process.stdout.write('[mcpNotes] generating id\n');
+        console.log('[mcpNotes] generating id');
         const timestamp = Date.now().toString(36).padStart(10, '0').toUpperCase();
         const random = crypto.randomBytes(10).toString('hex').toUpperCase();
         const id = timestamp + random;
-        process.stdout.write(`[mcpNotes] id=${id}\n`);
+        console.log(`[mcpNotes] id=${id}`);
         const created_at = new Date().toISOString();
         const note = { id, content, category, tags, related, supersedes, created_at, source: 'conversation' };
 
-        process.stdout.write('[mcpNotes] calling writeNote\n');
+        console.log('[mcpNotes] calling writeNote');
         await writeNote(note);
-        process.stdout.write('[mcpNotes] writeNote done\n');
+        console.log('[mcpNotes] writeNote done');
         return { id, created_at };
     } catch (err) {
-        process.stderr.write(`[mcpNotes] addNote ERROR: ${err && err.message ? err.message : String(err)}\n`);
-        process.stderr.write(`[mcpNotes] addNote STACK: ${err && err.stack ? err.stack : 'none'}\n`);
+        console.error(`[mcpNotes] addNote ERROR: ${err && err.message ? err.message : String(err)}`);
+        console.error(`[mcpNotes] addNote STACK: ${err && err.stack ? err.stack : 'none'}`);
         throw err;
     }
-}
-
-    await writeNote(note);
-    return { id, created_at };
 }
 
 async function getNotes(args) {
