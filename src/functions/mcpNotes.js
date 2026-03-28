@@ -2,6 +2,7 @@
 
 const { app } = require('@azure/functions');
 const { BlobServiceClient } = require('@azure/storage-blob');
+const { DefaultAzureCredential } = require('@azure/identity');
 const { ulid } = require('ulid');
 
 // ---------------------------------------------------------------------------
@@ -15,9 +16,12 @@ let _blobServiceClient = null;
 
 function getContainerClient() {
     if (!_blobServiceClient) {
-        const cs = process.env.NOTES_STORAGE_CONNECTION;
-        if (!cs) throw new Error('NOTES_STORAGE_CONNECTION environment variable is not set');
-        _blobServiceClient = BlobServiceClient.fromConnectionString(cs);
+        const account = process.env.AZURE_STORAGE_ACCOUNT_NAME;
+        if (!account) throw new Error('AZURE_STORAGE_ACCOUNT_NAME environment variable is not set');
+        _blobServiceClient = new BlobServiceClient(
+            `https://${account}.blob.core.windows.net`,
+            new DefaultAzureCredential()
+        );
     }
     return _blobServiceClient.getContainerClient('mcp-notes');
 }
