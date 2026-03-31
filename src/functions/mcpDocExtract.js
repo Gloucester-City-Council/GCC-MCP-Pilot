@@ -173,9 +173,7 @@ function detectDocumentType(contentType, url) {
     if (ct.includes('application/pdf') || urlLower.endsWith('.pdf')) return 'pdf';
     if (
         ct.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document') ||
-        ct.includes('application/msword') ||
-        urlLower.endsWith('.docx') ||
-        urlLower.endsWith('.doc')
+        urlLower.endsWith('.docx')
     ) return 'docx';
 
     return null;
@@ -215,7 +213,7 @@ const TOOLS = [
         name: 'fetch_document_content',
         description: [
             'Fetches a PDF or DOCX document from a public URL and returns the extracted text content for AI analysis.',
-            'Supported formats: PDF (.pdf) and Word documents (.docx / .doc).',
+            'Supported formats: PDF (.pdf) and Word documents (.docx).',
             '⚠️ Image-based (scanned) documents are not supported — OCR is out of scope at this stage; scanned pages will return empty or partial text.',
             'Respects robots.txt (checks * and DocExtractMCP user-agent rules).',
             'Enforces a minimum 2-second per-domain rate limit (or crawl-delay if longer).',
@@ -292,6 +290,14 @@ async function handleFetchDocumentContent({ url }, context) {
 
     const contentType = response.headers.get('content-type') || '';
     const finalUrl = response.url;
+    const redirectedValidation = validateUrl(finalUrl);
+    if (!redirectedValidation.ok) {
+        return {
+            blocked: true,
+            reason: `Redirect target blocked: ${redirectedValidation.reason}`,
+            url: finalUrl,
+        };
+    }
 
     // 6. Detect document type from Content-Type header and URL
     const docType = detectDocumentType(contentType, finalUrl);
@@ -308,6 +314,16 @@ async function handleFetchDocumentContent({ url }, context) {
     // 7. Read response body as binary buffer
     let buffer;
     try {
+        const contentLengthHeader = response.headers.get('content-length');
+        const declaredLength = Number.parseInt(contentLengthHeader || '', 10);
+        if (Number.isFinite(declaredLength) && declaredLength > MAX_DOCUMENT_BYTES) {
+            return {
+                error: true,
+                reason: `Document exceeds maximum allowed size of ${MAX_DOCUMENT_BYTES / 1_048_576} MB (declared size is ${(declaredLength / 1_048_576).toFixed(1)} MB)`,
+                url: finalUrl,
+            };
+        }
+
         const arrayBuffer = await response.arrayBuffer();
         if (arrayBuffer.byteLength > MAX_DOCUMENT_BYTES) {
             return {
