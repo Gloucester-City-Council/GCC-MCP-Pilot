@@ -47,6 +47,9 @@ jest.mock('../lib/tools/analyze-meeting-document', () => ({
 jest.mock('../lib/tools/get-report-recommendations', () => ({
     getReportRecommendations: jest.fn().mockResolvedValue({ success: true, recommendations: [] })
 }));
+jest.mock('../lib/tools/get-gloucester-constitution', () => ({
+    getGloucesterConstitution: jest.fn().mockResolvedValue({ committee: { id: 564, title: 'Constitution' }, meetings: [] })
+}));
 
 const { handleMcpRequest, TOOLS } = require('../lib/mcp-handler');
 
@@ -139,7 +142,7 @@ describe('handleMcpRequest - tools/list', () => {
             mockContext
         );
         expect(Array.isArray(result.result.tools)).toBe(true);
-        expect(result.result.tools.length).toBe(9);
+        expect(result.result.tools.length).toBe(10);
     });
 
     it('each tool has name, description, and inputSchema', () => {
