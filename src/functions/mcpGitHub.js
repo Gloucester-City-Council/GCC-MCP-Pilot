@@ -119,40 +119,63 @@ function parseRobots(text) {
 
         if (field === 'user-agent') {
             const agent = value.toLowerCase();
-            if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
+            if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], allow: [], crawlDelay: 0 };
             currentAgents.push(agent);
         } else if (field === 'disallow') {
             for (const agent of currentAgents) {
-                if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
+                if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], allow: [], crawlDelay: 0 };
                 rules.agents[agent].disallow.push(value);
+            }
+        } else if (field === 'allow') {
+            for (const agent of currentAgents) {
+                if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], allow: [], crawlDelay: 0 };
+                rules.agents[agent].allow.push(value);
             }
         } else if (field === 'crawl-delay') {
             const delay = parseFloat(value);
             if (!isNaN(delay) && delay > 0) {
                 for (const agent of currentAgents) {
-                    if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], crawlDelay: 0 };
+                    if (!rules.agents[agent]) rules.agents[agent] = { disallow: [], allow: [], crawlDelay: 0 };
                     rules.agents[agent].crawlDelay = delay * 1000;
                 }
             }
-        } else {
-            // Any non-agent-block directive resets the current agent scope
-            currentAgents = [];
         }
     }
     return rules;
 }
 
-function isPathDisallowed(path, disallowList) {
-    for (const rule of disallowList) {
-        if (!rule) continue; // empty Disallow means allow all
-        if (path.startsWith(rule)) return true;
+function isRuleMatch(path, rule) {
+    if (!rule) return false;
+    if (rule === '/') return true;
+    if (rule.endsWith('*')) {
+        const prefix = rule.slice(0, -1);
+        return path.startsWith(prefix);
     }
-    return false;
+    return path.startsWith(rule);
+}
+
+function getLongestMatchLength(path, rules = []) {
+    let best = -1;
+    for (const rule of rules) {
+        if (!rule) continue; // empty Disallow means allow all
+        if (isRuleMatch(path, rule)) {
+            best = Math.max(best, rule.length);
+        }
+    }
+    return best;
+}
+
+function isPathDisallowed(path, disallowList, allowList = []) {
+    const disallowLen = getLongestMatchLength(path, disallowList);
+    if (disallowLen < 0) return false;
+
+    const allowLen = getLongestMatchLength(path, allowList);
+    return allowLen < disallowLen;
 }
 
 function getRulesForBot(rules) {
     // Prefer specific agent match, fall back to wildcard
-    return rules.agents['githubmcp'] || rules.agents['*'] || { disallow: [], crawlDelay: 0 };
+    return rules.agents['githubmcp'] || rules.agents['*'] || { disallow: [], allow: [], crawlDelay: 0 };
 }
 
 async function fetchRobotsRules(origin) {
@@ -228,7 +251,7 @@ async function githubRequest(apiPath, context) {
     // Check robots.txt for api.github.com
     const rules = await fetchRobotsRules(GITHUB_API_BASE);
     const agentRules = getRulesForBot(rules);
-    if (isPathDisallowed(apiPath, agentRules.disallow)) {
+    if (isPathDisallowed(apiPath, agentRules.disallow, agentRules.allow)) {
         return { blocked: true, reason: `Path "${apiPath}" is disallowed by robots.txt for ${apiHost}` };
     }
 
@@ -832,3 +855,11 @@ app.http('mcpGitHub', {
         }
     },
 });
+
+module.exports = {
+    _internals: {
+        parseRobots,
+        isPathDisallowed,
+        getRulesForBot,
+    },
+};
