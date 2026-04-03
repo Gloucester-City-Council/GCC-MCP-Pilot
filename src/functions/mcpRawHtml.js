@@ -150,6 +150,10 @@ async function applyRateLimit(domain, crawlDelayMs) {
         await new Promise(r => setTimeout(r, wait));
     }
     rateLimitMap.set(domain, Date.now());
+    return {
+        waitMs: Math.max(wait, 0),
+        minDelayMs: minDelay,
+    };
 }
 
 // ─── Tool definition ──────────────────────────────────────────────────────────
@@ -194,19 +198,27 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
     // 2. Fetch and parse robots.txt
     const rules = await fetchRobotsRules(origin);
     const agentRules = getRulesForBot(rules);
+    const robotsContext = {
+        checked: true,
+        origin,
+        userAgent: 'RawHTMLMCP',
+        disallowRuleCount: Array.isArray(agentRules.disallow) ? agentRules.disallow.length : 0,
+    };
 
     // 3. Check path against disallow rules
     const path = parsed.pathname || '/';
     if (isPathDisallowed(path, agentRules.disallow)) {
         return {
             blocked: true,
+            blockedBy: 'robots_txt',
             reason: `Path "${path}" is disallowed by robots.txt`,
             robotsOrigin: origin,
+            robots: robotsContext,
         };
     }
 
     // 4. Apply rate limit
-    await applyRateLimit(parsed.hostname, agentRules.crawlDelay);
+    const rateLimit = await applyRateLimit(parsed.hostname, agentRules.crawlDelay);
 
     // 5. Fetch the target URL
     const controller = new AbortController();
@@ -224,7 +236,7 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         const reason = err.name === 'AbortError'
             ? 'Request timed out after 10 seconds'
             : `Fetch failed: ${err.message}`;
-        return { error: true, reason };
+        return { error: true, reason, robots: robotsContext, rateLimit };
     }
     clearTimeout(timer);
 
@@ -233,8 +245,11 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
     if (!redirectedValidation.ok) {
         return {
             blocked: true,
+            blockedBy: 'redirect_target_validation',
             reason: `Redirect target blocked: ${redirectedValidation.reason}`,
             url: finalUrl,
+            robots: robotsContext,
+            rateLimit,
         };
     }
 
@@ -247,6 +262,8 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         contentType,
         bodyLength: body.length,
         body,
+        robots: robotsContext,
+        rateLimit,
     };
 
     if (include_headers) {

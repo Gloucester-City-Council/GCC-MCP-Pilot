@@ -49,7 +49,9 @@ describe('mcpRawHtml', () => {
         const payload = JSON.parse(body.result.content[0].text);
 
         expect(payload.blocked).toBe(true);
+        expect(payload.blockedBy).toBe('redirect_target_validation');
         expect(payload.reason).toMatch(/Redirect target blocked/);
+        expect(payload.rateLimit).toBeDefined();
     });
 
     it('accepts stringified tool arguments', async () => {
@@ -84,6 +86,35 @@ describe('mcpRawHtml', () => {
         const payload = JSON.parse(body.result.content[0].text);
         expect(payload.statusCode).toBe(200);
         expect(payload.body).toContain('ok');
+        expect(payload.robots.checked).toBe(true);
+        expect(payload.rateLimit.minDelayMs).toBeGreaterThanOrEqual(2000);
+    });
+
+    it('returns explicit robots.txt block details', async () => {
+        const fetchMock = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            text: jest.fn().mockResolvedValue('User-agent: *\nDisallow: /private'),
+        });
+
+        const handler = loadWithMocks(fetchMock);
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: 'fetch_raw_html', arguments: { url: 'https://example.com/private/page' } },
+                    id: 3,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.blocked).toBe(true);
+        expect(payload.blockedBy).toBe('robots_txt');
+        expect(payload.robots.origin).toBe('https://example.com');
     });
 
     it('serves the manifest on GET requests', async () => {
