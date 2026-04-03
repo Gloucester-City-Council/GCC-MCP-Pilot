@@ -150,6 +150,10 @@ async function applyRateLimit(domain, crawlDelayMs) {
         await new Promise(r => setTimeout(r, wait));
     }
     rateLimitMap.set(domain, Date.now());
+    return {
+        waitMs: Math.max(wait, 0),
+        minDelayMs: minDelay,
+    };
 }
 
 // ─── Tool definition ──────────────────────────────────────────────────────────
@@ -194,19 +198,27 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
     // 2. Fetch and parse robots.txt
     const rules = await fetchRobotsRules(origin);
     const agentRules = getRulesForBot(rules);
+    const robotsContext = {
+        checked: true,
+        origin,
+        userAgent: 'RawHTMLMCP',
+        disallowRuleCount: Array.isArray(agentRules.disallow) ? agentRules.disallow.length : 0,
+    };
 
     // 3. Check path against disallow rules
     const path = parsed.pathname || '/';
     if (isPathDisallowed(path, agentRules.disallow)) {
         return {
             blocked: true,
+            blockedBy: 'robots_txt',
             reason: `Path "${path}" is disallowed by robots.txt`,
             robotsOrigin: origin,
+            robots: robotsContext,
         };
     }
 
     // 4. Apply rate limit
-    await applyRateLimit(parsed.hostname, agentRules.crawlDelay);
+    const rateLimit = await applyRateLimit(parsed.hostname, agentRules.crawlDelay);
 
     // 5. Fetch the target URL
     const controller = new AbortController();
@@ -224,9 +236,22 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         const reason = err.name === 'AbortError'
             ? 'Request timed out after 10 seconds'
             : `Fetch failed: ${err.message}`;
-        return { error: true, reason };
+        return { error: true, reason, robots: robotsContext, rateLimit };
     }
     clearTimeout(timer);
+
+    const finalUrl = response.url;
+    const redirectedValidation = validateUrl(finalUrl);
+    if (!redirectedValidation.ok) {
+        return {
+            blocked: true,
+            blockedBy: 'redirect_target_validation',
+            reason: `Redirect target blocked: ${redirectedValidation.reason}`,
+            url: finalUrl,
+            robots: robotsContext,
+            rateLimit,
+        };
+    }
 
     const body = await response.text();
     const contentType = response.headers.get('content-type') || '';
@@ -237,6 +262,8 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         contentType,
         bodyLength: body.length,
         body,
+        robots: robotsContext,
+        rateLimit,
     };
 
     if (include_headers) {
@@ -304,7 +331,7 @@ async function handleMcpRequest(request, context) {
             return { jsonrpc: '2.0', result: { tools: TOOLS }, id };
 
         case 'tools/call': {
-            const { name, arguments: args } = params || {};
+            const { name, arguments: rawArgs } = params || {};
             const toolStart = Date.now();
 
             if (!name) {
@@ -327,8 +354,28 @@ async function handleMcpRequest(request, context) {
             }
 
             try {
-                context.log(`Executing tool: ${name} url=${args?.url}`);
-                const result = await handleFetchRawHtml(args || {}, context);
+                let args = rawArgs;
+                if (typeof rawArgs === 'string') {
+                    try {
+                        args = JSON.parse(rawArgs);
+                    } catch {
+                        return {
+                            jsonrpc: '2.0',
+                            error: { code: -32602, message: 'Invalid params: arguments must be valid JSON when provided as a string' },
+                            id,
+                        };
+                    }
+                }
+                if (!args || typeof args !== 'object' || Array.isArray(args)) {
+                    return {
+                        jsonrpc: '2.0',
+                        error: { code: -32602, message: 'Invalid params: arguments must be an object' },
+                        id,
+                    };
+                }
+
+                context.log(`Executing tool: ${name} url=${args.url}`);
+                const result = await handleFetchRawHtml(args, context);
                 context.log(`Raw HTML tool completed [${name}] in ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
@@ -368,7 +415,7 @@ async function handleMcpRequest(request, context) {
 
 // ─── HTTP trigger registration ────────────────────────────────────────────────
 app.http('mcpRawHtml', {
-    methods: ['POST'],
+    methods: ['GET', 'POST'],
     authLevel: 'anonymous',
     route: 'mcp-raw-html',
     handler: async (request, context) => {
@@ -376,6 +423,15 @@ app.http('mcpRawHtml', {
         context.log('MCP Raw HTML request received');
 
         try {
+            if (request.method === 'GET') {
+                context.log(`MCP Raw HTML manifest served with 200 in ${Date.now() - requestStart}ms`);
+                return {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(MANIFEST),
+                };
+            }
+
             let body;
             try {
                 body = await request.json();
