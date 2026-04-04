@@ -46,8 +46,10 @@ const LOOPBACK_IP_RE = /^(127\.\d+\.\d+\.\d+|::1|0\.0\.0\.0)$/;
 const PRIVATE_IP_RE = /^(10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+|169\.254\.\d+\.\d+)$/;
 // Reserved / special-use TLDs (RFC 2606, RFC 6761)
 const BLOCKED_TLDS = new Set(['arpa', 'local', 'localhost', 'test', 'example', 'invalid', 'onion']);
-// Valid hostname label: starts and ends with alphanumeric, allows hyphens in the middle
-const LABEL_RE = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/;
+// Valid hostname label: standard labels start/end with alphanumeric (hyphens allowed in middle).
+// Underscore-prefixed labels (_dmarc, _domainkey, _smtp._tls, etc.) are also permitted —
+// RFC 2782 (SRV), RFC 7208 (SPF), and RFC 7489 (DMARC) all use them legitimately.
+const LABEL_RE = /^(_[a-z0-9][a-z0-9-]*|[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)$/;
 
 /**
  * Validates a bare domain name for safety before any DNS or HTTP request.
