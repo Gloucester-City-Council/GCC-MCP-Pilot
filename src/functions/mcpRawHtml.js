@@ -111,6 +111,52 @@ function getRulesForBot(rules) {
     return rules.agents['rawhtmlmcp'] || rules.agents['*'] || { disallow: [], crawlDelay: 0 };
 }
 
+// ─── Content cleanup helpers ──────────────────────────────────────────────────
+function decodeHtmlEntities(text) {
+    if (!text) return '';
+    return text
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, '\'')
+        .replace(/&#x27;/gi, '\'')
+        .replace(/&#x2F;/gi, '/');
+}
+
+function extractReadableText(html) {
+    if (!html || typeof html !== 'string') return '';
+
+    const withoutNonVisible = html
+        // Remove script/style/template/noscript/svg blocks entirely
+        .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, ' ')
+        .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, ' ')
+        .replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, ' ')
+        // Remove common non-content sections
+        .replace(/<(nav|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+        // Remove images and media placeholders
+        .replace(/<(img|picture|source|video|audio)\b[^>]*\/?>/gi, ' ')
+        // Remove HTML comments
+        .replace(/<!--[\s\S]*?-->/g, ' ');
+
+    const withBlockBreaks = withoutNonVisible
+        .replace(/<\/(p|div|section|article|li|tr|h[1-6]|br)>/gi, '\n')
+        .replace(/<(p|div|section|article|li|tr|h[1-6]|br)\b[^>]*>/gi, '\n');
+
+    const withoutTags = withBlockBreaks.replace(/<[^>]+>/g, ' ');
+    const decoded = decodeHtmlEntities(withoutTags);
+
+    return decoded
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n[ \t]+/g, '\n')
+        .replace(/[ \t]{2,}/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+}
+
 async function fetchRobotsRules(origin) {
     const cached = robotsCache.get(origin);
     if (cached && Date.now() - cached.fetchedAt < ROBOTS_CACHE_TTL_MS) {
@@ -165,7 +211,9 @@ const TOOLS = [
             'Respects robots.txt (checks * and RawHTMLMCP user-agent rules).',
             'Enforces a minimum 2-second per-domain rate limit (or crawl-delay if longer).',
             'Blocks requests to private/internal IP ranges to prevent SSRF.',
-            'Returns: statusCode, contentType, bodyLength, body, and optionally response headers.',
+            'Returns: statusCode, contentType, bodyLength, body (raw HTML), and readableText (cleaned visible text).',
+            'readableText strips scripts/styles/json-ld/image tags and other non-content noise.',
+            'Optionally includes response headers.',
         ].join(' '),
         inputSchema: {
             type: 'object',
@@ -255,6 +303,7 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
 
     const body = await response.text();
     const contentType = response.headers.get('content-type') || '';
+    const readableText = extractReadableText(body);
 
     const result = {
         url: response.url, // may differ from input if redirected
@@ -262,6 +311,8 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         contentType,
         bodyLength: body.length,
         body,
+        readableText,
+        readableTextLength: readableText.length,
         robots: robotsContext,
         rateLimit,
     };

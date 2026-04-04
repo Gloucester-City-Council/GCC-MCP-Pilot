@@ -86,8 +86,62 @@ describe('mcpRawHtml', () => {
         const payload = JSON.parse(body.result.content[0].text);
         expect(payload.statusCode).toBe(200);
         expect(payload.body).toContain('ok');
+        expect(payload.readableText).toContain('ok');
         expect(payload.robots.checked).toBe(true);
         expect(payload.rateLimit.minDelayMs).toBeGreaterThanOrEqual(2000);
+    });
+
+    it('returns cleaned readableText without product/image structured noise', async () => {
+        const noisyHtml = `
+            <html>
+                <head>
+                    <script type="application/ld+json">
+                        {"@type":"Product","name":"Noise Product","image":"https://example.com/img.jpg"}
+                    </script>
+                </head>
+                <body>
+                    <main>
+                        <h1>Planning Application Update</h1>
+                        <p>Decision expected next week.</p>
+                        <img src="https://example.com/banner.jpg" alt="banner" />
+                    </main>
+                </body>
+            </html>
+        `;
+        const fetchMock = jest.fn()
+            .mockResolvedValueOnce({ ok: false })
+            .mockResolvedValueOnce({
+                ok: true,
+                status: 200,
+                url: 'https://example.com/',
+                headers: {
+                    get: (key) => (key === 'content-type' ? 'text/html; charset=utf-8' : null),
+                    forEach: jest.fn(),
+                },
+                text: jest.fn().mockResolvedValue(noisyHtml),
+            });
+
+        const handler = loadWithMocks(fetchMock);
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: 'fetch_raw_html', arguments: { url: 'https://example.com/' } },
+                    id: 4,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.readableText).toContain('Planning Application Update');
+        expect(payload.readableText).toContain('Decision expected next week.');
+        expect(payload.readableText).not.toContain('Noise Product');
+        expect(payload.readableText).not.toContain('img.jpg');
+        expect(payload.readableTextLength).toBe(payload.readableText.length);
     });
 
     it('returns explicit robots.txt block details', async () => {
