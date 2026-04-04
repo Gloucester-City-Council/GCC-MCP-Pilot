@@ -8,13 +8,25 @@
  * Respects robots.txt (checked via HTTP before querying), enforces per-domain
  * rate limiting, and blocks SSRF attempts against private/internal domains.
  *
+ * Uses an explicit Resolver instance pointed at public DNS servers (Google and
+ * Cloudflare) rather than the OS resolver. On Azure Functions Consumption plan
+ * the OS resolver (127.0.0.53 / systemd-resolved) may not be reachable via a
+ * standard socket, causing all lookups to fail silently.
+ *
  * User-Agent: DNSMCP/1.0 (Azure Function MCP; respects robots.txt)
  */
 
 'use strict';
 
 const { app } = require('@azure/functions');
-const dns = require('dns').promises;
+const { Resolver } = require('dns').promises;
+
+// Module-scope resolver pointing at well-known public DNS servers.
+// Google (8.8.8.8 / 8.8.4.4) and Cloudflare (1.1.1.1 / 1.0.0.1) are used
+// so that lookups work reliably on Azure Functions Consumption plan where the
+// OS resolver socket path may not be accessible.
+const resolver = new Resolver();
+resolver.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1']);
 
 const USER_AGENT = 'DNSMCP/1.0 (Azure Function MCP; respects robots.txt)';
 const DNS_TIMEOUT_MS = 10_000;
@@ -231,13 +243,13 @@ async function resolveSafe(domain, type) {
         let recordPromise;
         switch (type) {
             case 'SOA':
-                recordPromise = dns.resolveSoa(domain);
+                recordPromise = resolver.resolveSoa(domain);
                 break;
             case 'CAA':
-                recordPromise = dns.resolveCaa(domain);
+                recordPromise = resolver.resolveCaa(domain);
                 break;
             default:
-                recordPromise = dns.resolve(domain, type);
+                recordPromise = resolver.resolve(domain, type);
                 break;
         }
 
@@ -481,22 +493,19 @@ async function handleGetMx({ domain: rawDomain }, context) {
     if (policy.blocked) return policy;
     const { robots, rateLimit } = policy;
 
-    // 3. Resolve MX records
-    const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(Object.assign(new Error('DNS query timed out'), { code: 'ETIMEOUT' })), DNS_TIMEOUT_MS)
-    );
+    // 3. Resolve MX records via the shared helper (uses public resolver + timeout)
+    const result = await resolveSafe(domain, 'MX');
 
     let mxRecords;
-    try {
-        mxRecords = await Promise.race([dns.resolveMx(domain), timeoutPromise]);
-    } catch (err) {
-        if (err.code === 'ENODATA' || err.code === 'ENOTFOUND') {
-            context.log(`get_mx: ${domain} — no MX records`);
-            return { domain, records: [], robots, rateLimit };
-        }
-        context.log(`get_mx: ${domain} — error: ${err.code || err.message}`);
-        return { domain, error: err.code || err.message, robots, rateLimit };
+    if (result.noData) {
+        context.log(`get_mx: ${domain} — no MX records`);
+        return { domain, records: [], robots, rateLimit };
     }
+    if (result.error) {
+        context.log(`get_mx: ${domain} — error: ${result.error}`);
+        return { domain, error: result.error, robots, rateLimit };
+    }
+    mxRecords = result.records;
 
     // Sort by priority ascending (lowest priority value = highest mail preference)
     const sorted = [...mxRecords].sort((a, b) => a.priority - b.priority);
