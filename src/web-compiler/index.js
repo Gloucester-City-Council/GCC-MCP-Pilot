@@ -30,7 +30,7 @@ const { resolveTemplate }          = require('./resolver/template-resolver');
 const { sanitiseSiteDefinition }   = require('./sanitiser/html-sanitiser');
 const { compileRenderPlan }        = require('./compiler/render-plan-compiler');
 const { emitHtml }                 = require('./emitter/html-emitter');
-const { emitCss }                  = require('./emitter/css-emitter');
+const { emitCss, getCssCoverageWarnings } = require('./emitter/css-emitter');
 const { emitJs }                   = require('./emitter/js-emitter');
 
 /**
@@ -119,6 +119,7 @@ function run(input, overrides = {}) {
     const htmlFiles = emitHtml(renderPlan);
     const cssContent = emitCss(renderPlan, themeResolution.tokens);
     const jsContent  = emitJs(renderPlan.behaviour_manifest);
+    warnings.push(...getCssCoverageWarnings(renderPlan));
 
     const bundle = {
         html: htmlFiles,
