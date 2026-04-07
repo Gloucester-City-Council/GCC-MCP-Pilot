@@ -15,7 +15,8 @@
         "assertions": [
           "homepage compiles to render plan",
           "render plan includes page_header and service_card",
-          "bundle contains homepage output"
+          "bundle contains homepage output",
+          "bundle css contains c-result-item rules"
         ]
       }
     },
@@ -87,7 +88,8 @@
         "outcome": "pass",
         "assertions": [
           "render plan contains body_sections component with rendered bindings",
-          "body section headings render as h2 in bundle html"
+          "body section headings render as h2 in bundle html",
+          "bundle css contains body section class rules"
         ]
       }
     },

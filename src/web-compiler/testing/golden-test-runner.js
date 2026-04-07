@@ -162,6 +162,10 @@ function evaluateAssertion(assertion, result, stage) {
         passed = result.ok && hasRenderedBodySections(result.renderPlan);
     } else if (text.includes('headings render as h2')) {
         passed = result.ok && bundleContainsBodySectionHeading(result.bundle);
+    } else if (text.includes('bundle css contains body section class rules')) {
+        passed = result.ok && bundleHasCssRules(result.bundle, ['.c-body-section__heading', '.c-body-section__content']);
+    } else if (text.includes('bundle css contains c-result-item rules')) {
+        passed = result.ok && bundleHasCssRules(result.bundle, ['.c-result-item', '.c-result-item__title', '.c-result-item__summary']);
     } else if (text.includes('warns about unused body_sections')) {
         passed = result.ok && (result.warnings || []).some(w => w.includes('content.body_sections supplied') && w.includes('has no binding'));
     } else if (text.includes('optional') || text.includes('omitted cleanly')) {
@@ -195,6 +199,11 @@ function hasRenderedBodySections(renderPlan) {
 function bundleContainsBodySectionHeading(bundle) {
     const html = bundle && Array.isArray(bundle.html) && bundle.html[0] && bundle.html[0].content;
     return Boolean(html && html.includes('<h2 class="c-body-section__heading">'));
+}
+
+function bundleHasCssRules(bundle, selectors) {
+    const css = bundle && bundle.css;
+    return Boolean(css) && selectors.every(selector => css.includes(selector));
 }
 
 function checkRenderPlanHasComponents(renderPlan, componentIds) {
