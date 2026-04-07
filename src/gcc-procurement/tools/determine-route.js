@@ -24,6 +24,15 @@ const {
 
 const VALID_TYPES = ['goods', 'services', 'works', 'light_touch', 'concession', 'mixed'];
 
+const DIRECT_ROUTES = [
+    'direct_award',
+    'below_threshold_direct',
+    'framework_call_off_direct',
+    'transparency',
+    'waiver',
+];
+
+
 /**
  * Derive the required notice codes for this contract context.
  * Source: derived_fields.fields.required_notices.logic
@@ -31,7 +40,7 @@ const VALID_TYPES = ['goods', 'services', 'works', 'light_touch', 'concession', 
 function deriveNotices(value, isAbove, procurementRoute) {
     const logic = DERIVED.fields.required_notices.logic;
     const route = (procurementRoute || 'competitive').toLowerCase();
-    const isDirect = route.includes('direct');
+    const isDirect = DIRECT_ROUTES.some(directRoute => route.includes(directRoute));
 
     let codes = [];
 
