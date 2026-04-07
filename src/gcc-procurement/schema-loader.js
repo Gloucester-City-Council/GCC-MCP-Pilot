@@ -64,6 +64,14 @@ try {
 
 const SCHEMA_VERSION = schema.version;
 
+const RISK_FLAGS_BY_ID = new Map(
+    (RISK_FLAGS || []).map(flag => [String(flag.flag_id).toUpperCase(), flag])
+);
+
+const NOTICES_BY_CODE = new Map(
+    (NOTICES || []).map(notice => [String(notice.code).toUpperCase(), notice])
+);
+
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
 /**
@@ -112,7 +120,8 @@ function isAboveThreshold(value, contractType) {
  * @returns {object|null}
  */
 function findRiskFlag(flagId) {
-    return RISK_FLAGS.find(f => f.flag_id === flagId) || null;
+    if (flagId === undefined || flagId === null) return null;
+    return RISK_FLAGS_BY_ID.get(String(flagId).toUpperCase()) || null;
 }
 
 /**
@@ -121,7 +130,8 @@ function findRiskFlag(flagId) {
  * @returns {object|null}
  */
 function findNotice(code) {
-    return NOTICES.find(n => n.code === code) || null;
+    if (code === undefined || code === null) return null;
+    return NOTICES_BY_CODE.get(String(code).toUpperCase()) || null;
 }
 
 module.exports = {
@@ -138,6 +148,8 @@ module.exports = {
     KD_TRIGGERS,
     EXECUTION_AUTHORITY,
     SCHEMA_VERSION,
+    RISK_FLAGS_BY_ID,
+    NOTICES_BY_CODE,
     // helpers
     findTier,
     isAboveThreshold,
