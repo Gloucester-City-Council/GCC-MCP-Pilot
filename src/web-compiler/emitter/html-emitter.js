@@ -33,29 +33,12 @@ function renderSlotContent(slot) {
     if (!slot.is_rendered || val === null || val === undefined) return '';
 
     if (Array.isArray(val)) {
-        // Array values (body_sections, service_cards, etc.) are rendered by the
-        // collection rendering in the parent component — slot just provides the wrapper.
-        return val.map(item => {
-            if (item && typeof item === 'object') {
-                // body section: { heading?, html? }
-                if (item.html !== undefined || item.heading !== undefined) {
-                    let out = '';
-                    if (item.heading) out += `<h2 class="c-body-section__heading">${escapeHtml(item.heading)}</h2>\n`;
-                    if (item.html) out += `<div class="c-body-section__content">${item.html}</div>`; // already sanitised
-                    return out;
-                }
-                // search/news result item
-                if (item.url && item.title) {
-                    let out = `<article class="c-result-item">\n`;
-                    out += `  <h2 class="c-result-item__title"><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h2>\n`;
-                    if (item.summary) out += `  <p class="c-result-item__summary">${escapeHtml(item.summary)}</p>\n`;
-                    out += `</article>`;
-                    return out;
-                }
-                return JSON.stringify(item);
-            }
-            return escapeHtml(String(item));
-        }).join('\n');
+        return renderArraySlot(slot.slot_id, val);
+    }
+
+    if (slot.slot_id === 'brand' && val && typeof val === 'object') {
+        const label = val.label || val.name || val.text || val.url || '/';
+        return escapeHtml(String(label));
     }
 
     if (typeof val === 'string') {
@@ -67,6 +50,54 @@ function renderSlotContent(slot) {
     return escapeHtml(String(val));
 }
 
+function renderArraySlot(slotId, values) {
+    if (slotId === 'items') {
+        return values.map(item => {
+            if (!item || typeof item !== 'object') return `<li>${escapeHtml(String(item))}</li>`;
+            const url = item.url || item.href || item.link || '#';
+            const label = item.label || item.title || item.text || item.name || url;
+            return `<li><a href="${escapeHtml(url)}">${escapeHtml(label)}</a></li>`;
+        }).join('\n');
+    }
+
+    if (slotId === 'groups') {
+        return values.map(group => {
+            if (!group || typeof group !== 'object') return '';
+            const heading = group.heading ? `<h2>${escapeHtml(group.heading)}</h2>` : '';
+            const links = Array.isArray(group.links)
+                ? `<ul>${group.links.map(link => `<li><a href="${escapeHtml(link.url || '#')}">${escapeHtml(link.label || link.url || '')}</a></li>`).join('')}</ul>`
+                : '';
+            return `<section class="c-footer__group">${heading}${links}</section>`;
+        }).join('\n');
+    }
+
+    return values.map(item => renderArrayItem(item)).join('\n');
+}
+
+function renderArrayItem(item) {
+    if (item && typeof item === 'object') {
+        if (item.html !== undefined || item.body !== undefined || item.heading !== undefined) {
+            let out = '';
+            if (item.heading) out += `<h2 class="c-body-section__heading">${escapeHtml(item.heading)}</h2>\n`;
+            if (item.html) out += `<div class="c-body-section__content">${item.html}</div>`;
+            if (item.body) out += `<p class="c-body-section__content">${escapeHtml(item.body)}</p>`;
+            if (Array.isArray(item.items) && item.items.length > 0) {
+                out += `<ul class="c-body-section__list">${item.items.map(v => `<li>${escapeHtml(String(v))}</li>`).join('')}</ul>`;
+            }
+            return out;
+        }
+        if (item.url && item.title) {
+            let out = `<article class="c-result-item">\n`;
+            out += `  <h2 class="c-result-item__title"><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h2>\n`;
+            if (item.summary) out += `  <p class="c-result-item__summary">${escapeHtml(item.summary)}</p>\n`;
+            out += `</article>`;
+            return out;
+        }
+        return escapeHtml(JSON.stringify(item));
+    }
+    return escapeHtml(String(item));
+}
+
 /**
  * Build HTML attribute string from an attributes object.
  */
@@ -75,6 +106,21 @@ function buildAttrs(attrs) {
     return Object.entries(attrs)
         .map(([k, v]) => `${k}="${escapeHtml(String(v))}"`)
         .join(' ');
+}
+
+function inferSlotAttributes(slot) {
+    if (slot.element !== 'a') return null;
+    if (slot.attributes && Object.prototype.hasOwnProperty.call(slot.attributes, 'href')) return null;
+    if (slot.slot_id !== 'brand') return null;
+
+    const value = slot.resolved_value;
+    if (typeof value === 'string') {
+        return { href: value };
+    }
+    if (value && typeof value === 'object') {
+        return { href: value.url || value.href || value.link || '/' };
+    }
+    return null;
 }
 
 /**
@@ -94,7 +140,8 @@ function renderComponent(instance, regionId) {
         if (!slot.is_rendered) continue;
 
         const slotClass = slot.class_name;
-        const extraAttrs = slot.attributes ? ' ' + buildAttrs(slot.attributes) : '';
+        const mergedAttrs = Object.assign({}, inferSlotAttributes(slot) || {}, slot.attributes || {});
+        const extraAttrs = Object.keys(mergedAttrs).length > 0 ? ' ' + buildAttrs(mergedAttrs) : '';
         const content = renderSlotContent(slot);
 
         if (Array.isArray(slot.resolved_value)) {

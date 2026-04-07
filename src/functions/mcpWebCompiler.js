@@ -122,6 +122,17 @@ const VALID_COMPONENTS = [
     'alert_banner', 'document_list', 'search_results', 'footer',
 ];
 
+function inlineBundleAssets(html, css, js) {
+    let out = html || '';
+    if (typeof css === 'string' && css.length > 0) {
+        out = out.replace('<link rel="stylesheet" href="site.css">', `<style>\n${css}\n</style>`);
+    }
+    if (typeof js === 'string') {
+        out = out.replace('<script src="site.js" defer></script>', `<script defer>\n${js}\n</script>`);
+    }
+    return out;
+}
+
 /**
  * Structurally validate a template object.
  * Returns { valid: boolean, errors: string[] }
@@ -316,7 +327,7 @@ async function handleTool(name, args) {
                     operation,
                     page_id:  pageId,
                     filename: htmlFile.filename,
-                    html:     htmlFile.content,
+                    html:     inlineBundleAssets(htmlFile.content, result.bundle.css, result.bundle.js),
                     warnings: result.warnings,
                 };
             }
