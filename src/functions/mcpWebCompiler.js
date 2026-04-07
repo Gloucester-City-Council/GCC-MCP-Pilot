@@ -19,9 +19,10 @@
 
 const { app }  = require('@azure/functions');
 const compiler = require('../web-compiler/index');
-const { loadContracts }       = require('../web-compiler/contracts/load-contracts');
+const { loadContracts, loadContractsAsync } = require('../web-compiler/contracts/load-contracts');
 const { validateAuthoring }   = require('../web-compiler/normaliser/normalise');
 const { runAllGoldenTests }   = require('../web-compiler/testing/golden-test-runner');
+const { listCustomTemplates, getTemplate, saveTemplate, deleteTemplate } = require('../web-compiler/storage/template-store');
 
 // ── Tool definitions ─────────────────────────────────────────────────────────
 
@@ -128,13 +129,157 @@ const TOOLS = [
         description: 'Run the built-in golden test suite. Returns pass/fail counts and per-test results.',
         inputSchema: { type: 'object', properties: {}, required: [] },
     },
+    {
+        name: 'validate_template',
+        description: 'Validate a template definition against the template registry schema without saving it. Returns structural errors.',
+        inputSchema: {
+            type: 'object',
+            required: ['template'],
+            properties: {
+                template: {
+                    type: 'object',
+                    description: 'A template object conforming to template_registry_v5 item shape',
+                },
+            },
+        },
+    },
+    {
+        name: 'create_template',
+        description: 'Validate and persist a new custom template to blob storage. Fails if a template with the same id already exists.',
+        inputSchema: {
+            type: 'object',
+            required: ['template'],
+            properties: {
+                template: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'update_template',
+        description: 'Validate and overwrite an existing custom template in blob storage. Fails if the template does not exist.',
+        inputSchema: {
+            type: 'object',
+            required: ['template'],
+            properties: {
+                template: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'delete_template',
+        description: 'Delete a custom template from blob storage by id. Base/sample templates cannot be deleted.',
+        inputSchema: {
+            type: 'object',
+            required: ['template_id'],
+            properties: {
+                template_id: { type: 'string', description: 'The id of the template to delete' },
+            },
+        },
+    },
 ];
 
 const TOOL_NAMES = TOOLS.map(t => t.name).join(', ');
 
+// ── Template validation ───────────────────────────────────────────────────────
+
+const VALID_PAGE_TYPES = [
+    'homepage', 'service_page', 'news_page', 'contact_page',
+    'eligibility_or_apply_page', 'document_list_page', 'search_results_page',
+];
+
+const VALID_LAYOUTS = [
+    'full_width', 'single_column', 'two_column', 'two_column_optional_aside',
+    'grid_2', 'grid_3', 'stack',
+];
+
+const VALID_COMPONENTS = [
+    'navigation', 'hero', 'service_card', 'page_header', 'breadcrumb',
+    'content_body', 'contact_block', 'eligibility_panel', 'step_list',
+    'alert_banner', 'document_list', 'search_results', 'footer',
+];
+
+/**
+ * Structurally validate a template object.
+ * Returns { valid: boolean, errors: string[] }
+ */
+function validateTemplateObject(tmpl) {
+    const errors = [];
+
+    if (!tmpl || typeof tmpl !== 'object') {
+        return { valid: false, errors: ['template must be an object'] };
+    }
+
+    // id
+    if (!tmpl.id) {
+        errors.push('template.id is required');
+    } else if (!/^[a-z0-9_-]+$/.test(tmpl.id)) {
+        errors.push(`template.id "${tmpl.id}" must match ^[a-z0-9_-]+$`);
+    }
+
+    // page_type
+    if (!tmpl.page_type) {
+        errors.push('template.page_type is required');
+    } else if (!VALID_PAGE_TYPES.includes(tmpl.page_type)) {
+        errors.push(`template.page_type "${tmpl.page_type}" must be one of: ${VALID_PAGE_TYPES.join(', ')}`);
+    }
+
+    // regions
+    if (!Array.isArray(tmpl.regions) || tmpl.regions.length === 0) {
+        errors.push('template.regions must be a non-empty array');
+    } else {
+        const seenOrders = new Set();
+        tmpl.regions.forEach((region, i) => {
+            const prefix = `regions[${i}]`;
+            if (!region.id)     errors.push(`${prefix}.id is required`);
+            if (!region.order)  errors.push(`${prefix}.order is required`);
+            else if (seenOrders.has(region.order)) errors.push(`${prefix}.order ${region.order} is duplicated`);
+            else seenOrders.add(region.order);
+
+            if (!region.layout) {
+                errors.push(`${prefix}.layout is required`);
+            } else if (!VALID_LAYOUTS.includes(region.layout)) {
+                errors.push(`${prefix}.layout "${region.layout}" must be one of: ${VALID_LAYOUTS.join(', ')}`);
+            }
+
+            if (!Array.isArray(region.components) || region.components.length === 0) {
+                errors.push(`${prefix}.components must be a non-empty array`);
+            } else {
+                region.components.forEach((comp, j) => {
+                    if (!comp.component) {
+                        errors.push(`${prefix}.components[${j}].component is required`);
+                    } else if (!VALID_COMPONENTS.includes(comp.component)) {
+                        errors.push(`${prefix}.components[${j}].component "${comp.component}" must be one of: ${VALID_COMPONENTS.join(', ')}`);
+                    }
+                });
+            }
+        });
+    }
+
+    // required_components
+    if (!Array.isArray(tmpl.required_components)) {
+        errors.push('template.required_components must be an array');
+    }
+
+    // content_mappings
+    if (!Array.isArray(tmpl.content_mappings)) {
+        errors.push('template.content_mappings must be an array');
+    } else {
+        tmpl.content_mappings.forEach((m, i) => {
+            const prefix = `content_mappings[${i}]`;
+            if (!m.source_field)      errors.push(`${prefix}.source_field is required`);
+            if (!m.target_component)  errors.push(`${prefix}.target_component is required`);
+            if (!m.target_slot)       errors.push(`${prefix}.target_slot is required`);
+        });
+    }
+
+    return { valid: errors.length === 0, errors };
+}
+
 // ── Tool handlers ─────────────────────────────────────────────────────────────
 
 async function handleTool(name, args) {
+    // Compile tools use the async loader so custom blob templates are included.
+    // List/theme tools only need the base contracts and can remain synchronous.
     const contracts = loadContracts();
 
     switch (name) {
@@ -187,7 +332,8 @@ async function handleTool(name, args) {
         case 'run_integrity_checks': {
             const payload = args.site_definition;
             if (!payload) return { ok: false, errors: ['site_definition is required'] };
-            const result = compiler.validateOnly(payload);
+            const mergedContracts = await loadContractsAsync();
+            const result = compiler.validateOnly(payload, mergedContracts);
             return {
                 ok:               result.ok,
                 errors:           result.errors,
@@ -199,7 +345,8 @@ async function handleTool(name, args) {
         case 'build_render_plan': {
             const payload = args.site_definition;
             if (!payload) return { ok: false, errors: ['site_definition is required'] };
-            const result = compiler.buildRenderPlan(payload);
+            const mergedContracts = await loadContractsAsync();
+            const result = compiler.buildRenderPlan(payload, mergedContracts);
             return {
                 ok:               result.ok,
                 errors:           result.errors,
@@ -215,7 +362,8 @@ async function handleTool(name, args) {
             if (!payload)  return { ok: false, errors: ['site_definition is required'] };
             if (!pageId)   return { ok: false, errors: ['page_id is required'] };
 
-            const result = compiler.run(payload);
+            const mergedContracts = await loadContractsAsync();
+            const result = compiler.run(payload, mergedContracts);
             if (!result.ok) return { ok: false, errors: result.errors, warnings: result.warnings };
 
             const htmlFile = (result.bundle.html || []).find(f =>
@@ -242,7 +390,8 @@ async function handleTool(name, args) {
             const payload = args.site_definition;
             if (!payload) return { ok: false, errors: ['site_definition is required'] };
 
-            const result = compiler.run(payload);
+            const mergedContracts = await loadContractsAsync();
+            const result = compiler.run(payload, mergedContracts);
             if (!result.ok) {
                 return {
                     ok:     false,
@@ -274,6 +423,68 @@ async function handleTool(name, args) {
                 total:   testResults.total,
                 results: testResults.results,
             };
+        }
+
+        case 'validate_template': {
+            const tmpl = args.template;
+            if (!tmpl) return { valid: false, errors: ['template is required'] };
+            const { valid, errors } = validateTemplateObject(tmpl);
+            return { valid, errors, error_count: errors.length };
+        }
+
+        case 'create_template': {
+            const tmpl = args.template;
+            if (!tmpl) return { ok: false, errors: ['template is required'] };
+
+            const { valid, errors } = validateTemplateObject(tmpl);
+            if (!valid) return { ok: false, errors };
+
+            const existing = await getTemplate(tmpl.id);
+            if (existing) {
+                return {
+                    ok: false,
+                    errors: [`Template "${tmpl.id}" already exists. Use update_template to overwrite it.`],
+                };
+            }
+
+            await saveTemplate(tmpl);
+            return { ok: true, template_id: tmpl.id, message: `Template "${tmpl.id}" created successfully.` };
+        }
+
+        case 'update_template': {
+            const tmpl = args.template;
+            if (!tmpl) return { ok: false, errors: ['template is required'] };
+
+            const { valid, errors } = validateTemplateObject(tmpl);
+            if (!valid) return { ok: false, errors };
+
+            const existing = await getTemplate(tmpl.id);
+            if (!existing) {
+                return {
+                    ok: false,
+                    errors: [`Template "${tmpl.id}" does not exist. Use create_template to add a new template.`],
+                };
+            }
+
+            await saveTemplate(tmpl);
+            return { ok: true, template_id: tmpl.id, message: `Template "${tmpl.id}" updated successfully.` };
+        }
+
+        case 'delete_template': {
+            const templateId = args.template_id;
+            if (!templateId) return { ok: false, errors: ['template_id is required'] };
+
+            // Prevent deletion of base/sample templates (they are not in blob)
+            const existing = await getTemplate(templateId);
+            if (!existing) {
+                return {
+                    ok: false,
+                    errors: [`Template "${templateId}" not found in custom template store. Base templates cannot be deleted.`],
+                };
+            }
+
+            await deleteTemplate(templateId);
+            return { ok: true, template_id: templateId, message: `Template "${templateId}" deleted successfully.` };
         }
 
         default:
