@@ -8,6 +8,10 @@ describe('web-compiler css emitter', () => {
             resolved_tokens: {
                 theme_id: 'civic_blue',
                 polish_profile_id: 'default',
+                values: {
+                    'typography.scale.h2': '2rem',
+                    'typography.scale.body': '1.125rem',
+                },
             },
             pages: [
                 {
@@ -35,7 +39,7 @@ describe('web-compiler css emitter', () => {
 
         const css = emitCss(renderPlan, {});
 
-        expect(css).toContain('.c-body-section__heading {\n  font-size: 2rem;\n}');
-        expect(css).toContain('.c-body-section__content {\n  font-size: 1.125rem;\n}');
+        expect(css).toContain('.c-body-section__heading {\n  font-size: var(--sb-typography-scale-h2);\n}');
+        expect(css).toContain('.c-body-section__content {\n  font-size: var(--sb-typography-scale-body);\n}');
     });
 });

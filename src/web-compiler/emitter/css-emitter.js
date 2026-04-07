@@ -51,43 +51,92 @@ function emitLayoutUtilities() {
 `;
 }
 
+function buildTokenValueLookup(renderPlan) {
+    const byValue = new Map();
+    const values = renderPlan && renderPlan.resolved_tokens && renderPlan.resolved_tokens.values || {};
+    for (const [tokenPath, value] of Object.entries(values)) {
+        const key = String(value);
+        if (!byValue.has(key)) byValue.set(key, tokenPath);
+    }
+    return byValue;
+}
+
+function toTokenReference(value, tokenValueLookup) {
+    const lookupKey = String(value);
+    if (tokenValueLookup.has(lookupKey)) {
+        return `var(${toCssVar(tokenValueLookup.get(lookupKey))})`;
+    }
+    return String(value);
+}
+
+function pushProp(props, property, value, tokenValueLookup) {
+    if (value === undefined || value === null || value === '') return;
+    props.push(`  ${property}: ${toTokenReference(value, tokenValueLookup)};`);
+}
+
+function emitRootRule(cls, tokens, tokenValueLookup) {
+    const props = [];
+    pushProp(props, 'background-color', tokens.surface, tokenValueLookup);
+    pushProp(props, 'padding', tokens.padding, tokenValueLookup);
+    pushProp(props, 'border-radius', tokens.radius, tokenValueLookup);
+    pushProp(props, 'box-shadow', tokens.shadow, tokenValueLookup);
+    if (tokens.border !== undefined && tokens.border !== null && tokens.border !== '') {
+        props.push(`  border-color: ${toTokenReference(tokens.border, tokenValueLookup)};`);
+        props.push('  border-style: solid;');
+        props.push('  border-width: thin;');
+    }
+    pushProp(props, 'gap', tokens.gap, tokenValueLookup);
+    pushProp(props, 'font-size', tokens.text_scale, tokenValueLookup);
+
+    // Ensure every component with non-empty style tokens produces a selector.
+    for (const [hookName, hookValue] of Object.entries(tokens)) {
+        if (hookValue === undefined || hookValue === null || hookValue === '') continue;
+        const cssCustomPropName = `--sb-component-${hookName.replace(/_/g, '-')}`;
+        props.push(`  ${cssCustomPropName}: ${toTokenReference(hookValue, tokenValueLookup)};`);
+    }
+
+    if (props.length === 0) return null;
+    return `.${cls} {\n${props.join('\n')}\n}`;
+}
+
 /**
  * Emit component base class rules from component recipes in the render plan.
  * Uses resolved token values from render plan.
  */
 function emitComponentClasses(renderPlan) {
-    const seenComponents = new Set();
-    const seenSpecialRules = new Set();
+    const seenRootRules = new Set();
+    const seenBodySectionTypography = new Set();
+    const emittedSelectors = new Set();
+    const coverageWarnings = [];
+    const tokenValueLookup = buildTokenValueLookup(renderPlan);
     const rules = [];
 
     for (const page of renderPlan.pages || []) {
         for (const region of page.regions || []) {
             for (const instance of region.components || []) {
                 const cls = instance.dom.root_class;
-                if (seenComponents.has(cls)) continue;
-                seenComponents.add(cls);
 
                 const tokens = instance.styles && instance.styles.tokens || {};
-                const props = [];
+                const nonEmptyTokens = Object.entries(tokens).filter(([, val]) => val !== undefined && val !== null && val !== '');
+                if (nonEmptyTokens.length === 0) continue;
+                const rootRule = seenRootRules.has(cls) ? null : emitRootRule(cls, tokens, tokenValueLookup);
 
-                if (tokens.surface && tokens.surface !== 'transparent') {
-                    props.push(`  background-color: ${tokens.surface};`);
-                }
-                if (tokens.padding && tokens.padding !== '0') {
-                    props.push(`  padding: ${tokens.padding};`);
-                }
-                if (tokens.radius && tokens.radius !== '0') {
-                    props.push(`  border-radius: ${tokens.radius};`);
-                }
-                if (tokens.shadow && tokens.shadow !== 'none') {
-                    props.push(`  box-shadow: ${tokens.shadow};`);
-                }
-                if (tokens.border && tokens.border !== 'transparent') {
-                    props.push(`  border: 1px solid ${tokens.border};`);
+                if (rootRule) {
+                    rules.push(rootRule);
+                    seenRootRules.add(cls);
+                    emittedSelectors.add(`.${cls}`);
                 }
 
-                if (props.length > 0) {
-                    rules.push(`.${cls} {\n${props.join('\n')}\n}`);
+                if (cls === 'c-body-section' && !seenBodySectionTypography.has(cls)) {
+                    seenBodySectionTypography.add(cls);
+                    if (tokens.title_scale) {
+                        rules.push(`.c-body-section__heading {\n  font-size: ${toTokenReference(tokens.title_scale, tokenValueLookup)};\n}`);
+                        emittedSelectors.add('.c-body-section__heading');
+                    }
+                    if (tokens.text_scale) {
+                        rules.push(`.c-body-section__content {\n  font-size: ${toTokenReference(tokens.text_scale, tokenValueLookup)};\n}`);
+                        emittedSelectors.add('.c-body-section__content');
+                    }
                 }
 
                 if (cls === 'c-body-section' && !seenSpecialRules.has(cls)) {
@@ -105,20 +154,30 @@ function emitComponentClasses(renderPlan) {
                     const slotCls = slot.class_name;
                     const slotProps = [];
                     if (slot.element === 'h1' && tokens.title_scale) {
-                        slotProps.push(`  font-size: ${tokens.title_scale};`);
+                        slotProps.push(`  font-size: ${toTokenReference(tokens.title_scale, tokenValueLookup)};`);
+                    } else if ((slot.element === 'h2' || slot.element === 'h3') && tokens.title_scale) {
+                        slotProps.push(`  font-size: ${toTokenReference(tokens.title_scale, tokenValueLookup)};`);
                     }
                     if (slot.element === 'p' && tokens.text_scale) {
-                        slotProps.push(`  font-size: ${tokens.text_scale};`);
+                        slotProps.push(`  font-size: ${toTokenReference(tokens.text_scale, tokenValueLookup)};`);
                     }
                     if (slotProps.length > 0) {
                         rules.push(`.${slotCls} {\n${slotProps.join('\n')}\n}`);
+                        emittedSelectors.add(`.${slotCls}`);
                     }
+                }
+
+                if (!emittedSelectors.has(`.${cls}`) && !(instance.dom.slots || []).some(slot => emittedSelectors.has(`.${slot.class_name}`))) {
+                    coverageWarnings.push(`webcompiler-css-coverage: component "${instance.component_id}" (${cls}) has non-empty styles.tokens but emitted no CSS rule`);
                 }
             }
         }
     }
 
-    return rules.join('\n\n');
+    return {
+        css: rules.join('\n\n'),
+        warnings: coverageWarnings,
+    };
 }
 
 /**
@@ -129,14 +188,19 @@ function emitComponentClasses(renderPlan) {
  * @returns {string} CSS content
  */
 function emitCss(renderPlan, tokens) {
+    const componentCss = emitComponentClasses(renderPlan);
     return [
         `/* Site CSS — generated by web-compiler. DO NOT EDIT. */`,
         `/* Theme: ${renderPlan.resolved_tokens.theme_id} | Profile: ${renderPlan.resolved_tokens.polish_profile_id} */`,
         '',
         emitRootVars(tokens),
         emitLayoutUtilities(),
-        emitComponentClasses(renderPlan),
+        componentCss.css,
     ].join('\n');
 }
 
-module.exports = { emitCss, toCssVar };
+function getCssCoverageWarnings(renderPlan) {
+    return emitComponentClasses(renderPlan).warnings;
+}
+
+module.exports = { emitCss, toCssVar, getCssCoverageWarnings };

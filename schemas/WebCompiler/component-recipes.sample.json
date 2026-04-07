@@ -347,6 +347,8 @@
         "padding": "literal:0",
         "gap": "token:spacing.scale.2",
         "radius": "token:radius.none",
+        "title_scale": "token:typography.scale.h2",
+        "text_scale": "token:typography.scale.body",
         "layout_recipe": "stack"
       },
       "responsive_rules": [],

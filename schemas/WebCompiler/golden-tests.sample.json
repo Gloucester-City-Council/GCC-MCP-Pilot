@@ -118,6 +118,39 @@
           "script tag is rejected for policy body sections"
         ]
       }
+    },
+    {
+      "id": "all_render_plan_components_have_css",
+      "stage": "full_pipeline",
+      "input_refs": [
+        "sample-site-definition.all-templates.json",
+        "template-registry.sample.json",
+        "component-recipes.sample.json",
+        "theme-pack.sample.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "every root_class from the render plan appears as a selector in the generated css",
+          "no rule body contains a literal hex colour or pixel value where a token reference is available"
+        ]
+      }
+    },
+    {
+      "id": "body_sections_renders_with_theme_typography",
+      "stage": "full_pipeline",
+      "input_refs": [
+        "sample-site-definition.policy-page.json",
+        "component-recipes.sample.json",
+        "theme-pack.sample.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "body sections css includes root heading content selectors",
+          "body section heading rule references --sb-typography-scale-h2"
+        ]
+      }
     }
   ]
 }

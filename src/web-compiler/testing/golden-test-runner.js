@@ -162,6 +162,14 @@ function evaluateAssertion(assertion, result, stage) {
         passed = result.ok && hasRenderedBodySections(result.renderPlan);
     } else if (text.includes('headings render as h2')) {
         passed = result.ok && bundleContainsBodySectionHeading(result.bundle);
+    } else if (text.includes('every root_class') && text.includes('generated css')) {
+        passed = result.ok && bundleHasAllRootClassSelectors(result.renderPlan, result.bundle);
+    } else if (text.includes('no literal hex') || text.includes('pixel value')) {
+        passed = result.ok && cssComponentRulesUseTokenReferences(result.bundle);
+    } else if (text.includes('body sections css includes root heading content selectors')) {
+        passed = result.ok && cssHasBodySectionSelectors(result.bundle);
+    } else if (text.includes('body section heading rule references --sb-typography-scale-h2')) {
+        passed = result.ok && cssBodySectionHeadingUsesH2Token(result.bundle);
     } else if (text.includes('warns about unused body_sections')) {
         passed = result.ok && (result.warnings || []).some(w => w.includes('content.body_sections supplied') && w.includes('has no binding'));
     } else if (text.includes('optional') || text.includes('omitted cleanly')) {
@@ -207,6 +215,42 @@ function checkRenderPlanHasComponents(renderPlan, componentIds) {
         }
     }
     return componentIds.every(id => found.has(id));
+}
+
+function bundleHasAllRootClassSelectors(renderPlan, bundle) {
+    const css = bundle && bundle.css;
+    if (!css) return false;
+    const selectors = new Set((css.match(/\.[a-z0-9_-]+\s*\{/gi) || []).map(s => s.replace(/\s*\{$/, '').trim()));
+
+    for (const page of renderPlan && renderPlan.pages || []) {
+        for (const region of page.regions || []) {
+            for (const comp of region.components || []) {
+                if (!comp.dom || !comp.dom.root_class) continue;
+                if (!selectors.has(`.${comp.dom.root_class}`)) return false;
+            }
+        }
+    }
+    return true;
+}
+
+function cssComponentRulesUseTokenReferences(bundle) {
+    const css = bundle && bundle.css;
+    if (!css) return false;
+    const componentBlocks = css.match(/\.c-[^{]+\{[^}]+\}/g) || [];
+    return componentBlocks.every(block => !/#(?:[a-f0-9]{3}|[a-f0-9]{6})\b/i.test(block) && !/\b\d+px\b/.test(block));
+}
+
+function cssHasBodySectionSelectors(bundle) {
+    const css = bundle && bundle.css || '';
+    return css.includes('.c-body-section {') &&
+        css.includes('.c-body-section__heading {') &&
+        css.includes('.c-body-section__content {');
+}
+
+function cssBodySectionHeadingUsesH2Token(bundle) {
+    const css = bundle && bundle.css || '';
+    const headingRule = css.match(/\.c-body-section__heading\s*\{[^}]+\}/);
+    return Boolean(headingRule && headingRule[0].includes('var(--sb-typography-scale-h2)'));
 }
 
 /**
