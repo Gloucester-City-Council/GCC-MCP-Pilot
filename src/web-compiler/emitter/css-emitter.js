@@ -57,6 +57,7 @@ function emitLayoutUtilities() {
  */
 function emitComponentClasses(renderPlan) {
     const seenComponents = new Set();
+    const seenSpecialRules = new Set();
     const rules = [];
 
     for (const page of renderPlan.pages || []) {
@@ -87,6 +88,16 @@ function emitComponentClasses(renderPlan) {
 
                 if (props.length > 0) {
                     rules.push(`.${cls} {\n${props.join('\n')}\n}`);
+                }
+
+                if (cls === 'c-body-section' && !seenSpecialRules.has(cls)) {
+                    seenSpecialRules.add(cls);
+                    if (tokens.title_scale) {
+                        rules.push(`.c-body-section__heading {\n  font-size: ${tokens.title_scale};\n}`);
+                    }
+                    if (tokens.text_scale) {
+                        rules.push(`.c-body-section__content {\n  font-size: ${tokens.text_scale};\n}`);
+                    }
                 }
 
                 // Slot classes
