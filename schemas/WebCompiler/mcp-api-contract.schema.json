@@ -11,7 +11,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "mcp_api_contract_v5"
+      "const": "mcp_api_contract_v6"
     },
     "tools": {
       "type": "array",
@@ -27,15 +27,10 @@
           "name": {
             "type": "string",
             "enum": [
-              "list_templates",
-              "list_themes",
-              "validate_authoring_input",
-              "normalise_to_site_definition",
-              "validate_site_definition",
-              "run_integrity_checks",
-              "build_render_plan",
-              "preview_page",
-              "build_site"
+              "discover_assets",
+              "process_site",
+              "manage_templates",
+              "run_golden_tests"
             ]
           },
           "input_schema_ref": {
