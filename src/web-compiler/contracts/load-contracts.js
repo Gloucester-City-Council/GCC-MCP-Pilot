@@ -71,7 +71,7 @@ const BUILTIN_COMPONENT_STUBS = [
             root_element: 'nav',
             css_hooks: { block_class: 'c-navigation', slot_class_prefix: 'c-navigation__', data_component_attr: 'navigation' },
             slots: [
-                { id: 'brand', element: 'a', source: 'brand_url', priority: 1 },
+                { id: 'brand', element: 'a', source: 'brand', priority: 1 },
                 { id: 'items', element: 'ul', source: 'items', priority: 2 },
             ],
         },

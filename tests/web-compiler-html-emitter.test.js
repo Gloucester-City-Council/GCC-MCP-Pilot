@@ -26,6 +26,41 @@ describe('web-compiler html emitter', () => {
         expect(html).toContain('Pages');
     });
 
+    test('renders navigation brand and links when global_nav uses string brand and links field', () => {
+        const siteDef = JSON.parse(JSON.stringify(samplePolicySite));
+        siteDef.globals = {};
+        siteDef.site.global_nav = {
+            brand: 'Gloucester City Council',
+            links: [
+                { href: '/council-tax/', label: 'Council Tax' },
+                { href: '/council-tax/discounts/', label: 'Discounts' },
+            ],
+        };
+        siteDef.site.global_footer = {
+            body: 'Gloucester City Council, Gloucester, GL1 2TG',
+            links: [
+                { href: '/accessibility/', label: 'Accessibility' },
+                { href: '/privacy/', label: 'Privacy' },
+            ],
+        };
+
+        const result = compiler.run(siteDef);
+        expect(result.ok).toBe(true);
+        const html = result.bundle.html[0].content;
+
+        // nav brand label rendered
+        expect(html).toContain('Gloucester City Council');
+        // nav links rendered via links alias
+        expect(html).toContain('/council-tax/');
+        expect(html).toContain('Council Tax');
+        expect(html).toContain('Discounts');
+        // footer body text rendered
+        expect(html).toContain('GL1 2TG');
+        // footer links rendered via body+links synthesis
+        expect(html).toContain('/accessibility/');
+        expect(html).toContain('Accessibility');
+    });
+
     test('renders navigation and footer when provided via site.global_nav/global_footer aliases', () => {
         const siteDef = JSON.parse(JSON.stringify(samplePolicySite));
         siteDef.globals = {};

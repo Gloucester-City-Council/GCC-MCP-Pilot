@@ -64,10 +64,15 @@ function renderArraySlot(slotId, values) {
         return values.map(group => {
             if (!group || typeof group !== 'object') return '';
             const heading = group.heading ? `<h2>${escapeHtml(group.heading)}</h2>` : '';
+            const body = group.body ? `<p>${escapeHtml(group.body)}</p>` : '';
             const links = Array.isArray(group.links)
-                ? `<ul>${group.links.map(link => `<li><a href="${escapeHtml(link.url || '#')}">${escapeHtml(link.label || link.url || '')}</a></li>`).join('')}</ul>`
+                ? `<ul>${group.links.map(link => {
+                    const url = link.url || link.href || '#';
+                    const label = link.label || link.text || url;
+                    return `<li><a href="${escapeHtml(url)}">${escapeHtml(label)}</a></li>`;
+                }).join('')}</ul>`
                 : '';
-            return `<section class="c-footer__group">${heading}${links}</section>`;
+            return `<section class="c-footer__group">${heading}${body}${links}</section>`;
         }).join('\n');
     }
 

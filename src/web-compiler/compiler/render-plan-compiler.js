@@ -128,17 +128,45 @@ function normaliseGlobals(siteDef) {
 
     const navigation = rawNav ? Object.assign({}, rawNav) : undefined;
     if (navigation) {
-        if (!navigation.brand_url && navigation.brand && typeof navigation.brand === 'object') {
-            navigation.brand_url = navigation.brand.url || navigation.brand.href || navigation.brand.link || '/';
+        // Extract brand_url / brand_label from a brand object
+        if (navigation.brand && typeof navigation.brand === 'object') {
+            if (!navigation.brand_url) {
+                navigation.brand_url = navigation.brand.url || navigation.brand.href || navigation.brand.link || '/';
+            }
+            if (!navigation.brand_label) {
+                navigation.brand_label = navigation.brand.label || navigation.brand.name || navigation.brand.text;
+            }
         }
-        if (!navigation.brand_label && navigation.brand && typeof navigation.brand === 'object') {
-            navigation.brand_label = navigation.brand.label || navigation.brand.name || navigation.brand.text;
+
+        // Handle brand supplied as a plain string (e.g. "Gloucester City Council")
+        if (navigation.brand && typeof navigation.brand === 'string') {
+            if (!navigation.brand_label) navigation.brand_label = navigation.brand;
         }
+
+        // Ensure brand_url has a default
+        if (!navigation.brand_url) navigation.brand_url = '/';
+
+        // Synthesise canonical brand object used by the brand slot (source: 'brand')
+        navigation.brand = {
+            label: navigation.brand_label || navigation.brand_url,
+            url:   navigation.brand_url,
+        };
+
+        // Alias links → items so callers can use either field name
+        if (!navigation.items && Array.isArray(navigation.links)) {
+            navigation.items = navigation.links;
+        }
+    }
+
+    // Normalise footer: synthesise groups from flat body/links when groups absent
+    let footer = rawFooter ? Object.assign({}, rawFooter) : undefined;
+    if (footer && !footer.groups && (footer.body || Array.isArray(footer.links))) {
+        footer.groups = [{ body: footer.body, links: footer.links }];
     }
 
     return {
         navigation,
-        footer: rawFooter,
+        footer,
         alert_banner: rawAlert,
     };
 }
