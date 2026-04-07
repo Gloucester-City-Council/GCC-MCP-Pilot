@@ -17,6 +17,11 @@
       "path": "content.opening_hours"
     },
     {
+      "id": "content.documents.exists",
+      "operator": "exists",
+      "path": "content.documents"
+    },
+    {
       "id": "page_options.hide_breadcrumb.false",
       "operator": "not_equals",
       "path": "page_options.hide_breadcrumb",

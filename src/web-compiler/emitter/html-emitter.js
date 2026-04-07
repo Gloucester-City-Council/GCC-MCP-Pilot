@@ -40,8 +40,8 @@ function renderSlotContent(slot) {
                 // body section: { heading?, html? }
                 if (item.html !== undefined || item.heading !== undefined) {
                     let out = '';
-                    if (item.heading) out += `<h2>${escapeHtml(item.heading)}</h2>\n`;
-                    if (item.html) out += item.html; // already sanitised
+                    if (item.heading) out += `<h2 class="c-body-section__heading">${escapeHtml(item.heading)}</h2>\n`;
+                    if (item.html) out += `<div class="c-body-section__content">${item.html}</div>`; // already sanitised
                     return out;
                 }
                 // search/news result item

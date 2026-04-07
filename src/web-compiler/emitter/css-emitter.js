@@ -57,6 +57,7 @@ function emitLayoutUtilities() {
  */
 function emitComponentClasses(renderPlan) {
     const seenComponents = new Set();
+    const seenDerivedRules = new Set();
     const rules = [];
 
     for (const page of renderPlan.pages || []) {
@@ -102,6 +103,39 @@ function emitComponentClasses(renderPlan) {
                     if (slotProps.length > 0) {
                         rules.push(`.${slotCls} {\n${slotProps.join('\n')}\n}`);
                     }
+                }
+
+                // Derived classes emitted by HTML renderer for collection items
+                if (instance.component_id === 'body_sections' && !seenDerivedRules.has('body_sections')) {
+                    seenDerivedRules.add('body_sections');
+                    const headingProps = [];
+                    const contentProps = [];
+                    if (tokens.title_scale) headingProps.push(`  font-size: ${tokens.title_scale};`);
+                    if (tokens.text_scale) contentProps.push(`  font-size: ${tokens.text_scale};`);
+                    if (headingProps.length > 0) {
+                        rules.push(`.c-body-section__heading {\n${headingProps.join('\n')}\n}`);
+                    }
+                    if (contentProps.length > 0) {
+                        rules.push(`.c-body-section__content {\n${contentProps.join('\n')}\n}`);
+                    }
+                }
+
+                if ((instance.component_id === 'document_list' || instance.component_id === 'search_results') && !seenDerivedRules.has('result_item')) {
+                    seenDerivedRules.add('result_item');
+                    const cardProps = [];
+                    const titleProps = [];
+                    const summaryProps = [];
+
+                    if (tokens.surface && tokens.surface !== 'transparent') cardProps.push(`  background-color: ${tokens.surface};`);
+                    if (tokens.padding && tokens.padding !== '0') cardProps.push(`  padding: ${tokens.padding};`);
+                    if (tokens.radius && tokens.radius !== '0') cardProps.push(`  border-radius: ${tokens.radius};`);
+                    if (tokens.border && tokens.border !== 'transparent') cardProps.push(`  border: 1px solid ${tokens.border};`);
+                    if (tokens.title_scale) titleProps.push(`  font-size: ${tokens.title_scale};`);
+                    if (tokens.text_scale) summaryProps.push(`  font-size: ${tokens.text_scale};`);
+
+                    if (cardProps.length > 0) rules.push(`.c-result-item {\n${cardProps.join('\n')}\n}`);
+                    if (titleProps.length > 0) rules.push(`.c-result-item__title {\n${titleProps.join('\n')}\n}`);
+                    if (summaryProps.length > 0) rules.push(`.c-result-item__summary {\n${summaryProps.join('\n')}\n}`);
                 }
             }
         }

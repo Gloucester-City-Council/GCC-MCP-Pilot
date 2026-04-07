@@ -15,7 +15,8 @@
         "assertions": [
           "homepage compiles to render plan",
           "render plan includes page_header and service_card",
-          "bundle contains homepage output"
+          "bundle contains homepage output",
+          "bundle css contains c-result-item rules"
         ]
       }
     },
@@ -74,6 +75,49 @@
         "outcome": "pass",
         "assertions": [
           "optional opening hours block omitted cleanly"
+        ]
+      }
+    },
+    {
+      "id": "policy_page_compiles_with_body_sections",
+      "stage": "full_pipeline",
+      "input_refs": [
+        "sample-site-definition.policy-page.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "render plan contains body_sections component with rendered bindings",
+          "body section headings render as h2 in bundle html",
+          "bundle css contains body section class rules"
+        ]
+      }
+    },
+    {
+      "id": "unused_content_field_warns",
+      "stage": "full_pipeline",
+      "input_refs": [
+        "sample-site-authoring.unused-content-field.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "normalise warns about unused body_sections field"
+        ]
+      }
+    },
+    {
+      "id": "policy_page_rejects_script_in_body_section",
+      "stage": "sanitise_html_fields",
+      "input_refs": [
+        "sample-site-definition.policy-page.invalid-html.json",
+        "html-policy.sample.json"
+      ],
+      "expected": {
+        "outcome": "fail",
+        "error_code": "html_sanitisation_failed",
+        "assertions": [
+          "script tag is rejected for policy body sections"
         ]
       }
     }

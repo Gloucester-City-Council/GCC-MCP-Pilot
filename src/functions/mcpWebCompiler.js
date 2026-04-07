@@ -260,7 +260,8 @@ async function handleTool(name, args) {
                 const { validateAuthoring: va, normalise } = require('../web-compiler/normaliser/normalise');
                 const check = va(payload);
                 if (!check.valid) return { ok: false, errors: check.errors };
-                const { siteDef, warnings } = normalise(payload);
+                const mergedContracts = await loadContractsAsync();
+                const { siteDef, warnings } = normalise(payload, mergedContracts.templateRegistry);
                 return { ok: true, operation, site_definition: siteDef, warnings };
             }
 
