@@ -55,6 +55,13 @@ try {
     APPLICABILITY_FRAMEWORK = RULESET.applicability_framework;
     CONDITIONS_LIBRARY      = RULESET.conditions_library || [];
     INFORMATIVES_LIBRARY    = RULESET.informatives_library || [];
+
+    if (!VALIDATION_MODULES || typeof VALIDATION_MODULES !== 'object' || Array.isArray(VALIDATION_MODULES)) {
+        throw new Error('validation_modules must be an object');
+    }
+    if (!Array.isArray(ASSESSMENT_TESTS)) {
+        throw new Error('assessment_tests must be an array');
+    }
 } catch (err) {
     throw new Error(
         `GCC Planning: ruleset structure invalid in ${RULESET_FILE} — ${err.message}`
