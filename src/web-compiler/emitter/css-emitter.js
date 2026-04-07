@@ -43,7 +43,7 @@ function emitLayoutUtilities() {
 .layout-single-column { max-width: var(--sb-layout-container-max-width, 1120px); margin: 0 auto; padding: 0 var(--sb-layout-gutter, 24px); }
 .layout-two-column { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sb-layout-gutter, 24px); }
 .layout-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sb-layout-gutter, 24px); }
-.layout-stack { display: flex; flex-direction: column; gap: var(--sb-spacing-scale-2, 8px); }
+.layout-stack { display: flex; flex-direction: column; gap: var(--sb-spacing-sm); }
 
 @media (max-width: 768px) {
   .layout-two-column, .layout-grid-3 { grid-template-columns: 1fr; }

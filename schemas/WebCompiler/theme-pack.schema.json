@@ -91,7 +91,9 @@
             "unit",
             "scale"
           ],
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "properties": {
             "unit": {
               "type": "string"
