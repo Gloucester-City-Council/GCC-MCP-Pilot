@@ -46,7 +46,7 @@ function instanceId(pageId, regionId, componentId) {
  * @param {object} transformRegistry
  * @returns {Array} slot array for render plan
  */
-function resolveSlots(recipe, template, page, transformRegistry) {
+function resolveSlots(recipe, template, page, siteGlobals, transformRegistry) {
     const slots = [];
 
     for (const slotDef of recipe.dom_recipe.slots || []) {
@@ -57,13 +57,22 @@ function resolveSlots(recipe, template, page, transformRegistry) {
 
         let rawValue;
         if (mapping) {
-            rawValue = get(page.content, mapping.source_field);
+            rawValue = resolveSourceValue(mapping.source_field, page, siteGlobals);
             if (mapping.transform_id) {
                 rawValue = applyTransform(mapping.transform_id, rawValue, transformRegistry);
             }
         } else {
             // Fallback: look in content directly by slot source
-            rawValue = slotDef.source ? get(page.content, slotDef.source) : undefined;
+            rawValue = slotDef.source ? resolveSourceValue(slotDef.source, page, siteGlobals) : undefined;
+        }
+
+        // Global layout components (navigation/footer/alert) source their data
+        // from site globals when no explicit template mapping is provided.
+        if (rawValue === undefined) {
+            const globalKey = getGlobalKeyForComponent(recipe.id);
+            if (globalKey && slotDef.source) {
+                rawValue = get(siteGlobals && siteGlobals[globalKey], slotDef.source);
+            }
         }
 
         const isRendered = rawValue !== null && rawValue !== undefined &&
@@ -85,6 +94,28 @@ function resolveSlots(recipe, template, page, transformRegistry) {
     }
 
     return slots;
+}
+
+function getGlobalKeyForComponent(componentId) {
+    if (componentId === 'navigation') return 'navigation';
+    if (componentId === 'footer') return 'footer';
+    if (componentId === 'alert_banner') return 'alert_banner';
+    return null;
+}
+
+function resolveSourceValue(sourceField, page, siteGlobals) {
+    if (!sourceField) return undefined;
+    if (sourceField.startsWith('globals.')) return get({ globals: siteGlobals }, sourceField);
+    if (sourceField.startsWith('page.')) return get({ page }, sourceField);
+    if (sourceField.startsWith('content.')) return get(page.content, sourceField.replace(/^content\./, ''));
+
+    const fromContent = get(page.content, sourceField);
+    if (fromContent !== undefined) return fromContent;
+
+    const fromGlobals = get(siteGlobals, sourceField);
+    if (fromGlobals !== undefined) return fromGlobals;
+
+    return get(page, sourceField);
 }
 
 /**
@@ -163,7 +194,7 @@ function compileRenderPlan(siteDef, contracts, themeResolution) {
                 const resolvedStyleTokens = resolveStyleHooks(recipe.style_hooks, tokens);
 
                 // Resolve slots
-                const slots = resolveSlots(recipe, template, page, transformRegistry);
+                const slots = resolveSlots(recipe, template, page, siteDef.globals, transformRegistry);
 
                 // Collect behaviour hooks
                 const hooks = collectBehaviourHooks(recipe.id, iId, recipe);
