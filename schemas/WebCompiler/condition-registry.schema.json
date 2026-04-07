@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/condition-registry.schema.json",
+  "title": "Condition Registry Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "conditions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "condition_registry_v1"
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "operator",
+          "path"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9._-]+$"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "exists",
+              "not_exists",
+              "equals",
+              "not_equals",
+              "boolean_true",
+              "boolean_false"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(site|globals|page|content|page_options)(\\.[a-zA-Z0-9_-]+)+$"
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

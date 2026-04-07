@@ -1,0 +1,34 @@
+{
+  "bundle_version": "site_builder_schema_v5_clean",
+  "description": "Full clean merged bundle for GitHub staging and API build.",
+  "schema_versions": {
+    "site_authoring": "site_authoring_v1",
+    "site_definition": "site_definition_v5",
+    "template_registry": "template_registry_v5",
+    "component_recipe": "component_recipe_registry_v5",
+    "theme_pack": "theme_pack_v5",
+    "condition_registry": "condition_registry_v1",
+    "transform_registry": "transform_registry_v1",
+    "system_integrity": "system_integrity_v2",
+    "html_policy": "html_policy_v1",
+    "naming_contract": "naming_contract_v1",
+    "normaliser_contract": "normaliser_contract_v1",
+    "renderer_execution_contract": "renderer_execution_contract_v3",
+    "render_plan": "render_plan_v1",
+    "compatibility_contract": "compatibility_contract_v1",
+    "golden_tests": "golden_tests_v1",
+    "mcp_api_contract": "mcp_api_contract_v5"
+  },
+  "key_files": [
+    "site-definition.schema.json",
+    "template-registry.schema.json",
+    "component-recipe.schema.json",
+    "theme-pack.schema.json",
+    "system-integrity.schema.json",
+    "renderer-execution-contract.schema.json",
+    "render-plan.schema.json",
+    "compatibility-contract.schema.json",
+    "golden-tests.schema.json",
+    "api_implementation_brief.md"
+  ]
+}

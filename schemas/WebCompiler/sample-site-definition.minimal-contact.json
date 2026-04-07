@@ -1,0 +1,59 @@
+{
+  "schema_version": "site_definition_v5",
+  "site": {
+    "id": "demo-civic-site",
+    "name": "Demo Civic Site",
+    "language": "en-GB",
+    "theme_id": "civic_blue",
+    "polish_profile_id": "comfortable-civic"
+  },
+  "globals": {
+    "navigation": {
+      "brand_label": "Demo Civic Site",
+      "brand_url": "/",
+      "search_action": "/search",
+      "items": [
+        {
+          "label": "Home",
+          "url": "/"
+        },
+        {
+          "label": "Contact",
+          "url": "/contact"
+        }
+      ]
+    },
+    "footer": {
+      "groups": [
+        {
+          "heading": "Pages",
+          "links": [
+            {
+              "label": "Home",
+              "url": "/"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "id": "contact",
+      "slug": "/contact",
+      "page_type": "contact_page",
+      "template_id": "template_contact_v5",
+      "content": {
+        "title": "Contact us",
+        "contact_channels": [
+          {
+            "id": "phone",
+            "label": "Phone",
+            "title": "Phone",
+            "html": "<p>Call us</p>"
+          }
+        ]
+      }
+    }
+  ]
+}

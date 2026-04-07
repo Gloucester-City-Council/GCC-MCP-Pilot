@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/compatibility-contract.schema.json",
+  "title": "Compatibility Contract Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "renderer",
+    "supported_versions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "compatibility_contract_v1"
+    },
+    "renderer": {
+      "type": "object",
+      "required": [
+        "engine_version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "engine_version": {
+          "type": "string"
+        },
+        "api_version": {
+          "type": "string"
+        }
+      }
+    },
+    "supported_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "site_definition": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "template_registry": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "component_recipe": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "theme_pack": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "condition_registry": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "transform_registry": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "normaliser_contract": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "renderer_execution_contract": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "html_policy": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "naming_contract": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "site_definition",
+        "template_registry",
+        "component_recipe",
+        "theme_pack",
+        "condition_registry",
+        "transform_registry",
+        "normaliser_contract",
+        "renderer_execution_contract",
+        "html_policy",
+        "naming_contract"
+      ]
+    }
+  }
+}

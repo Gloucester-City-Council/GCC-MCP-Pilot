@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/mcp-api-contract.schema.json",
+  "title": "MCP API Contract Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "tools"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "mcp_api_contract_v5"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "input_schema_ref",
+          "output_schema"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "list_templates",
+              "list_themes",
+              "validate_authoring_input",
+              "normalise_to_site_definition",
+              "validate_site_definition",
+              "run_integrity_checks",
+              "build_render_plan",
+              "preview_page",
+              "build_site"
+            ]
+          },
+          "input_schema_ref": {
+            "type": "string"
+          },
+          "output_schema": {
+            "type": "object",
+            "required": [
+              "type",
+              "required_fields",
+              "error_codes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "required_fields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "error_codes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

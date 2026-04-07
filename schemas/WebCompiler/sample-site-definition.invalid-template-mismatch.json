@@ -1,0 +1,157 @@
+{
+  "schema_version": "site_definition_v5",
+  "site": {
+    "id": "demo-civic-site",
+    "name": "Demo Civic Site",
+    "language": "en-GB",
+    "theme_id": "civic_blue",
+    "polish_profile_id": "comfortable-civic"
+  },
+  "globals": {
+    "navigation": {
+      "brand_label": "Demo Civic Site",
+      "brand_url": "/",
+      "search_action": "/search",
+      "items": [
+        {
+          "label": "Home",
+          "url": "/"
+        },
+        {
+          "label": "Services",
+          "url": "/services"
+        },
+        {
+          "label": "News",
+          "url": "/news"
+        },
+        {
+          "label": "Contact",
+          "url": "/contact"
+        }
+      ]
+    },
+    "footer": {
+      "groups": [
+        {
+          "heading": "Pages",
+          "links": [
+            {
+              "label": "Home",
+              "url": "/"
+            },
+            {
+              "label": "Contact",
+              "url": "/contact"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "id": "home",
+      "slug": "/",
+      "page_type": "homepage",
+      "template_id": "template_contact_v5",
+      "content": {
+        "title": "Welcome",
+        "summary": "A schema-driven civic homepage.",
+        "hero_items": [
+          {
+            "title": "Pay online",
+            "summary": "Quick route to a common task.",
+            "cta": {
+              "label": "Start",
+              "url": "/pay"
+            }
+          }
+        ],
+        "service_cards": [
+          {
+            "title": "Bins and recycling",
+            "summary": "Household collections and recycling.",
+            "url": "/services/bins"
+          }
+        ],
+        "body_sections": [
+          {
+            "heading": "About",
+            "html": "<p>Deterministic output from typed schema.</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "slug": "/contact",
+      "page_type": "contact_page",
+      "template_id": "template_contact_v5",
+      "content": {
+        "title": "Contact us",
+        "summary": "Get in touch using the routes below.",
+        "opening_hours": "Monday to Friday, 9am to 5pm.",
+        "contact_channels": [
+          {
+            "id": "form",
+            "label": "Online form",
+            "title": "Online form",
+            "html": "<p>Use the online form for fast help.</p>"
+          },
+          {
+            "id": "phone",
+            "label": "Phone",
+            "title": "Phone",
+            "html": "<p>Call 01452 000 000.</p>"
+          }
+        ]
+      }
+    },
+    {
+      "id": "documents",
+      "slug": "/documents",
+      "page_type": "document_list_page",
+      "template_id": "template_document_list_v5",
+      "content": {
+        "title": "Public documents",
+        "documents": [
+          {
+            "title": "Register entry 001",
+            "url": "/docs/1",
+            "summary": "Example document item."
+          },
+          {
+            "title": "Register entry 002",
+            "url": "/docs/2",
+            "summary": "Second document item."
+          }
+        ]
+      }
+    },
+    {
+      "id": "search",
+      "slug": "/search",
+      "page_type": "search_results_page",
+      "template_id": "template_search_v5",
+      "content": {
+        "title": "Search results",
+        "query": "bins",
+        "results": [
+          {
+            "title": "Bins and recycling",
+            "url": "/services/bins",
+            "summary": "Service page",
+            "type": "service"
+          },
+          {
+            "title": "Garden waste",
+            "url": "/services/garden-waste",
+            "summary": "Apply page",
+            "type": "service"
+          }
+        ]
+      }
+    }
+  ]
+}

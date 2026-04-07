@@ -1,0 +1,21 @@
+{
+  "schema_version": "template_registry_v5",
+  "templates": [
+    {
+      "id": "template_broken",
+      "page_type": "homepage",
+      "regions": [],
+      "required_components": [],
+      "forbidden_components": [],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title",
+          "transform_id": "missing_transform"
+        }
+      ]
+    }
+  ]
+}

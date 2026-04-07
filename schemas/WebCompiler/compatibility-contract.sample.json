@@ -1,0 +1,39 @@
+{
+  "schema_version": "compatibility_contract_v1",
+  "renderer": {
+    "engine_version": "0.1.0",
+    "api_version": "0.1.0"
+  },
+  "supported_versions": {
+    "site_definition": [
+      "site_definition_v5"
+    ],
+    "template_registry": [
+      "template_registry_v5"
+    ],
+    "component_recipe": [
+      "component_recipe_registry_v5"
+    ],
+    "theme_pack": [
+      "theme_pack_v5"
+    ],
+    "condition_registry": [
+      "condition_registry_v1"
+    ],
+    "transform_registry": [
+      "transform_registry_v1"
+    ],
+    "normaliser_contract": [
+      "normaliser_contract_v1"
+    ],
+    "renderer_execution_contract": [
+      "renderer_execution_contract_v3"
+    ],
+    "html_policy": [
+      "html_policy_v1"
+    ],
+    "naming_contract": [
+      "naming_contract_v1"
+    ]
+  }
+}

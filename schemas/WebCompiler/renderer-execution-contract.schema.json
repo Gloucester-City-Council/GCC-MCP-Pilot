@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/renderer-execution-contract.schema.json",
+  "title": "Renderer Execution Contract Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pipeline",
+    "resolution_order",
+    "merge_rules",
+    "output_contract",
+    "error_model"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "renderer_execution_contract_v3"
+    },
+    "pipeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "step",
+          "input",
+          "output"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "step": {
+            "type": "string"
+          },
+          "input": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "output": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocking": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "resolution_order": {
+      "type": "object",
+      "required": [
+        "template",
+        "component",
+        "theme",
+        "polish_profile"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "template": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "component": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "theme": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "polish_profile": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "merge_rules": {
+      "type": "object",
+      "required": [
+        "variant_merge_strategy",
+        "token_override_precedence",
+        "null_handling"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "variant_merge_strategy": {
+          "type": "string",
+          "enum": [
+            "deep_merge_last_wins"
+          ]
+        },
+        "token_override_precedence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "null_handling": {
+          "type": "string",
+          "enum": [
+            "null_never_deletes_required_values",
+            "null_drops_optional_values"
+          ]
+        }
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "formats",
+        "render_plan_shape",
+        "html_shape",
+        "css_shape",
+        "js_shape"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "html_bundle",
+              "react",
+              "vue",
+              "svelte",
+              "json_ui"
+            ]
+          }
+        },
+        "render_plan_shape": {
+          "type": "object",
+          "required": [
+            "page_nodes",
+            "component_nodes",
+            "resolved_tokens",
+            "behaviour_manifest"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "page_nodes": {
+              "type": "boolean"
+            },
+            "component_nodes": {
+              "type": "boolean"
+            },
+            "resolved_tokens": {
+              "type": "boolean"
+            },
+            "behaviour_manifest": {
+              "type": "boolean"
+            }
+          }
+        },
+        "html_shape": {
+          "type": "object",
+          "required": [
+            "semantic_elements",
+            "data_attributes"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "semantic_elements": {
+              "type": "boolean"
+            },
+            "data_attributes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "css_shape": {
+          "type": "object",
+          "required": [
+            "uses_css_variables",
+            "recipe_classes",
+            "variable_prefix"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "uses_css_variables": {
+              "type": "boolean"
+            },
+            "recipe_classes": {
+              "type": "boolean"
+            },
+            "variable_prefix": {
+              "type": "string"
+            }
+          }
+        },
+        "js_shape": {
+          "type": "object",
+          "required": [
+            "behaviour_hooks_only",
+            "no_layout_logic_in_js",
+            "hook_prefix"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "behaviour_hooks_only": {
+              "type": "boolean"
+            },
+            "no_layout_logic_in_js": {
+              "type": "boolean"
+            },
+            "hook_prefix": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "error_model": {
+      "type": "object",
+      "required": [
+        "error_codes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "error_codes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "code",
+              "stage",
+              "blocking"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "stage": {
+                "type": "string"
+              },
+              "blocking": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

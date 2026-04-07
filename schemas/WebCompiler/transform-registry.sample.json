@@ -1,0 +1,18 @@
+{
+  "schema_version": "transform_registry_v1",
+  "transforms": [
+    {
+      "id": "identity",
+      "kind": "identity",
+      "config": {}
+    },
+    {
+      "id": "wrap_opening_hours_as_body_section",
+      "kind": "wrap_scalar_as_body_section",
+      "config": {
+        "heading": "Opening hours",
+        "target_html_wrapper": "<p>{{value}}</p>"
+      }
+    }
+  ]
+}

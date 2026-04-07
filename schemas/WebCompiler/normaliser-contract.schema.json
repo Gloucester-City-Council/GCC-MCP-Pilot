@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/normaliser-contract.schema.json",
+  "title": "Normaliser Contract Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "allowed_repairs",
+    "defaulting_rules",
+    "failure_modes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "normaliser_contract_v1"
+    },
+    "allowed_repairs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "defaulting_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "field",
+          "strategy"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "set_default",
+              "omit_if_optional",
+              "error_if_required"
+            ]
+          },
+          "value": {}
+        }
+      }
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "description",
+          "blocking"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "blocking": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/transform-registry.schema.json",
+  "title": "Transform Registry Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "transforms"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "transform_registry_v1"
+    },
+    "transforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9._-]+$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "identity",
+              "wrap_scalar_as_body_section"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}

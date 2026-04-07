@@ -1,0 +1,98 @@
+{
+  "schema_version": "system_integrity_v2",
+  "integrity_checks": [
+    {
+      "id": "template.render_condition_id.exists",
+      "severity": "error",
+      "description": "Every render_condition_id in templates exists in condition-registry",
+      "left_ref": "template-registry.templates[].regions[].components[].render_condition_id",
+      "right_ref": "condition-registry.conditions[].id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "mapping.transform_id.exists",
+      "severity": "error",
+      "description": "Every transform_id in content_mappings exists in transform-registry",
+      "left_ref": "template-registry.templates[].content_mappings[].transform_id",
+      "right_ref": "transform-registry.transforms[].id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "site.theme_id.exists",
+      "severity": "error",
+      "description": "Every theme_id in site-definition exists in a theme-pack",
+      "left_ref": "site-definition.site.theme_id",
+      "right_ref": "theme-pack.manifest.theme_id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "site.polish_profile_id.supported",
+      "severity": "error",
+      "description": "Every polish_profile_id is supported by referenced theme",
+      "left_ref": "site-definition.site.polish_profile_id",
+      "right_ref": "theme-pack.manifest.supported_polish_profiles",
+      "operator": "must_be_supported_by"
+    },
+    {
+      "id": "page.template_id.exists",
+      "severity": "error",
+      "description": "Every template_id exists in template registry",
+      "left_ref": "site-definition.pages[].template_id",
+      "right_ref": "template-registry.templates[].id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "page.template_id.matches_page_type",
+      "severity": "error",
+      "description": "Every page template matches page.page_type",
+      "left_ref": "site-definition.pages[].template_id + site-definition.pages[].page_type",
+      "right_ref": "template-registry.templates[].id + template-registry.templates[].page_type",
+      "operator": "must_match_template_page_type"
+    },
+    {
+      "id": "mapping.target_component.exists",
+      "severity": "error",
+      "description": "Every mapping target_component exists in component recipes",
+      "left_ref": "template-registry.templates[].content_mappings[].target_component",
+      "right_ref": "component-recipe.components[].id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "component.default_variant.exists",
+      "severity": "error",
+      "description": "Every component default_variant exists in component variants",
+      "left_ref": "component-recipe.components[].default_variant",
+      "right_ref": "component-recipe.components[].variants[].id",
+      "operator": "must_exist_in"
+    },
+    {
+      "id": "style_tokens.resolve",
+      "severity": "error",
+      "description": "Every token path in style_hooks resolves in theme pack",
+      "left_ref": "component-recipe.components[].style_hooks.*",
+      "right_ref": "theme-pack.tokens",
+      "operator": "must_resolve_token_path"
+    },
+    {
+      "id": "page.id.unique",
+      "severity": "error",
+      "description": "Page ids unique",
+      "left_ref": "site-definition.pages[].id",
+      "operator": "must_be_unique_in"
+    },
+    {
+      "id": "page.slug.unique",
+      "severity": "error",
+      "description": "Page slugs unique",
+      "left_ref": "site-definition.pages[].slug",
+      "operator": "must_be_unique_in"
+    },
+    {
+      "id": "template.region.order.unique",
+      "severity": "error",
+      "description": "Region orders unique within template",
+      "left_ref": "template-registry.templates[].regions[].order",
+      "operator": "must_be_unique_in"
+    }
+  ]
+}

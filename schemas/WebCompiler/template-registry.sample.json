@@ -1,0 +1,396 @@
+{
+  "schema_version": "template_registry_v5",
+  "templates": [
+    {
+      "id": "template_homepage_v5",
+      "page_type": "homepage",
+      "regions": [
+        {
+          "id": "header",
+          "order": 1,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "navigation"
+            }
+          ]
+        },
+        {
+          "id": "pre_main",
+          "order": 2,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "alert_banner",
+              "optional": true,
+              "render_condition_id": "globals.alert_banner.exists"
+            }
+          ]
+        },
+        {
+          "id": "main_intro",
+          "order": 3,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "page_header"
+            }
+          ]
+        },
+        {
+          "id": "hero",
+          "order": 4,
+          "layout": "grid_3",
+          "components": [
+            {
+              "component": "hero",
+              "variant": "slider",
+              "max_items": 6
+            }
+          ]
+        },
+        {
+          "id": "service_grid",
+          "order": 5,
+          "layout": "grid_3",
+          "components": [
+            {
+              "component": "service_card",
+              "repeat": true,
+              "collection_id": "service_cards"
+            }
+          ]
+        },
+        {
+          "id": "body",
+          "order": 6,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "content_body",
+              "optional": true,
+              "render_condition_id": "content.body_sections.exists"
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "order": 7,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "footer"
+            }
+          ]
+        }
+      ],
+      "required_components": [
+        "navigation",
+        "page_header",
+        "hero",
+        "service_card",
+        "footer"
+      ],
+      "forbidden_components": [
+        "breadcrumb",
+        "document_list",
+        "search_results"
+      ],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title"
+        },
+        {
+          "source_field": "summary",
+          "target_component": "page_header",
+          "target_slot": "summary",
+          "required": false
+        },
+        {
+          "source_field": "eyebrow",
+          "target_component": "page_header",
+          "target_slot": "eyebrow",
+          "required": false
+        },
+        {
+          "source_field": "hero_items",
+          "target_component": "hero",
+          "target_slot": "items",
+          "transform_id": "identity"
+        },
+        {
+          "source_field": "service_cards",
+          "target_component": "service_card",
+          "target_slot": "collection",
+          "transform_id": "identity"
+        },
+        {
+          "source_field": "body_sections",
+          "target_component": "content_body",
+          "target_slot": "sections",
+          "transform_id": "identity",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "template_contact_v5",
+      "page_type": "contact_page",
+      "regions": [
+        {
+          "id": "header",
+          "order": 1,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "navigation"
+            }
+          ]
+        },
+        {
+          "id": "breadcrumb",
+          "order": 2,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "breadcrumb",
+              "optional": true,
+              "render_condition_id": "page_options.hide_breadcrumb.false"
+            }
+          ]
+        },
+        {
+          "id": "main_intro",
+          "order": 3,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "page_header"
+            }
+          ]
+        },
+        {
+          "id": "opening_hours",
+          "order": 4,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "content_body",
+              "optional": true,
+              "render_condition_id": "content.opening_hours.exists"
+            }
+          ]
+        },
+        {
+          "id": "contact",
+          "order": 5,
+          "layout": "two_column",
+          "components": [
+            {
+              "component": "contact_block",
+              "variant": "tabs"
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "order": 6,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "footer"
+            }
+          ]
+        }
+      ],
+      "required_components": [
+        "navigation",
+        "page_header",
+        "contact_block",
+        "footer"
+      ],
+      "forbidden_components": [],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title"
+        },
+        {
+          "source_field": "summary",
+          "target_component": "page_header",
+          "target_slot": "summary",
+          "required": false
+        },
+        {
+          "source_field": "contact_channels",
+          "target_component": "contact_block",
+          "target_slot": "channels",
+          "transform_id": "identity"
+        },
+        {
+          "source_field": "opening_hours",
+          "target_component": "content_body",
+          "target_slot": "sections",
+          "transform_id": "wrap_opening_hours_as_body_section",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "template_document_list_v5",
+      "page_type": "document_list_page",
+      "regions": [
+        {
+          "id": "header",
+          "order": 1,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "navigation"
+            }
+          ]
+        },
+        {
+          "id": "breadcrumb",
+          "order": 2,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "breadcrumb"
+            }
+          ]
+        },
+        {
+          "id": "main_intro",
+          "order": 3,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "page_header"
+            }
+          ]
+        },
+        {
+          "id": "documents",
+          "order": 4,
+          "layout": "stack",
+          "components": [
+            {
+              "component": "document_list"
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "order": 5,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "footer"
+            }
+          ]
+        }
+      ],
+      "required_components": [
+        "navigation",
+        "page_header",
+        "document_list",
+        "footer"
+      ],
+      "forbidden_components": [],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title"
+        },
+        {
+          "source_field": "documents",
+          "target_component": "document_list",
+          "target_slot": "documents",
+          "transform_id": "identity"
+        }
+      ]
+    },
+    {
+      "id": "template_search_v5",
+      "page_type": "search_results_page",
+      "regions": [
+        {
+          "id": "header",
+          "order": 1,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "navigation"
+            }
+          ]
+        },
+        {
+          "id": "main_intro",
+          "order": 2,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "page_header"
+            }
+          ]
+        },
+        {
+          "id": "results",
+          "order": 3,
+          "layout": "stack",
+          "components": [
+            {
+              "component": "search_results"
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "order": 4,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "footer"
+            }
+          ]
+        }
+      ],
+      "required_components": [
+        "navigation",
+        "page_header",
+        "search_results",
+        "footer"
+      ],
+      "forbidden_components": [],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title"
+        },
+        {
+          "source_field": "results",
+          "target_component": "search_results",
+          "target_slot": "results",
+          "transform_id": "identity"
+        },
+        {
+          "source_field": "query",
+          "target_component": "search_results",
+          "target_slot": "query",
+          "transform_id": "identity",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

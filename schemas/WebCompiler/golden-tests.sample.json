@@ -1,0 +1,81 @@
+{
+  "schema_version": "golden_tests_v1",
+  "tests": [
+    {
+      "id": "valid_homepage_compile",
+      "stage": "full_pipeline",
+      "input_refs": [
+        "sample-site-definition.json",
+        "template-registry.sample.json",
+        "component-recipes.sample.json",
+        "theme-pack.sample.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "homepage compiles to render plan",
+          "render plan includes page_header and service_card",
+          "bundle contains homepage output"
+        ]
+      }
+    },
+    {
+      "id": "template_page_type_mismatch_fails",
+      "stage": "run_integrity_checks",
+      "input_refs": [
+        "sample-site-definition.invalid-template-mismatch.json",
+        "system-integrity.sample.json"
+      ],
+      "expected": {
+        "outcome": "fail",
+        "error_code": "template_page_type_mismatch",
+        "assertions": [
+          "mismatched template page_type blocks compile"
+        ]
+      }
+    },
+    {
+      "id": "missing_transform_fails",
+      "stage": "run_integrity_checks",
+      "input_refs": [
+        "template-registry.invalid-transform.json",
+        "transform-registry.sample.json"
+      ],
+      "expected": {
+        "outcome": "fail",
+        "error_code": "integrity_check_failed",
+        "assertions": [
+          "missing transform id reported"
+        ]
+      }
+    },
+    {
+      "id": "bad_html_fragment_fails",
+      "stage": "sanitise_html_fields",
+      "input_refs": [
+        "sample-site-definition.invalid-html.json",
+        "html-policy.sample.json"
+      ],
+      "expected": {
+        "outcome": "fail",
+        "error_code": "html_sanitisation_failed",
+        "assertions": [
+          "script tag is rejected"
+        ]
+      }
+    },
+    {
+      "id": "missing_optional_collection_passes",
+      "stage": "compile_render_plan",
+      "input_refs": [
+        "sample-site-definition.minimal-contact.json"
+      ],
+      "expected": {
+        "outcome": "pass",
+        "assertions": [
+          "optional opening hours block omitted cleanly"
+        ]
+      }
+    }
+  ]
+}

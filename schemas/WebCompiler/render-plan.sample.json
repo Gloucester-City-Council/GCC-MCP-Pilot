@@ -1,0 +1,97 @@
+{
+  "schema_version": "render_plan_v1",
+  "site_id": "demo-civic-site",
+  "pages": [
+    {
+      "page_id": "home",
+      "slug": "/",
+      "template_id": "template_homepage_v5",
+      "regions": [
+        {
+          "region_id": "main_intro",
+          "order": 3,
+          "layout": "single_column",
+          "components": [
+            {
+              "component_id": "page_header",
+              "instance_id": "home-page-header-1",
+              "variant": "default",
+              "dom": {
+                "root_element": "header",
+                "root_class": "c-page-header",
+                "slots": [
+                  {
+                    "slot_id": "title",
+                    "element": "h1",
+                    "class_name": "c-page-header__title",
+                    "resolved_value": "Welcome",
+                    "is_rendered": true
+                  },
+                  {
+                    "slot_id": "summary",
+                    "element": "p",
+                    "class_name": "c-page-header__summary",
+                    "resolved_value": "A schema-driven civic homepage.",
+                    "is_rendered": true
+                  }
+                ]
+              },
+              "styles": {
+                "tokens": {
+                  "title_scale": "48px",
+                  "text_scale": "18px"
+                },
+                "recipe": {
+                  "layout_recipe": "stack"
+                }
+              },
+              "data_attributes": {
+                "component": "page-header",
+                "variant": "default",
+                "region": "main_intro"
+              },
+              "accessibility": {
+                "rules_applied": [
+                  "must render exactly one h1 per page"
+                ],
+                "roles": [],
+                "attributes": []
+              },
+              "source_bindings": [
+                {
+                  "source_field": "title",
+                  "target_slot": "title"
+                },
+                {
+                  "source_field": "summary",
+                  "target_slot": "summary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resolved_tokens": {
+    "theme_id": "civic_blue",
+    "polish_profile_id": "comfortable-civic",
+    "values": {
+      "color.primary": "#0054A4",
+      "typography.scale.h1": "48px"
+    }
+  },
+  "behaviour_manifest": [],
+  "asset_manifest": {
+    "html_files": [
+      "index.html"
+    ],
+    "css_files": [
+      "site.css"
+    ],
+    "js_files": [
+      "site.js"
+    ],
+    "images": []
+  }
+}

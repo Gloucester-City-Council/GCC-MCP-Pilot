@@ -1,0 +1,37 @@
+{
+  "schema_version": "normaliser_contract_v1",
+  "allowed_repairs": [
+    "supply_default_language_if_missing",
+    "omit_optional_empty_fields",
+    "wrap_scalar_opening_hours_into_body_section",
+    "generate_page_id_from_slug_if_missing"
+  ],
+  "defaulting_rules": [
+    {
+      "field": "site.language",
+      "strategy": "set_default",
+      "value": "en-GB"
+    },
+    {
+      "field": "globals.alert_banner",
+      "strategy": "omit_if_optional"
+    }
+  ],
+  "failure_modes": [
+    {
+      "code": "missing_required_page_title",
+      "description": "Page title required after normalisation",
+      "blocking": true
+    },
+    {
+      "code": "unknown_page_type",
+      "description": "Page type not supported by template registry",
+      "blocking": true
+    },
+    {
+      "code": "missing_optional_collection",
+      "description": "Optional collection omitted",
+      "blocking": false
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "condition_registry_v1",
+  "conditions": [
+    {
+      "id": "globals.alert_banner.exists",
+      "operator": "exists",
+      "path": "globals.alert_banner"
+    },
+    {
+      "id": "content.body_sections.exists",
+      "operator": "exists",
+      "path": "content.body_sections"
+    },
+    {
+      "id": "content.opening_hours.exists",
+      "operator": "exists",
+      "path": "content.opening_hours"
+    },
+    {
+      "id": "page_options.hide_breadcrumb.false",
+      "operator": "not_equals",
+      "path": "page_options.hide_breadcrumb",
+      "value": true
+    },
+    {
+      "id": "slot.summary.exists",
+      "operator": "exists",
+      "path": "content.summary"
+    },
+    {
+      "id": "slot.eyebrow.exists",
+      "operator": "exists",
+      "path": "content.eyebrow"
+    }
+  ]
+}

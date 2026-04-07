@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/system-integrity.schema.json",
+  "title": "System Integrity Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "integrity_checks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "system_integrity_v2"
+    },
+    "integrity_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "severity",
+          "description",
+          "operator"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9._-]+$"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "left_ref": {
+            "type": "string"
+          },
+          "right_ref": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "must_exist_in",
+              "must_be_unique_in",
+              "must_be_supported_by",
+              "must_match_template_page_type",
+              "must_resolve_token_path"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

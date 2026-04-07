@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/html-policy.schema.json",
+  "title": "HTML Policy Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "policy"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "html_policy_v1"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "allowed_tags",
+        "allowed_attributes",
+        "forbidden_tags",
+        "forbidden_attributes",
+        "uri_attribute_rules"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "allowed_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_attributes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "forbidden_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forbidden_attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uri_attribute_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "attribute",
+              "allowed_schemes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "attribute": {
+                "type": "string"
+              },
+              "allowed_schemes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,919 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/site-definition.schema.json",
+  "title": "Site Definition Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "site",
+    "globals",
+    "pages"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "site_definition_v5"
+    },
+    "site": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "language",
+        "theme_id",
+        "polish_profile_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string"
+        },
+        "theme_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "polish_profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "organisation": {
+          "type": "string"
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "globals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "navigation": {
+          "$ref": "#/$defs/navigation"
+        },
+        "footer": {
+          "$ref": "#/$defs/footer"
+        },
+        "alert_banner": {
+          "$ref": "#/$defs/alertBanner"
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/page"
+      }
+    }
+  },
+  "$defs": {
+    "linkItem": {
+      "type": "object",
+      "required": [
+        "label",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "current": {
+          "type": "boolean"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/linkItem"
+          }
+        }
+      }
+    },
+    "cta": {
+      "type": "object",
+      "required": [
+        "label",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      }
+    },
+    "heroItem": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 90
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "cta": {
+          "$ref": "#/$defs/cta"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      }
+    },
+    "serviceCardItem": {
+      "type": "object",
+      "required": [
+        "title",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 70
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      }
+    },
+    "bodySection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contactChannel": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "title",
+        "html"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "label": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        }
+      }
+    },
+    "eligibilityCriterion": {
+      "type": "object",
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "passes": {
+          "type": "boolean"
+        }
+      }
+    },
+    "stepItem": {
+      "type": "object",
+      "required": [
+        "html"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        }
+      }
+    },
+    "documentItem": {
+      "type": "object",
+      "required": [
+        "title",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "file_type": {
+          "type": "string"
+        },
+        "file_size": {
+          "type": "string"
+        }
+      }
+    },
+    "searchResultItem": {
+      "type": "object",
+      "required": [
+        "title",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "brand_label": {
+          "type": "string"
+        },
+        "brand_url": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "search_action": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/linkItem"
+          }
+        }
+      }
+    },
+    "footerGroup": {
+      "type": "object",
+      "required": [
+        "heading",
+        "links"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "heading": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/linkItem"
+          }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "required": [
+        "groups"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/footerGroup"
+          }
+        },
+        "social_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/linkItem"
+          }
+        }
+      }
+    },
+    "alertBanner": {
+      "type": "object",
+      "required": [
+        "message_html"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "message_html": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "success",
+            "error"
+          ]
+        }
+      }
+    },
+    "pageOptions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hide_breadcrumb": {
+          "type": "boolean"
+        },
+        "show_feedback_widget": {
+          "type": "boolean"
+        },
+        "hero_variant": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "layout_variant": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        }
+      }
+    },
+    "pageContentBase": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "eyebrow": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "body_sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bodySection"
+          }
+        },
+        "related_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/linkItem"
+          }
+        }
+      }
+    },
+    "homepageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "hero_items",
+            "service_cards"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "hero_items": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 6,
+              "items": {
+                "$ref": "#/$defs/heroItem"
+              }
+            },
+            "service_cards": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/serviceCardItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "servicePageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "service_cards": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/serviceCardItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "newsPageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "news_items"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "news_items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/searchResultItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "contactPageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "contact_channels"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "opening_hours": {
+              "type": "string"
+            },
+            "contact_channels": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/contactChannel"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "applyPageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "steps"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "eligibility_criteria": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/eligibilityCriterion"
+              }
+            },
+            "steps": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 9,
+              "items": {
+                "$ref": "#/$defs/stepItem"
+              }
+            },
+            "primary_cta": {
+              "$ref": "#/$defs/cta"
+            }
+          }
+        }
+      ]
+    },
+    "documentListContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "documents"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "documents": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/documentItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "searchPageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "results"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "query": {
+              "type": "string"
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/searchResultItem"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "page": {
+      "type": "object",
+      "required": [
+        "id",
+        "slug",
+        "page_type",
+        "template_id",
+        "content"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "page_type": {
+          "type": "string",
+          "enum": [
+            "homepage",
+            "service_page",
+            "news_page",
+            "contact_page",
+            "eligibility_or_apply_page",
+            "document_list_page",
+            "search_results_page"
+          ]
+        },
+        "template_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "page_options": {
+          "$ref": "#/$defs/pageOptions"
+        },
+        "content": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "homepage"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/homepageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "service_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/servicePageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "news_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/newsPageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "contact_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/contactPageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "eligibility_or_apply_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/applyPageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "document_list_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/documentListContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "search_results_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/searchPageContent"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

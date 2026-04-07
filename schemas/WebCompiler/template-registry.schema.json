@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/template-registry.schema.json",
+  "title": "Template Registry Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "templates"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "template_registry_v5"
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "page_type",
+          "regions",
+          "required_components",
+          "content_mappings"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "homepage",
+              "service_page",
+              "news_page",
+              "contact_page",
+              "eligibility_or_apply_page",
+              "document_list_page",
+              "search_results_page"
+            ]
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "order",
+                "layout",
+                "components"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_-]+$"
+                },
+                "order": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "layout": {
+                  "type": "string",
+                  "enum": [
+                    "full_width",
+                    "single_column",
+                    "two_column",
+                    "two_column_optional_aside",
+                    "grid_2",
+                    "grid_3",
+                    "stack"
+                  ]
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "component"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "component": {
+                        "type": "string",
+                        "enum": [
+                          "navigation",
+                          "hero",
+                          "service_card",
+                          "page_header",
+                          "breadcrumb",
+                          "content_body",
+                          "contact_block",
+                          "eligibility_panel",
+                          "step_list",
+                          "alert_banner",
+                          "document_list",
+                          "search_results",
+                          "footer"
+                        ]
+                      },
+                      "required": {
+                        "type": "boolean"
+                      },
+                      "optional": {
+                        "type": "boolean"
+                      },
+                      "repeat": {
+                        "type": "boolean"
+                      },
+                      "variant": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9_-]+$"
+                      },
+                      "collection_id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9._-]+$"
+                      },
+                      "max_items": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "render_condition_id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9._-]+$"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required_components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "forbidden_components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowed_layout_overrides": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "content_mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "source_field",
+                "target_component",
+                "target_slot"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "source_field": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_.-]+$"
+                },
+                "target_component": {
+                  "type": "string"
+                },
+                "target_slot": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_.-]+$"
+                },
+                "transform_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9._-]+$"
+                },
+                "required": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

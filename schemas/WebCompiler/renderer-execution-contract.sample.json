@@ -1,0 +1,253 @@
+{
+  "schema_version": "renderer_execution_contract_v3",
+  "pipeline": [
+    {
+      "step": "validate_authoring_input",
+      "input": [
+        "site-authoring.schema.json"
+      ],
+      "output": [
+        "validated_authoring_payload"
+      ]
+    },
+    {
+      "step": "normalise_input",
+      "input": [
+        "validated_authoring_payload",
+        "normaliser-contract.schema.json"
+      ],
+      "output": [
+        "site_definition_v5"
+      ]
+    },
+    {
+      "step": "validate_site_definition",
+      "input": [
+        "site_definition_v5",
+        "site-definition.schema.json"
+      ],
+      "output": [
+        "validated_site_definition"
+      ]
+    },
+    {
+      "step": "run_integrity_checks",
+      "input": [
+        "validated_site_definition",
+        "system-integrity.schema.json"
+      ],
+      "output": [
+        "integrity_report"
+      ]
+    },
+    {
+      "step": "resolve_conditions_and_transforms",
+      "input": [
+        "condition-registry.schema.json",
+        "transform-registry.schema.json"
+      ],
+      "output": [
+        "resolved_logic_registry"
+      ]
+    },
+    {
+      "step": "resolve_template",
+      "input": [
+        "validated_site_definition",
+        "template-registry.schema.json"
+      ],
+      "output": [
+        "resolved_template"
+      ]
+    },
+    {
+      "step": "resolve_component_recipes",
+      "input": [
+        "resolved_template",
+        "component-recipe.schema.json"
+      ],
+      "output": [
+        "resolved_component_plan"
+      ]
+    },
+    {
+      "step": "resolve_theme",
+      "input": [
+        "validated_site_definition.site.theme_id",
+        "theme-pack.schema.json"
+      ],
+      "output": [
+        "resolved_theme"
+      ]
+    },
+    {
+      "step": "apply_polish_profile",
+      "input": [
+        "resolved_theme",
+        "validated_site_definition.site.polish_profile_id"
+      ],
+      "output": [
+        "resolved_theme_with_polish"
+      ]
+    },
+    {
+      "step": "sanitise_html_fields",
+      "input": [
+        "validated_site_definition",
+        "html-policy.schema.json"
+      ],
+      "output": [
+        "sanitised_site_definition"
+      ]
+    },
+    {
+      "step": "compile_render_plan",
+      "input": [
+        "sanitised_site_definition",
+        "resolved_template",
+        "resolved_component_plan",
+        "resolved_theme_with_polish"
+      ],
+      "output": [
+        "render_plan"
+      ]
+    },
+    {
+      "step": "lint_accessibility_and_guardrails",
+      "input": [
+        "render_plan"
+      ],
+      "output": [
+        "validated_render_plan"
+      ]
+    },
+    {
+      "step": "emit_standard_web_output",
+      "input": [
+        "validated_render_plan",
+        "naming-contract.schema.json"
+      ],
+      "output": [
+        "html_bundle",
+        "asset_manifest",
+        "validation_report"
+      ]
+    }
+  ],
+  "resolution_order": {
+    "template": [
+      "page.template_id",
+      "template.region.order",
+      "template.content_mappings"
+    ],
+    "component": [
+      "component.default_variant",
+      "component.variant.overrides"
+    ],
+    "theme": [
+      "theme.tokens",
+      "theme.recipes.components",
+      "request.token_overrides"
+    ],
+    "polish_profile": [
+      "theme.polish_profiles",
+      "profile.overrides"
+    ]
+  },
+  "merge_rules": {
+    "variant_merge_strategy": "deep_merge_last_wins",
+    "token_override_precedence": [
+      "theme.tokens",
+      "theme.variant_overrides",
+      "request.token_overrides"
+    ],
+    "null_handling": "null_never_deletes_required_values"
+  },
+  "output_contract": {
+    "formats": [
+      "html_bundle",
+      "react",
+      "vue",
+      "svelte",
+      "json_ui"
+    ],
+    "render_plan_shape": {
+      "page_nodes": true,
+      "component_nodes": true,
+      "resolved_tokens": true,
+      "behaviour_manifest": true
+    },
+    "html_shape": {
+      "semantic_elements": true,
+      "data_attributes": [
+        "data-component",
+        "data-variant",
+        "data-region"
+      ]
+    },
+    "css_shape": {
+      "uses_css_variables": true,
+      "recipe_classes": true,
+      "variable_prefix": "--sb-"
+    },
+    "js_shape": {
+      "behaviour_hooks_only": true,
+      "no_layout_logic_in_js": true,
+      "hook_prefix": "js:"
+    }
+  },
+  "error_model": {
+    "error_codes": [
+      {
+        "code": "unknown_page_type",
+        "stage": "validate_site_definition",
+        "blocking": true
+      },
+      {
+        "code": "template_not_found",
+        "stage": "resolve_template",
+        "blocking": true
+      },
+      {
+        "code": "template_page_type_mismatch",
+        "stage": "run_integrity_checks",
+        "blocking": true
+      },
+      {
+        "code": "component_recipe_missing",
+        "stage": "resolve_component_recipes",
+        "blocking": true
+      },
+      {
+        "code": "theme_not_found",
+        "stage": "resolve_theme",
+        "blocking": true
+      },
+      {
+        "code": "polish_profile_not_supported",
+        "stage": "apply_polish_profile",
+        "blocking": true
+      },
+      {
+        "code": "token_resolution_failed",
+        "stage": "compile_render_plan",
+        "blocking": true
+      },
+      {
+        "code": "guardrail_violation",
+        "stage": "lint_accessibility_and_guardrails",
+        "blocking": true
+      },
+      {
+        "code": "html_sanitisation_failed",
+        "stage": "sanitise_html_fields",
+        "blocking": true
+      },
+      {
+        "code": "integrity_check_failed",
+        "stage": "run_integrity_checks",
+        "blocking": true
+      }
+    ]
+  }
+}

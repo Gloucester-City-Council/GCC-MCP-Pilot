@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/theme-pack.schema.json",
+  "title": "Theme Pack Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest",
+    "tokens",
+    "recipes",
+    "polish_profiles",
+    "guardrails"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "theme_pack_v5"
+    },
+    "manifest": {
+      "type": "object",
+      "required": [
+        "theme_id",
+        "name",
+        "category",
+        "supports_dark_mode",
+        "supported_polish_profiles"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "theme_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "supports_dark_mode": {
+          "type": "boolean"
+        },
+        "supported_polish_profiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          }
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "required": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow",
+        "layout"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "type": "object",
+          "required": [
+            "primary",
+            "surface",
+            "text",
+            "border",
+            "focus"
+          ],
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "typography": {
+          "type": "object",
+          "required": [
+            "font_family_body",
+            "body_size",
+            "line_height",
+            "scale"
+          ],
+          "additionalProperties": true
+        },
+        "spacing": {
+          "type": "object",
+          "required": [
+            "unit",
+            "scale"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "unit": {
+              "type": "string"
+            },
+            "scale": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "radius": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "shadow": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "layout": {
+          "type": "object",
+          "required": [
+            "container_max_width",
+            "grid_columns",
+            "gutter",
+            "breakpoints"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "container_max_width": {
+              "type": "string"
+            },
+            "grid_columns": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "gutter": {
+              "type": "string"
+            },
+            "breakpoints": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "recipes": {
+      "type": "object",
+      "required": [
+        "components"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "components": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "base"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "base": {
+                "type": "object",
+                "required": [
+                  "surface_token",
+                  "padding_token",
+                  "radius_token",
+                  "title_scale_token",
+                  "stack_gap_token",
+                  "border_token"
+                ],
+                "additionalProperties": true
+              },
+              "variants": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "polish_profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "density",
+          "visual_tone",
+          "surface_style",
+          "motion_level",
+          "corner_style"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "density": {
+            "type": "string",
+            "enum": [
+              "compact",
+              "comfortable",
+              "spacious"
+            ]
+          },
+          "visual_tone": {
+            "type": "string",
+            "enum": [
+              "civic",
+              "editorial",
+              "product",
+              "campaign"
+            ]
+          },
+          "surface_style": {
+            "type": "string",
+            "enum": [
+              "flat",
+              "soft",
+              "elevated"
+            ]
+          },
+          "motion_level": {
+            "type": "string",
+            "enum": [
+              "none",
+              "subtle",
+              "moderate"
+            ]
+          },
+          "corner_style": {
+            "type": "string",
+            "enum": [
+              "sharp",
+              "rounded"
+            ]
+          }
+        }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "required": [
+        "min_contrast_ratio_body_text",
+        "min_contrast_ratio_large_text",
+        "max_line_length_body",
+        "max_container_width",
+        "min_tap_target"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "min_contrast_ratio_body_text": {
+          "type": "number"
+        },
+        "min_contrast_ratio_large_text": {
+          "type": "number"
+        },
+        "max_line_length_body": {
+          "type": "string"
+        },
+        "max_container_width": {
+          "type": "string"
+        },
+        "min_tap_target": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

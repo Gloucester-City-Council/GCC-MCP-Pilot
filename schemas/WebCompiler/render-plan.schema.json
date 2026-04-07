@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/render-plan.schema.json",
+  "title": "Render Plan Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "site_id",
+    "pages",
+    "resolved_tokens",
+    "behaviour_manifest",
+    "asset_manifest"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "render_plan_v1"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "pages": {
+      "type": "array"
+    },
+    "resolved_tokens": {
+      "type": "object"
+    },
+    "behaviour_manifest": {
+      "type": "array"
+    },
+    "asset_manifest": {
+      "type": "object"
+    }
+  }
+}

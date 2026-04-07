@@ -1,0 +1,426 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/component-recipe.schema.json",
+  "title": "Component Recipe Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "components"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "component_recipe_registry_v5"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "data_contract_ref",
+          "default_variant",
+          "dom_recipe",
+          "slot_conditions",
+          "collection_rendering",
+          "empty_state_recipe",
+          "style_hooks",
+          "responsive_rules",
+          "accessibility",
+          "variants"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "navigation",
+              "hero",
+              "service_card",
+              "page_header",
+              "breadcrumb",
+              "content_body",
+              "contact_block",
+              "eligibility_panel",
+              "step_list",
+              "alert_banner",
+              "document_list",
+              "search_results",
+              "footer"
+            ]
+          },
+          "data_contract_ref": {
+            "type": "string"
+          },
+          "default_variant": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "dom_recipe": {
+            "type": "object",
+            "required": [
+              "root_element",
+              "css_hooks",
+              "slots"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "root_element": {
+                "type": "string"
+              },
+              "root_role": {
+                "type": "string"
+              },
+              "root_attributes": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "css_hooks": {
+                "type": "object",
+                "required": [
+                  "block_class",
+                  "slot_class_prefix",
+                  "data_component_attr"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "block_class": {
+                    "type": "string",
+                    "pattern": "^c-[a-z0-9-]+$"
+                  },
+                  "slot_class_prefix": {
+                    "type": "string",
+                    "pattern": "^c-[a-z0-9-]+__$"
+                  },
+                  "data_component_attr": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$"
+                  }
+                }
+              },
+              "slots": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "element",
+                    "source"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9_-]+$"
+                    },
+                    "element": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_.-]+$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "repeatable": {
+                      "type": "boolean"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "fallback_text": {
+                      "type": "string"
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "slot_conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "slot_id",
+                "condition_id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "slot_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_-]+$"
+                },
+                "condition_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9._-]+$"
+                },
+                "else_action": {
+                  "type": "string",
+                  "enum": [
+                    "omit_slot",
+                    "render_fallback",
+                    "raise_error"
+                  ]
+                }
+              }
+            }
+          },
+          "collection_rendering": {
+            "type": "object",
+            "required": [
+              "source_field",
+              "wrapper_element",
+              "item_component_mode"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "source_field": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_.-]*$"
+              },
+              "wrapper_element": {
+                "type": "string"
+              },
+              "wrapper_role": {
+                "type": "string"
+              },
+              "item_component_mode": {
+                "type": "string",
+                "enum": [
+                  "self_repeat",
+                  "child_records"
+                ]
+              },
+              "min_items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "max_items": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "empty_state_recipe": {
+            "type": "object",
+            "required": [
+              "strategy"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "strategy": {
+                "type": "string",
+                "enum": [
+                  "omit_component",
+                  "render_empty_notice",
+                  "raise_error"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "element": {
+                "type": "string"
+              }
+            }
+          },
+          "interaction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "pattern_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9._-]+$"
+              },
+              "state_fields": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "state_to_attribute_mappings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "state_field",
+                    "target_attribute"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "state_field": {
+                      "type": "string"
+                    },
+                    "target_attribute": {
+                      "type": "string"
+                    },
+                    "target_slot": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "js_hooks": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^js:[a-z0-9-]+$"
+                }
+              }
+            }
+          },
+          "style_hooks": {
+            "type": "object",
+            "required": [
+              "surface",
+              "padding",
+              "radius"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "surface": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "padding": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "gap": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "radius": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "shadow": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "border": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "title_scale": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "text_scale": {
+                "type": "string",
+                "pattern": "^(token:|literal:).+$"
+              },
+              "layout_recipe": {
+                "type": "string",
+                "pattern": "^[a-z0-9_-]+$"
+              },
+              "interactive_recipe": {
+                "type": "string",
+                "pattern": "^[a-z0-9_-]+$"
+              }
+            }
+          },
+          "responsive_rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "breakpoint",
+                "changes"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "breakpoint": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_-]+$"
+                },
+                "changes": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "accessibility": {
+            "type": "object",
+            "required": [
+              "rules"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "rules": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required_roles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "required_attributes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "slot_requirements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "slot_id",
+                    "requirement"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "slot_id": {
+                      "type": "string"
+                    },
+                    "requirement": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "variants": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_-]+$"
+                },
+                "overrides": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

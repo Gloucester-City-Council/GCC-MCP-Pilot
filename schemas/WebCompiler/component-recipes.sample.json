@@ -1,0 +1,496 @@
+{
+  "schema_version": "component_recipe_registry_v5",
+  "components": [
+    {
+      "id": "page_header",
+      "data_contract_ref": "site-definition.schema.json#/$defs/pageContentBase",
+      "default_variant": "default",
+      "dom_recipe": {
+        "root_element": "header",
+        "css_hooks": {
+          "block_class": "c-page-header",
+          "slot_class_prefix": "c-page-header__",
+          "data_component_attr": "page-header"
+        },
+        "slots": [
+          {
+            "id": "eyebrow",
+            "element": "span",
+            "source": "eyebrow",
+            "required": false,
+            "priority": 1
+          },
+          {
+            "id": "title",
+            "element": "h1",
+            "source": "title",
+            "priority": 2
+          },
+          {
+            "id": "summary",
+            "element": "p",
+            "source": "summary",
+            "required": false,
+            "priority": 3
+          }
+        ]
+      },
+      "slot_conditions": [
+        {
+          "slot_id": "eyebrow",
+          "condition_id": "slot.eyebrow.exists",
+          "else_action": "omit_slot"
+        },
+        {
+          "slot_id": "summary",
+          "condition_id": "slot.summary.exists",
+          "else_action": "omit_slot"
+        }
+      ],
+      "collection_rendering": {
+        "source_field": "",
+        "wrapper_element": "div",
+        "item_component_mode": "child_records",
+        "min_items": 0,
+        "max_items": 1
+      },
+      "empty_state_recipe": {
+        "strategy": "raise_error",
+        "message": "page_header requires title",
+        "element": "div"
+      },
+      "style_hooks": {
+        "surface": "literal:transparent",
+        "padding": "literal:0",
+        "gap": "token:spacing.scale.1",
+        "radius": "token:radius.none",
+        "title_scale": "token:typography.scale.h1",
+        "text_scale": "token:typography.scale.body",
+        "layout_recipe": "stack"
+      },
+      "responsive_rules": [],
+      "accessibility": {
+        "rules": [
+          "must render exactly one h1 per page"
+        ],
+        "required_roles": [],
+        "required_attributes": [],
+        "slot_requirements": []
+      },
+      "variants": [
+        {
+          "id": "default",
+          "overrides": {}
+        }
+      ]
+    },
+    {
+      "id": "service_card",
+      "data_contract_ref": "site-definition.schema.json#/$defs/serviceCardItem",
+      "default_variant": "grid",
+      "dom_recipe": {
+        "root_element": "article",
+        "css_hooks": {
+          "block_class": "c-service-card",
+          "slot_class_prefix": "c-service-card__",
+          "data_component_attr": "service-card"
+        },
+        "slots": [
+          {
+            "id": "title",
+            "element": "h3",
+            "source": "title",
+            "priority": 1
+          },
+          {
+            "id": "summary",
+            "element": "p",
+            "source": "summary",
+            "required": false,
+            "priority": 2
+          },
+          {
+            "id": "link",
+            "element": "a",
+            "source": "url",
+            "attributes": {
+              "href": "{url}"
+            },
+            "priority": 3
+          }
+        ]
+      },
+      "slot_conditions": [
+        {
+          "slot_id": "summary",
+          "condition_id": "slot.summary.exists",
+          "else_action": "omit_slot"
+        }
+      ],
+      "collection_rendering": {
+        "source_field": "service_cards",
+        "wrapper_element": "div",
+        "wrapper_role": "list",
+        "item_component_mode": "self_repeat",
+        "min_items": 1,
+        "max_items": 24
+      },
+      "empty_state_recipe": {
+        "strategy": "omit_component",
+        "message": "No service cards available",
+        "element": "div"
+      },
+      "style_hooks": {
+        "surface": "token:color.surface",
+        "padding": "token:spacing.scale.3",
+        "gap": "token:spacing.scale.2",
+        "radius": "token:radius.lg",
+        "shadow": "token:shadow.card",
+        "border": "token:color.border",
+        "title_scale": "token:typography.scale.h3",
+        "text_scale": "token:typography.scale.body",
+        "layout_recipe": "card",
+        "interactive_recipe": "card_link"
+      },
+      "responsive_rules": [],
+      "accessibility": {
+        "rules": [
+          "title text must match accessible name of destination link"
+        ],
+        "required_roles": [],
+        "required_attributes": [],
+        "slot_requirements": [
+          {
+            "slot_id": "link",
+            "requirement": "href attribute required"
+          }
+        ]
+      },
+      "variants": [
+        {
+          "id": "grid",
+          "overrides": {}
+        },
+        {
+          "id": "compact_link",
+          "overrides": {
+            "style_hooks": {
+              "padding": "token:spacing.scale.2"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "contact_block",
+      "data_contract_ref": "site-definition.schema.json#/$defs/contactChannel",
+      "default_variant": "tabs",
+      "dom_recipe": {
+        "root_element": "section",
+        "root_role": "region",
+        "css_hooks": {
+          "block_class": "c-contact-block",
+          "slot_class_prefix": "c-contact-block__",
+          "data_component_attr": "contact-block"
+        },
+        "slots": [
+          {
+            "id": "tablist",
+            "element": "div",
+            "source": "contact_channels",
+            "attributes": {
+              "role": "tablist"
+            },
+            "priority": 1
+          },
+          {
+            "id": "tab",
+            "element": "button",
+            "source": "contact_channels",
+            "repeatable": true,
+            "attributes": {
+              "role": "tab"
+            },
+            "priority": 2
+          },
+          {
+            "id": "tabpanel",
+            "element": "section",
+            "source": "contact_channels",
+            "repeatable": true,
+            "attributes": {
+              "role": "tabpanel"
+            },
+            "priority": 3
+          }
+        ]
+      },
+      "slot_conditions": [],
+      "collection_rendering": {
+        "source_field": "contact_channels",
+        "wrapper_element": "div",
+        "item_component_mode": "self_repeat",
+        "min_items": 1,
+        "max_items": 20
+      },
+      "empty_state_recipe": {
+        "strategy": "raise_error",
+        "message": "contact_block requires at least one channel",
+        "element": "div"
+      },
+      "interaction": {
+        "pattern_id": "tabs",
+        "state_fields": [
+          "selected_index"
+        ],
+        "state_to_attribute_mappings": [
+          {
+            "state_field": "selected_index",
+            "target_attribute": "aria-selected",
+            "target_slot": "tab"
+          }
+        ],
+        "js_hooks": [
+          "js:tabs"
+        ]
+      },
+      "style_hooks": {
+        "surface": "token:color.surface",
+        "padding": "token:spacing.scale.3",
+        "gap": "token:spacing.scale.3",
+        "radius": "token:radius.lg",
+        "shadow": "token:shadow.card",
+        "border": "token:color.border",
+        "title_scale": "token:typography.scale.h2",
+        "text_scale": "token:typography.scale.body",
+        "layout_recipe": "tabs_split",
+        "interactive_recipe": "tabs"
+      },
+      "responsive_rules": [
+        {
+          "breakpoint": "sm",
+          "changes": {
+            "layout_recipe": "stack"
+          }
+        },
+        {
+          "breakpoint": "lg",
+          "changes": {
+            "layout_recipe": "tabs_split"
+          }
+        }
+      ],
+      "accessibility": {
+        "rules": [
+          "tablist, tab and tabpanel roles must be present",
+          "selected tab must match visible panel"
+        ],
+        "required_roles": [
+          "tablist",
+          "tab",
+          "tabpanel"
+        ],
+        "required_attributes": [
+          "aria-selected",
+          "aria-controls"
+        ],
+        "slot_requirements": [
+          {
+            "slot_id": "tab",
+            "requirement": "button element must be keyboard focusable"
+          }
+        ]
+      },
+      "variants": [
+        {
+          "id": "tabs",
+          "overrides": {}
+        }
+      ]
+    },
+    {
+      "id": "document_list",
+      "data_contract_ref": "site-definition.schema.json#/$defs/documentItem",
+      "default_variant": "stack",
+      "dom_recipe": {
+        "root_element": "section",
+        "css_hooks": {
+          "block_class": "c-document-list",
+          "slot_class_prefix": "c-document-list__",
+          "data_component_attr": "document-list"
+        },
+        "slots": [
+          {
+            "id": "item",
+            "element": "article",
+            "source": "documents",
+            "repeatable": true,
+            "priority": 1
+          },
+          {
+            "id": "title",
+            "element": "h2",
+            "source": "title",
+            "priority": 2
+          },
+          {
+            "id": "link",
+            "element": "a",
+            "source": "url",
+            "attributes": {
+              "href": "{url}"
+            },
+            "priority": 3
+          },
+          {
+            "id": "summary",
+            "element": "p",
+            "source": "summary",
+            "required": false,
+            "priority": 4
+          }
+        ]
+      },
+      "slot_conditions": [
+        {
+          "slot_id": "summary",
+          "condition_id": "slot.summary.exists",
+          "else_action": "omit_slot"
+        }
+      ],
+      "collection_rendering": {
+        "source_field": "documents",
+        "wrapper_element": "div",
+        "item_component_mode": "self_repeat",
+        "min_items": 1,
+        "max_items": 500
+      },
+      "empty_state_recipe": {
+        "strategy": "render_empty_notice",
+        "message": "No documents available",
+        "element": "p"
+      },
+      "style_hooks": {
+        "surface": "token:color.surface",
+        "padding": "token:spacing.scale.3",
+        "gap": "token:spacing.scale.2",
+        "radius": "token:radius.lg",
+        "shadow": "token:shadow.card",
+        "border": "token:color.border",
+        "title_scale": "token:typography.scale.h3",
+        "text_scale": "token:typography.scale.body",
+        "layout_recipe": "stack"
+      },
+      "responsive_rules": [],
+      "accessibility": {
+        "rules": [
+          "each document link must have a clear title"
+        ],
+        "required_roles": [],
+        "required_attributes": [],
+        "slot_requirements": []
+      },
+      "variants": [
+        {
+          "id": "stack",
+          "overrides": {}
+        }
+      ]
+    },
+    {
+      "id": "search_results",
+      "data_contract_ref": "site-definition.schema.json#/$defs/searchResultItem",
+      "default_variant": "stack",
+      "dom_recipe": {
+        "root_element": "section",
+        "css_hooks": {
+          "block_class": "c-search-results",
+          "slot_class_prefix": "c-search-results__",
+          "data_component_attr": "search-results"
+        },
+        "slots": [
+          {
+            "id": "query_form",
+            "element": "form",
+            "source": "query",
+            "required": false,
+            "priority": 1
+          },
+          {
+            "id": "result",
+            "element": "article",
+            "source": "results",
+            "repeatable": true,
+            "priority": 2
+          },
+          {
+            "id": "title",
+            "element": "h2",
+            "source": "title",
+            "priority": 3
+          },
+          {
+            "id": "link",
+            "element": "a",
+            "source": "url",
+            "attributes": {
+              "href": "{url}"
+            },
+            "priority": 4
+          },
+          {
+            "id": "summary",
+            "element": "p",
+            "source": "summary",
+            "required": false,
+            "priority": 5
+          }
+        ]
+      },
+      "slot_conditions": [
+        {
+          "slot_id": "summary",
+          "condition_id": "slot.summary.exists",
+          "else_action": "omit_slot"
+        }
+      ],
+      "collection_rendering": {
+        "source_field": "results",
+        "wrapper_element": "div",
+        "item_component_mode": "self_repeat",
+        "min_items": 0,
+        "max_items": 1000
+      },
+      "empty_state_recipe": {
+        "strategy": "render_empty_notice",
+        "message": "No results found",
+        "element": "p"
+      },
+      "style_hooks": {
+        "surface": "literal:transparent",
+        "padding": "literal:0",
+        "gap": "token:spacing.scale.3",
+        "radius": "token:radius.none",
+        "title_scale": "token:typography.scale.h3",
+        "text_scale": "token:typography.scale.body",
+        "layout_recipe": "stack"
+      },
+      "responsive_rules": [],
+      "accessibility": {
+        "rules": [
+          "search form must have role=search",
+          "results must be perceivable as a list of records"
+        ],
+        "required_roles": [],
+        "required_attributes": [],
+        "slot_requirements": []
+      },
+      "variants": [
+        {
+          "id": "stack",
+          "overrides": {}
+        }
+      ]
+    }
+  ]
+}

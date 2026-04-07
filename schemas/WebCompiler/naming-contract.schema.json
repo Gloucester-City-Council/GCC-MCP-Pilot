@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/naming-contract.schema.json",
+  "title": "Naming Contract Schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "css_variables",
+    "component_classes",
+    "data_attributes",
+    "js_hooks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "naming_contract_v1"
+    },
+    "css_variables": {
+      "type": "object",
+      "required": [
+        "prefix",
+        "pattern"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "prefix": {
+          "type": "string"
+        },
+        "pattern": {
+          "type": "string"
+        }
+      }
+    },
+    "component_classes": {
+      "type": "object",
+      "required": [
+        "block_pattern",
+        "slot_pattern",
+        "variant_pattern"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "block_pattern": {
+          "type": "string"
+        },
+        "slot_pattern": {
+          "type": "string"
+        },
+        "variant_pattern": {
+          "type": "string"
+        }
+      }
+    },
+    "data_attributes": {
+      "type": "object",
+      "required": [
+        "component",
+        "variant",
+        "region"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "type": "string"
+        },
+        "variant": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        }
+      }
+    },
+    "js_hooks": {
+      "type": "object",
+      "required": [
+        "prefix",
+        "pattern"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "prefix": {
+          "type": "string"
+        },
+        "pattern": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

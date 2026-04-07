@@ -1,0 +1,175 @@
+{
+  "schema_version": "theme_pack_v5",
+  "manifest": {
+    "theme_id": "civic_blue",
+    "name": "Civic Blue",
+    "category": "civic",
+    "supports_dark_mode": false,
+    "supported_polish_profiles": [
+      "comfortable-civic",
+      "compact-civic"
+    ]
+  },
+  "tokens": {
+    "color": {
+      "primary": "#0054A4",
+      "primary_dark": "#07335F",
+      "surface": "#FFFFFF",
+      "surface_alt": "#F5F7FA",
+      "text": "#111827",
+      "text_muted": "#5B6770",
+      "border": "#D0D7DE",
+      "focus": "#FFBF47",
+      "error": "#B00020",
+      "success": "#53CAD3",
+      "link": "#0054A4",
+      "link_hover": "#07335F",
+      "footer_bg": "#0D1520",
+      "footer_text": "#DFE6EE"
+    },
+    "typography": {
+      "font_family_body": "Inter, Arial, sans-serif",
+      "font_family_heading": "Inter, Arial, sans-serif",
+      "body_size": "18px",
+      "line_height": "1.5",
+      "scale": {
+        "h1": "48px",
+        "h2": "36px",
+        "h3": "28px",
+        "h4": "22px",
+        "body": "18px",
+        "small": "16px"
+      }
+    },
+    "spacing": {
+      "unit": "4px",
+      "scale": [
+        "4px",
+        "8px",
+        "12px",
+        "16px",
+        "24px",
+        "32px",
+        "48px",
+        "64px"
+      ]
+    },
+    "radius": {
+      "sm": "8px",
+      "md": "12px",
+      "lg": "14px",
+      "pill": "999px",
+      "none": "0"
+    },
+    "shadow": {
+      "card": "0 8px 30px rgba(0,0,0,0.06)",
+      "none": "none"
+    },
+    "layout": {
+      "container_max_width": "1120px",
+      "grid_columns": 12,
+      "gutter": "24px",
+      "breakpoints": {
+        "sm": "640px",
+        "md": "768px",
+        "lg": "1024px",
+        "xl": "1280px"
+      }
+    }
+  },
+  "recipes": {
+    "components": {
+      "service_card": {
+        "base": {
+          "surface_token": "color.surface",
+          "padding_token": "spacing.scale.3",
+          "radius_token": "radius.lg",
+          "title_scale_token": "typography.scale.h3",
+          "stack_gap_token": "spacing.scale.2",
+          "border_token": "color.border",
+          "shadow_token": "shadow.card",
+          "hover_style": "lift_subtle"
+        },
+        "variants": {
+          "compact_link": {
+            "padding_token": "spacing.scale.2"
+          }
+        }
+      },
+      "page_header": {
+        "base": {
+          "surface_token": "transparent",
+          "padding_token": "0",
+          "radius_token": "radius.none",
+          "title_scale_token": "typography.scale.h1",
+          "stack_gap_token": "spacing.scale.1",
+          "border_token": "transparent"
+        },
+        "variants": {}
+      },
+      "contact_block": {
+        "base": {
+          "surface_token": "color.surface",
+          "padding_token": "spacing.scale.3",
+          "radius_token": "radius.lg",
+          "title_scale_token": "typography.scale.h2",
+          "stack_gap_token": "spacing.scale.3",
+          "border_token": "color.border",
+          "shadow_token": "shadow.card",
+          "interactive_state": "tabs"
+        },
+        "variants": {
+          "tabs": {}
+        }
+      },
+      "document_list": {
+        "base": {
+          "surface_token": "color.surface",
+          "padding_token": "spacing.scale.3",
+          "radius_token": "radius.lg",
+          "title_scale_token": "typography.scale.h3",
+          "stack_gap_token": "spacing.scale.2",
+          "border_token": "color.border",
+          "shadow_token": "shadow.card"
+        },
+        "variants": {}
+      },
+      "search_results": {
+        "base": {
+          "surface_token": "transparent",
+          "padding_token": "0",
+          "radius_token": "radius.none",
+          "title_scale_token": "typography.scale.h3",
+          "stack_gap_token": "spacing.scale.3",
+          "border_token": "transparent"
+        },
+        "variants": {}
+      }
+    }
+  },
+  "polish_profiles": [
+    {
+      "id": "comfortable-civic",
+      "density": "comfortable",
+      "visual_tone": "civic",
+      "surface_style": "soft",
+      "motion_level": "subtle",
+      "corner_style": "rounded"
+    },
+    {
+      "id": "compact-civic",
+      "density": "compact",
+      "visual_tone": "civic",
+      "surface_style": "flat",
+      "motion_level": "none",
+      "corner_style": "rounded"
+    }
+  ],
+  "guardrails": {
+    "min_contrast_ratio_body_text": 4.5,
+    "min_contrast_ratio_large_text": 3.0,
+    "max_line_length_body": "75ch",
+    "max_container_width": "1280px",
+    "min_tap_target": "44px"
+  }
+}

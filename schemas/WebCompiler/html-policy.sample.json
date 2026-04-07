@@ -1,0 +1,59 @@
+{
+  "schema_version": "html_policy_v1",
+  "policy": {
+    "allowed_tags": [
+      "p",
+      "a",
+      "ul",
+      "ol",
+      "li",
+      "strong",
+      "em",
+      "span",
+      "h2",
+      "h3",
+      "h4",
+      "br"
+    ],
+    "allowed_attributes": {
+      "*": [
+        "class"
+      ],
+      "a": [
+        "href",
+        "title",
+        "target",
+        "rel"
+      ],
+      "span": [
+        "aria-hidden"
+      ]
+    },
+    "forbidden_tags": [
+      "script",
+      "style",
+      "iframe",
+      "object",
+      "embed",
+      "form"
+    ],
+    "forbidden_attributes": [
+      "onclick",
+      "onload",
+      "onerror",
+      "style"
+    ],
+    "uri_attribute_rules": [
+      {
+        "attribute": "href",
+        "allowed_schemes": [
+          "http",
+          "https",
+          "mailto",
+          "tel",
+          ""
+        ]
+      }
+    ]
+  }
+}

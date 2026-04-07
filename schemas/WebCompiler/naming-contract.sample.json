@@ -1,0 +1,21 @@
+{
+  "schema_version": "naming_contract_v1",
+  "css_variables": {
+    "prefix": "--sb-",
+    "pattern": "^--sb-[a-z0-9-]+$"
+  },
+  "component_classes": {
+    "block_pattern": "^c-[a-z0-9-]+$",
+    "slot_pattern": "^c-[a-z0-9-]+__[a-z0-9-]+$",
+    "variant_pattern": "^is-[a-z0-9-]+$"
+  },
+  "data_attributes": {
+    "component": "data-component",
+    "variant": "data-variant",
+    "region": "data-region"
+  },
+  "js_hooks": {
+    "prefix": "js:",
+    "pattern": "^js:[a-z0-9-]+$"
+  }
+}
