@@ -15,5 +15,6 @@ require('./functions/mcpNotes');
 require('./functions/mcpDocExtract');
 require('./functions/mcpGitHub');
 require('./functions/mcpDns');
+require('./functions/mcpWebCompiler');
 
-console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml, mcpNotes, mcpDocExtract, mcpGitHub, mcpDns');
+console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml, mcpNotes, mcpDocExtract, mcpGitHub, mcpDns, mcpWebCompiler');
