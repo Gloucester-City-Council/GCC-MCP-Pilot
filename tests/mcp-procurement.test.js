@@ -146,3 +146,25 @@ describe('mcpProcurement request handling', () => {
         expect(payload.data.ok).toBe(true);
     });
 });
+
+
+describe('schema-loader helper lookups', () => {
+    afterEach(() => {
+        jest.resetModules();
+        delete process.env.GCC_PROCUREMENT_SCHEMA_FILE;
+    });
+
+    it('resolves notices and risk flags case-insensitively', () => {
+        const loader = require('../src/gcc-procurement/schema-loader');
+
+        expect(loader.findNotice('uk4')).toEqual(loader.findNotice('UK4'));
+        expect(loader.findRiskFlag('r11')).toEqual(loader.findRiskFlag('R11'));
+    });
+
+    it('returns null for missing lookup values', () => {
+        const loader = require('../src/gcc-procurement/schema-loader');
+
+        expect(loader.findNotice()).toBeNull();
+        expect(loader.findRiskFlag(null)).toBeNull();
+    });
+});

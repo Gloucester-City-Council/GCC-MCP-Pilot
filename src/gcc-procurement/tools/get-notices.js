@@ -35,6 +35,8 @@ const DIRECT_ROUTES = [
     'transparency',
 ];
 
+const ROUTE_ALLOWLIST = [...new Set([...COMPETITIVE_ROUTES, ...DIRECT_ROUTES])];
+
 /**
  * Resolve a notice code string (may be in form 'UK4_tender_notice' or just 'UK4')
  * to a full notice entry, supplemented with a publication platform note.
@@ -186,6 +188,14 @@ function execute(input = {}) {
         return createError(ERROR_CODES.BAD_REQUEST, `contract_type must be one of: ${VALID_TYPES.join(', ')}`);
     }
 
+    const procurementRoute = (input.procurement_route || '').toLowerCase().trim();
+    if (!ROUTE_ALLOWLIST.includes(procurementRoute)) {
+        return createError(
+            ERROR_CODES.BAD_REQUEST,
+            `procurement_route must be one of: ${ROUTE_ALLOWLIST.join(', ')}`
+        );
+    }
+
     const responseFormat = (input.response_format || 'markdown').toLowerCase();
     const isFramework = !!input.is_framework_establishment;
 
@@ -193,14 +203,14 @@ function execute(input = {}) {
     const required_notices = deriveRequiredNotices(
         value,
         thresholdResult.above,
-        input.procurement_route,
+        procurementRoute,
         isFramework
     );
 
     const result = {
         value_gbp: value,
         contract_type: contractType,
-        procurement_route: input.procurement_route,
+        procurement_route: procurementRoute,
         is_framework_establishment: isFramework,
         is_above_threshold: thresholdResult.above,
         threshold_gbp: thresholdResult.thresholdGbp,
