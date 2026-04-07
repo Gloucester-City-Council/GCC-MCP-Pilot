@@ -22,7 +22,19 @@ const DEFAULT_PAGE_TYPE_TO_TEMPLATE = {
     eligibility_or_apply_page:'template_apply_v5',
     document_list_page:       'template_document_list_v5',
     search_results_page:      'template_search_v5',
+    policy_page:              'template_policy_page_v5',
 };
+
+const UNIVERSAL_PAGE_HEADER_FIELDS = new Set(['title', 'summary', 'eyebrow']);
+
+function buildTemplateBindingIndex(templateRegistry) {
+    const index = new Map();
+    for (const template of (templateRegistry && templateRegistry.templates) || []) {
+        const boundFields = new Set((template.content_mappings || []).map(mapping => mapping.source_field));
+        index.set(template.id, boundFields);
+    }
+    return index;
+}
 
 function slugify(str) {
     return String(str)
@@ -67,8 +79,9 @@ function validateAuthoring(payload) {
  * If the payload is already site_definition_v5 it is passed through with
  * minimal defaulting applied.
  */
-function normalise(payload) {
+function normalise(payload, templateRegistry) {
     const warnings = [];
+    const templateBindings = buildTemplateBindingIndex(templateRegistry);
 
     // Pass-through if already a runtime definition
     if (payload && payload.schema_version === 'site_definition_v5') {
@@ -127,6 +140,15 @@ function normalise(payload) {
             if (tmpl) {
                 page.template_id = tmpl;
                 warnings.push(`pages[${idx}].template_id defaulted to "${tmpl}"`);
+            }
+        }
+
+        const boundFields = templateBindings.get(page.template_id);
+        if (page.content && typeof page.content === 'object' && boundFields) {
+            for (const field of Object.keys(page.content)) {
+                if (UNIVERSAL_PAGE_HEADER_FIELDS.has(field)) continue;
+                if (boundFields.has(field)) continue;
+                warnings.push(`pages[${idx}].content.${field} supplied but template "${page.template_id}" has no binding for this field — content will not be rendered`);
             }
         }
 

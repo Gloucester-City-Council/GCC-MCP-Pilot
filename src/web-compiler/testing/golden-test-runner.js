@@ -60,7 +60,7 @@ function runStage(stage, inputs, contracts) {
         case 'run_integrity_checks': {
             // Run just integrity checks with swapped contracts
             const { normalise } = require('../normaliser/normalise');
-            const { siteDef: normalised } = normalise(siteDef || inputs[0]);
+            const { siteDef: normalised } = normalise(siteDef || inputs[0], integrityContracts.templateRegistry);
             const result = runIntegrityChecks(normalised, integrityContracts);
             const errors = result.passed ? result.errors : ['integrity_check_failed', ...result.errors];
             return {
@@ -73,13 +73,13 @@ function runStage(stage, inputs, contracts) {
 
         case 'sanitise_html_fields': {
             const { normalise } = require('../normaliser/normalise');
-            const { siteDef: normalised } = normalise(siteDef || inputs[0]);
+            const { siteDef: normalised } = normalise(siteDef || inputs[0], integrityContracts.templateRegistry);
             const htmlPolicy = integrityContracts.htmlPolicy;
             const { errors } = sanitiseSiteDefinition(normalised, htmlPolicy);
             return {
                 ok: errors.length === 0,
                 stage: 'sanitise_html_fields',
-                errors,
+                errors: errors.length > 0 ? ['html_sanitisation_failed', ...errors] : [],
                 warnings: [],
             };
         }
@@ -158,6 +158,12 @@ function evaluateAssertion(assertion, result, stage) {
         passed = !result.ok;
     } else if (text.includes('script tag') || text.includes('rejected')) {
         passed = !result.ok && (result.errors || []).some(e => e.includes('script') || e.includes('sanitisation'));
+    } else if (text.includes('body_sections component') && text.includes('rendered bindings')) {
+        passed = result.ok && hasRenderedBodySections(result.renderPlan);
+    } else if (text.includes('headings render as h2')) {
+        passed = result.ok && bundleContainsBodySectionHeading(result.bundle);
+    } else if (text.includes('warns about unused body_sections')) {
+        passed = result.ok && (result.warnings || []).some(w => w.includes('content.body_sections supplied') && w.includes('has no binding'));
     } else if (text.includes('optional') || text.includes('omitted cleanly')) {
         passed = result.ok;
     } else {
@@ -166,6 +172,29 @@ function evaluateAssertion(assertion, result, stage) {
     }
 
     return { assertion, passed };
+}
+
+function hasRenderedBodySections(renderPlan) {
+    for (const page of renderPlan && renderPlan.pages || []) {
+        for (const region of page.regions || []) {
+            for (const component of region.components || []) {
+                if (component.component_id !== 'body_sections') continue;
+                const slot = (component.dom.slots || []).find(s => s.slot_id === 'sections');
+                if (!slot || !slot.is_rendered || !Array.isArray(slot.resolved_value) || slot.resolved_value.length < 3) {
+                    return false;
+                }
+                const allSectionsValid = slot.resolved_value.every(section => section.heading && section.html);
+                if (!allSectionsValid) return false;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function bundleContainsBodySectionHeading(bundle) {
+    const html = bundle && Array.isArray(bundle.html) && bundle.html[0] && bundle.html[0].content;
+    return Boolean(html && html.includes('<h2 class="c-body-section__heading">'));
 }
 
 function checkRenderPlanHasComponents(renderPlan, componentIds) {

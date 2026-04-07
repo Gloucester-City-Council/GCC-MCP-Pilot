@@ -309,6 +309,64 @@
       ]
     },
     {
+      "id": "body_sections",
+      "data_contract_ref": "site-definition.schema.json#/$defs/bodySection",
+      "default_variant": "default",
+      "dom_recipe": {
+        "root_element": "section",
+        "css_hooks": {
+          "block_class": "c-body-section",
+          "slot_class_prefix": "c-body-section__",
+          "data_component_attr": "body-sections"
+        },
+        "slots": [
+          {
+            "id": "sections",
+            "element": "div",
+            "source": "body_sections",
+            "repeatable": true,
+            "priority": 1
+          }
+        ]
+      },
+      "slot_conditions": [],
+      "collection_rendering": {
+        "source_field": "body_sections",
+        "wrapper_element": "div",
+        "item_component_mode": "self_repeat",
+        "min_items": 1,
+        "max_items": 50
+      },
+      "empty_state_recipe": {
+        "strategy": "omit_component",
+        "message": "No body sections",
+        "element": "div"
+      },
+      "style_hooks": {
+        "surface": "literal:transparent",
+        "padding": "literal:0",
+        "gap": "token:spacing.scale.2",
+        "radius": "token:radius.none",
+        "layout_recipe": "stack"
+      },
+      "responsive_rules": [],
+      "accessibility": {
+        "rules": [
+          "each section heading must be h2 to maintain heading hierarchy under page_header h1",
+          "links inside body content must have discernible text"
+        ],
+        "required_roles": [],
+        "required_attributes": [],
+        "slot_requirements": []
+      },
+      "variants": [
+        {
+          "id": "default",
+          "overrides": {}
+        }
+      ]
+    },
+    {
       "id": "document_list",
       "data_contract_ref": "site-definition.schema.json#/$defs/documentItem",
       "default_variant": "stack",

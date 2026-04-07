@@ -759,6 +759,50 @@
         }
       ]
     },
+    "policyPageContent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pageContentBase"
+        },
+        {
+          "type": "object",
+          "required": [
+            "body_sections"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "eyebrow": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "body_sections": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/bodySection"
+              }
+            },
+            "related_links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/linkItem"
+              }
+            },
+            "documents": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/documentItem"
+              }
+            }
+          }
+        }
+      ]
+    },
     "page": {
       "type": "object",
       "required": [
@@ -786,7 +830,8 @@
             "contact_page",
             "eligibility_or_apply_page",
             "document_list_page",
-            "search_results_page"
+            "search_results_page",
+            "policy_page"
           ]
         },
         "template_id": {
@@ -909,6 +954,22 @@
             "properties": {
               "content": {
                 "$ref": "#/$defs/searchPageContent"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "page_type": {
+                "const": "policy_page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "content": {
+                "$ref": "#/$defs/policyPageContent"
               }
             }
           }

@@ -319,6 +319,115 @@
       ]
     },
     {
+      "id": "template_policy_page_v5",
+      "page_type": "policy_page",
+      "regions": [
+        {
+          "id": "header",
+          "order": 1,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "navigation"
+            }
+          ]
+        },
+        {
+          "id": "breadcrumb",
+          "order": 2,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "breadcrumb"
+            }
+          ]
+        },
+        {
+          "id": "main_intro",
+          "order": 3,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "page_header"
+            }
+          ]
+        },
+        {
+          "id": "main_body",
+          "order": 4,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "body_sections"
+            }
+          ]
+        },
+        {
+          "id": "aside",
+          "order": 5,
+          "layout": "single_column",
+          "components": [
+            {
+              "component": "document_list",
+              "optional": true,
+              "render_condition_id": "content.documents.exists"
+            }
+          ]
+        },
+        {
+          "id": "footer",
+          "order": 6,
+          "layout": "full_width",
+          "components": [
+            {
+              "component": "footer"
+            }
+          ]
+        }
+      ],
+      "required_components": [
+        "navigation",
+        "breadcrumb",
+        "page_header",
+        "body_sections",
+        "footer"
+      ],
+      "forbidden_components": [],
+      "allowed_layout_overrides": [],
+      "content_mappings": [
+        {
+          "source_field": "title",
+          "target_component": "page_header",
+          "target_slot": "title"
+        },
+        {
+          "source_field": "summary",
+          "target_component": "page_header",
+          "target_slot": "summary",
+          "required": false
+        },
+        {
+          "source_field": "eyebrow",
+          "target_component": "page_header",
+          "target_slot": "eyebrow",
+          "required": false
+        },
+        {
+          "source_field": "body_sections",
+          "target_component": "body_sections",
+          "target_slot": "sections",
+          "transform_id": "identity"
+        },
+        {
+          "source_field": "documents",
+          "target_component": "document_list",
+          "target_slot": "documents",
+          "transform_id": "identity",
+          "required": false
+        }
+      ]
+    },
+    {
       "id": "template_search_v5",
       "page_type": "search_results_page",
       "regions": [
