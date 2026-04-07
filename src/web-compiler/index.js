@@ -62,7 +62,7 @@ function run(input, overrides = {}) {
     // ── Step 2: Normalise to runtime site definition ─────────────────────────
     let siteDef, normaliseWarnings;
     try {
-        ({ siteDef, warnings: normaliseWarnings } = normalise(input));
+        ({ siteDef, warnings: normaliseWarnings } = normalise(input, contracts.templateRegistry));
         warnings.push(...normaliseWarnings);
     } catch (err) {
         return failure('normalise', [err.message], warnings, startTime);
@@ -168,7 +168,7 @@ function validateOnly(input, overrides = {}) {
 
     let siteDef, normaliseWarnings;
     try {
-        ({ siteDef, warnings: normaliseWarnings } = normalise(input));
+        ({ siteDef, warnings: normaliseWarnings } = normalise(input, contracts.templateRegistry));
         warnings.push(...normaliseWarnings);
     } catch (err) {
         return failure('normalise', [err.message], warnings, startTime);

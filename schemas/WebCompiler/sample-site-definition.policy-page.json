@@ -1,0 +1,64 @@
+{
+  "schema_version": "site_definition_v5",
+  "site": {
+    "id": "demo-civic-site",
+    "name": "Demo Civic Site",
+    "language": "en-GB",
+    "theme_id": "civic_blue",
+    "polish_profile_id": "comfortable-civic"
+  },
+  "globals": {
+    "navigation": {
+      "brand_label": "Demo Civic Site",
+      "brand_url": "/",
+      "search_action": "/search",
+      "items": [
+        { "label": "Home", "url": "/" }
+      ]
+    },
+    "footer": {
+      "groups": [
+        {
+          "heading": "Pages",
+          "links": [
+            { "label": "Home", "url": "/" }
+          ]
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "id": "single-person-discount",
+      "slug": "/council-tax/single-person-discount",
+      "page_type": "policy_page",
+      "template_id": "template_policy_page_v5",
+      "content": {
+        "eyebrow": "Council Tax",
+        "title": "Single Person Discount",
+        "summary": "If you are the only adult resident at your address, you may qualify for a 25% discount.",
+        "body_sections": [
+          {
+            "heading": "Who can apply",
+            "html": "<p>You can apply if you are the only adult resident at your address.</p>"
+          },
+          {
+            "heading": "How to apply",
+            "html": "<p>Complete the online form and upload supporting evidence.</p><ul><li>Proof of residence</li><li>Council Tax account number</li></ul>"
+          },
+          {
+            "heading": "When to notify us",
+            "html": "<p>You must tell us about changes in circumstances within 21 days.</p>"
+          }
+        ],
+        "documents": [
+          {
+            "title": "Single Person Discount form",
+            "url": "/documents/single-person-discount-form.pdf",
+            "summary": "Downloadable PDF form"
+          }
+        ]
+      }
+    }
+  ]
+}

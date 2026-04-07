@@ -39,7 +39,8 @@
               "contact_page",
               "eligibility_or_apply_page",
               "document_list_page",
-              "search_results_page"
+              "search_results_page",
+              "policy_page"
             ]
           },
           "regions": {
@@ -90,6 +91,7 @@
                           "hero",
                           "service_card",
                           "page_header",
+                          "body_sections",
                           "breadcrumb",
                           "content_body",
                           "contact_block",

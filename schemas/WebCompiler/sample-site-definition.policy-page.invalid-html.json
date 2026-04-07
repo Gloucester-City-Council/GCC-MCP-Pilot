@@ -1,0 +1,47 @@
+{
+  "schema_version": "site_definition_v5",
+  "site": {
+    "id": "demo-civic-site",
+    "name": "Demo Civic Site",
+    "language": "en-GB",
+    "theme_id": "civic_blue",
+    "polish_profile_id": "comfortable-civic"
+  },
+  "globals": {
+    "navigation": {
+      "brand_label": "Demo Civic Site",
+      "brand_url": "/",
+      "search_action": "/search",
+      "items": [
+        { "label": "Home", "url": "/" }
+      ]
+    },
+    "footer": {
+      "groups": [
+        {
+          "heading": "Pages",
+          "links": [
+            { "label": "Home", "url": "/" }
+          ]
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "id": "single-person-discount",
+      "slug": "/council-tax/single-person-discount",
+      "page_type": "policy_page",
+      "template_id": "template_policy_page_v5",
+      "content": {
+        "title": "Single Person Discount",
+        "body_sections": [
+          {
+            "heading": "Who can apply",
+            "html": "<p>Only one adult resident.</p><script>alert('xss')</script>"
+          }
+        ]
+      }
+    }
+  ]
+}
