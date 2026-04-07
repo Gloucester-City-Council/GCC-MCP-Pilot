@@ -101,6 +101,8 @@ const MATERIAL_RULES_REGISTER = [
     'A1.8.1',   // flood zone (when in FZ2/3)
 ];
 
+const MATERIAL_RULES_REGISTER_SET = new Set(MATERIAL_RULES_REGISTER);
+
 const MATERIAL_RULES_REGISTER_VERSION = RULESET.model_version;
 
 // ─── Schema versions ──────────────────────────────────────────────────────────
@@ -122,6 +124,12 @@ if (ENUMS && ENUMS.properties) {
     }
 }
 
+function normaliseLookupId(value) {
+    if (typeof value !== 'string') return null;
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+}
+
 /**
  * Validate that a value belongs to a named enum type.
  * @param {string} enumType  e.g. 'decision_mode'
@@ -139,7 +147,9 @@ function isValidEnumValue(enumType, value) {
  * @returns {{ rule, test_id, test_name } | null}
  */
 function findRule(ruleId) {
-    return RULES_BY_ID.get(ruleId) || null;
+    const normalisedRuleId = normaliseLookupId(ruleId);
+    if (!normalisedRuleId) return null;
+    return RULES_BY_ID.get(normalisedRuleId) || null;
 }
 
 /**
@@ -148,7 +158,9 @@ function findRule(ruleId) {
  * @returns {object | null}
  */
 function findValidationRequirement(reqId) {
-    return VALIDATION_REQUIREMENTS_BY_ID.get(reqId) || null;
+    const normalisedReqId = normaliseLookupId(reqId);
+    if (!normalisedReqId) return null;
+    return VALIDATION_REQUIREMENTS_BY_ID.get(normalisedReqId) || null;
 }
 
 /**
@@ -157,7 +169,9 @@ function findValidationRequirement(reqId) {
  * @returns {boolean}
  */
 function isMaterialRule(ruleId) {
-    return MATERIAL_RULES_REGISTER.includes(ruleId);
+    const normalisedRuleId = normaliseLookupId(ruleId);
+    if (!normalisedRuleId) return false;
+    return MATERIAL_RULES_REGISTER_SET.has(normalisedRuleId);
 }
 
 module.exports = {
@@ -179,6 +193,7 @@ module.exports = {
     VALIDATION_REQUIREMENTS_BY_ID,
     // Register
     MATERIAL_RULES_REGISTER,
+    MATERIAL_RULES_REGISTER_SET,
     MATERIAL_RULES_REGISTER_VERSION,
     // Version info
     SCHEMA_VERSIONS,
