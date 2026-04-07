@@ -36,6 +36,11 @@ function renderSlotContent(slot) {
         return renderArraySlot(slot.slot_id, val);
     }
 
+    if (slot.slot_id === 'brand' && val && typeof val === 'object') {
+        const label = val.label || val.name || val.text || val.url || '/';
+        return escapeHtml(String(label));
+    }
+
     if (typeof val === 'string') {
         // Sanitised HTML fragment — emit raw
         if (val.trim().startsWith('<')) return val;
@@ -49,8 +54,8 @@ function renderArraySlot(slotId, values) {
     if (slotId === 'items') {
         return values.map(item => {
             if (!item || typeof item !== 'object') return `<li>${escapeHtml(String(item))}</li>`;
-            const url = item.url || '#';
-            const label = item.label || item.title || url;
+            const url = item.url || item.href || item.link || '#';
+            const label = item.label || item.title || item.text || item.name || url;
             return `<li><a href="${escapeHtml(url)}">${escapeHtml(label)}</a></li>`;
         }).join('\n');
     }
@@ -103,6 +108,21 @@ function buildAttrs(attrs) {
         .join(' ');
 }
 
+function inferSlotAttributes(slot) {
+    if (slot.element !== 'a') return null;
+    if (slot.attributes && Object.prototype.hasOwnProperty.call(slot.attributes, 'href')) return null;
+    if (slot.slot_id !== 'brand') return null;
+
+    const value = slot.resolved_value;
+    if (typeof value === 'string') {
+        return { href: value };
+    }
+    if (value && typeof value === 'object') {
+        return { href: value.url || value.href || value.link || '/' };
+    }
+    return null;
+}
+
 /**
  * Render a component instance to HTML.
  */
@@ -120,7 +140,8 @@ function renderComponent(instance, regionId) {
         if (!slot.is_rendered) continue;
 
         const slotClass = slot.class_name;
-        const extraAttrs = slot.attributes ? ' ' + buildAttrs(slot.attributes) : '';
+        const mergedAttrs = Object.assign({}, inferSlotAttributes(slot) || {}, slot.attributes || {});
+        const extraAttrs = Object.keys(mergedAttrs).length > 0 ? ' ' + buildAttrs(mergedAttrs) : '';
         const content = renderSlotContent(slot);
 
         if (Array.isArray(slot.resolved_value)) {

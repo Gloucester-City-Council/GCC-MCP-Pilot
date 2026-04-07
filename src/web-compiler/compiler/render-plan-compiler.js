@@ -118,6 +118,31 @@ function resolveSourceValue(sourceField, page, siteGlobals) {
     return get(page, sourceField);
 }
 
+function normaliseGlobals(siteDef) {
+    const sourceGlobals = siteDef.globals || {};
+    const siteLevel = siteDef.site || {};
+
+    const rawNav = sourceGlobals.navigation || sourceGlobals.global_nav || siteLevel.global_nav || siteDef.global_nav;
+    const rawFooter = sourceGlobals.footer || sourceGlobals.global_footer || siteLevel.global_footer || siteDef.global_footer;
+    const rawAlert = sourceGlobals.alert_banner || sourceGlobals.global_alert || siteLevel.global_alert || siteDef.global_alert;
+
+    const navigation = rawNav ? Object.assign({}, rawNav) : undefined;
+    if (navigation) {
+        if (!navigation.brand_url && navigation.brand && typeof navigation.brand === 'object') {
+            navigation.brand_url = navigation.brand.url || navigation.brand.href || navigation.brand.link || '/';
+        }
+        if (!navigation.brand_label && navigation.brand && typeof navigation.brand === 'object') {
+            navigation.brand_label = navigation.brand.label || navigation.brand.name || navigation.brand.text;
+        }
+    }
+
+    return {
+        navigation,
+        footer: rawFooter,
+        alert_banner: rawAlert,
+    };
+}
+
 /**
  * Resolve slot attribute templates (e.g. href="{url}").
  */
@@ -164,13 +189,14 @@ function compileRenderPlan(siteDef, contracts, themeResolution) {
 
     const behaviourManifest = [];
     const pages = [];
+    const siteGlobals = normaliseGlobals(siteDef);
 
     // Flatten theme tokens for resolved_tokens
     const flatTokens = flattenTokens(tokens);
 
     for (const page of siteDef.pages) {
         const template = resolveTemplate(page, templateRegistry);
-        const ctx = { globals: siteDef.globals, page };
+        const ctx = { globals: siteGlobals, page };
 
         const regions = [];
 
@@ -194,7 +220,7 @@ function compileRenderPlan(siteDef, contracts, themeResolution) {
                 const resolvedStyleTokens = resolveStyleHooks(recipe.style_hooks, tokens);
 
                 // Resolve slots
-                const slots = resolveSlots(recipe, template, page, siteDef.globals, transformRegistry);
+                const slots = resolveSlots(recipe, template, page, siteGlobals, transformRegistry);
 
                 // Collect behaviour hooks
                 const hooks = collectBehaviourHooks(recipe.id, iId, recipe);

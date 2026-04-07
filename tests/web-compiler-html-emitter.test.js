@@ -25,4 +25,24 @@ describe('web-compiler html emitter', () => {
         expect(html).toContain('<footer');
         expect(html).toContain('Pages');
     });
+
+    test('renders navigation and footer when provided via site.global_nav/global_footer aliases', () => {
+        const siteDef = JSON.parse(JSON.stringify(samplePolicySite));
+        siteDef.globals = {};
+        siteDef.site.global_nav = {
+            brand: { name: 'Council', url: '/' },
+            items: [{ text: 'Council Tax', href: '/council-tax' }],
+        };
+        siteDef.site.global_footer = {
+            groups: [{ heading: 'Support', links: [{ label: 'Help', url: '/help' }] }],
+        };
+
+        const result = compiler.run(siteDef);
+        expect(result.ok).toBe(true);
+        const html = result.bundle.html[0].content;
+        expect(html).toContain('Council');
+        expect(html).toContain('/council-tax');
+        expect(html).toContain('Support');
+        expect(html).toContain('/help');
+    });
 });
