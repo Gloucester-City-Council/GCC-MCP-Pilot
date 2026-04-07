@@ -210,4 +210,40 @@ function loadContractsWith(overrides = {}) {
     return Object.assign({}, base, overrides);
 }
 
-module.exports = { loadContracts, loadContractsWith, mergeComponentStubs };
+/**
+ * Async variant — merges custom templates persisted in blob storage over the
+ * base in-memory template registry before returning contracts.
+ *
+ * Custom templates with the same id as a base template replace the base entry.
+ * All other contracts (themes, components, etc.) are unchanged.
+ *
+ * @param {object} [overrides]  Optional additional overrides (same as loadContractsWith)
+ * @returns {Promise<object>}
+ */
+async function loadContractsAsync(overrides = {}) {
+    const base = loadContracts();
+
+    let customTemplates = [];
+    try {
+        const { listCustomTemplates } = require('../storage/template-store');
+        customTemplates = await listCustomTemplates();
+    } catch {
+        // If blob storage is unavailable (e.g. local dev without env var),
+        // fall back gracefully to the base contracts only.
+    }
+
+    if (customTemplates.length === 0) {
+        return Object.assign({}, base, overrides);
+    }
+
+    // Merge: custom templates take precedence over base entries with the same id
+    const baseTemplates    = base.templateRegistry.templates || [];
+    const customIds        = new Set(customTemplates.map(t => t.id));
+    const filteredBase     = baseTemplates.filter(t => !customIds.has(t.id));
+    const mergedTemplates  = [...filteredBase, ...customTemplates];
+
+    const mergedRegistry = Object.assign({}, base.templateRegistry, { templates: mergedTemplates });
+    return Object.assign({}, base, { templateRegistry: mergedRegistry }, overrides);
+}
+
+module.exports = { loadContracts, loadContractsWith, loadContractsAsync, mergeComponentStubs };
