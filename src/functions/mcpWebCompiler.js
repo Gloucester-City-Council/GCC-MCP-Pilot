@@ -1,0 +1,419 @@
+'use strict';
+
+/**
+ * MCP Web Compiler — POST /mcp-web-compiler
+ *
+ * Azure Functions v4 MCP JSON-RPC endpoint implementing the 9 tools defined
+ * in mcp-api-contract.schema.json (mcp_api_contract_v5):
+ *
+ *   list_templates            — list available templates with page_type
+ *   list_themes               — list available themes and polish profiles
+ *   validate_authoring_input  — step 1 only
+ *   normalise_to_site_definition — steps 1-3
+ *   validate_site_definition  — steps 1-4 (integrity report)
+ *   run_integrity_checks      — steps 1-4 with full report
+ *   build_render_plan         — steps 1-12 (render plan JSON)
+ *   preview_page              — full pipeline for a single page (HTML fragment)
+ *   build_site                — full pipeline (HTML/CSS/JS bundle + asset manifest)
+ */
+
+const { app }  = require('@azure/functions');
+const compiler = require('../web-compiler/index');
+const { loadContracts }       = require('../web-compiler/contracts/load-contracts');
+const { validateAuthoring }   = require('../web-compiler/normaliser/normalise');
+const { runAllGoldenTests }   = require('../web-compiler/testing/golden-test-runner');
+
+// ── Tool definitions ─────────────────────────────────────────────────────────
+
+const TOOLS = [
+    {
+        name: 'list_templates',
+        description: 'List all available page templates with their page_type and required components.',
+        inputSchema: { type: 'object', properties: {}, required: [] },
+    },
+    {
+        name: 'list_themes',
+        description: 'List all available theme packs with their supported polish profiles and token summary.',
+        inputSchema: { type: 'object', properties: {}, required: [] },
+    },
+    {
+        name: 'validate_authoring_input',
+        description: 'Validate a site authoring payload (site_authoring_v1) without compiling. Returns structural errors.',
+        inputSchema: {
+            type: 'object',
+            required: ['authoring_payload'],
+            properties: {
+                authoring_payload: {
+                    type: 'object',
+                    description: 'The site authoring payload (schema_version: site_authoring_v1)',
+                },
+            },
+        },
+    },
+    {
+        name: 'normalise_to_site_definition',
+        description: 'Normalise a site_authoring_v1 payload into a validated site_definition_v5 runtime object.',
+        inputSchema: {
+            type: 'object',
+            required: ['authoring_payload'],
+            properties: {
+                authoring_payload: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'validate_site_definition',
+        description: 'Validate a site definition including structural + integrity checks. Returns a validation report.',
+        inputSchema: {
+            type: 'object',
+            required: ['site_definition'],
+            properties: {
+                site_definition: {
+                    type: 'object',
+                    description: 'A site_definition_v5 or site_authoring_v1 payload',
+                },
+            },
+        },
+    },
+    {
+        name: 'run_integrity_checks',
+        description: 'Run all system integrity checks against a site definition. Returns blocking errors and warnings.',
+        inputSchema: {
+            type: 'object',
+            required: ['site_definition'],
+            properties: {
+                site_definition: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'build_render_plan',
+        description: 'Compile a site definition into a typed render plan (render_plan_v1) without emitting HTML.',
+        inputSchema: {
+            type: 'object',
+            required: ['site_definition'],
+            properties: {
+                site_definition: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'preview_page',
+        description: 'Compile and emit HTML for a single page by page_id. Returns the HTML string for that page.',
+        inputSchema: {
+            type: 'object',
+            required: ['site_definition', 'page_id'],
+            properties: {
+                site_definition: { type: 'object' },
+                page_id: {
+                    type: 'string',
+                    description: 'The page id to preview (e.g. "home", "contact")',
+                },
+            },
+        },
+    },
+    {
+        name: 'build_site',
+        description: 'Run the full pipeline. Returns the complete HTML/CSS/JS bundle, render plan, and asset manifest.',
+        inputSchema: {
+            type: 'object',
+            required: ['site_definition'],
+            properties: {
+                site_definition: { type: 'object' },
+            },
+        },
+    },
+    {
+        name: 'run_golden_tests',
+        description: 'Run the built-in golden test suite. Returns pass/fail counts and per-test results.',
+        inputSchema: { type: 'object', properties: {}, required: [] },
+    },
+];
+
+const TOOL_NAMES = TOOLS.map(t => t.name).join(', ');
+
+// ── Tool handlers ─────────────────────────────────────────────────────────────
+
+async function handleTool(name, args) {
+    const contracts = loadContracts();
+
+    switch (name) {
+
+        case 'list_templates': {
+            const templates = (contracts.templateRegistry.templates || []).map(t => ({
+                id:                  t.id,
+                page_type:           t.page_type,
+                required_components: t.required_components || [],
+                region_count:        (t.regions || []).length,
+            }));
+            return { templates, count: templates.length };
+        }
+
+        case 'list_themes': {
+            const { manifest, polish_profiles, tokens } = contracts.themePack;
+            return {
+                theme_id:           manifest.theme_id,
+                name:               manifest.name,
+                category:           manifest.category,
+                supported_polish_profiles: manifest.supported_polish_profiles,
+                polish_profiles:    polish_profiles.map(p => ({
+                    id:           p.id,
+                    density:      p.density,
+                    visual_tone:  p.visual_tone,
+                    corner_style: p.corner_style,
+                })),
+                token_categories:   Object.keys(tokens || {}),
+            };
+        }
+
+        case 'validate_authoring_input': {
+            const payload = args.authoring_payload;
+            if (!payload) return { valid: false, errors: ['authoring_payload is required'] };
+            const { valid, errors } = validateAuthoring(payload);
+            return { valid, errors, error_count: errors.length };
+        }
+
+        case 'normalise_to_site_definition': {
+            const payload = args.authoring_payload;
+            if (!payload) return { ok: false, errors: ['authoring_payload is required'] };
+            const { validateAuthoring: va, normalise } = require('../web-compiler/normaliser/normalise');
+            const check = va(payload);
+            if (!check.valid) return { ok: false, errors: check.errors };
+            const { siteDef, warnings } = normalise(payload);
+            return { ok: true, site_definition: siteDef, warnings };
+        }
+
+        case 'validate_site_definition':
+        case 'run_integrity_checks': {
+            const payload = args.site_definition;
+            if (!payload) return { ok: false, errors: ['site_definition is required'] };
+            const result = compiler.validateOnly(payload);
+            return {
+                ok:               result.ok,
+                errors:           result.errors,
+                warnings:         result.warnings,
+                validation_report: result.validationReport,
+            };
+        }
+
+        case 'build_render_plan': {
+            const payload = args.site_definition;
+            if (!payload) return { ok: false, errors: ['site_definition is required'] };
+            const result = compiler.buildRenderPlan(payload);
+            return {
+                ok:               result.ok,
+                errors:           result.errors,
+                warnings:         result.warnings,
+                render_plan:      result.renderPlan,
+                validation_report: result.validationReport,
+            };
+        }
+
+        case 'preview_page': {
+            const payload  = args.site_definition;
+            const pageId   = args.page_id;
+            if (!payload)  return { ok: false, errors: ['site_definition is required'] };
+            if (!pageId)   return { ok: false, errors: ['page_id is required'] };
+
+            const result = compiler.run(payload);
+            if (!result.ok) return { ok: false, errors: result.errors, warnings: result.warnings };
+
+            const htmlFile = (result.bundle.html || []).find(f =>
+                f.filename === `${pageId}.html` || (pageId === 'home' && f.filename === 'index.html')
+            );
+
+            if (!htmlFile) {
+                return {
+                    ok: false,
+                    errors: [`Page "${pageId}" not found in bundle. Available: ${result.bundle.html.map(f => f.filename).join(', ')}`],
+                };
+            }
+
+            return {
+                ok:       true,
+                page_id:  pageId,
+                filename: htmlFile.filename,
+                html:     htmlFile.content,
+                warnings: result.warnings,
+            };
+        }
+
+        case 'build_site': {
+            const payload = args.site_definition;
+            if (!payload) return { ok: false, errors: ['site_definition is required'] };
+
+            const result = compiler.run(payload);
+            if (!result.ok) {
+                return {
+                    ok:     false,
+                    stage:  result.stage,
+                    errors: result.errors,
+                    warnings: result.warnings,
+                };
+            }
+
+            return {
+                ok:           true,
+                warnings:     result.warnings,
+                render_plan:  result.renderPlan,
+                bundle: {
+                    html_files:    result.bundle.html,
+                    css:           result.bundle.css,
+                    js:            result.bundle.js,
+                    asset_manifest: result.renderPlan.asset_manifest,
+                },
+                validation_report: result.validationReport,
+            };
+        }
+
+        case 'run_golden_tests': {
+            const testResults = runAllGoldenTests();
+            return {
+                passed:  testResults.passed,
+                failed:  testResults.failed,
+                total:   testResults.total,
+                results: testResults.results,
+            };
+        }
+
+        default:
+            throw new Error(`Unknown tool: ${name}. Available: ${TOOL_NAMES}`);
+    }
+}
+
+// ── MCP JSON-RPC handler ──────────────────────────────────────────────────────
+
+async function handleMcpRequest(body, context) {
+    if (!body || typeof body !== 'object') {
+        return { jsonrpc: '2.0', error: { code: -32600, message: 'Invalid Request' }, id: null };
+    }
+
+    const { jsonrpc, method, params, id } = body;
+    if (jsonrpc !== '2.0') {
+        return { jsonrpc: '2.0', error: { code: -32600, message: 'jsonrpc must be "2.0"' }, id: null };
+    }
+
+    context.log(`[mcpWebCompiler] method: ${method}`);
+
+    switch (method) {
+
+        case 'initialize':
+            return {
+                jsonrpc: '2.0',
+                result: {
+                    protocolVersion: '2024-11-05',
+                    capabilities: { tools: {} },
+                    serverInfo: {
+                        name:    'gcc-web-compiler-mcp',
+                        version: '1.0.0',
+                        description: 'Deterministic web compiler — compiles typed site definitions into HTML/CSS/JS bundles',
+                        instructions: `WEB COMPILER MCP — gcc-web-compiler-mcp
+
+Compiles a site_definition_v5 (content + design schema) into finished HTML/CSS/JS.
+No LLM at render time — fully deterministic, schema-driven pipeline.
+
+QUICK START:
+1. list_templates   — see available page templates
+2. list_themes      — see available themes and polish profiles
+3. build_site       — compile a site_definition_v5 into a full HTML bundle
+
+VALIDATION TOOLS:
+- validate_authoring_input  — check an authoring payload before normalising
+- normalise_to_site_definition — convert authoring → runtime definition
+- run_integrity_checks       — cross-reference all registries
+- build_render_plan          — compile to typed intermediate without emitting
+
+PIPELINE: validate → normalise → integrity check → template resolve →
+          theme resolve → HTML sanitise → token resolve → render plan →
+          lint → emit HTML/CSS/JS
+
+All tools accept a site_definition (site_definition_v5 schema).
+run_golden_tests runs the built-in acceptance test suite.`,
+                        schema_bundle: 'site_builder_schema_v5_clean',
+                    },
+                },
+                id,
+            };
+
+        case 'notifications/initialized':
+            return null;
+
+        case 'tools/list':
+            return { jsonrpc: '2.0', result: { tools: TOOLS }, id };
+
+        case 'tools/call': {
+            const { name, arguments: toolArgs } = params || {};
+            if (!name) {
+                return { jsonrpc: '2.0', error: { code: -32602, message: 'tool name is required' }, id };
+            }
+            const knownTool = TOOLS.find(t => t.name === name);
+            if (!knownTool) {
+                return { jsonrpc: '2.0', error: { code: -32602, message: `Unknown tool: ${name}. Available: ${TOOL_NAMES}` }, id };
+            }
+
+            const start = Date.now();
+            try {
+                const result = await handleTool(name, toolArgs || {});
+                context.log(`[mcpWebCompiler] tool ${name} completed in ${Date.now() - start}ms`);
+                return {
+                    jsonrpc: '2.0',
+                    result: {
+                        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+                    },
+                    id,
+                };
+            } catch (err) {
+                context.log.error(`[mcpWebCompiler] tool ${name} error: ${err.message}`);
+                return {
+                    jsonrpc: '2.0',
+                    result: {
+                        content: [{ type: 'text', text: JSON.stringify({ error: err.message, tool: name }) }],
+                        isError: true,
+                    },
+                    id,
+                };
+            }
+        }
+
+        case 'ping':
+            return { jsonrpc: '2.0', result: {}, id };
+
+        default:
+            return { jsonrpc: '2.0', error: { code: -32601, message: `Method not found: ${method}` }, id };
+    }
+}
+
+// ── Azure Function registration ───────────────────────────────────────────────
+
+app.http('mcpWebCompiler', {
+    methods:   ['POST'],
+    authLevel: 'anonymous',
+    route:     'mcp-web-compiler',
+    handler: async (request, context) => {
+        context.log('[mcpWebCompiler] request received');
+        const start = Date.now();
+
+        let body;
+        try {
+            body = await request.json();
+        } catch (err) {
+            return {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', error: { code: -32700, message: 'Parse error: Invalid JSON' }, id: null }),
+            };
+        }
+
+        const response = await handleMcpRequest(body, context);
+        if (response === null) {
+            return { status: 204 };
+        }
+
+        context.log(`[mcpWebCompiler] completed in ${Date.now() - start}ms`);
+        return {
+            status:  200,
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify(response),
+        };
+    },
+});
