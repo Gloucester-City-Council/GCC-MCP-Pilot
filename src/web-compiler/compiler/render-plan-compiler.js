@@ -46,24 +46,28 @@ function instanceId(pageId, regionId, componentId) {
  * @param {object} transformRegistry
  * @returns {Array} slot array for render plan
  */
-function resolveSlots(recipe, template, page, siteGlobals, transformRegistry) {
+function resolveSlots(recipe, template, page, siteGlobals, transformRegistry, itemContext = null, childMappings = []) {
     const slots = [];
+
+    const templateMappings = template.content_mappings || [];
+    const allMappings = [
+        ...templateMappings.filter(m => m.target_component === recipe.id),
+        ...childMappings.filter(m => !m.target_component || m.target_component === recipe.id),
+    ];
 
     for (const slotDef of recipe.dom_recipe.slots || []) {
         // Find the mapping for this slot from the template's content_mappings
-        const mapping = (template.content_mappings || []).find(
-            m => m.target_component === recipe.id && m.target_slot === slotDef.id
-        );
+        const mapping = allMappings.find(m => m.target_slot === slotDef.id);
 
         let rawValue;
         if (mapping) {
-            rawValue = resolveSourceValue(mapping.source_field, page, siteGlobals);
+            rawValue = resolveSourceValue(mapping.source_field, page, siteGlobals, itemContext);
             if (mapping.transform_id) {
                 rawValue = applyTransform(mapping.transform_id, rawValue, transformRegistry);
             }
         } else {
             // Fallback: look in content directly by slot source
-            rawValue = slotDef.source ? resolveSourceValue(slotDef.source, page, siteGlobals) : undefined;
+            rawValue = slotDef.source ? resolveSourceValue(slotDef.source, page, siteGlobals, itemContext) : undefined;
         }
 
         // Global layout components (navigation/footer/alert) source their data
@@ -93,6 +97,25 @@ function resolveSlots(recipe, template, page, siteGlobals, transformRegistry) {
         slots.push(slot);
     }
 
+    // Allow arbitrary template target slots beyond the built-in recipe slots.
+    const recipeSlotIds = new Set((recipe.dom_recipe.slots || []).map(s => s.id));
+    const extraMappings = allMappings.filter(m => m.target_slot && !recipeSlotIds.has(m.target_slot));
+    for (const mapping of extraMappings) {
+        let rawValue = resolveSourceValue(mapping.source_field, page, siteGlobals, itemContext);
+        if (mapping.transform_id) {
+            rawValue = applyTransform(mapping.transform_id, rawValue, transformRegistry);
+        }
+        const isRendered = rawValue !== null && rawValue !== undefined &&
+            !(Array.isArray(rawValue) && rawValue.length === 0);
+        slots.push({
+            slot_id: mapping.target_slot,
+            element: 'div',
+            class_name: `${recipe.dom_recipe.css_hooks.slot_class_prefix}${mapping.target_slot}`,
+            resolved_value: rawValue !== undefined ? rawValue : null,
+            is_rendered: Boolean(isRendered),
+        });
+    }
+
     return slots;
 }
 
@@ -103,11 +126,17 @@ function getGlobalKeyForComponent(componentId) {
     return null;
 }
 
-function resolveSourceValue(sourceField, page, siteGlobals) {
+function resolveSourceValue(sourceField, page, siteGlobals, itemContext = null) {
     if (!sourceField) return undefined;
+    if (sourceField.startsWith('item.')) return get(itemContext || {}, sourceField.replace(/^item\./, ''));
     if (sourceField.startsWith('globals.')) return get({ globals: siteGlobals }, sourceField);
     if (sourceField.startsWith('page.')) return get({ page }, sourceField);
     if (sourceField.startsWith('content.')) return get(page.content, sourceField.replace(/^content\./, ''));
+
+    if (itemContext && typeof itemContext === 'object') {
+        const fromItem = get(itemContext, sourceField);
+        if (fromItem !== undefined) return fromItem;
+    }
 
     const fromContent = get(page.content, sourceField);
     if (fromContent !== undefined) return fromContent;
@@ -242,52 +271,75 @@ function compileRenderPlan(siteDef, contracts, themeResolution) {
                 }
 
                 const recipe = resolveComponent(regionComp.component, regionComp.variant || null, componentRecipes);
-                const iId = instanceId(page.id, region.id, recipe.id);
+                const componentMappings = (template.content_mappings || []).filter(m => m.target_component === recipe.id);
+                const collectionMapping = componentMappings.find(m => m.target_slot === 'collection') ||
+                    componentMappings.find(m => m.source_field === regionComp.collection_id) ||
+                    null;
 
-                // Resolve style hooks → token values
-                const resolvedStyleTokens = resolveStyleHooks(recipe.style_hooks, tokens);
+                const repeatItems = regionComp.repeat
+                    ? resolveSourceValue(
+                        (collectionMapping && collectionMapping.source_field) ||
+                        regionComp.collection_id ||
+                        (recipe.collection_rendering && recipe.collection_rendering.source_field),
+                        page,
+                        siteGlobals
+                    )
+                    : null;
 
-                // Resolve slots
-                const slots = resolveSlots(recipe, template, page, siteGlobals, transformRegistry);
+                const scopedChildMappings = []
+                    .concat(Array.isArray(template.child_mappings) ? template.child_mappings : [])
+                    .concat(Array.isArray(collectionMapping && collectionMapping.child_mappings) ? collectionMapping.child_mappings : [])
+                    .filter(m => !m.target_component || m.target_component === recipe.id);
 
-                // Collect behaviour hooks
-                const hooks = collectBehaviourHooks(recipe.id, iId, recipe);
-                behaviourManifest.push(...hooks);
+                const renderItems = Array.isArray(repeatItems) ? repeatItems : [null];
+                renderItems.forEach((item, idx) => {
+                    if (regionComp.repeat && item == null) return;
+                    const iId = instanceId(page.id, region.id, recipe.id) + (regionComp.repeat ? `-${idx + 1}` : '');
 
-                const instance = {
-                    component_id:    recipe.id,
-                    instance_id:     iId,
-                    variant:         recipe._resolved_variant,
-                    dom: {
-                        root_element: recipe.dom_recipe.root_element,
-                        root_class:   recipe.dom_recipe.css_hooks.block_class,
-                        slots,
-                    },
-                    styles: {
-                        tokens:  resolvedStyleTokens,
-                        recipe:  { layout_recipe: recipe.style_hooks && recipe.style_hooks.layout_recipe },
-                    },
-                    data_attributes: {
-                        component: recipe.dom_recipe.css_hooks.data_component_attr,
-                        variant:   recipe._resolved_variant,
-                        region:    region.id,
-                    },
-                    accessibility: {
-                        rules_applied: (recipe.accessibility && recipe.accessibility.rules) || [],
-                        roles:         (recipe.accessibility && recipe.accessibility.required_roles) || [],
-                        attributes:    (recipe.accessibility && recipe.accessibility.required_attributes) || [],
-                    },
-                    source_bindings: (template.content_mappings || [])
-                        .filter(m => m.target_component === recipe.id)
-                        .map(m => ({ source_field: m.source_field, target_slot: m.target_slot })),
-                };
+                    // Resolve style hooks → token values
+                    const resolvedStyleTokens = resolveStyleHooks(recipe.style_hooks, tokens);
 
-                // Accessibility guardrail: exactly one h1 per page
-                if (recipe.id === 'page_header') {
-                    instance._guardrails = { single_h1: true };
-                }
+                    // Resolve slots
+                    const slots = resolveSlots(recipe, template, page, siteGlobals, transformRegistry, item, scopedChildMappings);
 
-                componentInstances.push(instance);
+                    // Collect behaviour hooks
+                    const hooks = collectBehaviourHooks(recipe.id, iId, recipe);
+                    behaviourManifest.push(...hooks);
+
+                    const instance = {
+                        component_id:    recipe.id,
+                        instance_id:     iId,
+                        variant:         recipe._resolved_variant,
+                        dom: {
+                            root_element: recipe.dom_recipe.root_element,
+                            root_class:   recipe.dom_recipe.css_hooks.block_class,
+                            slots,
+                        },
+                        styles: {
+                            tokens:  resolvedStyleTokens,
+                            recipe:  { layout_recipe: recipe.style_hooks && recipe.style_hooks.layout_recipe },
+                        },
+                        data_attributes: {
+                            component: recipe.dom_recipe.css_hooks.data_component_attr,
+                            variant:   recipe._resolved_variant,
+                            region:    region.id,
+                        },
+                        accessibility: {
+                            rules_applied: (recipe.accessibility && recipe.accessibility.rules) || [],
+                            roles:         (recipe.accessibility && recipe.accessibility.required_roles) || [],
+                            attributes:    (recipe.accessibility && recipe.accessibility.required_attributes) || [],
+                        },
+                        source_bindings: componentMappings
+                            .map(m => ({ source_field: m.source_field, target_slot: m.target_slot })),
+                    };
+
+                    // Accessibility guardrail: exactly one h1 per page
+                    if (recipe.id === 'page_header') {
+                        instance._guardrails = { single_h1: true };
+                    }
+
+                    componentInstances.push(instance);
+                });
             }
 
             if (componentInstances.length > 0) {

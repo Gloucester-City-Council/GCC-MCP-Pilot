@@ -80,4 +80,101 @@ describe('web-compiler html emitter', () => {
         expect(html).toContain('Support');
         expect(html).toContain('/help');
     });
+
+    test('renders repeated service_card items using collection mapping and child_mappings', () => {
+        const siteDef = JSON.parse(JSON.stringify(samplePolicySite));
+        siteDef.pages[0].page_type = 'homepage';
+        siteDef.pages[0].template_id = 'template_homepage_child_map_test';
+        siteDef.pages[0].content = {
+            title: 'Homepage',
+            service_cards: [
+                { title: 'Bins and recycling', summary: 'Collection days and missed bins.', url: '/bins' },
+                { title: 'Council tax', summary: 'Pay, view or report changes.', url: '/council-tax' },
+            ],
+        };
+
+        const templateRegistry = {
+            schema_version: 'template_registry_v5',
+            templates: [{
+                id: 'template_homepage_child_map_test',
+                page_type: 'homepage',
+                regions: [{
+                    id: 'main',
+                    order: 1,
+                    layout: 'single_column',
+                    components: [{ component: 'service_card', repeat: true, collection_id: 'service_cards' }],
+                }],
+                required_components: ['service_card'],
+                forbidden_components: [],
+                allowed_layout_overrides: [],
+                content_mappings: [{
+                    source_field: 'service_cards',
+                    target_component: 'service_card',
+                    target_slot: 'collection',
+                    transform_id: 'identity',
+                }],
+                child_mappings: [
+                    { target_component: 'service_card', source_field: 'item.title', target_slot: 'title' },
+                    { target_component: 'service_card', source_field: 'item.summary', target_slot: 'summary' },
+                    { target_component: 'service_card', source_field: 'item.url', target_slot: 'link' },
+                ],
+            }],
+        };
+
+        const result = compiler.run(siteDef, { templateRegistry });
+        expect(result.ok).toBe(true);
+        const html = result.bundle.html[0].content;
+        expect(html).toContain('Bins and recycling');
+        expect(html).toContain('Collection days and missed bins.');
+        expect(html).toContain('href="/bins"');
+        expect(html).toContain('Council tax');
+        expect(html).toContain('href="/council-tax"');
+    });
+
+    test('renders arbitrary mapped slots for hero and alert_banner components', () => {
+        const siteDef = JSON.parse(JSON.stringify(samplePolicySite));
+        siteDef.pages[0].page_type = 'homepage';
+        siteDef.pages[0].template_id = 'template_homepage_dynamic_slots_test';
+        siteDef.pages[0].content = {
+            title: 'Homepage',
+            summary: 'Services and updates',
+            hero_items: [{ title: 'Top service', url: '/top-service' }],
+        };
+        siteDef.globals.alert_banner = {
+            message_html: '<strong>Planned maintenance</strong>',
+            severity: 'warning',
+        };
+
+        const templateRegistry = {
+            schema_version: 'template_registry_v5',
+            templates: [{
+                id: 'template_homepage_dynamic_slots_test',
+                page_type: 'homepage',
+                regions: [{
+                    id: 'pre_main',
+                    order: 1,
+                    layout: 'single_column',
+                    components: [{ component: 'alert_banner' }, { component: 'hero' }],
+                }],
+                required_components: ['alert_banner', 'hero'],
+                forbidden_components: [],
+                allowed_layout_overrides: [],
+                content_mappings: [
+                    { source_field: 'globals.alert_banner.message_html', target_component: 'alert_banner', target_slot: 'message' },
+                    { source_field: 'globals.alert_banner.severity', target_component: 'alert_banner', target_slot: 'severity_label' },
+                    { source_field: 'hero_items', target_component: 'hero', target_slot: 'items', transform_id: 'identity' },
+                    { source_field: 'summary', target_component: 'hero', target_slot: 'supporting_copy' },
+                ],
+            }],
+        };
+
+        const result = compiler.run(siteDef, { templateRegistry });
+        expect(result.ok).toBe(true);
+        const html = result.bundle.html[0].content;
+        expect(html).toContain('Planned maintenance');
+        expect(html).toContain('c-alert-banner__severity_label');
+        expect(html).toContain('warning');
+        expect(html).toContain('c-hero__supporting_copy');
+        expect(html).toContain('Services and updates');
+    });
 });
