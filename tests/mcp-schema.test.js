@@ -15,9 +15,10 @@ describe('mcpSchema request handling', () => {
         jest.doMock('../src/tools/schemaEvaluate', () => ({ execute: jest.fn().mockReturnValue({ outcome: 'likely' }) }));
 
         jest.doMock('../src/schema/loader', () => ({
-            getSchemaVersion: () => '1.0.0',
+            getSchemaVersion: () => '2.4.0',
             getSchemaHash: () => 'abc123',
-            isSchemaLoaded: () => true
+            isSchemaLoaded: () => true,
+            getFinancialYear: () => '2026/27'
         }));
 
         jest.doMock('../src/tools/heritageGet', () => ({ execute: jest.fn().mockReturnValue({ ok: true }) }));
@@ -86,5 +87,54 @@ describe('mcpSchema request handling', () => {
         const body = JSON.parse(response.body);
         const payload = JSON.parse(body.result.content[0].text);
         expect(payload.data.asyncOk).toBe(true);
+    });
+
+    it('includes financialYear in tool call responses', async () => {
+        const httpMock = jest.fn();
+        mockSchemaModules(httpMock, jest.fn().mockReturnValue({ ok: true }));
+
+        require('../src/functions/mcpSchema');
+
+        const [, registration] = httpMock.mock.calls[0];
+        const response = await registration.handler(
+            {
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: 'schema_get', arguments: { path: '/discounts' } },
+                    id: 3
+                })
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.financialYear).toBe('2026/27');
+        expect(payload.schemaVersion).toBe('2.4.0');
+    });
+
+    it('returns server version 2.0.0 in initialize response', async () => {
+        const httpMock = jest.fn();
+        mockSchemaModules(httpMock);
+
+        require('../src/functions/mcpSchema');
+
+        const [, registration] = httpMock.mock.calls[0];
+        const response = await registration.handler(
+            {
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'initialize',
+                    id: 4
+                })
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        expect(body.result.serverInfo.version).toBe('2.0.0');
+        expect(body.result.serverInfo.schemas.councilTax.financialYear).toBe('2026/27');
+        expect(body.result.serverInfo.schemas.councilTax.documentPack).toContain('v2.4');
     });
 });

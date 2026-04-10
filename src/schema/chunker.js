@@ -1,6 +1,7 @@
 /**
  * Schema chunker - builds a chunk index at cold start
- * Creates searchable chunks from schema content with metadata
+ * Creates searchable chunks from the merged council tax schema (v2.4 four-document pack)
+ * with metadata for hybrid search.
  */
 
 const { getSchema } = require('./loader');
@@ -59,6 +60,8 @@ function extractTags(value, pathTokens) {
 
     // Look for common identifiers in the value
     if (typeof value === 'object' && value !== null) {
+        if (value.id) tags.add(value.id);
+        if (value.category) tags.add(value.category);
         if (value.discount_id) tags.add('discount');
         if (value.exemption) tags.add('exemption');
         if (value.premium_id) tags.add('premium');
@@ -67,7 +70,19 @@ function extractTags(value, pathTokens) {
         if (value.application_process) tags.add('application');
         if (value.url) tags.add('has-url');
         if (value.TODO || value.status === 'TODO') tags.add('todo');
+        if (value.mechanism) tags.add(value.mechanism);
+        if (value.rule_id) tags.add('rule');
+        if (value.effect) tags.add('effect');
     }
+
+    // Tag based on path context
+    const pathStr = pathTokens.join('/');
+    if (pathStr.includes('discount')) tags.add('discount');
+    if (pathStr.includes('exemption')) tags.add('exemption');
+    if (pathStr.includes('premium')) tags.add('premium');
+    if (pathStr.includes('enforcement')) tags.add('enforcement');
+    if (pathStr.includes('payment')) tags.add('payment');
+    if (pathStr.includes('appeal')) tags.add('appeal');
 
     // Check for TODO in text
     const text = extractText(value);
@@ -102,62 +117,10 @@ function createChunk(id, value, pathTokens) {
 }
 
 /**
- * Build chunks from discounts section
- * @param {object} discounts - Discounts section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
+ * Build chunks from the discounts section (v2.4 flat items array)
  */
 function chunkDiscounts(discounts, chunks, idCounter) {
     if (!discounts) return idCounter;
-
-    // Person-based discounts
-    if (Array.isArray(discounts.person_based_discounts)) {
-        for (let i = 0; i < discounts.person_based_discounts.length; i++) {
-            const item = discounts.person_based_discounts[i];
-            chunks.push(createChunk(
-                `chunk_${idCounter++}`,
-                item,
-                ['discounts', 'person_based_discounts', String(i)]
-            ));
-        }
-    }
-
-    // Student discounts
-    if (Array.isArray(discounts.student_discounts)) {
-        for (let i = 0; i < discounts.student_discounts.length; i++) {
-            const item = discounts.student_discounts[i];
-            chunks.push(createChunk(
-                `chunk_${idCounter++}`,
-                item,
-                ['discounts', 'student_discounts', String(i)]
-            ));
-        }
-    }
-
-    // Property-based discounts
-    if (Array.isArray(discounts.property_based_discounts)) {
-        for (let i = 0; i < discounts.property_based_discounts.length; i++) {
-            const item = discounts.property_based_discounts[i];
-            chunks.push(createChunk(
-                `chunk_${idCounter++}`,
-                item,
-                ['discounts', 'property_based_discounts', String(i)]
-            ));
-        }
-    }
-
-    // Other disregards
-    if (Array.isArray(discounts.other_disregards)) {
-        for (let i = 0; i < discounts.other_disregards.length; i++) {
-            const item = discounts.other_disregards[i];
-            chunks.push(createChunk(
-                `chunk_${idCounter++}`,
-                item,
-                ['discounts', 'other_disregards', String(i)]
-            ));
-        }
-    }
 
     // Overview
     if (discounts.overview) {
@@ -168,48 +131,70 @@ function chunkDiscounts(discounts, chunks, idCounter) {
         ));
     }
 
+    // Items array (flat list with category field)
+    if (Array.isArray(discounts.items)) {
+        for (let i = 0; i < discounts.items.length; i++) {
+            chunks.push(createChunk(
+                `chunk_${idCounter++}`,
+                discounts.items[i],
+                ['discounts', 'items', String(i)]
+            ));
+        }
+    }
+
     return idCounter;
 }
 
 /**
- * Build chunks from enforcement section
- * @param {object} enforcement - Enforcement section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
+ * Build chunks from enforcement section (v2.4 structure)
  */
 function chunkEnforcement(enforcement, chunks, idCounter) {
     if (!enforcement) return idCounter;
 
-    // Recovery process stages
-    if (enforcement.recovery_process) {
-        const stages = ['stage_1', 'stage_2', 'stage_3', 'stage_4'];
-        for (const stage of stages) {
-            if (enforcement.recovery_process[stage]) {
-                chunks.push(createChunk(
-                    `chunk_${idCounter++}`,
-                    enforcement.recovery_process[stage],
-                    ['enforcement', 'recovery_process', stage]
-                ));
-            }
+    // Escalation stages
+    if (Array.isArray(enforcement.escalation_stages)) {
+        for (let i = 0; i < enforcement.escalation_stages.length; i++) {
+            chunks.push(createChunk(
+                `chunk_${idCounter++}`,
+                enforcement.escalation_stages[i],
+                ['enforcement', 'escalation_stages', String(i)]
+            ));
         }
     }
 
-    // Avoiding enforcement
-    if (enforcement.avoiding_enforcement) {
+    // Post-liability order powers
+    if (enforcement.post_liability_order_powers) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
-            enforcement.avoiding_enforcement,
-            ['enforcement', 'avoiding_enforcement']
+            enforcement.post_liability_order_powers,
+            ['enforcement', 'post_liability_order_powers']
         ));
     }
 
-    // Overview
-    if (enforcement.overview) {
+    // Debt support signposting
+    if (enforcement.debt_support_signposting) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
-            { overview: enforcement.overview },
-            ['enforcement', 'overview']
+            enforcement.debt_support_signposting,
+            ['enforcement', 'debt_support_signposting']
+        ));
+    }
+
+    // Vulnerability and hardship policy
+    if (enforcement.vulnerability_hardship_policy) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            enforcement.vulnerability_hardship_policy,
+            ['enforcement', 'vulnerability_hardship_policy']
+        ));
+    }
+
+    // Enforcement policy overview
+    if (enforcement.enforcement_policy) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            enforcement.enforcement_policy,
+            ['enforcement', 'enforcement_policy']
         ));
     }
 
@@ -218,15 +203,10 @@ function chunkEnforcement(enforcement, chunks, idCounter) {
 
 /**
  * Build chunks from appeals section
- * @param {object} appeals - Appeals section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
  */
 function chunkAppeals(appeals, chunks, idCounter) {
     if (!appeals) return idCounter;
 
-    // Challenging bill
     if (appeals.challenging_bill) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -235,7 +215,6 @@ function chunkAppeals(appeals, chunks, idCounter) {
         ));
     }
 
-    // Valuation band challenges
     if (appeals.valuation_band_challenges) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -244,7 +223,6 @@ function chunkAppeals(appeals, chunks, idCounter) {
         ));
     }
 
-    // Valuation tribunal
     if (appeals.valuation_tribunal) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -258,15 +236,10 @@ function chunkAppeals(appeals, chunks, idCounter) {
 
 /**
  * Build chunks from data privacy section
- * @param {object} privacy - Data privacy section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
  */
 function chunkPrivacy(privacy, chunks, idCounter) {
     if (!privacy) return idCounter;
 
-    // What we process - each category as a chunk
     if (privacy.what_we_process) {
         const categories = Object.keys(privacy.what_we_process);
         for (const cat of categories) {
@@ -278,7 +251,6 @@ function chunkPrivacy(privacy, chunks, idCounter) {
         }
     }
 
-    // Your rights
     if (privacy.your_rights) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -287,7 +259,6 @@ function chunkPrivacy(privacy, chunks, idCounter) {
         ));
     }
 
-    // DPO info
     if (privacy.data_protection_officer) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -301,15 +272,10 @@ function chunkPrivacy(privacy, chunks, idCounter) {
 
 /**
  * Build chunks from holiday lets section
- * @param {object} holidayLets - Holiday lets section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
  */
 function chunkHolidayLets(holidayLets, chunks, idCounter) {
     if (!holidayLets) return idCounter;
 
-    // Business rates eligibility
     if (holidayLets.business_rates_eligibility) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -318,7 +284,6 @@ function chunkHolidayLets(holidayLets, chunks, idCounter) {
         ));
     }
 
-    // Council tax liability
     if (holidayLets.council_tax_liability_for_holiday_lets) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -327,7 +292,6 @@ function chunkHolidayLets(holidayLets, chunks, idCounter) {
         ));
     }
 
-    // Common scenarios
     if (holidayLets.common_scenarios) {
         const scenarios = Object.keys(holidayLets.common_scenarios);
         for (const scenario of scenarios) {
@@ -339,7 +303,6 @@ function chunkHolidayLets(holidayLets, chunks, idCounter) {
         }
     }
 
-    // Strategic implications
     if (holidayLets.strategic_implications) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -352,33 +315,25 @@ function chunkHolidayLets(holidayLets, chunks, idCounter) {
 }
 
 /**
- * Build chunks from exemptions section
- * @param {object} exemptions - Exemptions section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
+ * Build chunks from exemptions section (v2.4 flat items array)
  */
 function chunkExemptions(exemptions, chunks, idCounter) {
     if (!exemptions) return idCounter;
 
-    // Unoccupied property exemptions
-    if (Array.isArray(exemptions.unoccupied_property_exemptions)) {
-        for (let i = 0; i < exemptions.unoccupied_property_exemptions.length; i++) {
-            chunks.push(createChunk(
-                `chunk_${idCounter++}`,
-                exemptions.unoccupied_property_exemptions[i],
-                ['exemptions', 'unoccupied_property_exemptions', String(i)]
-            ));
-        }
+    if (exemptions.overview) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            { overview: exemptions.overview },
+            ['exemptions', 'overview']
+        ));
     }
 
-    // Occupied property exemptions
-    if (Array.isArray(exemptions.occupied_property_exemptions)) {
-        for (let i = 0; i < exemptions.occupied_property_exemptions.length; i++) {
+    if (Array.isArray(exemptions.items)) {
+        for (let i = 0; i < exemptions.items.length; i++) {
             chunks.push(createChunk(
                 `chunk_${idCounter++}`,
-                exemptions.occupied_property_exemptions[i],
-                ['exemptions', 'occupied_property_exemptions', String(i)]
+                exemptions.items[i],
+                ['exemptions', 'items', String(i)]
             ));
         }
     }
@@ -388,15 +343,10 @@ function chunkExemptions(exemptions, chunks, idCounter) {
 
 /**
  * Build chunks from property premiums section
- * @param {object} premiums - Property premiums section
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
  */
 function chunkPremiums(premiums, chunks, idCounter) {
     if (!premiums) return idCounter;
 
-    // Empty homes premium
     if (premiums.empty_homes_premium) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -405,7 +355,6 @@ function chunkPremiums(premiums, chunks, idCounter) {
         ));
     }
 
-    // Second homes premium
     if (premiums.second_homes_premium) {
         chunks.push(createChunk(
             `chunk_${idCounter++}`,
@@ -418,11 +367,49 @@ function chunkPremiums(premiums, chunks, idCounter) {
 }
 
 /**
+ * Build chunks from charge outputs (2026/27 approved rates)
+ */
+function chunkChargeOutputs(chargeOutputs, chunks, idCounter) {
+    if (!chargeOutputs) return idCounter;
+
+    if (Array.isArray(chargeOutputs.band_totals)) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            chargeOutputs.band_totals,
+            ['charge_outputs', 'band_totals']
+        ));
+    }
+
+    if (chargeOutputs.increase_summary) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            chargeOutputs.increase_summary,
+            ['charge_outputs', 'increase_summary']
+        ));
+    }
+
+    return idCounter;
+}
+
+/**
+ * Build chunks from executable rules
+ */
+function chunkExecutableRules(execRules, chunks, idCounter) {
+    if (!execRules || !Array.isArray(execRules.rules)) return idCounter;
+
+    for (let i = 0; i < execRules.rules.length; i++) {
+        chunks.push(createChunk(
+            `chunk_${idCounter++}`,
+            execRules.rules[i],
+            ['executable_rules', 'rules', String(i)]
+        ));
+    }
+
+    return idCounter;
+}
+
+/**
  * Build chunks for top-level sections that are simple objects
- * @param {object} schema - Full schema
- * @param {object[]} chunks - Array to add chunks to
- * @param {number} idCounter - Current ID counter
- * @returns {number} Updated ID counter
  */
 function chunkSimpleSections(schema, chunks, idCounter) {
     const simpleSections = [
@@ -436,6 +423,7 @@ function chunkSimpleSections(schema, chunks, idCounter) {
         'liability',
         'service_standards',
         'governance',
+        'national_context',
         'channels',
         'complaints',
         'related_services',
@@ -457,7 +445,7 @@ function chunkSimpleSections(schema, chunks, idCounter) {
 }
 
 /**
- * Build the chunk index from the schema
+ * Build the chunk index from the merged schema
  * @returns {object[]} Array of chunks
  */
 function buildChunkIndex() {
@@ -482,6 +470,8 @@ function buildChunkIndex() {
     idCounter = chunkHolidayLets(schema.holiday_lets_and_self_catering, chunks, idCounter);
     idCounter = chunkExemptions(schema.exemptions, chunks, idCounter);
     idCounter = chunkPremiums(schema.property_premiums, chunks, idCounter);
+    idCounter = chunkChargeOutputs(schema.charge_outputs, chunks, idCounter);
+    idCounter = chunkExecutableRules(schema.executable_rules, chunks, idCounter);
 
     // Chunk simple top-level sections
     idCounter = chunkSimpleSections(schema, chunks, idCounter);
