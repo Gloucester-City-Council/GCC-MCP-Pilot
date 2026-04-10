@@ -1,7 +1,10 @@
 /**
  * MCP Schema HTTP Function - POST /mcp-schema
- * Implements MCP JSON-RPC protocol for schema-driven tools
- * Supports multiple schemas: Council Tax and Heritage Assets
+ * Implements MCP JSON-RPC protocol for Gloucester City Council's
+ * Council Tax and Heritage Assets policy schemas.
+ *
+ * Council Tax schema: v2.4 four-document pack (facts, rules, taxonomy, results)
+ * approved for 2026/27 financial year.
  */
 
 const { app } = require('@azure/functions');
@@ -11,7 +14,7 @@ const schemaGet = require('../tools/schemaGet');
 const schemaSearch = require('../tools/schemaSearch');
 const schemaTodos = require('../tools/schemaTodos');
 const schemaEvaluate = require('../tools/schemaEvaluate');
-const { getSchemaVersion, getSchemaHash, isSchemaLoaded } = require('../schema/loader');
+const { getSchemaVersion, getSchemaHash, isSchemaLoaded, getFinancialYear } = require('../schema/loader');
 
 // Heritage Assets schema tools
 const heritageGet = require('../tools/heritageGet');
@@ -20,26 +23,39 @@ const heritageLoader = require('../heritage/loader');
 
 /**
  * MCP Tool definitions with JSON Schema
+ * Customer-focused, authoritative, accountable and accurate.
  */
 const TOOLS = [
     {
         name: 'schema_get',
-        description: `Retrieve data from the Council Tax schema by JSON Pointer path.
+        description: `Retrieve council tax information by path. Use this to look up specific details about your council tax — discounts you may be entitled to, how your bill is calculated, what exemptions exist, payment options, and more.
 
-Usage: schema_get(path='/discounts/person_based_discounts/0')
+Paths you can use:
+- /discounts — All discounts (single person, students, carers, care leavers, disabled band reduction)
+- /discounts/items/0 — A specific discount by index
+- /exemptions — All exemption classes (A through W)
+- /property_premiums — Empty homes and second homes premiums
+- /charge_outputs — 2026/27 council tax amounts by band (council-approved rates)
+- /charge_outputs/band_totals — What you pay per band, broken down by precepting authority
+- /council_tax_support — Means-tested help with your bill
+- /payment — How to pay, instalments, direct debit
+- /enforcement — What happens if you don't pay (escalation stages, your rights, debt support)
+- /appeals_and_challenges — How to challenge your bill or valuation band
+- /liability — Who is liable to pay
+- /valuation_and_charging — How your band is determined
+- /service_overview — What council tax pays for
+- /legal_framework — The law behind council tax
+- /executable_rules — Machine-readable rules for eligibility checks
+- /taxonomy — Controlled vocabulary and definitions
+- /evidence_requirements — What evidence you need for applications
 
-Supports:
-- JSON Pointer (RFC 6901) paths like "/discounts", "/legal_framework/primary_legislation"
-- Optional projection to select specific fields
-- maxBytes limit to prevent oversized responses
-
-Returns schema data with version and hash for cache validation.`,
+All information is from Gloucester City Council's approved 2026/27 service definition, checked against live public sources.`,
         inputSchema: {
             type: 'object',
             properties: {
                 path: {
                     type: 'string',
-                    description: 'JSON Pointer path (e.g., "/discounts", "/schema_metadata"). Must start with /'
+                    description: 'JSON Pointer path (e.g., "/discounts", "/charge_outputs/band_totals"). Must start with /'
                 },
                 projection: {
                     type: 'array',
@@ -56,35 +72,39 @@ Returns schema data with version and hash for cache validation.`,
     },
     {
         name: 'schema_search',
-        description: `Search the Council Tax schema for relevant content.
+        description: `Search council tax information for answers to your question. Enter what you want to know in plain language — the system searches across all council tax policy, rules, rates, discounts, exemptions, enforcement and more.
 
-Usage: schema_search(text='single person discount', topK=5)
+Example searches:
+- "single person discount" — Find out about the 25% discount for sole occupants
+- "care leaver" — Discount for young people leaving local authority care
+- "empty property premium" — What happens if your home is left empty
+- "how to pay" — Payment methods and instalment options
+- "appeal my band" — How to challenge your valuation band
+- "bailiff" — Enforcement powers and your rights
+- "student exemption" — Full exemption for student-only households
 
-Features:
-- Hybrid search using BM25 + keyword boosting
-- Scope filtering by section (discounts, appeals, enforcement, etc.)
-- Returns ranked snippets with JSON paths
+Results are ranked by relevance and include the exact path to the source data, so you can verify the information.
 
-Good for finding specific discounts, exemptions, or policy details.`,
+Covers the full 2026/27 approved service definition including 16 discount types, 21 exemption classes, premiums, enforcement stages, and 20 executable rules.`,
         inputSchema: {
             type: 'object',
             properties: {
                 text: {
                     type: 'string',
-                    description: 'Search query text'
+                    description: 'What you want to find out about (plain language query)'
                 },
                 scope: {
                     type: 'array',
                     items: { type: 'string' },
-                    description: 'Sections to search (e.g., ["discounts", "exemptions"]). Empty = all sections.'
+                    description: 'Limit search to specific sections (e.g., ["discounts", "exemptions"]). Leave empty to search everything.'
                 },
                 topK: {
                     type: 'integer',
-                    description: 'Number of results to return (default: 5)'
+                    description: 'Number of results to return (default: 5, max: 50)'
                 },
                 filters: {
                     type: 'object',
-                    description: 'Additional filters (e.g., {"section": "discounts"})'
+                    description: 'Filter by metadata (e.g., {"section": "discounts"}, {"tag": "eligibility"})'
                 }
             },
             required: ['text']
@@ -92,16 +112,14 @@ Good for finding specific discounts, exemptions, or policy details.`,
     },
     {
         name: 'schema_todos',
-        description: `Extract TODO and validation items from the schema.
+        description: `List items in the council tax service definition that still need confirmation or sign-off before publication.
 
-Usage: schema_todos(scope=['data_privacy', 'governance'])
-
-Returns items needing attention with severity:
-- blocking: Legal/DPO sign-off required
-- needs-confirmation: URLs, timescales, policy links
+Returns issues categorised by severity:
+- blocking: Must be resolved before any public use (e.g., DPO sign-off)
+- needs-confirmation: Operational details awaiting internal verification (e.g., processing times, specific URLs)
 - nice-to-have: Minor improvements
 
-Useful for identifying incomplete sections before publication.`,
+This supports accountability — every gap is tracked and visible. The council tax schema is version-controlled and content-checked against live Gloucester City Council and GOV.UK pages.`,
         inputSchema: {
             type: 'object',
             properties: {
@@ -116,34 +134,41 @@ Useful for identifying incomplete sections before publication.`,
     },
     {
         name: 'schema_evaluate',
-        description: `Evaluate discount eligibility based on user facts.
+        description: `Check what council tax discounts, exemptions or reductions you might be eligible for based on your circumstances.
 
-Usage: schema_evaluate(rulesetId='discount_eligibility', userFacts={adults: 1, students: 0})
+Tell us about your household and we'll tell you what may apply:
 
-Currently supports: discount_eligibility ruleset
-
-User facts can include:
-- adults: Number of adults in household
+Household facts you can provide:
+- adults: Number of adults living at the property
 - students: Number of full-time students
-- carers: Number of live-in carers
-- severely_mentally_impaired: Count of SMI persons
-- disabled_resident: true/false
-- has_disabled_adaptations: true/false
-- care_leaver: true/false
-- age: Person's age
+- carers: Number of live-in carers providing at least 35 hours/week care
+- severely_mentally_impaired: Number of people with SMI certification
+- disabled_resident: true/false — does a disabled person live at the property?
+- has_disabled_adaptations: true/false — wheelchair room, extra bathroom, etc.
+- care_leaver: true/false — person who was in local authority care
+- age: Person's age (relevant for care leaver eligibility, 18-24)
+- apprentice: true/false — on an approved apprenticeship scheme
+- property_empty: true/false
+- property_empty_years: How long the property has been empty
 
-Returns advisory candidates with likelihood (likely/unclear/unlikely).`,
+Results show each potential discount/exemption with:
+- likelihood: likely, unclear, or unlikely
+- reasons: Why we think it applies or doesn't
+- what to do next: Evidence needed and how to apply
+- source: The specific rule or legislation
+
+This is guidance only. Your actual eligibility depends on a full assessment by Gloucester City Council's Revenues team. Uses 20 executable rules from the approved 2026/27 service definition.`,
         inputSchema: {
             type: 'object',
             properties: {
                 rulesetId: {
                     type: 'string',
-                    description: 'Ruleset to evaluate. Currently only "discount_eligibility" is supported.',
+                    description: 'Which check to run. "discount_eligibility" covers all discounts, exemptions and reductions.',
                     enum: ['discount_eligibility']
                 },
                 userFacts: {
                     type: 'object',
-                    description: 'Facts about the user/household for evaluation'
+                    description: 'Your household circumstances (adults, students, carers, etc.)'
                 }
             },
             required: ['rulesetId', 'userFacts']
@@ -306,13 +331,16 @@ async function handleMcpRequest(request, context) {
                     },
                     serverInfo: {
                         name: 'gcc-policy-schema-mcp',
-                        version: '1.1.0',
-                        description: 'Gloucester City Council Policy Schemas - Council Tax and Heritage Assets',
+                        version: '2.0.0',
+                        description: 'Gloucester City Council Policy Schemas — Council Tax (2026/27) and Heritage Assets',
                         schemas: {
                             councilTax: {
                                 version: getSchemaVersion(),
                                 hash: getSchemaHash(),
-                                loaded: isSchemaLoaded()
+                                loaded: isSchemaLoaded(),
+                                financialYear: getFinancialYear(),
+                                documentPack: 'v2.4 (facts, rules, taxonomy, results)',
+                                status: 'council-approved'
                             },
                             heritage: {
                                 version: heritageLoader.getSchemaVersion(),
@@ -321,50 +349,58 @@ async function handleMcpRequest(request, context) {
                             }
                         },
                         ...getDateContext(),
-                        instructions: `🏛️ GLOUCESTER CITY COUNCIL POLICY SCHEMA MCP SERVER
+                        instructions: `GLOUCESTER CITY COUNCIL — COUNCIL TAX & HERITAGE POLICY SERVER
 
-This MCP provides access to Gloucester City Council's policy schemas:
+You are providing information from Gloucester City Council's official, council-approved policy schemas. Your role is to help residents, staff and advisers get accurate, clear answers about council tax and heritage matters.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 COUNCIL TAX SCHEMA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Comprehensive information about:
-- Discounts (single person, students, carers, care leavers, disabled)
-- Exemptions (property and person-based)
-- Premiums (empty homes, second homes)
-- Payment and enforcement processes
-- Appeals and challenges
-- Holiday lets and self-catering rules
+PRINCIPLES — apply these to every response:
 
-Tools:
-- schema_get(path) - Retrieve specific sections
-- schema_search(text) - Search for content
-- schema_todos(scope) - Find incomplete items
-- schema_evaluate(rulesetId, userFacts) - Check eligibility
+1. CUSTOMER FOCUSED: Write for the person asking. Use "you" and "your". Anticipate follow-up questions. If someone asks about a discount, also mention how to apply, what evidence they need, and where to go for help. Never make the customer do unnecessary work.
 
-Key paths: /discounts, /exemptions, /property_premiums, /enforcement, /appeals_and_challenges
+2. AUTHORITATIVE: This data comes from Gloucester City Council's approved 2026/27 service definition (schema v${getSchemaVersion() || '2.4.0'}), checked against live council web pages and GOV.UK as of April 2026. Cite the source — legislation references, council policy documents, or specific schema paths. When stating rates or amounts, these are the council-approved figures.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏛️ HERITAGE ASSETS SCHEMA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Designated heritage assets policy including:
-- Listed Building Consent requirements and processes
-- Conservation Area controls
-- NPPF Chapter 16 policy framework
-- Statutory duties (Sections 16, 66, 72 of the 1990 Act)
-- Harm assessment frameworks
-- Public benefits tests
-- Heritage at Risk procedures
+3. ACCOUNTABLE: Be transparent about what is confirmed and what is still under review. The schema tracks open issues and publication status per section. If a section is blocked (service_standards, data_privacy, channels), say so. Never present unconfirmed operational detail as fact. Use schema_todos to check for gaps.
+
+4. ACCURATE: Use the exact figures, rules, and eligibility criteria from the schema. Do not round, approximate, or generalise. Council tax is a statutory service — precision matters. The 2026/27 Band D total is £2,238.77. There are 16 discount types, 21 exemption classes, and 2 premium categories. 20 executable rules are available for eligibility assessment.
+
+COUNCIL TAX SCHEMA (2026/27)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Four-document pack: facts, rules, taxonomy, results
+Financial year: ${getFinancialYear() || '2026/27'}
+Content checked: April 2026 against live Gloucester and GOV.UK pages
+Approved by: Full Council (rates), Cabinet (care leavers scheme)
 
 Tools:
-- heritage_get(path) - Retrieve specific sections
-- heritage_search(text) - Search for content
+- schema_get(path) — Look up specific council tax information
+- schema_search(text) — Search across all council tax content
+- schema_todos(scope) — See what needs confirmation before publication
+- schema_evaluate(rulesetId, userFacts) — Check discount/exemption eligibility
+
+Key paths:
+  /discounts — 16 discounts (single person 25%, care leavers 100%, SMI, students, carers, disabled band reduction, annexe, job-related)
+  /exemptions — 21 statutory exemption classes (B through W)
+  /property_premiums — Empty homes premium (100-300%) and second homes premium (100%)
+  /charge_outputs/band_totals — 2026/27 rates by band
+  /enforcement — Escalation stages, your rights, debt support
+  /council_tax_support — Means-tested help with your bill
+  /executable_rules — 20 machine-readable rules for eligibility decisions
+  /evidence_requirements — What you need to provide for applications
+
+HERITAGE ASSETS SCHEMA
+━━━━━━━━━━━━━━━━━━━━━━
+Tools:
+- heritage_get(path) — Retrieve heritage policy sections
+- heritage_search(text) — Search heritage content
 
 Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJourneys, /keyDefinitions
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚠️ ADVISORY: All information is for guidance only. Actual eligibility and consent requirements depend on specific circumstances and professional assessment.`
+RESPONSE GUIDELINES:
+- Always state the financial year when quoting rates or amounts
+- Include "how to apply" and evidence requirements when discussing discounts/exemptions
+- Link to the source: legislation reference, council policy, or schema path
+- If eligibility is unclear, say what additional information would help determine it
+- Flag any section that is not yet confirmed for publication
+- Advisory notice: "This is guidance based on Gloucester City Council's approved 2026/27 council tax policy. Your actual entitlement depends on your individual circumstances and a formal assessment by the council's Revenues team."`
                     }
                 },
                 id
@@ -417,6 +453,7 @@ Key paths: /legislativeFramework, /heritageAssetTypes, /serviceProcesses, /userJ
                 const wrappedResult = {
                     ...getDateContext(),
                     schemaVersion: getSchemaVersion(),
+                    financialYear: getFinancialYear(),
                     data: result
                 };
 

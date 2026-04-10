@@ -1,20 +1,47 @@
 /**
- * schema.evaluate tool - Evaluate rules against user facts
+ * schema.evaluate tool - Evaluate council tax eligibility against user facts
+ * Uses executable rule slices from the 2026/27 rules document and
+ * discount/exemption catalogue from the facts document.
+ *
  * Currently implements: discount_eligibility ruleset
+ * Covers: 20 executable rules across discounts, exemptions, disregards,
+ *         reductions and premiums.
  */
 
 const { ERROR_CODES, createError, createSuccess } = require('../util/errors');
-const { getSchema } = require('../schema/loader');
+const { getSchema, getDocument } = require('../schema/loader');
 
-/**
- * Available rulesets
- */
 const RULESETS = ['discount_eligibility'];
 
 /**
- * Evaluate single person discount eligibility
- * @param {object} facts - User facts
- * @returns {object} Candidate result
+ * Find a discount item by ID from the adjustment catalogue
+ */
+function findDiscountItem(schema, discountId) {
+    const items = schema.discounts && schema.discounts.items;
+    if (!Array.isArray(items)) return null;
+    return items.find(item => item.id === discountId) || null;
+}
+
+/**
+ * Find an exemption item by ID from the adjustment catalogue
+ */
+function findExemptionItem(schema, exemptionId) {
+    const items = schema.exemptions && schema.exemptions.items;
+    if (!Array.isArray(items)) return null;
+    return items.find(item => item.id === exemptionId) || null;
+}
+
+/**
+ * Get the executable rules from the rules document
+ */
+function getExecutableRules() {
+    const rulesDoc = getDocument('rules');
+    if (!rulesDoc || !rulesDoc.executable_rule_slices) return [];
+    return rulesDoc.executable_rule_slices.rules || [];
+}
+
+/**
+ * Evaluate single person discount
  */
 function evaluateSinglePersonDiscount(facts) {
     const reasons = [];
@@ -22,198 +49,286 @@ function evaluateSinglePersonDiscount(facts) {
 
     if (facts.adults === 1) {
         likelihood = 'likely';
-        reasons.push('Only 1 adult in household qualifies for single person discount');
+        reasons.push('Only 1 adult in the household — you are likely entitled to the 25% single person discount');
     } else if (facts.adults === 0) {
         likelihood = 'unclear';
-        reasons.push('No adults specified - cannot determine eligibility');
+        reasons.push('Number of adults not specified — we need this to assess eligibility');
     } else if (facts.adults > 1) {
-        // Check for disregarded persons
-        const disregarded = (facts.students || 0) + (facts.carers || 0) + (facts.severely_mentally_impaired || 0);
+        const disregarded = (facts.students || 0) + (facts.carers || 0) + (facts.severely_mentally_impaired || 0) + (facts.apprentice ? 1 : 0);
         const countingAdults = facts.adults - disregarded;
 
         if (countingAdults === 1) {
             likelihood = 'likely';
-            reasons.push(`${disregarded} adult(s) may be disregarded, leaving 1 counting adult`);
+            reasons.push(`${disregarded} adult(s) in your household may be disregarded for council tax purposes (students, carers, SMI, apprentices), leaving 1 counting adult`);
         } else if (countingAdults === 0) {
             likelihood = 'likely';
-            reasons.push('All adults may be disregarded - may qualify for exemption instead');
+            reasons.push('All adults may be disregarded — you may qualify for a full exemption rather than a discount');
         } else {
             likelihood = 'unlikely';
-            reasons.push(`${countingAdults} counting adults - single person discount requires only 1`);
+            reasons.push(`${countingAdults} counting adults in the household — the single person discount requires only 1 counting adult`);
         }
     }
 
     return {
         id: 'single-person-discount',
+        ruleId: 'rule.discount.single_person',
         name: 'Single Person Discount',
-        amount: '25%',
+        amount: '25% off your bill',
+        mechanism: 'discount',
+        legalBasis: 'Local Government Finance Act 1992, s.11',
         likelihood,
-        jsonPath: '/discounts/person_based_discounts/0',
-        reasons
+        jsonPath: '/discounts/items/0',
+        reasons,
+        howToApply: 'Apply online at gloucester.gov.uk or call the Revenues team',
+        evidence: 'No formal evidence required but the council may verify your household composition'
     };
 }
 
 /**
- * Evaluate student exemption/discount eligibility
- * @param {object} facts - User facts
- * @returns {object|null} Candidate result or null
+ * Evaluate student discount/exemption
  */
 function evaluateStudentDiscount(facts) {
-    if (facts.students === undefined || facts.students === 0) {
-        return null;
-    }
+    if (facts.students === undefined || facts.students === 0) return null;
 
     const reasons = [];
     let likelihood = 'unclear';
+    let name = 'Student Exemption/Discount';
+    let amount = 'Up to 100%';
 
     if (facts.adults === facts.students) {
         likelihood = 'likely';
-        reasons.push('All adults are students - may qualify for Class N exemption (100%)');
+        name = 'Student Household Exemption (Class N)';
+        amount = '100% exemption';
+        reasons.push('All adults in the household are full-time students — you are likely exempt from council tax entirely under Class N');
     } else if (facts.students > 0 && facts.adults === 2 && facts.students === 1) {
         likelihood = 'likely';
-        reasons.push('One student with one non-student - student is disregarded, may get 25% discount');
+        name = 'Single Person Discount (student disregard)';
+        amount = '25% discount';
+        reasons.push('One full-time student with one non-student — the student is disregarded, so you may get the 25% single person discount');
     } else if (facts.students > 0) {
         likelihood = 'unclear';
-        reasons.push('Some household members are students - need to assess full household composition');
+        reasons.push('Some household members are students — we need to assess the full household to determine whether a discount or exemption applies');
     }
 
     return {
         id: 'student-discount',
-        name: 'Student Exemption/Discount',
-        amount: 'Up to 100%',
+        ruleId: 'rule.exemption.student.all_residents',
+        name,
+        amount,
+        mechanism: 'exemption',
+        legalBasis: 'Council Tax (Exempt Dwellings) Order 1992, Class N; LGFA 1992 Sch 1 para 4',
         likelihood,
-        jsonPath: '/discounts/student_discounts/0',
-        reasons
+        jsonPath: '/exemptions',
+        reasons,
+        howToApply: 'Apply online. You will need your student certificate or UCAS confirmation',
+        evidence: 'Student certificate from your university or college confirming full-time status'
     };
 }
 
 /**
- * Evaluate disabled band reduction eligibility
- * @param {object} facts - User facts
- * @returns {object|null} Candidate result or null
+ * Evaluate disabled band reduction
  */
 function evaluateDisabledBandReduction(facts) {
-    if (!facts.has_disabled_adaptations && !facts.disabled_resident) {
-        return null;
-    }
+    if (!facts.has_disabled_adaptations && !facts.disabled_resident) return null;
 
     const reasons = [];
     let likelihood = 'unclear';
 
     if (facts.has_disabled_adaptations && facts.disabled_resident) {
         likelihood = 'likely';
-        reasons.push('Property has disabled adaptations and disabled resident - likely eligible');
+        reasons.push('Your property has qualifying disabled adaptations and a disabled person lives there — you are likely eligible for the disabled band reduction');
     } else if (facts.has_disabled_adaptations) {
         likelihood = 'unclear';
-        reasons.push('Property has adaptations but need to confirm disabled resident lives there');
+        reasons.push('Your property has adaptations but we need to confirm a disabled person lives there as their main home');
     } else if (facts.disabled_resident) {
         likelihood = 'unclear';
-        reasons.push('Disabled resident present but need qualifying adaptations (bathroom, wheelchair space, etc.)');
+        reasons.push('A disabled person lives at the property — we need to check for qualifying adaptations (extra bathroom or kitchen, wheelchair room, or extra space essential for wellbeing)');
     }
 
     return {
         id: 'disabled-band-reduction',
+        ruleId: 'rule.reduction.disabled_band',
         name: 'Disabled Band Reduction',
-        amount: 'One band lower',
+        amount: 'Bill reduced to one band lower (Band A gets a 1/9 reduction)',
+        mechanism: 'reduction',
+        legalBasis: 'Local Government Finance Act 1992, s.13; Council Tax (Reductions for Disabilities) Regulations 1992',
         likelihood,
-        jsonPath: '/discounts/property_based_discounts/0',
-        reasons
+        jsonPath: '/discounts/items',
+        reasons,
+        howToApply: 'Apply to Gloucester City Council Revenues team. A visit to confirm adaptations may be required',
+        evidence: 'Details of the adaptation (extra bathroom, wheelchair room, etc.) and confirmation the disabled person uses it'
     };
 }
 
 /**
- * Evaluate care leaver discount eligibility
- * @param {object} facts - User facts
- * @returns {object|null} Candidate result or null
+ * Evaluate care leaver discount
  */
 function evaluateCareLeaverDiscount(facts) {
-    if (!facts.care_leaver) {
-        return null;
-    }
+    if (!facts.care_leaver) return null;
 
     const reasons = [];
     let likelihood = 'unclear';
 
     if (facts.care_leaver && facts.age >= 18 && facts.age < 25) {
         likelihood = 'likely';
-        reasons.push('Gloucestershire care leaver aged 18-24 - likely eligible for 100% discount');
+        reasons.push('You are a care leaver aged 18-24 — Gloucester City Council offers a 100% council tax discount for care leavers of any English local authority up to age 25');
     } else if (facts.care_leaver && facts.age >= 25) {
         likelihood = 'unlikely';
-        reasons.push('Care leaver aged 25+ - discount ends on 25th birthday');
+        reasons.push('The care leaver discount ends on your 25th birthday. You may still be eligible for other discounts or council tax support');
     } else if (facts.care_leaver) {
         likelihood = 'unclear';
-        reasons.push('Care leaver status confirmed but need to verify age and GCC care history');
+        reasons.push('Care leaver status confirmed — we need your age to determine eligibility (must be 18-24)');
     }
 
     return {
         id: 'care-leavers-discount',
+        ruleId: 'rule.discount.care_leaver',
         name: 'Care Leavers Discount',
-        amount: '100%',
+        amount: '100% discount',
+        mechanism: 'discount',
+        legalBasis: 'LGFA 1992 s.13A(1)(c) — local discretionary scheme. Cabinet approved 10 January 2024, extended to age 24 and to care leavers of any English LA',
         likelihood,
-        jsonPath: '/discounts/person_based_discounts/2',
-        reasons
+        jsonPath: '/discounts/items',
+        reasons,
+        howToApply: 'Contact Gloucester City Council Revenues team with evidence of your care history',
+        evidence: 'Confirmation of care leaver status from your leaving care team or personal adviser',
+        schemeUrl: 'https://www.gloucester.gov.uk/media/psgjmws5/council-tax-discount-scheme-for-care-leavers.pdf'
     };
 }
 
 /**
- * Evaluate severely mentally impaired discount eligibility
- * @param {object} facts - User facts
- * @returns {object|null} Candidate result or null
+ * Evaluate severely mentally impaired discount
  */
 function evaluateSMIDiscount(facts) {
-    if (!facts.severely_mentally_impaired || facts.severely_mentally_impaired === 0) {
-        return null;
-    }
+    if (!facts.severely_mentally_impaired || facts.severely_mentally_impaired === 0) return null;
 
     const reasons = [];
     let likelihood = 'unclear';
+    let amount = '25% or 100%';
 
     if (facts.severely_mentally_impaired >= 1) {
         if (facts.adults === facts.severely_mentally_impaired) {
             likelihood = 'likely';
-            reasons.push('All adults are SMI - may qualify for 100% discount');
+            amount = '100% discount';
+            reasons.push('All adults in the household are certified as severely mentally impaired — you may qualify for a full 100% discount');
         } else if (facts.adults === 2 && facts.severely_mentally_impaired === 1) {
             likelihood = 'likely';
-            reasons.push('One SMI person with one other adult - may qualify for 25% discount');
+            amount = '25% discount';
+            reasons.push('One person with SMI certification and one other adult — the SMI person is disregarded, which may qualify you for the 25% single person discount');
         } else {
             likelihood = 'unclear';
-            reasons.push('SMI person in household - need doctor certificate and qualifying benefit proof');
+            reasons.push('A person in the household has severe mental impairment — we need to verify the medical certificate and qualifying benefit to determine the discount level');
         }
     }
 
     return {
         id: 'smi-discount',
+        ruleId: 'rule.discount.smi_household',
         name: 'Severely Mentally Impaired Discount',
-        amount: '25% or 100%',
+        amount,
+        mechanism: 'discount',
+        legalBasis: 'LGFA 1992 Sch 1 para 2; Council Tax (Reductions for Disabilities) Regulations 1992',
         likelihood,
-        jsonPath: '/discounts/person_based_discounts/1',
+        jsonPath: '/discounts/items',
+        reasons,
+        howToApply: 'Apply to Gloucester City Council with the required medical evidence',
+        evidence: 'Medical certificate from a registered medical practitioner confirming severe mental impairment, plus proof of a qualifying benefit (PIP, DLA, Attendance Allowance, ESA, UC limited capability, or IS with disability premium)'
+    };
+}
+
+/**
+ * Evaluate empty property premium
+ */
+function evaluateEmptyPropertyPremium(facts) {
+    if (!facts.property_empty) return null;
+
+    const reasons = [];
+    let likelihood = 'unclear';
+    let amount = '';
+    const years = facts.property_empty_years || 0;
+
+    if (years >= 10) {
+        likelihood = 'likely';
+        amount = '300% premium (total 400% of standard charge)';
+        reasons.push(`Your property has been empty for ${years} years — a 300% premium applies to properties empty for 10 or more years`);
+    } else if (years >= 5) {
+        likelihood = 'likely';
+        amount = '200% premium (total 300% of standard charge)';
+        reasons.push(`Your property has been empty for ${years} years — a 200% premium applies to properties empty for 5 to 9 years`);
+    } else if (years >= 2) {
+        likelihood = 'likely';
+        amount = '100% premium (total 200% of standard charge)';
+        reasons.push(`Your property has been empty for ${years} years — a 100% premium applies to properties empty for 2 to 4 years`);
+    } else if (years >= 1) {
+        likelihood = 'unlikely';
+        reasons.push('Your property has been empty for less than 2 years — the premium starts after 2 years of being unoccupied and substantially unfurnished');
+        amount = 'No premium yet (starts at 2 years)';
+    } else {
+        likelihood = 'unclear';
+        amount = 'Depends on duration';
+        reasons.push('Your property is empty — if it remains empty and substantially unfurnished for 2+ years, a premium will apply. Consider whether the property qualifies for an exemption in the meantime');
+    }
+
+    return {
+        id: 'empty-property-premium',
+        ruleId: 'rule.premium.empty_property_long_term',
+        name: 'Long-term Empty Property Premium',
+        amount,
+        mechanism: 'premium',
+        legalBasis: 'LGFA 1992 s.11B as amended by Rating (Property in Common Occupation) and Council Tax (Empty Dwellings) Act 2018 and Levelling-up and Regeneration Act 2023',
+        likelihood,
+        jsonPath: '/property_premiums/empty_homes_premium',
         reasons
     };
 }
 
 /**
+ * Evaluate second home premium
+ */
+function evaluateSecondHomePremium(facts) {
+    if (!facts.second_home) return null;
+
+    return {
+        id: 'second-home-premium',
+        ruleId: 'rule.premium.second_home',
+        name: 'Second Homes Premium',
+        amount: '100% premium (total 200% of standard charge)',
+        mechanism: 'premium',
+        legalBasis: 'Levelling-up and Regeneration Act 2023, s.80',
+        likelihood: 'likely',
+        jsonPath: '/property_premiums/second_homes_premium',
+        reasons: ['Your property is a furnished second home — from 1 April 2025, billing authorities may charge a 100% premium on second homes. Check with Gloucester City Council whether this applies in your case']
+    };
+}
+
+/**
  * Determine which facts are missing for better evaluation
- * @param {object} facts - Provided facts
- * @returns {string[]} Array of missing fact names
  */
 function getMissingFacts(facts) {
     const missing = [];
 
     if (facts.adults === undefined) {
-        missing.push('adults');
+        missing.push('adults — how many adults (aged 18+) live at the property?');
     }
 
-    // Contextual missing facts
     if (facts.students === undefined && facts.adults > 1) {
-        missing.push('students (number of full-time students)');
+        missing.push('students — are any adults full-time students?');
     }
 
     if (facts.age === undefined && facts.care_leaver) {
-        missing.push('age (for care leaver eligibility)');
+        missing.push('age — how old are you? (care leaver discount is for ages 18-24)');
     }
 
     if (facts.disabled_resident === undefined && facts.has_disabled_adaptations) {
-        missing.push('disabled_resident (true/false)');
+        missing.push('disabled_resident — does a disabled person live at the property?');
+    }
+
+    if (facts.has_disabled_adaptations === undefined && facts.disabled_resident) {
+        missing.push('has_disabled_adaptations — does the property have qualifying adaptations (extra bathroom, wheelchair room, etc.)?');
+    }
+
+    if (facts.property_empty !== undefined && facts.property_empty && facts.property_empty_years === undefined) {
+        missing.push('property_empty_years — how long has the property been empty? (affects premium level)');
     }
 
     return missing;
@@ -221,8 +336,6 @@ function getMissingFacts(facts) {
 
 /**
  * Execute the discount_eligibility ruleset
- * @param {object} facts - User facts
- * @returns {object} Evaluation result
  */
 function evaluateDiscountEligibility(facts) {
     const candidates = [];
@@ -230,7 +343,7 @@ function evaluateDiscountEligibility(facts) {
     // Always evaluate single person discount
     candidates.push(evaluateSinglePersonDiscount(facts));
 
-    // Conditional evaluations
+    // Conditional evaluations based on provided facts
     const studentResult = evaluateStudentDiscount(facts);
     if (studentResult) candidates.push(studentResult);
 
@@ -243,6 +356,12 @@ function evaluateDiscountEligibility(facts) {
     const smiResult = evaluateSMIDiscount(facts);
     if (smiResult) candidates.push(smiResult);
 
+    const emptyPremiumResult = evaluateEmptyPropertyPremium(facts);
+    if (emptyPremiumResult) candidates.push(emptyPremiumResult);
+
+    const secondHomeResult = evaluateSecondHomePremium(facts);
+    if (secondHomeResult) candidates.push(secondHomeResult);
+
     // Sort by likelihood (likely first)
     const likelihoodOrder = { 'likely': 0, 'unclear': 1, 'unlikely': 2 };
     candidates.sort((a, b) => likelihoodOrder[a.likelihood] - likelihoodOrder[b.likelihood]);
@@ -250,16 +369,14 @@ function evaluateDiscountEligibility(facts) {
     return {
         candidates,
         missingFacts: getMissingFacts(facts),
-        note: 'Advisory only - actual eligibility depends on full assessment and evidence'
+        rulesUsed: candidates.map(c => c.ruleId).filter(Boolean),
+        financialYear: '2026/27',
+        note: 'This is guidance based on Gloucester City Council\'s approved 2026/27 council tax policy. Your actual entitlement depends on your individual circumstances and a formal assessment by the council\'s Revenues team.'
     };
 }
 
 /**
  * Execute the schema.evaluate tool
- * @param {object} input - Tool input
- * @param {string} input.rulesetId - Ruleset to evaluate (e.g., "discount_eligibility")
- * @param {object} input.userFacts - Facts about the user/household
- * @returns {object} Tool result
  */
 function execute(input = {}) {
     const schema = getSchema();
@@ -267,13 +384,12 @@ function execute(input = {}) {
     if (!schema) {
         return createError(
             ERROR_CODES.SCHEMA_LOAD_FAILED,
-            'Schema could not be loaded'
+            'Council tax schema could not be loaded'
         );
     }
 
     const { rulesetId, userFacts } = input;
 
-    // Validate rulesetId
     if (!rulesetId || typeof rulesetId !== 'string') {
         return createError(
             ERROR_CODES.BAD_REQUEST,
@@ -290,11 +406,10 @@ function execute(input = {}) {
         );
     }
 
-    // Validate userFacts
     if (!userFacts || typeof userFacts !== 'object') {
         return createError(
             ERROR_CODES.BAD_REQUEST,
-            'Missing or invalid "userFacts" parameter'
+            'Missing or invalid "userFacts" parameter — tell us about your household circumstances'
         );
     }
 
