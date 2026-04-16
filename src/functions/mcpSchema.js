@@ -3,7 +3,7 @@
  * Implements MCP JSON-RPC protocol for Gloucester City Council's
  * Council Tax and Heritage Assets policy schemas.
  *
- * Council Tax schema: v2.5.2 four-document pack (facts, rules, taxonomy, results)
+ * Council Tax schema: v2.5.3 four-document pack (facts, rules, taxonomy, results)
  * approved for 2026/27 financial year.
  */
 
@@ -339,7 +339,7 @@ async function handleMcpRequest(request, context) {
                                 hash: getSchemaHash(),
                                 loaded: isSchemaLoaded(),
                                 financialYear: getFinancialYear(),
-                                documentPack: 'v2.5.2 (facts, rules, taxonomy, results)',
+                                documentPack: 'v2.5.3 (facts, rules, taxonomy, results)',
                                 status: 'council-approved'
                             },
                             heritage: {
@@ -357,7 +357,7 @@ PRINCIPLES — apply these to every response:
 
 1. CUSTOMER FOCUSED: Write for the person asking. Use "you" and "your". Anticipate follow-up questions. If someone asks about a discount, also mention how to apply, what evidence they need, and where to go for help. Never make the customer do unnecessary work.
 
-2. AUTHORITATIVE: This data comes from Gloucester City Council's approved 2026/27 service definition (schema v${getSchemaVersion() || '2.5.2'}), checked against live council web pages and GOV.UK as of April 2026. Cite the source — legislation references, council policy documents, or specific schema paths. When stating rates or amounts, these are the council-approved figures.
+2. AUTHORITATIVE: This data comes from Gloucester City Council's approved 2026/27 service definition (schema v${getSchemaVersion() || '2.5.3'}), checked against live council web pages and GOV.UK as of April 2026. Cite the source — legislation references, council policy documents, or specific schema paths. When stating rates or amounts, these are the council-approved figures.
 
 3. ACCOUNTABLE: Be transparent about what is confirmed and what is still under review. The schema tracks open issues and publication status per section. If a section is blocked (service_standards, data_privacy, channels), say so. Never present unconfirmed operational detail as fact. Use schema_todos to check for gaps.
 
