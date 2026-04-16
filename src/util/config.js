@@ -75,7 +75,7 @@ function getMaxBytes() {
 }
 
 /**
- * Get the schema directory path (containing the 4 v2.4 documents)
+ * Get the schema directory path (containing the 4 v2.5.2 documents)
  * @returns {string} Path to schema directory
  */
 function getSchemaDir() {
