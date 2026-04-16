@@ -1,6 +1,6 @@
 /**
  * Schema chunker - builds a chunk index at cold start
- * Creates searchable chunks from the merged council tax schema (v2.4 four-document pack)
+ * Creates searchable chunks from the merged council tax schema (v2.5.2 four-document pack)
  * with metadata for hybrid search.
  */
 
@@ -117,7 +117,7 @@ function createChunk(id, value, pathTokens) {
 }
 
 /**
- * Build chunks from the discounts section (v2.4 flat items array)
+ * Build chunks from the discounts section (v2.5.2 flat items array)
  */
 function chunkDiscounts(discounts, chunks, idCounter) {
     if (!discounts) return idCounter;
@@ -146,7 +146,7 @@ function chunkDiscounts(discounts, chunks, idCounter) {
 }
 
 /**
- * Build chunks from enforcement section (v2.4 structure)
+ * Build chunks from enforcement section (v2.5.2 structure)
  */
 function chunkEnforcement(enforcement, chunks, idCounter) {
     if (!enforcement) return idCounter;
@@ -315,7 +315,7 @@ function chunkHolidayLets(holidayLets, chunks, idCounter) {
 }
 
 /**
- * Build chunks from exemptions section (v2.4 flat items array)
+ * Build chunks from exemptions section (v2.5.2 flat items array)
  */
 function chunkExemptions(exemptions, chunks, idCounter) {
     if (!exemptions) return idCounter;
