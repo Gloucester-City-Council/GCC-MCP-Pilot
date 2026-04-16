@@ -1,6 +1,6 @@
 /**
  * Schema loader - loads the council tax schema pack at cold start
- * Loads four v2.5.2 documents (facts, rules, taxonomy, results) from schemas/CouncilTax/
+ * Loads four v2.5.3 documents (facts, rules, taxonomy, results) from schemas/CouncilTax/
  * and builds a merged view that preserves backward-compatible JSON Pointer paths.
  * Computes SHA-256 hash and extracts version metadata.
  */
@@ -19,13 +19,13 @@ let cachedFinancialYear = null;
 let loadError = null;
 
 /**
- * Schema file manifest - the four v2.5.2 documents
+ * Schema file manifest - the four v2.5.3 documents
  */
 const SCHEMA_FILES = {
-    facts: 'council_tax_facts.v2.5.2.json',
-    rules: 'council_tax_rules.v2.5.2.json',
-    taxonomy: 'council_tax_taxonomy.v2.5.2.json',
-    results: 'council_tax_results.v2.5.2.json'
+    facts: 'council_tax_facts.v2.5.3.json',
+    rules: 'council_tax_rules.v2.5.3.json',
+    taxonomy: 'council_tax_taxonomy.v2.5.3.json',
+    results: 'council_tax_results.v2.5.3.json'
 };
 
 /**

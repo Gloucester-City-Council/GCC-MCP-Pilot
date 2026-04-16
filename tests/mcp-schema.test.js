@@ -15,7 +15,7 @@ describe('mcpSchema request handling', () => {
         jest.doMock('../src/tools/schemaEvaluate', () => ({ execute: jest.fn().mockReturnValue({ outcome: 'likely' }) }));
 
         jest.doMock('../src/schema/loader', () => ({
-            getSchemaVersion: () => '2.5.2',
+            getSchemaVersion: () => '2.5.3',
             getSchemaHash: () => 'abc123',
             isSchemaLoaded: () => true,
             getFinancialYear: () => '2026/27'
@@ -111,7 +111,7 @@ describe('mcpSchema request handling', () => {
         const body = JSON.parse(response.body);
         const payload = JSON.parse(body.result.content[0].text);
         expect(payload.financialYear).toBe('2026/27');
-        expect(payload.schemaVersion).toBe('2.5.2');
+        expect(payload.schemaVersion).toBe('2.5.3');
     });
 
     it('returns server version 2.0.0 in initialize response', async () => {
@@ -135,6 +135,6 @@ describe('mcpSchema request handling', () => {
         const body = JSON.parse(response.body);
         expect(body.result.serverInfo.version).toBe('2.0.0');
         expect(body.result.serverInfo.schemas.councilTax.financialYear).toBe('2026/27');
-        expect(body.result.serverInfo.schemas.councilTax.documentPack).toContain('v2.5.2');
+        expect(body.result.serverInfo.schemas.councilTax.documentPack).toContain('v2.5.3');
     });
 });
