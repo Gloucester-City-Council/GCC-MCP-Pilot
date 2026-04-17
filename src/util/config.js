@@ -52,6 +52,13 @@ function getSchemaAllowlist() {
             '/conflict_resolution',
             '/evidence_requirements',
             '/execution_readiness',
+            '/runtime_contract',
+            '/consumer_contract',
+            '/supporting_context',
+            '/runtime_resolver_contract',
+            '/runtime_vocabularies',
+            '/runtime_case_model',
+            '/runtime',
             // Taxonomy
             '/taxonomy'
         ];
@@ -75,7 +82,7 @@ function getMaxBytes() {
 }
 
 /**
- * Get the schema directory path (containing the 4 v2.5.3 documents)
+ * Get the schema directory path (containing the 4 council tax schema documents)
  * @returns {string} Path to schema directory
  */
 function getSchemaDir() {
