@@ -422,6 +422,12 @@ function getMechanismBucket(candidate) {
 
 function applyApplicabilityRules(candidates, facts, normalisedHousehold) {
     const propertyStateDominates = Boolean(normalisedHousehold.property_empty || normalisedHousehold.second_home);
+    const hasLikelyFullRelief = candidates.some(candidate => {
+        if (candidate.likelihood !== 'likely') return false;
+        const mechanismBucket = getMechanismBucket(candidate);
+        return mechanismBucket === 'exemption' || mechanismBucket === 'discount_full';
+    });
+
     return candidates.map(candidate => {
         const next = { ...candidate };
         if (!next.candidateRole) {
@@ -432,6 +438,11 @@ function applyApplicabilityRules(candidates, facts, normalisedHousehold) {
             next.candidateRole = 'rejected';
             next.likelihood = 'unlikely';
             next.reasons = [...next.reasons, 'Counting adults is zero, so single person discount is not the primary outcome route'];
+        }
+
+        if (hasLikelyFullRelief && next.id === 'single-person-discount' && next.likelihood === 'likely' && next.candidateRole !== 'rejected') {
+            next.candidateRole = 'fallback';
+            next.reasons = [...next.reasons, 'A likely full-relief route applies, so single person discount is treated as a lower-priority alternative'];
         }
 
         if (propertyStateDominates && next.mechanism !== 'premium') {

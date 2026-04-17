@@ -26,6 +26,26 @@ describe('schemaEvaluate resolver precedence', () => {
         expect(result.result.best_outcome.id).toBe('care-leavers-discount');
     });
 
+
+    it('care leaver full discount keeps SPD as alternative, not supporting final outcome', () => {
+        const result = execute({
+            rulesetId: 'discount_eligibility',
+            projectionMode: 'runtime',
+            userFacts: { adults: 1, care_leaver: true, age: 23 }
+        });
+
+        expect(result.ok).toBe(true);
+        const options = result.result.options;
+        const supportingIds = options.supporting_candidates.map(c => c.id);
+        const alternativeIds = options.alternative_outcomes.map(c => c.id);
+
+        expect(supportingIds).not.toContain('single-person-discount');
+        expect(alternativeIds).toContain('single-person-discount');
+
+        const spdCandidate = options.alternative_outcomes.find(c => c.id === 'single-person-discount');
+        expect(spdCandidate.candidateRole).toBe('fallback');
+    });
+
     it('2 adults + disabled adaptations -> disabled band reduction must win', () => {
         const result = execute({
             rulesetId: 'discount_eligibility',
