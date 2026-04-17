@@ -15,18 +15,10 @@ describe('mcpSchema request handling', () => {
         jest.doMock('../src/tools/schemaEvaluate', () => ({ execute: jest.fn().mockReturnValue({ outcome: 'likely' }) }));
 
         jest.doMock('../src/schema/loader', () => ({
-            getSchemaVersion: () => '2.5.3',
+            getSchemaVersion: () => '2.5.6',
             getSchemaHash: () => 'abc123',
             isSchemaLoaded: () => true,
             getFinancialYear: () => '2026/27'
-        }));
-
-        jest.doMock('../src/tools/heritageGet', () => ({ execute: jest.fn().mockReturnValue({ ok: true }) }));
-        jest.doMock('../src/tools/heritageSearch', () => ({ execute: jest.fn().mockReturnValue({ results: [] }) }));
-        jest.doMock('../src/heritage/loader', () => ({
-            getSchemaVersion: () => '1.0.0',
-            getSchemaHash: () => 'def456',
-            isSchemaLoaded: () => true
         }));
     }
 
@@ -111,10 +103,10 @@ describe('mcpSchema request handling', () => {
         const body = JSON.parse(response.body);
         const payload = JSON.parse(body.result.content[0].text);
         expect(payload.financialYear).toBe('2026/27');
-        expect(payload.schemaVersion).toBe('2.5.3');
+        expect(payload.schemaVersion).toBe('2.5.6');
     });
 
-    it('returns server version 2.0.0 in initialize response', async () => {
+    it('returns server version 2.1.0 in initialize response', async () => {
         const httpMock = jest.fn();
         mockSchemaModules(httpMock);
 
@@ -133,8 +125,8 @@ describe('mcpSchema request handling', () => {
         );
 
         const body = JSON.parse(response.body);
-        expect(body.result.serverInfo.version).toBe('2.0.0');
+        expect(body.result.serverInfo.version).toBe('2.1.0');
         expect(body.result.serverInfo.schemas.councilTax.financialYear).toBe('2026/27');
-        expect(body.result.serverInfo.schemas.councilTax.documentPack).toContain('v2.5.3');
+        expect(body.result.serverInfo.schemas.councilTax.documentPack).toContain('v2.5.6');
     });
 });

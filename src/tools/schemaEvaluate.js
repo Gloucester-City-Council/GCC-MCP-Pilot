@@ -12,6 +12,7 @@ const { ERROR_CODES, createError, createSuccess } = require('../util/errors');
 const { getSchema, getDocument } = require('../schema/loader');
 
 const RULESETS = ['discount_eligibility'];
+const PROJECTION_MODES = ['runtime', 'trace', 'debug'];
 
 /**
  * Find a discount item by ID from the adjustment catalogue
@@ -366,13 +367,151 @@ function evaluateDiscountEligibility(facts) {
     const likelihoodOrder = { 'likely': 0, 'unclear': 1, 'unlikely': 2 };
     candidates.sort((a, b) => likelihoodOrder[a.likelihood] - likelihoodOrder[b.likelihood]);
 
+    return candidates;
+}
+
+function toNormalisedHousehold(facts) {
+    const adults = Number.isFinite(facts.adults) ? facts.adults : 0;
+    const students = Number.isFinite(facts.students) ? facts.students : 0;
+    const carers = Number.isFinite(facts.carers) ? facts.carers : 0;
+    const severelyMentallyImpaired = Number.isFinite(facts.severely_mentally_impaired) ? facts.severely_mentally_impaired : 0;
+    const apprentice = facts.apprentice ? 1 : 0;
+    const disregardedAdults = students + carers + severelyMentallyImpaired + apprentice;
+    const countingAdults = Math.max(0, adults - disregardedAdults);
+
     return {
-        candidates,
-        missingFacts: getMissingFacts(facts),
-        rulesUsed: candidates.map(c => c.ruleId).filter(Boolean),
-        financialYear: '2026/27',
-        note: 'This is guidance based on Gloucester City Council\'s approved 2026/27 council tax policy. Your actual entitlement depends on your individual circumstances and a formal assessment by the council\'s Revenues team.'
+        adults,
+        disregarded_adults: disregardedAdults,
+        counting_adults: countingAdults,
+        student_adults: students,
+        carer_adults: carers,
+        severely_mentally_impaired_adults: severelyMentallyImpaired,
+        property_empty: Boolean(facts.property_empty),
+        property_empty_years: Number.isFinite(facts.property_empty_years) ? facts.property_empty_years : 0,
+        second_home: Boolean(facts.second_home)
     };
+}
+
+function buildDerivedFacts(facts, candidates) {
+    const likely = candidates.filter(c => c.likelihood === 'likely').map(c => c.id);
+    const unclear = candidates.filter(c => c.likelihood === 'unclear').map(c => c.id);
+
+    return {
+        likely_candidate_ids: likely,
+        unclear_candidate_ids: unclear,
+        has_likely_outcome: likely.length > 0,
+        requires_manual_review: unclear.length > 0 || getMissingFacts(facts).length > 0
+    };
+}
+
+function selectBestOutcome(candidates) {
+    if (!Array.isArray(candidates) || candidates.length === 0) return null;
+    return candidates[0];
+}
+
+function splitCandidateOptions(candidates) {
+    const likely = candidates.filter(c => c.likelihood === 'likely');
+    const unclear = candidates.filter(c => c.likelihood === 'unclear');
+    const unlikely = candidates.filter(c => c.likelihood === 'unlikely');
+
+    return {
+        supporting_candidates: likely.slice(1),
+        alternative_outcomes: unclear,
+        rejected_outcomes: unlikely
+    };
+}
+
+function buildConfidence(bestOutcome, missingCriticalFacts) {
+    const missingWeight = Math.min(0.4, missingCriticalFacts.length * 0.1);
+    const base = bestOutcome ? (bestOutcome.likelihood === 'likely' ? 0.85 : bestOutcome.likelihood === 'unclear' ? 0.55 : 0.3) : 0.2;
+    const overall = Math.max(0, Number((base - missingWeight).toFixed(2)));
+
+    return {
+        overall,
+        best_outcome_likelihood: bestOutcome ? bestOutcome.likelihood : 'unclear',
+        missing_critical_facts_count: missingCriticalFacts.length
+    };
+}
+
+function loadRuntimeProfiles() {
+    const taxonomyDoc = getDocument('taxonomy') || {};
+    const factsDoc = getDocument('facts') || {};
+    const rulesDoc = getDocument('rules') || {};
+    const resultsDoc = getDocument('results') || {};
+
+    return {
+        taxonomy_runtime_vocabularies: taxonomyDoc.runtime_vocabularies || {},
+        facts_runtime_case_model: factsDoc.runtime_case_model || {},
+        rules_runtime_resolver_contract: rulesDoc.runtime_resolver_contract || {},
+        results_runtime_contract: resultsDoc.runtime_contract || {},
+        results_consumer_contract: resultsDoc.consumer_contract || {},
+        results_supporting_context: resultsDoc.supporting_context || {}
+    };
+}
+
+function projectResult(result, projectionMode) {
+    const mode = PROJECTION_MODES.includes(projectionMode) ? projectionMode : 'runtime';
+    if (mode === 'trace') {
+        return {
+            best_outcome: result.best_outcome,
+            facts: result.facts,
+            missing_critical_facts: result.missing_critical_facts,
+            unresolved_conflicts: result.unresolved_conflicts,
+            confidence: result.confidence,
+            trace: result.trace
+        };
+    }
+
+    if (mode === 'debug') {
+        return result;
+    }
+
+    return {
+        best_outcome: result.best_outcome,
+        options: result.options,
+        facts: result.facts,
+        missing_critical_facts: result.missing_critical_facts,
+        unresolved_conflicts: result.unresolved_conflicts,
+        confidence: result.confidence,
+        trace: {
+            resolver_version: result.trace.resolver_version,
+            projection_mode: result.trace.projection_mode,
+            ruleset_id: result.trace.ruleset_id
+        }
+    };
+}
+
+function runRuntimeResolver(facts, rulesetId, projectionMode) {
+    const runtimeProfiles = loadRuntimeProfiles();
+    const normalisedHousehold = toNormalisedHousehold(facts);
+    const candidates = evaluateDiscountEligibility(facts);
+    const bestOutcome = selectBestOutcome(candidates);
+    const missingCriticalFacts = getMissingFacts(facts);
+    const derivedFacts = buildDerivedFacts(facts, candidates);
+    const rulesUsed = candidates.map(c => c.ruleId).filter(Boolean);
+
+    const runtimeResult = {
+        best_outcome: bestOutcome,
+        options: splitCandidateOptions(candidates),
+        facts: {
+            input_facts: facts,
+            derived_facts: derivedFacts,
+            normalised_household: normalisedHousehold
+        },
+        missing_critical_facts: missingCriticalFacts,
+        unresolved_conflicts: [],
+        confidence: buildConfidence(bestOutcome, missingCriticalFacts),
+        trace: {
+            resolver_version: '2.5.6-runtime',
+            projection_mode: projectionMode,
+            ruleset_id: rulesetId,
+            rules_used: rulesUsed,
+            runtime_profiles_loaded: Object.keys(runtimeProfiles),
+            note: 'This is guidance based on Gloucester City Council\'s approved 2026/27 council tax policy. Your actual entitlement depends on your individual circumstances and a formal assessment by the council\'s Revenues team.'
+        }
+    };
+
+    return projectResult(runtimeResult, projectionMode);
 }
 
 /**
@@ -388,7 +527,7 @@ function execute(input = {}) {
         );
     }
 
-    const { rulesetId, userFacts } = input;
+    const { rulesetId, userFacts, projectionMode = 'runtime' } = input;
 
     if (!rulesetId || typeof rulesetId !== 'string') {
         return createError(
@@ -413,16 +552,21 @@ function execute(input = {}) {
         );
     }
 
-    try {
-        let result;
+    if (!PROJECTION_MODES.includes(projectionMode)) {
+        return createError(
+            ERROR_CODES.BAD_REQUEST,
+            `Unknown projectionMode "${projectionMode}"`,
+            { availableProjectionModes: PROJECTION_MODES }
+        );
+    }
 
-        if (rulesetId === 'discount_eligibility') {
-            result = evaluateDiscountEligibility(userFacts);
-        }
+    try {
+        const result = runRuntimeResolver(userFacts, rulesetId, projectionMode);
 
         return createSuccess({
             rulesetId,
             userFacts,
+            projectionMode,
             ...result
         });
     } catch (err) {
