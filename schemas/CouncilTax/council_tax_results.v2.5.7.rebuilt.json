@@ -1,0 +1,1433 @@
+{
+  "document_meta": {
+    "document_type": "council_tax_results",
+    "document_version": "2.5",
+    "derived_from": "council tax schema v1 2 0.json",
+    "derived_from_schema_version": "1.2.0",
+    "financial_year": "2026/27",
+    "status": "review-ready",
+    "result_type": "service_definition_refactor_result",
+    "content_checked_at": "2026-04-03",
+    "content_checked_basis": "Live Gloucester and GOV.UK public pages",
+    "note": "Hardened v2.2 adds partial executable rule slices and stronger cross-document references. v2.5 adds sanctions and prosecution policy coverage.",
+    "version": "2.5.7",
+    "generated_from": "council tax schema v1 2 0.json",
+    "last_hardened_at": "2026-04-17",
+    "last_updated": "2026-04-17",
+    "change_summary": "v2.5.3 adds explicit post-summons special payment arrangement pathways, removes named officers in favour of job titles, and normalises hardship confirmation notes.",
+    "schema_profile": "beta_runtime_authoring_dual_profile",
+    "beta_note": "Rebuilt fresh from uploaded 2.5.3 sources."
+  },
+  "run_context": {
+    "authority": "Gloucester City Council",
+    "service_name": "Council Tax",
+    "source_document": "council tax schema v1 2 0.json",
+    "source_last_updated": "2026-03-06"
+  },
+  "summary_outcome": {
+    "refactor_complete_for_top_level_sections": true,
+    "top_level_section_count": 23,
+    "discount_count": 16,
+    "exemption_count": 21,
+    "premium_count": 2,
+    "support_scheme_count": 1,
+    "publication_status": "review",
+    "blocked_sections": [
+      "service_standards",
+      "data_privacy",
+      "channels"
+    ],
+    "content_check_status": "updated_from_live_public_sources_on_2026_04_03",
+    "content_check_note": "Public-facing Gloucester content corrected where live pages were explicit; internal operational detail remains flagged as unconfirmed.",
+    "machine_actionable_rule_slice_status": {
+      "status": "expanded_high_value_slice",
+      "count": 36,
+      "rule_ids": [
+        "rule.disregard.carer",
+        "rule.discount.smi_household",
+        "rule.reduction.disabled_band",
+        "rule.sequence.statutory_before_local_adjustments",
+        "rule.discount.care_leaver",
+        "rule.discount.single_person",
+        "rule.disregard.student.full_time",
+        "rule.exemption.student.all_residents",
+        "rule.liability.hierarchy",
+        "rule.premium.empty_property_long_term",
+        "rule.premium.second_home",
+        "rule.sequence.council_tax_support_after_statutory_adjustments",
+        "rule.disregard.apprentice_youth_trainee",
+        "rule.disregard.school_college_leaver",
+        "rule.disregard.hospital_care_patient",
+        "rule.disregard.detention",
+        "rule.disregard.religious_community",
+        "rule.disregard.foreign_student_dependant",
+        "rule.discount.annexe",
+        "rule.discount.job_related_second_home",
+        "rule.sanction.caution",
+        "rule.sanction.penalty_alternative_to_prosecution",
+        "rule.sanction.prosecution",
+        "rule.civil_penalty.council_tax",
+        "rule.civil_penalty.housing_benefit",
+        "rule.civil_penalty.council_tax_support",
+        "rule.payment.flexibility.payment_date_change",
+        "rule.payment.flexibility.instalment_spread",
+        "rule.payment.special_arrangement.pre_summons",
+        "rule.enforcement.vulnerability.high_risk_refer_back",
+        "rule.recovery.decision.cannot_pay_vs_will_not_pay",
+        "rule.recovery.vulnerability.override",
+        "rule.payment.special_arrangement.primary_intervention",
+        "rule.payment.special_arrangement.post_summons",
+        "rule.payment.special_arrangement.post_summons.sfs_acceptance",
+        "rule.payment.special_arrangement.post_summons.previous_year_debt"
+      ],
+      "supported_domains": [
+        "liability",
+        "student disregard",
+        "student exemption",
+        "single person discount",
+        "severely mentally impaired outcome",
+        "carer disregard",
+        "apprentice and youth trainee disregard",
+        "school or college leaver disregard",
+        "hospital and care patient disregard",
+        "detention disregard",
+        "religious community disregard",
+        "foreign student dependant disregard",
+        "disabled band reduction",
+        "annexe discount",
+        "job-related second home discount",
+        "care leaver discount",
+        "empty homes premium",
+        "second homes premium",
+        "CTS sequencing",
+        "fraud sanctions ladder",
+        "civil penalties",
+        "prosecution escalation timing",
+        "penalty cooling-off mechanism",
+        "payment flexibility",
+        "special payment arrangements",
+        "vulnerability referral safeguards",
+        "compassionate recovery decisioning",
+        "cannot pay vs will not pay branching",
+        "vulnerability override rules",
+        "post-summons special payment arrangements",
+        "Standard Financial Statement acceptance",
+        "previous-year debt arrangement rule"
+      ],
+      "unsupported_domains": [
+        "full exemption catalogue",
+        "full discount catalogue",
+        "appeals determination",
+        "complaints handling decisioning",
+        "holiday-let operational transition"
+      ]
+    }
+  },
+  "charge_outputs": {
+    "band_totals": [
+      {
+        "band": "A",
+        "gloucester_city": "£158.03",
+        "county_council": "£1,119.77",
+        "police_pcc": "£214.72",
+        "total": "£1,492.52"
+      },
+      {
+        "band": "B",
+        "gloucester_city": "£184.36",
+        "county_council": "£1,306.39",
+        "police_pcc": "£250.51",
+        "total": "£1,741.26"
+      },
+      {
+        "band": "C",
+        "gloucester_city": "£210.70",
+        "county_council": "£1,493.02",
+        "police_pcc": "£286.29",
+        "total": "£1,990.01"
+      },
+      {
+        "band": "D",
+        "gloucester_city": "£237.04",
+        "county_council": "£1,679.65",
+        "police_pcc": "£322.08",
+        "total": "£2,238.77"
+      },
+      {
+        "band": "E",
+        "gloucester_city": "£289.72",
+        "county_council": "£2,052.91",
+        "police_pcc": "£393.65",
+        "total": "£2,736.28"
+      },
+      {
+        "band": "F",
+        "gloucester_city": "£342.39",
+        "county_council": "£2,426.16",
+        "police_pcc": "£465.23",
+        "total": "£3,233.78"
+      },
+      {
+        "band": "G",
+        "gloucester_city": "£395.07",
+        "county_council": "£2,799.42",
+        "police_pcc": "£536.80",
+        "total": "£3,731.29"
+      },
+      {
+        "band": "H",
+        "gloucester_city": "£474.08",
+        "county_council": "£3,359.30",
+        "police_pcc": "£644.16",
+        "total": "£4,477.54"
+      }
+    ],
+    "increase_summary": {
+      "gloucester_city": "3%",
+      "county_council": "5% (including adult social care precept)",
+      "police_pcc": "4.5%",
+      "average_total": "4.7%",
+      "band_d_weekly_increase": "£0.13 per week (£6.68 per year)"
+    },
+    "parish_precepts": {
+      "quedgeley_town_council": {
+        "note": "Additional precept applies to properties in Quedgeley parish",
+        "status": "See separate Quedgeley spending plans document"
+      }
+    },
+    "public_charge_page_year": "2025/26",
+    "public_charge_page_year_status": "archived"
+  },
+  "applied_transformations": [
+    {
+      "transformation_id": "group-top-level-sections-into-domain-documents",
+      "result": "completed",
+      "note": "All top-level sections from the uploaded council tax schema have been allocated to the populated taxonomy, facts, rules or results documents."
+    },
+    {
+      "transformation_id": "preserve-source-prose-where-formal-logic-is-not-yet-safe",
+      "result": "completed",
+      "note": "Narrative logic remains attached to source extracts in the rules document where formalisation would otherwise invent policy."
+    },
+    {
+      "transformation_id": "expand-high-value-executable-slice-for-build-handoff",
+      "result": "completed",
+      "note": "Added typed rules for additional disregards and selected property discounts, plus stronger sequencing and readiness metadata."
+    },
+    {
+      "transformation_id": "integrate-sanctions-and-prosecution-policy-domain",
+      "result": "completed",
+      "note": "Added facts, rules, taxonomy and coverage trace for the August 2024 Revenues and Benefits Sanction and Prosecution Policy using the user-provided policy extract."
+    },
+    {
+      "transformation_id": "make-compassion-explicit-and-promote-spa-to-primary-intervention",
+      "result": "completed",
+      "note": "Converted compassionate recovery from prose principles into explicit decision objects and elevated SPA to preferred pre-enforcement intervention."
+    },
+    {
+      "transformation_id": "add-post-summons-spa-operational-layer",
+      "result": "completed",
+      "note": "Modelled the summons/liability-order arrangement tier separately from the pre-summons self-serve SPA, including upfront payment, income evidence, SFS acceptance and previous-year debt handling."
+    }
+  ],
+  "evidence_requirements": [
+    {
+      "context": "severely-mentally-impaired",
+      "requirement": "Medical certificate from doctor confirming severe mental impairment"
+    },
+    {
+      "context": "severely-mentally-impaired",
+      "requirement": "Include medical certificate and benefit evidence"
+    },
+    {
+      "context": "carer-disregard",
+      "requirement": "Evidence of care arrangement and benefits required"
+    },
+    {
+      "context": "full-time-students",
+      "requirement": "Student certificate from educational institution"
+    },
+    {
+      "context": "full-time-students",
+      "requirement": "Download and email form to revenues@gloucester.gov.uk with student certificate"
+    },
+    {
+      "context": "exemptions",
+      "requirement": "Must provide evidence exemption criteria met"
+    },
+    {
+      "context": "holiday_lets_and_self_catering",
+      "requirement": {
+        "voa_contact": "https://www.gov.uk/contact-voa",
+        "council_contact": "revenues@gloucester.gov.uk",
+        "evidence_to_maintain": [
+          "Booking calendar showing availability",
+          "Marketing materials and listings (Airbnb, Booking.com, etc)",
+          "Booking confirmations and receipts",
+          "Rental income records",
+          "Business accounts showing profit motive",
+          "Evidence of market-rate pricing"
+        ],
+        "annual_declaration": "VOA may require annual declaration that criteria still met"
+      }
+    }
+  ],
+  "notices": [
+    {
+      "type": "publication_blocker",
+      "message": "The service definition remains in review. Publication blockers and unresolved issues remain and are carried through from the source pack."
+    },
+    {
+      "type": "results_scope_notice",
+      "message": "This results document is a refactor/completeness result, not an individual resident liability calculation."
+    },
+    {
+      "type": "schema_hardening_note",
+      "message": "v2.5.2 makes compassionate recovery and cannot-pay vs will-not-pay branching explicit, but some recovery decisions still require officer judgement and proportionality review."
+    }
+  ],
+  "coverage_trace": [
+    {
+      "original_section": "schema_metadata",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "package_identity",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "service_overview",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "legal_framework",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "valuation_and_charging",
+      "migrated_to": "facts.charge_schedule",
+      "status": "migrated"
+    },
+    {
+      "original_section": "discounts",
+      "migrated_to": "facts.adjustment_catalogue",
+      "status": "migrated"
+    },
+    {
+      "original_section": "property_premiums",
+      "migrated_to": "facts.adjustment_catalogue",
+      "status": "migrated"
+    },
+    {
+      "original_section": "exemptions",
+      "migrated_to": "facts.adjustment_catalogue",
+      "status": "migrated"
+    },
+    {
+      "original_section": "council_tax_support",
+      "migrated_to": "facts.adjustment_catalogue",
+      "status": "migrated"
+    },
+    {
+      "original_section": "payment",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "liability",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "enforcement",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "appeals_and_challenges",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "service_standards",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "data_privacy",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "governance",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "channels",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "complaints",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "holiday_lets_and_self_catering",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "related_services",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "fraud",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "security_warning",
+      "migrated_to": "facts.operational_facts",
+      "status": "migrated"
+    },
+    {
+      "original_section": "national_context",
+      "migrated_to": "facts.service_definition",
+      "status": "migrated"
+    },
+    {
+      "original_section": "additional_high_value_disregards_and_property_discounts",
+      "migrated_to": "rules.executable_rule_slices.rules",
+      "status": "machine_actionable_slice",
+      "note": "v2.4 expands the typed rule set for handoff-grade prototyping."
+    },
+    {
+      "original_section": "Revenues and Benefits Sanction and Prosecution Policy — August 2024",
+      "migrated_to": "facts.service_definition.sanctions_and_prosecution_policy / rules.rule_sets.sanctions_and_prosecution_rules / taxonomy.enforcement_types",
+      "status": "migrated"
+    },
+    {
+      "original_section": "Payment flexibility and debt support additions — April 2026 handoff",
+      "migrated_to": "facts.operational_facts.payment.payment_flexibility / facts.operational_facts.enforcement.debt_support / rules.rule_sets.payment_rules / rules.rule_sets.recovery_and_enforcement_rules",
+      "status": "migrated"
+    },
+    {
+      "original_section": "GCC Billing, Collection and Enforcement Policy July 2023 v1",
+      "migrated_to": "facts.operational_facts.enforcement.billing_collection_enforcement_policy / rules.rule_sets.recovery_and_enforcement_rules.billing_collection_enforcement_policy",
+      "status": "migrated_internal_policy"
+    },
+    {
+      "original_section": "Billing Collection and Enforcement Policy 2023 v1 (compassion, cannot pay vs will not pay, SPA role)",
+      "migrated_to": [
+        "facts.operational_facts.enforcement.billing_collection_enforcement_policy.compassionate_recovery_principles",
+        "facts.operational_facts.enforcement.billing_collection_enforcement_policy.recovery_decision_framework",
+        "facts.operational_facts.payment.payment_flexibility.special_payment_arrangement",
+        "rules.recovery_and_enforcement_rules.recovery_decision_framework",
+        "rules.payment_rules.payment_flexibility.special_payment_arrangement",
+        "taxonomy.customer_states",
+        "taxonomy.decision_outcomes"
+      ],
+      "status": "migrated_v2_5_2"
+    },
+    {
+      "original_section": "Billing, Collection and Enforcement Policy 2023 — Summons / Liability Order payment arrangements",
+      "migrated_to": [
+        "facts.operational_facts.payment.payment_flexibility.special_payment_arrangement.post_summons",
+        "rules.rule_sets.payment_rules.payment_flexibility.special_payment_arrangement.post_summons",
+        "taxonomy.payment_arrangement_types"
+      ],
+      "status": "migrated_v2_5_3"
+    }
+  ],
+  "audit_trace": {
+    "source_files": [
+      "council tax schema v1 2 0.json",
+      "ai_digital_delivery_22-02-2026.docx",
+      "Revenues and Benefits Sanction and Prosecution Policy — August 2024 (user-provided extract)"
+    ],
+    "design_principles_applied": [
+      "service definition treated as the governed asset",
+      "channels kept separate from business logic",
+      "traceability preserved through section-level migration",
+      "human review blockers carried into populated outputs",
+      "information governance retained as part of the service definition"
+    ],
+    "open_issues_carried_forward": [
+      "ct-issue-001",
+      "ct-issue-003",
+      "ct-issue-004",
+      "ct-issue-005",
+      "ct-issue-006",
+      "ct-issue-007",
+      "ct-issue-008",
+      "ct-issue-009",
+      "ct-issue-010",
+      "ct-issue-011",
+      "ct-issue-015",
+      "ct-issue-016",
+      "ct-issue-017"
+    ],
+    "rule_slice_contract_version": "2.2"
+  },
+  "assurance": {
+    "release_control": {
+      "overall_status": "review",
+      "publishable": false,
+      "release_scope": "service_definition_refactor_result",
+      "blocking_issues": [
+        {
+          "issue_id": "CT-ASSURE-001",
+          "title": "General DPO contact details now confirmed; service-specific IG sign-off still pending",
+          "severity": "high",
+          "status": "partially_resolved",
+          "owner": "Revenues and Benefits / Information Governance",
+          "affects_sections": [
+            "data_privacy"
+          ],
+          "source": "schema_metadata.validation_status.TODO_SUMMARY"
+        },
+        {
+          "issue_id": "CT-ASSURE-002",
+          "title": "Customer contact standards partly confirmed; collection and processing metrics still need validation",
+          "severity": "high",
+          "status": "partially_resolved",
+          "owner": "Revenues and Benefits",
+          "affects_sections": [
+            "service_standards"
+          ],
+          "source": "schema_metadata.validation_status.performance_metrics"
+        },
+        {
+          "issue_id": "CT-ASSURE-003",
+          "title": "Data retention periods need formal confirmation",
+          "severity": "high",
+          "status": "open",
+          "owner": "Information Governance",
+          "affects_sections": [
+            "data_privacy"
+          ],
+          "source": "schema_metadata.validation_status.TODO_SUMMARY"
+        },
+        {
+          "issue_id": "CT-ASSURE-004",
+          "title": "Caller identity verification and third-party access process not confirmed",
+          "severity": "critical",
+          "status": "open",
+          "owner": "Customer Services / Revenues and Benefits",
+          "affects_sections": [
+            "channels",
+            "data_privacy",
+            "fraud"
+          ],
+          "source": "channels.caller_identity_verification"
+        },
+        {
+          "issue_id": "CT-ASSURE-005",
+          "title": "Valuation Tribunal timescales need confirmation",
+          "severity": "medium",
+          "status": "open",
+          "owner": "Revenues and Benefits",
+          "affects_sections": [
+            "appeals_and_challenges"
+          ],
+          "source": "schema_metadata.validation_status.TODO_SUMMARY"
+        },
+        {
+          "issue_id": "CT-ASSURE-006",
+          "title": "Holiday lets public facts narrowed; detailed operational guidance still needs confirmation",
+          "severity": "medium",
+          "status": "partially_resolved",
+          "owner": "Revenues and Benefits",
+          "affects_sections": [
+            "holiday_lets_and_self_catering"
+          ],
+          "source": "schema_metadata.validation_status.TODO_SUMMARY"
+        },
+        {
+          "issue_id": "CT-ASSURE-007",
+          "title": "2026/27 charge table not independently verified from current public charge page",
+          "severity": "medium",
+          "status": "open",
+          "owner": "Revenues and Benefits",
+          "affects_sections": [
+            "valuation_and_charging"
+          ],
+          "source": "Live Gloucester public charge page still shows 2025/26 figures"
+        }
+      ],
+      "section_statuses": [
+        {
+          "section_id": "service_standards",
+          "status": "review-ready-with-gaps"
+        },
+        {
+          "section_id": "data_privacy",
+          "status": "review-ready-with-gaps"
+        },
+        {
+          "section_id": "channels",
+          "status": "blocked"
+        },
+        {
+          "section_id": "valuation_and_charging",
+          "status": "review-ready"
+        },
+        {
+          "section_id": "discounts",
+          "status": "review-ready"
+        },
+        {
+          "section_id": "exemptions",
+          "status": "review-ready"
+        },
+        {
+          "section_id": "property_premiums",
+          "status": "review-ready"
+        },
+        {
+          "section_id": "council_tax_support",
+          "status": "review-ready"
+        },
+        {
+          "section_id": "sanctions_and_prosecution",
+          "status": "review-ready"
+        }
+      ],
+      "last_reviewed_at": "2026-04-03",
+      "release_decision": {
+        "decision": "withhold_publication_of_unconfirmed_operational_detail",
+        "reason": "Core public content is largely review-ready, but operational IG detail and independent verification of the 2026/27 public charge page remain incomplete.",
+        "decision_date": "2026-04-03"
+      }
+    },
+    "validation": {
+      "status": "partial",
+      "confidence": "medium",
+      "open_validation_items": [
+        "collection rates and service processing times",
+        "service-specific retention periods",
+        "named payment processor confirmation",
+        "caller identity verification and call recording arrangements",
+        "third-party access handling on accounts",
+        "Valuation Tribunal timescales",
+        "holiday lets monitoring and transition handling",
+        "2026/27 public charge-page verification"
+      ],
+      "source_summary": [
+        "v1.2.0 (2026-03-06): Normalised discounts, disregards and exemptions into flat arrays with canonical record shapes. Extracted valuation band rates into versioned rate_history array with shared valuation_ranges_1991 definition.",
+        "RESOLVED (2026-03-06): Cabinet Member, Service Manager, Corporate Director, CTS policy URL, 2026/27 rates",
+        "Performance metrics - collection rates and processing times need validation",
+        "DPO sign off - required before publication",
+        "Data retention periods - need formal confirmation for all processes",
+        "Payment system details - GOV.UK Pay implementation status",
+        "Appeals process - Valuation Tribunal timescales need confirmation",
+        "Holiday lets - council's monitoring approach needs confirmation",
+        "Holiday lets - council guidance document URL needed",
+        "Holiday lets - Business Rates application processing times need confirmation",
+        "Holiday lets - composite property guidance needed",
+        "RESOLVED (2026-03-06): Enforcement policy — full escalation stages and post-LO powers sourced from GCC website",
+        "RESOLVED (2026-03-06): Exemption classes — full statutory set from SI 1992/558. 13 unoccupied, 8 occupied.",
+        "RESOLVED (2026-03-06): National context section added — best practice guidance, Select Committee response Feb 2024, DEA data sharing, national collection benchmark 95.9%.",
+        "TODO: Confirm GCC enrolment in Digital Economy Act data sharing (debt-and-fraud-dea@cabinetoffice.gov.uk)",
+        "TODO: Confirm whether GCC has a published vulnerability and hardship policy for council tax recovery. National guidance (MHCLG 2021) and Select Committee response (Feb 2024) expect billing authorities to have a formal published policy. If not in place, this is the most significant gap before the schema can be used to generate any public-facing content. Check with Revenues & Benefits service before publication.",
+        "TODO: Caller identity verification — confirm verification process, third-party access arrangements, call recording policy and retention. Flagged in channels, data_privacy and fraud sections.",
+        "RESOLVED (2026-03-06): Care leavers discount policy — sourced from https://www.gloucester.gov.uk/media/psgjmws5/council-tax-discount-scheme-for-care-leavers.pdf",
+        "RESOLVED (2026-03-06): Fraud reporting contact — https://www.gloucester.gov.uk/benefits-and-support/benefits/report-fraud/",
+        "CONTENT CHECK (2026-04-03): complaints process corrected to 2 stages plus Ombudsman after stage 2; customer charter timings added; published DPO contact details added; holiday-let detailed switch logic downgraded from fact to interpretation; 2026/27 charge page remains publicly unverified."
+      ],
+      "supplementary_inputs": [
+        "User-provided extract from the Revenues and Benefits Sanction and Prosecution Policy — August 2024, authored by Gloucester City Council policy author, used for v2.5 sanctions integration."
+      ]
+    },
+    "sign_off": {
+      "service_owner": {
+        "role": "Customer Experience and Revenues Manager",
+        "status": "identified"
+      },
+      "senior_responsible_officer": {
+        "role": "Head of Finance",
+        "status": "identified"
+      },
+      "member_accountability": {
+        "role": "Deputy Leader and Cabinet Member for Resources",
+        "status": "identified"
+      },
+      "information_governance": {
+        "role": "Data Protection Officer",
+        "status": "pending_service_specific_review"
+      }
+    }
+  },
+  "execution_readiness": {
+    "status": "prototype_handoff_ready",
+    "supported_domains": [
+      "liability",
+      "counted-adult disregards",
+      "student exemption",
+      "core household discounts",
+      "selected property discounts",
+      "core premiums",
+      "local sequencing gates"
+    ],
+    "unsupported_domains": [
+      "most non-student exemption classes",
+      "recovery workflow",
+      "appeals determination",
+      "complaints handling decisioning",
+      "holiday-let operational transition"
+    ],
+    "supported_rule_count": 20,
+    "coverage_estimate_percent": 74,
+    "scorecard": {
+      "architecture": 8.5,
+      "cohesion": 8.6,
+      "facts_usefulness": 8.7,
+      "taxonomy_quality": 8.1,
+      "rules_executability": 8.0,
+      "schema_contract_quality": 8.1,
+      "overall_tool_usability": 8.3
+    },
+    "note": "v2.4 is cohesive and strict enough for build-AI handoff on the covered slice, while narrative-only areas remain clearly marked."
+  },
+  "profiles": {
+    "runtime_profile": {
+      "purpose": "Primary response contract for MCP and API consumers."
+    },
+    "authoring_profile": {
+      "purpose": "Supporting audit, assurance, coverage and source-trace material."
+    }
+  },
+  "runtime_contract": {
+    "response_shape": {
+      "resolution_mode": "resolution",
+      "best_outcome": {},
+      "options": {
+        "supporting_candidates": [],
+        "alternative_outcomes": [],
+        "rejected_outcomes": []
+      },
+      "facts": {
+        "input_facts": {},
+        "derived_facts": {},
+        "normalised_household": {}
+      },
+      "missing_critical_facts": [],
+      "unresolved_conflicts": [],
+      "confidence": {},
+      "trace": {
+        "rule_ids": [],
+        "fact_refs": [],
+        "source_refs": []
+      }
+    },
+    "special_payment_arrangement_projection": {
+      "plain_english_summary": "You may be able to catch up your missed council tax payment using a special payment arrangement.",
+      "user_facing_purpose": "Catch up a missed council tax payment.",
+      "access_channels": {
+        "online": "My Gloucester account",
+        "assisted": [
+          "phone",
+          "email",
+          "post"
+        ]
+      },
+      "next_best_action": "Use My Gloucester to set up the arrangement online, or contact the council if you need help."
+    }
+  },
+  "consumer_contract": {
+    "best_practice": [
+      "Return facts alongside the best resolved answer.",
+      "Where special payment arrangements apply, describe them first as the catch-up route for missed payments and surface online plus assisted access channels."
+    ]
+  },
+  "supporting_context": {
+    "run_context": {
+      "authority": "Gloucester City Council",
+      "service_name": "Council Tax",
+      "source_document": "council tax schema v1 2 0.json",
+      "source_last_updated": "2026-03-06"
+    },
+    "summary_outcome": {
+      "refactor_complete_for_top_level_sections": true,
+      "top_level_section_count": 23,
+      "discount_count": 16,
+      "exemption_count": 21,
+      "premium_count": 2,
+      "support_scheme_count": 1,
+      "publication_status": "review",
+      "blocked_sections": [
+        "service_standards",
+        "data_privacy",
+        "channels"
+      ],
+      "content_check_status": "updated_from_live_public_sources_on_2026_04_03",
+      "content_check_note": "Public-facing Gloucester content corrected where live pages were explicit; internal operational detail remains flagged as unconfirmed.",
+      "machine_actionable_rule_slice_status": {
+        "status": "expanded_high_value_slice",
+        "count": 36,
+        "rule_ids": [
+          "rule.disregard.carer",
+          "rule.discount.smi_household",
+          "rule.reduction.disabled_band",
+          "rule.sequence.statutory_before_local_adjustments",
+          "rule.discount.care_leaver",
+          "rule.discount.single_person",
+          "rule.disregard.student.full_time",
+          "rule.exemption.student.all_residents",
+          "rule.liability.hierarchy",
+          "rule.premium.empty_property_long_term",
+          "rule.premium.second_home",
+          "rule.sequence.council_tax_support_after_statutory_adjustments",
+          "rule.disregard.apprentice_youth_trainee",
+          "rule.disregard.school_college_leaver",
+          "rule.disregard.hospital_care_patient",
+          "rule.disregard.detention",
+          "rule.disregard.religious_community",
+          "rule.disregard.foreign_student_dependant",
+          "rule.discount.annexe",
+          "rule.discount.job_related_second_home",
+          "rule.sanction.caution",
+          "rule.sanction.penalty_alternative_to_prosecution",
+          "rule.sanction.prosecution",
+          "rule.civil_penalty.council_tax",
+          "rule.civil_penalty.housing_benefit",
+          "rule.civil_penalty.council_tax_support",
+          "rule.payment.flexibility.payment_date_change",
+          "rule.payment.flexibility.instalment_spread",
+          "rule.payment.special_arrangement.pre_summons",
+          "rule.enforcement.vulnerability.high_risk_refer_back",
+          "rule.recovery.decision.cannot_pay_vs_will_not_pay",
+          "rule.recovery.vulnerability.override",
+          "rule.payment.special_arrangement.primary_intervention",
+          "rule.payment.special_arrangement.post_summons",
+          "rule.payment.special_arrangement.post_summons.sfs_acceptance",
+          "rule.payment.special_arrangement.post_summons.previous_year_debt"
+        ],
+        "supported_domains": [
+          "liability",
+          "student disregard",
+          "student exemption",
+          "single person discount",
+          "severely mentally impaired outcome",
+          "carer disregard",
+          "apprentice and youth trainee disregard",
+          "school or college leaver disregard",
+          "hospital and care patient disregard",
+          "detention disregard",
+          "religious community disregard",
+          "foreign student dependant disregard",
+          "disabled band reduction",
+          "annexe discount",
+          "job-related second home discount",
+          "care leaver discount",
+          "empty homes premium",
+          "second homes premium",
+          "CTS sequencing",
+          "fraud sanctions ladder",
+          "civil penalties",
+          "prosecution escalation timing",
+          "penalty cooling-off mechanism",
+          "payment flexibility",
+          "special payment arrangements",
+          "vulnerability referral safeguards",
+          "compassionate recovery decisioning",
+          "cannot pay vs will not pay branching",
+          "vulnerability override rules",
+          "post-summons special payment arrangements",
+          "Standard Financial Statement acceptance",
+          "previous-year debt arrangement rule"
+        ],
+        "unsupported_domains": [
+          "full exemption catalogue",
+          "full discount catalogue",
+          "appeals determination",
+          "complaints handling decisioning",
+          "holiday-let operational transition"
+        ]
+      }
+    },
+    "charge_outputs": {
+      "band_totals": [
+        {
+          "band": "A",
+          "gloucester_city": "£158.03",
+          "county_council": "£1,119.77",
+          "police_pcc": "£214.72",
+          "total": "£1,492.52"
+        },
+        {
+          "band": "B",
+          "gloucester_city": "£184.36",
+          "county_council": "£1,306.39",
+          "police_pcc": "£250.51",
+          "total": "£1,741.26"
+        },
+        {
+          "band": "C",
+          "gloucester_city": "£210.70",
+          "county_council": "£1,493.02",
+          "police_pcc": "£286.29",
+          "total": "£1,990.01"
+        },
+        {
+          "band": "D",
+          "gloucester_city": "£237.04",
+          "county_council": "£1,679.65",
+          "police_pcc": "£322.08",
+          "total": "£2,238.77"
+        },
+        {
+          "band": "E",
+          "gloucester_city": "£289.72",
+          "county_council": "£2,052.91",
+          "police_pcc": "£393.65",
+          "total": "£2,736.28"
+        },
+        {
+          "band": "F",
+          "gloucester_city": "£342.39",
+          "county_council": "£2,426.16",
+          "police_pcc": "£465.23",
+          "total": "£3,233.78"
+        },
+        {
+          "band": "G",
+          "gloucester_city": "£395.07",
+          "county_council": "£2,799.42",
+          "police_pcc": "£536.80",
+          "total": "£3,731.29"
+        },
+        {
+          "band": "H",
+          "gloucester_city": "£474.08",
+          "county_council": "£3,359.30",
+          "police_pcc": "£644.16",
+          "total": "£4,477.54"
+        }
+      ],
+      "increase_summary": {
+        "gloucester_city": "3%",
+        "county_council": "5% (including adult social care precept)",
+        "police_pcc": "4.5%",
+        "average_total": "4.7%",
+        "band_d_weekly_increase": "£0.13 per week (£6.68 per year)"
+      },
+      "parish_precepts": {
+        "quedgeley_town_council": {
+          "note": "Additional precept applies to properties in Quedgeley parish",
+          "status": "See separate Quedgeley spending plans document"
+        }
+      },
+      "public_charge_page_year": "2025/26",
+      "public_charge_page_year_status": "archived"
+    },
+    "applied_transformations": [
+      {
+        "transformation_id": "group-top-level-sections-into-domain-documents",
+        "result": "completed",
+        "note": "All top-level sections from the uploaded council tax schema have been allocated to the populated taxonomy, facts, rules or results documents."
+      },
+      {
+        "transformation_id": "preserve-source-prose-where-formal-logic-is-not-yet-safe",
+        "result": "completed",
+        "note": "Narrative logic remains attached to source extracts in the rules document where formalisation would otherwise invent policy."
+      },
+      {
+        "transformation_id": "expand-high-value-executable-slice-for-build-handoff",
+        "result": "completed",
+        "note": "Added typed rules for additional disregards and selected property discounts, plus stronger sequencing and readiness metadata."
+      },
+      {
+        "transformation_id": "integrate-sanctions-and-prosecution-policy-domain",
+        "result": "completed",
+        "note": "Added facts, rules, taxonomy and coverage trace for the August 2024 Revenues and Benefits Sanction and Prosecution Policy using the user-provided policy extract."
+      },
+      {
+        "transformation_id": "make-compassion-explicit-and-promote-spa-to-primary-intervention",
+        "result": "completed",
+        "note": "Converted compassionate recovery from prose principles into explicit decision objects and elevated SPA to preferred pre-enforcement intervention."
+      },
+      {
+        "transformation_id": "add-post-summons-spa-operational-layer",
+        "result": "completed",
+        "note": "Modelled the summons/liability-order arrangement tier separately from the pre-summons self-serve SPA, including upfront payment, income evidence, SFS acceptance and previous-year debt handling."
+      }
+    ],
+    "evidence_requirements": [
+      {
+        "context": "severely-mentally-impaired",
+        "requirement": "Medical certificate from doctor confirming severe mental impairment"
+      },
+      {
+        "context": "severely-mentally-impaired",
+        "requirement": "Include medical certificate and benefit evidence"
+      },
+      {
+        "context": "carer-disregard",
+        "requirement": "Evidence of care arrangement and benefits required"
+      },
+      {
+        "context": "full-time-students",
+        "requirement": "Student certificate from educational institution"
+      },
+      {
+        "context": "full-time-students",
+        "requirement": "Download and email form to revenues@gloucester.gov.uk with student certificate"
+      },
+      {
+        "context": "exemptions",
+        "requirement": "Must provide evidence exemption criteria met"
+      },
+      {
+        "context": "holiday_lets_and_self_catering",
+        "requirement": {
+          "voa_contact": "https://www.gov.uk/contact-voa",
+          "council_contact": "revenues@gloucester.gov.uk",
+          "evidence_to_maintain": [
+            "Booking calendar showing availability",
+            "Marketing materials and listings (Airbnb, Booking.com, etc)",
+            "Booking confirmations and receipts",
+            "Rental income records",
+            "Business accounts showing profit motive",
+            "Evidence of market-rate pricing"
+          ],
+          "annual_declaration": "VOA may require annual declaration that criteria still met"
+        }
+      }
+    ],
+    "notices": [
+      {
+        "type": "publication_blocker",
+        "message": "The service definition remains in review. Publication blockers and unresolved issues remain and are carried through from the source pack."
+      },
+      {
+        "type": "results_scope_notice",
+        "message": "This results document is a refactor/completeness result, not an individual resident liability calculation."
+      },
+      {
+        "type": "schema_hardening_note",
+        "message": "v2.5.2 makes compassionate recovery and cannot-pay vs will-not-pay branching explicit, but some recovery decisions still require officer judgement and proportionality review."
+      }
+    ],
+    "coverage_trace": [
+      {
+        "original_section": "schema_metadata",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "package_identity",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "service_overview",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "legal_framework",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "valuation_and_charging",
+        "migrated_to": "facts.charge_schedule",
+        "status": "migrated"
+      },
+      {
+        "original_section": "discounts",
+        "migrated_to": "facts.adjustment_catalogue",
+        "status": "migrated"
+      },
+      {
+        "original_section": "property_premiums",
+        "migrated_to": "facts.adjustment_catalogue",
+        "status": "migrated"
+      },
+      {
+        "original_section": "exemptions",
+        "migrated_to": "facts.adjustment_catalogue",
+        "status": "migrated"
+      },
+      {
+        "original_section": "council_tax_support",
+        "migrated_to": "facts.adjustment_catalogue",
+        "status": "migrated"
+      },
+      {
+        "original_section": "payment",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "liability",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "enforcement",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "appeals_and_challenges",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "service_standards",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "data_privacy",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "governance",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "channels",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "complaints",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "holiday_lets_and_self_catering",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "related_services",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "fraud",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "security_warning",
+        "migrated_to": "facts.operational_facts",
+        "status": "migrated"
+      },
+      {
+        "original_section": "national_context",
+        "migrated_to": "facts.service_definition",
+        "status": "migrated"
+      },
+      {
+        "original_section": "additional_high_value_disregards_and_property_discounts",
+        "migrated_to": "rules.executable_rule_slices.rules",
+        "status": "machine_actionable_slice",
+        "note": "v2.4 expands the typed rule set for handoff-grade prototyping."
+      },
+      {
+        "original_section": "Revenues and Benefits Sanction and Prosecution Policy — August 2024",
+        "migrated_to": "facts.service_definition.sanctions_and_prosecution_policy / rules.rule_sets.sanctions_and_prosecution_rules / taxonomy.enforcement_types",
+        "status": "migrated"
+      },
+      {
+        "original_section": "Payment flexibility and debt support additions — April 2026 handoff",
+        "migrated_to": "facts.operational_facts.payment.payment_flexibility / facts.operational_facts.enforcement.debt_support / rules.rule_sets.payment_rules / rules.rule_sets.recovery_and_enforcement_rules",
+        "status": "migrated"
+      },
+      {
+        "original_section": "GCC Billing, Collection and Enforcement Policy July 2023 v1",
+        "migrated_to": "facts.operational_facts.enforcement.billing_collection_enforcement_policy / rules.rule_sets.recovery_and_enforcement_rules.billing_collection_enforcement_policy",
+        "status": "migrated_internal_policy"
+      },
+      {
+        "original_section": "Billing Collection and Enforcement Policy 2023 v1 (compassion, cannot pay vs will not pay, SPA role)",
+        "migrated_to": [
+          "facts.operational_facts.enforcement.billing_collection_enforcement_policy.compassionate_recovery_principles",
+          "facts.operational_facts.enforcement.billing_collection_enforcement_policy.recovery_decision_framework",
+          "facts.operational_facts.payment.payment_flexibility.special_payment_arrangement",
+          "rules.recovery_and_enforcement_rules.recovery_decision_framework",
+          "rules.payment_rules.payment_flexibility.special_payment_arrangement",
+          "taxonomy.customer_states",
+          "taxonomy.decision_outcomes"
+        ],
+        "status": "migrated_v2_5_2"
+      },
+      {
+        "original_section": "Billing, Collection and Enforcement Policy 2023 — Summons / Liability Order payment arrangements",
+        "migrated_to": [
+          "facts.operational_facts.payment.payment_flexibility.special_payment_arrangement.post_summons",
+          "rules.rule_sets.payment_rules.payment_flexibility.special_payment_arrangement.post_summons",
+          "taxonomy.payment_arrangement_types"
+        ],
+        "status": "migrated_v2_5_3"
+      }
+    ],
+    "audit_trace": {
+      "source_files": [
+        "council tax schema v1 2 0.json",
+        "ai_digital_delivery_22-02-2026.docx",
+        "Revenues and Benefits Sanction and Prosecution Policy — August 2024 (user-provided extract)"
+      ],
+      "design_principles_applied": [
+        "service definition treated as the governed asset",
+        "channels kept separate from business logic",
+        "traceability preserved through section-level migration",
+        "human review blockers carried into populated outputs",
+        "information governance retained as part of the service definition"
+      ],
+      "open_issues_carried_forward": [
+        "ct-issue-001",
+        "ct-issue-003",
+        "ct-issue-004",
+        "ct-issue-005",
+        "ct-issue-006",
+        "ct-issue-007",
+        "ct-issue-008",
+        "ct-issue-009",
+        "ct-issue-010",
+        "ct-issue-011",
+        "ct-issue-015",
+        "ct-issue-016",
+        "ct-issue-017"
+      ],
+      "rule_slice_contract_version": "2.2"
+    },
+    "assurance": {
+      "release_control": {
+        "overall_status": "review",
+        "publishable": false,
+        "release_scope": "service_definition_refactor_result",
+        "blocking_issues": [
+          {
+            "issue_id": "CT-ASSURE-001",
+            "title": "General DPO contact details now confirmed; service-specific IG sign-off still pending",
+            "severity": "high",
+            "status": "partially_resolved",
+            "owner": "Revenues and Benefits / Information Governance",
+            "affects_sections": [
+              "data_privacy"
+            ],
+            "source": "schema_metadata.validation_status.TODO_SUMMARY"
+          },
+          {
+            "issue_id": "CT-ASSURE-002",
+            "title": "Customer contact standards partly confirmed; collection and processing metrics still need validation",
+            "severity": "high",
+            "status": "partially_resolved",
+            "owner": "Revenues and Benefits",
+            "affects_sections": [
+              "service_standards"
+            ],
+            "source": "schema_metadata.validation_status.performance_metrics"
+          },
+          {
+            "issue_id": "CT-ASSURE-003",
+            "title": "Data retention periods need formal confirmation",
+            "severity": "high",
+            "status": "open",
+            "owner": "Information Governance",
+            "affects_sections": [
+              "data_privacy"
+            ],
+            "source": "schema_metadata.validation_status.TODO_SUMMARY"
+          },
+          {
+            "issue_id": "CT-ASSURE-004",
+            "title": "Caller identity verification and third-party access process not confirmed",
+            "severity": "critical",
+            "status": "open",
+            "owner": "Customer Services / Revenues and Benefits",
+            "affects_sections": [
+              "channels",
+              "data_privacy",
+              "fraud"
+            ],
+            "source": "channels.caller_identity_verification"
+          },
+          {
+            "issue_id": "CT-ASSURE-005",
+            "title": "Valuation Tribunal timescales need confirmation",
+            "severity": "medium",
+            "status": "open",
+            "owner": "Revenues and Benefits",
+            "affects_sections": [
+              "appeals_and_challenges"
+            ],
+            "source": "schema_metadata.validation_status.TODO_SUMMARY"
+          },
+          {
+            "issue_id": "CT-ASSURE-006",
+            "title": "Holiday lets public facts narrowed; detailed operational guidance still needs confirmation",
+            "severity": "medium",
+            "status": "partially_resolved",
+            "owner": "Revenues and Benefits",
+            "affects_sections": [
+              "holiday_lets_and_self_catering"
+            ],
+            "source": "schema_metadata.validation_status.TODO_SUMMARY"
+          },
+          {
+            "issue_id": "CT-ASSURE-007",
+            "title": "2026/27 charge table not independently verified from current public charge page",
+            "severity": "medium",
+            "status": "open",
+            "owner": "Revenues and Benefits",
+            "affects_sections": [
+              "valuation_and_charging"
+            ],
+            "source": "Live Gloucester public charge page still shows 2025/26 figures"
+          }
+        ],
+        "section_statuses": [
+          {
+            "section_id": "service_standards",
+            "status": "review-ready-with-gaps"
+          },
+          {
+            "section_id": "data_privacy",
+            "status": "review-ready-with-gaps"
+          },
+          {
+            "section_id": "channels",
+            "status": "blocked"
+          },
+          {
+            "section_id": "valuation_and_charging",
+            "status": "review-ready"
+          },
+          {
+            "section_id": "discounts",
+            "status": "review-ready"
+          },
+          {
+            "section_id": "exemptions",
+            "status": "review-ready"
+          },
+          {
+            "section_id": "property_premiums",
+            "status": "review-ready"
+          },
+          {
+            "section_id": "council_tax_support",
+            "status": "review-ready"
+          },
+          {
+            "section_id": "sanctions_and_prosecution",
+            "status": "review-ready"
+          }
+        ],
+        "last_reviewed_at": "2026-04-03",
+        "release_decision": {
+          "decision": "withhold_publication_of_unconfirmed_operational_detail",
+          "reason": "Core public content is largely review-ready, but operational IG detail and independent verification of the 2026/27 public charge page remain incomplete.",
+          "decision_date": "2026-04-03"
+        }
+      },
+      "validation": {
+        "status": "partial",
+        "confidence": "medium",
+        "open_validation_items": [
+          "collection rates and service processing times",
+          "service-specific retention periods",
+          "named payment processor confirmation",
+          "caller identity verification and call recording arrangements",
+          "third-party access handling on accounts",
+          "Valuation Tribunal timescales",
+          "holiday lets monitoring and transition handling",
+          "2026/27 public charge-page verification"
+        ],
+        "source_summary": [
+          "v1.2.0 (2026-03-06): Normalised discounts, disregards and exemptions into flat arrays with canonical record shapes. Extracted valuation band rates into versioned rate_history array with shared valuation_ranges_1991 definition.",
+          "RESOLVED (2026-03-06): Cabinet Member, Service Manager, Corporate Director, CTS policy URL, 2026/27 rates",
+          "Performance metrics - collection rates and processing times need validation",
+          "DPO sign off - required before publication",
+          "Data retention periods - need formal confirmation for all processes",
+          "Payment system details - GOV.UK Pay implementation status",
+          "Appeals process - Valuation Tribunal timescales need confirmation",
+          "Holiday lets - council's monitoring approach needs confirmation",
+          "Holiday lets - council guidance document URL needed",
+          "Holiday lets - Business Rates application processing times need confirmation",
+          "Holiday lets - composite property guidance needed",
+          "RESOLVED (2026-03-06): Enforcement policy — full escalation stages and post-LO powers sourced from GCC website",
+          "RESOLVED (2026-03-06): Exemption classes — full statutory set from SI 1992/558. 13 unoccupied, 8 occupied.",
+          "RESOLVED (2026-03-06): National context section added — best practice guidance, Select Committee response Feb 2024, DEA data sharing, national collection benchmark 95.9%.",
+          "TODO: Confirm GCC enrolment in Digital Economy Act data sharing (debt-and-fraud-dea@cabinetoffice.gov.uk)",
+          "TODO: Confirm whether GCC has a published vulnerability and hardship policy for council tax recovery. National guidance (MHCLG 2021) and Select Committee response (Feb 2024) expect billing authorities to have a formal published policy. If not in place, this is the most significant gap before the schema can be used to generate any public-facing content. Check with Revenues & Benefits service before publication.",
+          "TODO: Caller identity verification — confirm verification process, third-party access arrangements, call recording policy and retention. Flagged in channels, data_privacy and fraud sections.",
+          "RESOLVED (2026-03-06): Care leavers discount policy — sourced from https://www.gloucester.gov.uk/media/psgjmws5/council-tax-discount-scheme-for-care-leavers.pdf",
+          "RESOLVED (2026-03-06): Fraud reporting contact — https://www.gloucester.gov.uk/benefits-and-support/benefits/report-fraud/",
+          "CONTENT CHECK (2026-04-03): complaints process corrected to 2 stages plus Ombudsman after stage 2; customer charter timings added; published DPO contact details added; holiday-let detailed switch logic downgraded from fact to interpretation; 2026/27 charge page remains publicly unverified."
+        ],
+        "supplementary_inputs": [
+          "User-provided extract from the Revenues and Benefits Sanction and Prosecution Policy — August 2024, authored by Gloucester City Council policy author, used for v2.5 sanctions integration."
+        ]
+      },
+      "sign_off": {
+        "service_owner": {
+          "role": "Customer Experience and Revenues Manager",
+          "status": "identified"
+        },
+        "senior_responsible_officer": {
+          "role": "Head of Finance",
+          "status": "identified"
+        },
+        "member_accountability": {
+          "role": "Deputy Leader and Cabinet Member for Resources",
+          "status": "identified"
+        },
+        "information_governance": {
+          "role": "Data Protection Officer",
+          "status": "pending_service_specific_review"
+        }
+      }
+    },
+    "execution_readiness": {
+      "status": "prototype_handoff_ready",
+      "supported_domains": [
+        "liability",
+        "counted-adult disregards",
+        "student exemption",
+        "core household discounts",
+        "selected property discounts",
+        "core premiums",
+        "local sequencing gates"
+      ],
+      "unsupported_domains": [
+        "most non-student exemption classes",
+        "recovery workflow",
+        "appeals determination",
+        "complaints handling decisioning",
+        "holiday-let operational transition"
+      ],
+      "supported_rule_count": 20,
+      "coverage_estimate_percent": 74,
+      "scorecard": {
+        "architecture": 8.5,
+        "cohesion": 8.6,
+        "facts_usefulness": 8.7,
+        "taxonomy_quality": 8.1,
+        "rules_executability": 8.0,
+        "schema_contract_quality": 8.1,
+        "overall_tool_usability": 8.3
+      },
+      "note": "v2.4 is cohesive and strict enough for build-AI handoff on the covered slice, while narrative-only areas remain clearly marked."
+    },
+    "special_payment_arrangement_editorial_note": {
+      "reason_for_v2_5_7_change": "v2.5.7 surfaces the primary user-facing meaning of SPA: catching up a missed payment, including online access."
+    }
+  }
+}

@@ -1,0 +1,1817 @@
+{
+  "document_meta": {
+    "document_type": "council_tax_taxonomy",
+    "document_version": "2.5",
+    "derived_from": "council tax schema v1 2 0.json",
+    "derived_from_schema_version": "1.2.0",
+    "financial_year": "2026/27",
+    "status": "review-ready",
+    "purpose": "Controlled vocabulary and classification model for the council tax service definition.",
+    "content_checked_at": "2026-04-03",
+    "content_checked_basis": "Live Gloucester and GOV.UK public pages",
+    "note": "Hardened v2.2 adds partial executable rule slices and stronger cross-document references. v2.5 adds sanctions and prosecution policy coverage.",
+    "version": "2.5.7",
+    "generated_from": "council tax schema v1 2 0.json",
+    "last_hardened_at": "2026-04-17",
+    "last_updated": "2026-04-17",
+    "change_summary": "v2.5.3 adds explicit post-summons special payment arrangement pathways, removes named officers in favour of job titles, and normalises hardship confirmation notes.",
+    "schema_profile": "beta_runtime_authoring_dual_profile",
+    "beta_note": "Rebuilt fresh from uploaded 2.5.3 sources."
+  },
+  "design_principles": {
+    "service_definition_is_the_asset": true,
+    "channels_must_not_embed_business_logic": true,
+    "traceability_required": true,
+    "human_sign_off_required_before_publication": true,
+    "information_governance_embedded_in_service_definition": true,
+    "source_document": "ai_digital_delivery_22-02-2026.docx"
+  },
+  "mechanisms": [
+    {
+      "id": "discount",
+      "label": "Discount",
+      "definition": "A reduction in council tax liability calculated after liability and valuation have been established, usually as a percentage of charge.",
+      "aliases": [
+        "Discount",
+        "discount"
+      ]
+    },
+    {
+      "id": "disregard",
+      "label": "Disregard",
+      "definition": "A rule that removes a person from the count of relevant adults used to determine discount or exemption outcomes.",
+      "aliases": [
+        "Disregard",
+        "disregard"
+      ]
+    },
+    {
+      "id": "exemption",
+      "label": "Exemption",
+      "definition": "A rule that removes or extinguishes council tax liability for a dwelling or class of occupation.",
+      "aliases": [
+        "Exemption",
+        "exemption"
+      ]
+    },
+    {
+      "id": "premium",
+      "label": "Premium",
+      "definition": "An increase applied to the standard charge for certain long-term empty or second-home situations.",
+      "aliases": [
+        "Premium",
+        "premium"
+      ]
+    },
+    {
+      "id": "reduction",
+      "label": "Reduction",
+      "definition": "A reduction scheme or band adjustment that changes the charge payable, including disabled band reduction and CTS.",
+      "aliases": [
+        "Reduction",
+        "reduction"
+      ]
+    },
+    {
+      "id": "support",
+      "label": "Support",
+      "definition": "Means-tested or scheme-based reduction such as local council tax support.",
+      "aliases": [
+        "Support",
+        "support"
+      ]
+    },
+    {
+      "id": "sanction",
+      "label": "Sanction",
+      "definition": "A formal enforcement outcome applied following fraud or incorrect claims, including cautions, penalties and prosecution.",
+      "aliases": [
+        "Sanction",
+        "sanction"
+      ]
+    },
+    {
+      "id": "civil_penalty",
+      "label": "Civil penalty",
+      "definition": "A fixed financial penalty applied for negligent or incorrect information without requiring prosecution.",
+      "aliases": [
+        "Civil penalty",
+        "civil_penalty"
+      ]
+    },
+    {
+      "id": "payment_flexibility",
+      "label": "Payment flexibility",
+      "definition": "A discretionary or operational option that changes payment dates or spreads instalments without changing liability."
+    },
+    {
+      "id": "special_payment_arrangement",
+      "label": "Special payment arrangement",
+      "definition": "A catch-up payment arrangement for missed council tax instalments. Before summons it may be available as a self-serve online option; after summons it becomes a council-managed assessed arrangement."
+    }
+  ],
+  "legal_basis_types": [
+    {
+      "id": "local-discretionary",
+      "label": "Local discretionary",
+      "definition": "A local authority discretionary scheme or policy choice."
+    },
+    {
+      "id": "statutory",
+      "label": "Statutory",
+      "definition": "A rule or entitlement based directly on legislation."
+    }
+  ],
+  "discount_categories": [
+    {
+      "id": "disregard",
+      "label": "Disregard",
+      "definition": "A person-count treatment that can indirectly create a discount or exemption outcome.",
+      "aliases": [
+        "Disregard",
+        "disregard"
+      ]
+    },
+    {
+      "id": "person-based",
+      "label": "Person based",
+      "definition": "A discount or disregard determined by the status, circumstances or attributes of one or more people.",
+      "aliases": [
+        "Person based",
+        "person_based"
+      ]
+    },
+    {
+      "id": "property-based",
+      "label": "Property based",
+      "definition": "A discount or reduction determined by the physical use, occupation or relationship of a dwelling.",
+      "aliases": [
+        "Property based",
+        "property_based"
+      ]
+    },
+    {
+      "id": "student",
+      "label": "Student related",
+      "definition": "A student-specific disregard or exemption class driven by education status.",
+      "aliases": [
+        "Student related",
+        "student"
+      ]
+    }
+  ],
+  "exemption_categories": [
+    {
+      "id": "occupied",
+      "label": "Occupied",
+      "definition": "An exemption category applying where the dwelling is occupied by a qualifying class of resident.",
+      "aliases": [
+        "Occupied",
+        "occupied"
+      ]
+    },
+    {
+      "id": "unoccupied",
+      "label": "Unoccupied",
+      "definition": "An exemption category applying where the dwelling is unoccupied and the last or intended occupier meets a qualifying condition.",
+      "aliases": [
+        "Unoccupied",
+        "unoccupied"
+      ]
+    }
+  ],
+  "exemption_classes": [
+    {
+      "id": "b",
+      "label": "B",
+      "definition": "Empty dwelling owned by a charity and exempt for the limited statutory period.",
+      "aliases": [
+        "B",
+        "b"
+      ]
+    },
+    {
+      "id": "d",
+      "label": "D",
+      "definition": "Empty dwelling where the liable person is detained in prison or other qualifying detention.",
+      "aliases": [
+        "D",
+        "d"
+      ]
+    },
+    {
+      "id": "e",
+      "label": "E",
+      "definition": "Empty dwelling where the liable person has moved permanently to a hospital or care home.",
+      "aliases": [
+        "E",
+        "e"
+      ]
+    },
+    {
+      "id": "f",
+      "label": "F",
+      "definition": "Empty dwelling because the liable person has died and probate or letters of administration conditions apply.",
+      "aliases": [
+        "F",
+        "f"
+      ]
+    },
+    {
+      "id": "g",
+      "label": "G",
+      "definition": "Dwelling occupation prohibited by law.",
+      "aliases": [
+        "G",
+        "g"
+      ]
+    },
+    {
+      "id": "h",
+      "label": "H",
+      "definition": "Empty dwelling awaiting occupation by a minister of religion.",
+      "aliases": [
+        "H",
+        "h"
+      ]
+    },
+    {
+      "id": "i",
+      "label": "I",
+      "definition": "Empty dwelling where the liable person is receiving care elsewhere.",
+      "aliases": [
+        "I",
+        "i"
+      ]
+    },
+    {
+      "id": "j",
+      "label": "J",
+      "definition": "Empty dwelling where the liable person has moved elsewhere to provide care.",
+      "aliases": [
+        "J",
+        "j"
+      ]
+    },
+    {
+      "id": "k",
+      "label": "K",
+      "definition": "Empty dwelling left by a student.",
+      "aliases": [
+        "K",
+        "k"
+      ]
+    },
+    {
+      "id": "l",
+      "label": "L",
+      "definition": "Dwelling repossessed by a mortgagee.",
+      "aliases": [
+        "L",
+        "l"
+      ]
+    },
+    {
+      "id": "m",
+      "label": "M",
+      "definition": "Student hall of residence.",
+      "aliases": [
+        "M",
+        "m"
+      ]
+    },
+    {
+      "id": "n",
+      "label": "N",
+      "definition": "Dwelling occupied only by students.",
+      "aliases": [
+        "N",
+        "n"
+      ]
+    },
+    {
+      "id": "o",
+      "label": "O",
+      "definition": "Armed forces accommodation.",
+      "aliases": [
+        "O",
+        "o"
+      ]
+    },
+    {
+      "id": "p",
+      "label": "P",
+      "definition": "Visiting forces accommodation.",
+      "aliases": [
+        "P",
+        "p"
+      ]
+    },
+    {
+      "id": "q",
+      "label": "Q",
+      "definition": "Dwelling left empty by a bankrupt trustee.",
+      "aliases": [
+        "Q",
+        "q"
+      ]
+    },
+    {
+      "id": "r",
+      "label": "R",
+      "definition": "Unoccupied caravan pitch or boat mooring.",
+      "aliases": [
+        "R",
+        "r"
+      ]
+    },
+    {
+      "id": "s",
+      "label": "S",
+      "definition": "Occupied only by persons under 18.",
+      "aliases": [
+        "S",
+        "s"
+      ]
+    },
+    {
+      "id": "t",
+      "label": "T",
+      "definition": "Unoccupied annexe that may not be let separately due to planning condition.",
+      "aliases": [
+        "T",
+        "t"
+      ]
+    },
+    {
+      "id": "u",
+      "label": "U",
+      "definition": "Occupied only by people who are severely mentally impaired.",
+      "aliases": [
+        "U",
+        "u"
+      ]
+    },
+    {
+      "id": "v",
+      "label": "V",
+      "definition": "Occupied by at least one foreign diplomat or specified international organisation person.",
+      "aliases": [
+        "V",
+        "v"
+      ]
+    },
+    {
+      "id": "w",
+      "label": "W",
+      "definition": "Occupied annexe used by a dependent relative.",
+      "aliases": [
+        "W",
+        "w"
+      ]
+    }
+  ],
+  "occupancy_statuses": [
+    {
+      "id": "occupied",
+      "label": "Occupied",
+      "definition": "The dwelling is occupied."
+    },
+    {
+      "id": "unoccupied",
+      "label": "Unoccupied",
+      "definition": "The dwelling is not occupied."
+    },
+    {
+      "id": "sole_or_main_residence",
+      "label": "Sole or main residence",
+      "definition": "The dwelling is occupied as a person's sole or main residence."
+    },
+    {
+      "id": "second_home",
+      "label": "Second home",
+      "definition": "The dwelling is furnished but is not anyone's sole or main residence."
+    },
+    {
+      "id": "empty_long_term",
+      "label": "Empty long-term",
+      "definition": "The dwelling has been unoccupied for a long enough period to trigger empty-property rules."
+    },
+    {
+      "id": "student_occupied",
+      "label": "Occupied only by students",
+      "definition": "Occupied only by students"
+    }
+  ],
+  "property_statuses": [
+    {
+      "id": "domestic_dwelling",
+      "label": "Domestic dwelling",
+      "definition": "A dwelling entered in the council tax list."
+    },
+    {
+      "id": "holiday_let",
+      "label": "Holiday let",
+      "definition": "Accommodation let or intended to be let for short stays; council tax or business rates treatment depends on statutory tests."
+    },
+    {
+      "id": "self_catering",
+      "label": "Self-catering accommodation",
+      "definition": "Self-catering accommodation that may move between council tax and business rates depending on VOA rules."
+    },
+    {
+      "id": "hmo",
+      "label": "House in multiple occupation",
+      "definition": "A house in multiple occupation for which owner-liability rules may apply."
+    },
+    {
+      "id": "annexe",
+      "label": "Annexe",
+      "definition": "A subsidiary dwelling linked to a main residence."
+    },
+    {
+      "id": "care_home",
+      "label": "Care home or hospital related",
+      "definition": "Care home or hospital related"
+    }
+  ],
+  "person_roles": [
+    {
+      "id": "liable_person",
+      "label": "Liable person",
+      "definition": "A person who is legally responsible for paying council tax for a dwelling."
+    },
+    {
+      "id": "resident",
+      "label": "Resident",
+      "definition": "A person who occupies a dwelling as their sole or main residence."
+    },
+    {
+      "id": "owner",
+      "label": "Owner",
+      "definition": "The person or body with the legal ownership interest that makes them liable where owner liability applies."
+    },
+    {
+      "id": "student",
+      "label": "Student",
+      "definition": "A person who meets the statutory definition of a full-time student for council tax purposes."
+    },
+    {
+      "id": "care_leaver",
+      "label": "Care leaver",
+      "definition": "A person who qualifies under the authority's care leaver reduction scheme."
+    },
+    {
+      "id": "carer",
+      "label": "Carer",
+      "definition": "Carer"
+    },
+    {
+      "id": "disregarded_person",
+      "label": "Disregarded person",
+      "definition": "Disregarded person"
+    }
+  ],
+  "liability_bases": [
+    {
+      "id": "resident_hierarchy",
+      "label": "Resident hierarchy",
+      "definition": "Liability is established by the statutory hierarchy of resident status and interest in the dwelling."
+    },
+    {
+      "id": "owner_liability",
+      "label": "Owner liability",
+      "definition": "Liability rests with the owner where owner-liability classes apply or there are no liable residents."
+    },
+    {
+      "id": "property_based_charge",
+      "label": "Property based charge",
+      "definition": "The base charge is attached to the dwelling rather than to income or benefit status."
+    },
+    {
+      "id": "valuation_band",
+      "label": "Valuation band",
+      "definition": "The dwelling charge is derived from the statutory valuation band."
+    }
+  ],
+  "evidence_types": [
+    {
+      "id": "medical_certificate",
+      "label": "Medical certificate",
+      "definition": "Medical certificate"
+    },
+    {
+      "id": "benefit_award",
+      "label": "Benefit award evidence",
+      "definition": "Benefit award evidence"
+    },
+    {
+      "id": "student_certificate",
+      "label": "Student certificate",
+      "definition": "Student certificate"
+    },
+    {
+      "id": "care_leaver_verification",
+      "label": "Care leaver verification",
+      "definition": "Care leaver verification"
+    },
+    {
+      "id": "occupancy_evidence",
+      "label": "Occupancy evidence",
+      "definition": "Occupancy evidence"
+    },
+    {
+      "id": "tenancy_or_ownership_evidence",
+      "label": "Tenancy or ownership evidence",
+      "definition": "Tenancy or ownership evidence"
+    },
+    {
+      "id": "identity_verification",
+      "label": "Identity verification",
+      "definition": "Identity verification"
+    },
+    {
+      "id": "interview_under_caution_record",
+      "label": "Interview under caution record",
+      "definition": "Record of the interview under caution including any admission."
+    },
+    {
+      "id": "signed_caution_certificate",
+      "label": "Signed caution certificate",
+      "definition": "Signed record confirming acceptance of a caution."
+    },
+    {
+      "id": "overpayment_calculation",
+      "label": "Overpayment calculation",
+      "definition": "Calculation showing the value and period of the overpayment."
+    },
+    {
+      "id": "penalty_agreement",
+      "label": "Penalty agreement",
+      "definition": "Signed agreement for a penalty as an alternative to prosecution, including cooling-off rights."
+    }
+  ],
+  "decision_outcomes": [
+    {
+      "id": "apply",
+      "label": "Apply",
+      "definition": "The mechanism or rule outcome should be applied."
+    },
+    {
+      "id": "reject",
+      "label": "Reject",
+      "definition": "The mechanism or rule outcome should not be applied."
+    },
+    {
+      "id": "pending_evidence",
+      "label": "Pending evidence",
+      "definition": "A decision cannot be completed until required evidence is supplied."
+    },
+    {
+      "id": "review_required",
+      "label": "Review required",
+      "definition": "A human decision or review is required before the outcome can be finalised."
+    },
+    {
+      "id": "blocked_for_publication",
+      "label": "Blocked for publication",
+      "definition": "The content or result must not be published until blockers are resolved."
+    },
+    {
+      "id": "sanction_applied",
+      "label": "Sanction applied",
+      "definition": "A sanction or civil penalty outcome has been selected for the case."
+    },
+    {
+      "id": "support_path",
+      "label": "Support path",
+      "definition": "A recovery outcome focused on support, affordability and signposting rather than immediate escalation."
+    },
+    {
+      "id": "enhanced_support_path",
+      "label": "Enhanced support path",
+      "definition": "A tailored support outcome used where vulnerability or hardship requires modified handling."
+    },
+    {
+      "id": "enhanced_enforcement_path",
+      "label": "Enhanced enforcement path",
+      "definition": "A more assertive recovery outcome used where the resident is assessed as unwilling rather than unable to pay."
+    },
+    {
+      "id": "special_payment_arrangement",
+      "label": "Special payment arrangement",
+      "definition": "A negotiated replacement instalment plan used as the primary pre-enforcement intervention where policy conditions are met."
+    },
+    {
+      "id": "post_summons_arrangement",
+      "label": "Post-summons arrangement",
+      "definition": "A council-managed arrangement outcome selected at summons or liability order stage after financial assessment."
+    }
+  ],
+  "payment_method_types": [
+    {
+      "id": "direct-debit",
+      "label": "direct_debit",
+      "definition": "Payment collected automatically from a bank account on agreed instalment dates.",
+      "aliases": [
+        "direct_debit"
+      ]
+    },
+    {
+      "id": "online",
+      "label": "online",
+      "definition": "Payment made through the council online payment service by debit or credit card.",
+      "aliases": [
+        "online"
+      ]
+    },
+    {
+      "id": "phone",
+      "label": "phone",
+      "definition": "Payment made by telephone using the council payment line or assisted service.",
+      "aliases": [
+        "phone"
+      ]
+    },
+    {
+      "id": "post",
+      "label": "post",
+      "definition": "post",
+      "aliases": [
+        "post"
+      ]
+    }
+  ],
+  "channel_types": [
+    {
+      "id": "website",
+      "label": "website",
+      "definition": "Public council website content channel.",
+      "aliases": [
+        "website"
+      ]
+    },
+    {
+      "id": "online-account",
+      "label": "online_account",
+      "definition": "Authenticated self-service account channel.",
+      "aliases": [
+        "online_account"
+      ]
+    },
+    {
+      "id": "phone",
+      "label": "phone",
+      "definition": "Telephone contact channel.",
+      "aliases": [
+        "phone"
+      ]
+    },
+    {
+      "id": "email",
+      "label": "email",
+      "definition": "Email communication or submission channel.",
+      "aliases": [
+        "email"
+      ]
+    },
+    {
+      "id": "post",
+      "label": "post",
+      "definition": "Postal document or correspondence channel.",
+      "aliases": [
+        "post"
+      ]
+    },
+    {
+      "id": "office-hours",
+      "label": "office_hours",
+      "definition": "office hours",
+      "aliases": [
+        "office_hours"
+      ]
+    },
+    {
+      "id": "accessibility",
+      "label": "accessibility",
+      "definition": "accessibility",
+      "aliases": [
+        "accessibility"
+      ]
+    },
+    {
+      "id": "caller-identity-verification",
+      "label": "caller_identity_verification",
+      "definition": "caller identity verification",
+      "aliases": [
+        "caller_identity_verification"
+      ]
+    }
+  ],
+  "issue_types": [
+    {
+      "id": "validation_gap",
+      "label": "Validation gap",
+      "definition": "A content or contract area that cannot yet be fully validated from trusted sources.",
+      "aliases": [
+        "Validation gap",
+        "validation_gap"
+      ]
+    },
+    {
+      "id": "sign_off_gap",
+      "label": "Sign-off gap",
+      "definition": "A review or approval requirement that is still outstanding.",
+      "aliases": [
+        "Sign-off gap",
+        "sign_off_gap"
+      ]
+    },
+    {
+      "id": "publication_blocker",
+      "label": "Publication blocker",
+      "definition": "An issue that prevents safe public release.",
+      "aliases": [
+        "Publication blocker",
+        "publication_blocker"
+      ]
+    },
+    {
+      "id": "source_confirmation_needed",
+      "label": "Source confirmation needed",
+      "definition": "Source confirmation needed",
+      "aliases": [
+        "Source confirmation needed",
+        "source_confirmation_needed"
+      ]
+    }
+  ],
+  "source_types": [
+    {
+      "id": "compiled",
+      "label": "compiled",
+      "definition": "A curated composite source assembled from multiple primary or secondary sources.",
+      "aliases": [
+        "compiled"
+      ]
+    },
+    {
+      "id": "gcc-cabinet-report",
+      "label": "gcc_cabinet_report",
+      "definition": "A Gloucester City Council cabinet or committee report.",
+      "aliases": [
+        "gcc_cabinet_report"
+      ]
+    },
+    {
+      "id": "gcc-confirmed",
+      "label": "gcc_confirmed",
+      "definition": "gcc confirmed",
+      "aliases": [
+        "gcc_confirmed"
+      ]
+    },
+    {
+      "id": "gcc-full-council-resolution",
+      "label": "gcc_full_council_resolution",
+      "definition": "gcc full council resolution",
+      "aliases": [
+        "gcc_full_council_resolution"
+      ]
+    },
+    {
+      "id": "gcc-web",
+      "label": "gcc_web",
+      "definition": "gcc web",
+      "aliases": [
+        "gcc_web"
+      ]
+    },
+    {
+      "id": "gov-guidance",
+      "label": "gov_guidance",
+      "definition": "gov guidance",
+      "aliases": [
+        "gov_guidance"
+      ]
+    },
+    {
+      "id": "gov-statistics",
+      "label": "gov_statistics",
+      "definition": "gov statistics",
+      "aliases": [
+        "gov_statistics"
+      ]
+    },
+    {
+      "id": "internal-todo",
+      "label": "internal_todo",
+      "definition": "internal todo",
+      "aliases": [
+        "internal_todo"
+      ]
+    },
+    {
+      "id": "legislation",
+      "label": "legislation",
+      "definition": "Primary or secondary legislation.",
+      "aliases": [
+        "legislation"
+      ]
+    },
+    {
+      "id": "local-discretionary",
+      "label": "local_discretionary",
+      "definition": "local discretionary",
+      "aliases": [
+        "local_discretionary"
+      ]
+    },
+    {
+      "id": "mixed",
+      "label": "mixed",
+      "definition": "mixed",
+      "aliases": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "statutory",
+      "label": "statutory",
+      "definition": "statutory",
+      "aliases": [
+        "statutory"
+      ]
+    },
+    {
+      "id": "statutory-framework-local-scheme",
+      "label": "statutory_framework_local_scheme",
+      "definition": "statutory framework local scheme",
+      "aliases": [
+        "statutory_framework_local_scheme"
+      ]
+    },
+    {
+      "id": "unconfirmed",
+      "label": "unconfirmed",
+      "definition": "unconfirmed",
+      "aliases": [
+        "unconfirmed"
+      ]
+    },
+    {
+      "id": "user-provided-policy-extract",
+      "label": "user_provided_policy_extract",
+      "definition": "A policy extract provided directly by the user in conversation for schema integration work.",
+      "aliases": [
+        "user_provided_policy_extract"
+      ]
+    }
+  ],
+  "themes": [
+    {
+      "id": "annexe-discount",
+      "label": "annexe-discount",
+      "definition": "Discount for qualifying annexes associated with a main dwelling.",
+      "aliases": [
+        "annexe-discount",
+        "annexe_discount"
+      ]
+    },
+    {
+      "id": "apprentices-youth-trainees",
+      "label": "apprentices-youth-trainees",
+      "definition": "Disregard for apprentices and specified youth trainees.",
+      "aliases": [
+        "apprentices-youth-trainees",
+        "apprentices_youth_trainees"
+      ]
+    },
+    {
+      "id": "banding-challenge",
+      "label": "banding-challenge",
+      "definition": "banding challenge",
+      "aliases": [
+        "banding-challenge",
+        "banding_challenge"
+      ]
+    },
+    {
+      "id": "care-leavers",
+      "label": "care-leavers",
+      "definition": "Local discount for qualifying care leavers.",
+      "aliases": [
+        "care-leavers",
+        "care_leavers"
+      ]
+    },
+    {
+      "id": "carer-disregard",
+      "label": "carer-disregard",
+      "definition": "Disregard for qualifying carers providing substantial care.",
+      "aliases": [
+        "carer-disregard",
+        "carer_disregard"
+      ]
+    },
+    {
+      "id": "class-b",
+      "label": "class-b",
+      "definition": "class b",
+      "aliases": [
+        "class-b",
+        "class_b"
+      ]
+    },
+    {
+      "id": "class-d",
+      "label": "class-d",
+      "definition": "class d",
+      "aliases": [
+        "class-d",
+        "class_d"
+      ]
+    },
+    {
+      "id": "class-e",
+      "label": "class-e",
+      "definition": "class e",
+      "aliases": [
+        "class-e",
+        "class_e"
+      ]
+    },
+    {
+      "id": "class-f",
+      "label": "class-f",
+      "definition": "class f",
+      "aliases": [
+        "class-f",
+        "class_f"
+      ]
+    },
+    {
+      "id": "class-g",
+      "label": "class-g",
+      "definition": "class g",
+      "aliases": [
+        "class-g",
+        "class_g"
+      ]
+    },
+    {
+      "id": "class-h",
+      "label": "class-h",
+      "definition": "class h",
+      "aliases": [
+        "class-h",
+        "class_h"
+      ]
+    },
+    {
+      "id": "class-i",
+      "label": "class-i",
+      "definition": "class i",
+      "aliases": [
+        "class-i",
+        "class_i"
+      ]
+    },
+    {
+      "id": "class-j",
+      "label": "class-j",
+      "definition": "class j",
+      "aliases": [
+        "class-j",
+        "class_j"
+      ]
+    },
+    {
+      "id": "class-k",
+      "label": "class-k",
+      "definition": "class k",
+      "aliases": [
+        "class-k",
+        "class_k"
+      ]
+    },
+    {
+      "id": "class-l",
+      "label": "class-l",
+      "definition": "class l",
+      "aliases": [
+        "class-l",
+        "class_l"
+      ]
+    },
+    {
+      "id": "class-m",
+      "label": "class-m",
+      "definition": "class m",
+      "aliases": [
+        "class-m",
+        "class_m"
+      ]
+    },
+    {
+      "id": "class-n",
+      "label": "class-n",
+      "definition": "class n",
+      "aliases": [
+        "class-n",
+        "class_n"
+      ]
+    },
+    {
+      "id": "class-o",
+      "label": "class-o",
+      "definition": "class o",
+      "aliases": [
+        "class-o",
+        "class_o"
+      ]
+    },
+    {
+      "id": "class-p",
+      "label": "class-p",
+      "definition": "class p",
+      "aliases": [
+        "class-p",
+        "class_p"
+      ]
+    },
+    {
+      "id": "class-q",
+      "label": "class-q",
+      "definition": "class q",
+      "aliases": [
+        "class-q",
+        "class_q"
+      ]
+    },
+    {
+      "id": "class-r",
+      "label": "class-r",
+      "definition": "class r",
+      "aliases": [
+        "class-r",
+        "class_r"
+      ]
+    },
+    {
+      "id": "class-s",
+      "label": "class-s",
+      "definition": "class s",
+      "aliases": [
+        "class-s",
+        "class_s"
+      ]
+    },
+    {
+      "id": "class-t",
+      "label": "class-t",
+      "definition": "class t",
+      "aliases": [
+        "class-t",
+        "class_t"
+      ]
+    },
+    {
+      "id": "class-u",
+      "label": "class-u",
+      "definition": "class u",
+      "aliases": [
+        "class-u",
+        "class_u"
+      ]
+    },
+    {
+      "id": "class-v",
+      "label": "class-v",
+      "definition": "class v",
+      "aliases": [
+        "class-v",
+        "class_v"
+      ]
+    },
+    {
+      "id": "class-w",
+      "label": "class-w",
+      "definition": "class w",
+      "aliases": [
+        "class-w",
+        "class_w"
+      ]
+    },
+    {
+      "id": "complaint",
+      "label": "complaint",
+      "definition": "complaint",
+      "aliases": [
+        "complaint"
+      ]
+    },
+    {
+      "id": "council-tax-support",
+      "label": "council-tax-support",
+      "definition": "council tax support",
+      "aliases": [
+        "council-tax-support",
+        "council_tax_support"
+      ]
+    },
+    {
+      "id": "disabled-band-reduction",
+      "label": "disabled-band-reduction",
+      "definition": "Reduction for dwellings with qualifying disability-related features.",
+      "aliases": [
+        "disabled-band-reduction",
+        "disabled_band_reduction"
+      ]
+    },
+    {
+      "id": "empty-homes-premium",
+      "label": "empty-homes-premium",
+      "definition": "empty homes premium",
+      "aliases": [
+        "empty-homes-premium",
+        "empty_homes_premium"
+      ]
+    },
+    {
+      "id": "foreign-spouses-dependants-of-students",
+      "label": "foreign-spouses-dependants-of-students",
+      "definition": "Disregard for qualifying foreign student spouses or dependants.",
+      "aliases": [
+        "foreign-spouses-dependants-of-students",
+        "foreign_spouses_dependants_of_students"
+      ]
+    },
+    {
+      "id": "fraud-report",
+      "label": "fraud-report",
+      "definition": "fraud report",
+      "aliases": [
+        "fraud-report",
+        "fraud_report"
+      ]
+    },
+    {
+      "id": "full-time-students",
+      "label": "full-time-students",
+      "definition": "Disregard for qualifying full-time students.",
+      "aliases": [
+        "full-time-students",
+        "full_time_students"
+      ]
+    },
+    {
+      "id": "hospital-care-patients",
+      "label": "hospital-care-patients",
+      "definition": "hospital care patients",
+      "aliases": [
+        "hospital-care-patients",
+        "hospital_care_patients"
+      ]
+    },
+    {
+      "id": "job-related-second-home",
+      "label": "job-related-second-home",
+      "definition": "Discount for qualifying job-related second homes.",
+      "aliases": [
+        "job-related-second-home",
+        "job_related_second_home"
+      ]
+    },
+    {
+      "id": "liability-order",
+      "label": "liability-order",
+      "definition": "liability order",
+      "aliases": [
+        "liability-order",
+        "liability_order"
+      ]
+    },
+    {
+      "id": "major-repair",
+      "label": "major-repair",
+      "definition": "Historic or legacy discount/guidance for major repair situations.",
+      "aliases": [
+        "major-repair",
+        "major_repair"
+      ]
+    },
+    {
+      "id": "members-of-religious-communities",
+      "label": "members-of-religious-communities",
+      "definition": "members of religious communities",
+      "aliases": [
+        "members-of-religious-communities",
+        "members_of_religious_communities"
+      ]
+    },
+    {
+      "id": "persons-in-detention",
+      "label": "persons-in-detention",
+      "definition": "Disregard for qualifying detained persons.",
+      "aliases": [
+        "persons-in-detention",
+        "persons_in_detention"
+      ]
+    },
+    {
+      "id": "school-college-leavers",
+      "label": "school-college-leavers",
+      "definition": "Temporary disregard for certain 18 to 19 year old leavers and child-benefit-linked cases.",
+      "aliases": [
+        "school-college-leavers",
+        "school_college_leavers"
+      ]
+    },
+    {
+      "id": "second-homes-premium",
+      "label": "second-homes-premium",
+      "definition": "second homes premium",
+      "aliases": [
+        "second-homes-premium",
+        "second_homes_premium"
+      ]
+    },
+    {
+      "id": "severely-mentally-impaired",
+      "label": "severely-mentally-impaired",
+      "definition": "Household outcome driven by SMI disregard status.",
+      "aliases": [
+        "severely-mentally-impaired",
+        "severely_mentally_impaired"
+      ]
+    },
+    {
+      "id": "single-person-discount",
+      "label": "single-person-discount",
+      "definition": "Discount where only one counted adult is resident.",
+      "aliases": [
+        "single-person-discount",
+        "single_person_discount"
+      ]
+    },
+    {
+      "id": "unoccupied-unfurnished",
+      "label": "unoccupied-unfurnished",
+      "definition": "unoccupied unfurnished",
+      "aliases": [
+        "unoccupied-unfurnished",
+        "unoccupied_unfurnished"
+      ]
+    },
+    {
+      "id": "fraud-and-sanctions",
+      "label": "fraud-and-sanctions",
+      "definition": "Fraud investigation outcomes, sanctions ladder decisions, civil penalties and prosecution escalation.",
+      "aliases": [
+        "fraud-and-sanctions",
+        "fraud_and_sanctions"
+      ]
+    },
+    {
+      "id": "compassionate_recovery",
+      "label": "Compassionate recovery",
+      "definition": "A recovery approach that considers vulnerability, hardship, dignity and ability to pay before escalation."
+    }
+  ],
+  "relationship_types": [
+    {
+      "id": "derived_from",
+      "label": "Derived from",
+      "definition": "Relationship indicating that one artefact element is derived from another.",
+      "aliases": [
+        "Derived from",
+        "derived_from"
+      ]
+    },
+    {
+      "id": "governed_by",
+      "label": "Governed by",
+      "definition": "Relationship indicating that an element is controlled by a rule, policy or legal basis.",
+      "aliases": [
+        "Governed by",
+        "governed_by"
+      ]
+    },
+    {
+      "id": "published_via",
+      "label": "Published via",
+      "definition": "Published via",
+      "aliases": [
+        "Published via",
+        "published_via"
+      ]
+    },
+    {
+      "id": "requires_evidence",
+      "label": "Requires evidence",
+      "definition": "Requires evidence",
+      "aliases": [
+        "Requires evidence",
+        "requires_evidence"
+      ]
+    },
+    {
+      "id": "subject_to_sign_off",
+      "label": "Subject to sign-off",
+      "definition": "Subject to sign off",
+      "aliases": [
+        "Subject to sign-off",
+        "subject_to_sign_off"
+      ]
+    },
+    {
+      "id": "cannot_pay",
+      "label": "Cannot pay",
+      "definition": "Resident is assessed as lacking the means to clear the debt on standard terms."
+    },
+    {
+      "id": "temporary_hardship",
+      "label": "Temporary hardship",
+      "definition": "Resident is facing a short-term financial shock affecting ability to pay."
+    },
+    {
+      "id": "vulnerable",
+      "label": "Vulnerable",
+      "definition": "Resident has indicators requiring modified, safeguarded or referred-back handling."
+    },
+    {
+      "id": "engaging_but_struggling",
+      "label": "Engaging but struggling",
+      "definition": "Resident is cooperating and seeking an affordable route to pay."
+    },
+    {
+      "id": "non_engaging",
+      "label": "Non-engaging",
+      "definition": "Resident is not responding or not providing required information."
+    },
+    {
+      "id": "will_not_pay",
+      "label": "Will not pay",
+      "definition": "Resident appears able to pay but refuses meaningful engagement or repeatedly defaults without reasonable explanation."
+    }
+  ],
+  "mappings": {
+    "original_top_level_sections": [
+      "schema_metadata",
+      "package_identity",
+      "service_overview",
+      "legal_framework",
+      "valuation_and_charging",
+      "discounts",
+      "property_premiums",
+      "exemptions",
+      "council_tax_support",
+      "payment",
+      "liability",
+      "enforcement",
+      "appeals_and_challenges",
+      "service_standards",
+      "data_privacy",
+      "governance",
+      "channels",
+      "complaints",
+      "holiday_lets_and_self_catering",
+      "related_services",
+      "fraud",
+      "security_warning",
+      "national_context"
+    ],
+    "publish_statuses": [
+      "blocked",
+      "review"
+    ]
+  },
+  "comparison_operators": [
+    {
+      "id": "equals",
+      "label": "Equals",
+      "definition": "The left-hand value must equal the right-hand value."
+    },
+    {
+      "id": "not_equals",
+      "label": "Does not equal",
+      "definition": "The left-hand value must not equal the right-hand value."
+    },
+    {
+      "id": "greater_than",
+      "label": "Greater than",
+      "definition": "The left-hand value must be greater than the right-hand value."
+    },
+    {
+      "id": "greater_than_or_equal",
+      "label": "Greater than or equal",
+      "definition": "The left-hand value must be greater than or equal to the right-hand value."
+    },
+    {
+      "id": "less_than",
+      "label": "Less than",
+      "definition": "The left-hand value must be less than the right-hand value."
+    },
+    {
+      "id": "less_than_or_equal",
+      "label": "Less than or equal",
+      "definition": "The left-hand value must be less than or equal to the right-hand value."
+    },
+    {
+      "id": "in",
+      "label": "In set",
+      "definition": "The left-hand value must be one of the supplied values."
+    },
+    {
+      "id": "contains",
+      "label": "Contains",
+      "definition": "The left-hand array or text value must contain the supplied value."
+    }
+  ],
+  "aggregation_functions": [
+    {
+      "id": "count",
+      "label": "Count",
+      "definition": "Count the matching items in the collection."
+    },
+    {
+      "id": "sum",
+      "label": "Sum",
+      "definition": "Add the numeric values in the collection."
+    },
+    {
+      "id": "max",
+      "label": "Maximum",
+      "definition": "Take the largest numeric value in the collection."
+    },
+    {
+      "id": "min",
+      "label": "Minimum",
+      "definition": "Take the smallest numeric value in the collection."
+    }
+  ],
+  "effect_types": [
+    {
+      "id": "percentage_reduction",
+      "label": "Percentage reduction",
+      "definition": "Reduce the charge by a stated percentage."
+    },
+    {
+      "id": "percentage_premium",
+      "label": "Percentage premium",
+      "definition": "Increase the charge by a stated percentage."
+    },
+    {
+      "id": "band_reduction",
+      "label": "Band reduction",
+      "definition": "Reduce the charge by reference to a lower valuation band."
+    },
+    {
+      "id": "set_zero_charge",
+      "label": "Set zero charge",
+      "definition": "Set the charge to nil."
+    },
+    {
+      "id": "mark_disregarded",
+      "label": "Mark disregarded",
+      "definition": "Mark a person as disregarded for adult-counting purposes."
+    },
+    {
+      "id": "workflow_gate",
+      "label": "Workflow gate",
+      "definition": "Direct the case into a defined workflow state or review queue."
+    },
+    {
+      "id": "set_sanction_outcome",
+      "label": "Set sanction outcome",
+      "definition": "Set the case outcome to a specified sanction or prosecution path."
+    },
+    {
+      "id": "set_fixed_penalty",
+      "label": "Set fixed penalty",
+      "definition": "Apply a fixed monetary penalty amount."
+    }
+  ],
+  "calc_stages": [
+    {
+      "id": "liability",
+      "label": "Liability",
+      "definition": "Determine whether liability follows the resident hierarchy or an owner-liability class."
+    },
+    {
+      "id": "disregards",
+      "label": "Disregards",
+      "definition": "Mark individuals who are not counted as adults for Council Tax purposes."
+    },
+    {
+      "id": "exemptions",
+      "label": "Exemptions",
+      "definition": "Determine whether the dwelling is exempt from Council Tax charge."
+    },
+    {
+      "id": "discounts",
+      "label": "Discounts and reductions",
+      "definition": "Apply percentage discounts or valuation-based reductions after exemptions."
+    },
+    {
+      "id": "premiums",
+      "label": "Premiums",
+      "definition": "Apply statutory or local premiums for empty homes or second homes."
+    },
+    {
+      "id": "support",
+      "label": "Council Tax Support",
+      "definition": "Apply means-tested local support after statutory adjustments and premiums where policy requires."
+    },
+    {
+      "id": "assurance",
+      "label": "Assurance",
+      "definition": "Apply review gates where facts are incomplete or operational confirmation is required."
+    },
+    {
+      "id": "sanctions_and_prosecution",
+      "label": "Sanctions and prosecution",
+      "definition": "Assess fraud enforcement outcomes including cautions, penalty alternatives, civil penalties and prosecution escalation."
+    }
+  ],
+  "rule_types": [
+    {
+      "id": "workflow_gate",
+      "label": "Workflow gate",
+      "definition": "Opens, closes or redirects a calculation or review stage."
+    },
+    {
+      "id": "eligibility_rule",
+      "label": "Eligibility rule",
+      "definition": "Determines whether a person, property or account meets a rule condition."
+    },
+    {
+      "id": "disregard_rule",
+      "label": "Disregard rule",
+      "definition": "Marks a person as disregarded for adult-count purposes."
+    },
+    {
+      "id": "discount_rule",
+      "label": "Discount rule",
+      "definition": "Applies a percentage discount to the charge."
+    },
+    {
+      "id": "exemption_rule",
+      "label": "Exemption rule",
+      "definition": "Sets charge to zero when exemption conditions are met."
+    },
+    {
+      "id": "premium_rule",
+      "label": "Premium rule",
+      "definition": "Adds a percentage premium to the charge."
+    },
+    {
+      "id": "valuation_reduction_rule",
+      "label": "Valuation reduction rule",
+      "definition": "Changes the valuation band or equivalent charge basis."
+    },
+    {
+      "id": "sequencing_rule",
+      "label": "Sequencing rule",
+      "definition": "Controls the order in which rule families are applied."
+    },
+    {
+      "id": "sanction_rule",
+      "label": "Sanction rule",
+      "definition": "Determines or records a fraud sanction, civil penalty or prosecution escalation outcome."
+    }
+  ],
+  "coverage_statuses": [
+    {
+      "id": "narrative_only",
+      "label": "Narrative only",
+      "definition": "Only represented as source prose or guidance.",
+      "aliases": [
+        "Narrative only",
+        "narrative_only"
+      ]
+    },
+    {
+      "id": "machine_actionable_slice",
+      "label": "Machine-actionable slice",
+      "definition": "Represented in typed rule form for controlled execution.",
+      "aliases": [
+        "Machine-actionable slice",
+        "machine_actionable_slice"
+      ]
+    },
+    {
+      "id": "requires_human_review",
+      "label": "Requires human review",
+      "definition": "Rule cannot safely execute without officer or policy-owner judgement.",
+      "aliases": [
+        "Requires human review",
+        "requires_human_review"
+      ]
+    }
+  ],
+  "rule_statuses": [
+    {
+      "id": "draft",
+      "label": "Draft",
+      "definition": "Rule exists but is not ready for operational use.",
+      "aliases": [
+        "draft"
+      ]
+    },
+    {
+      "id": "review-ready",
+      "label": "Review ready",
+      "definition": "Rule is coherent and ready for engineering or policy review.",
+      "aliases": [
+        "review_ready"
+      ]
+    },
+    {
+      "id": "production-candidate",
+      "label": "Production candidate",
+      "definition": "Rule is structured enough for controlled build or prototype execution.",
+      "aliases": [
+        "production_candidate"
+      ]
+    }
+  ],
+  "explanation_template_types": [
+    {
+      "id": "decision_summary",
+      "label": "Decision summary",
+      "definition": "Short explanation stating why a rule applied or did not apply.",
+      "aliases": [
+        "decision_summary"
+      ]
+    },
+    {
+      "id": "evidence_request",
+      "label": "Evidence request",
+      "definition": "Template explaining the evidence required before a rule can be applied.",
+      "aliases": [
+        "evidence_request"
+      ]
+    },
+    {
+      "id": "exception_reason",
+      "label": "Exception reason",
+      "definition": "Template describing why an exception or non-standard path was triggered.",
+      "aliases": [
+        "exception_reason"
+      ]
+    }
+  ],
+  "enforcement_types": [
+    {
+      "id": "caution",
+      "label": "Caution",
+      "definition": "Formal warning requiring admission of the offence at interview under caution and a signed certificate."
+    },
+    {
+      "id": "penalty_as_alternative_to_prosecution",
+      "label": "Penalty as alternative to prosecution",
+      "definition": "Financial penalty offered instead of prosecution, subject to full repayment and a cooling-off period."
+    },
+    {
+      "id": "prosecution",
+      "label": "Prosecution",
+      "definition": "Criminal proceedings considered where seriousness, value, duration, repetition or public interest justify prosecution."
+    },
+    {
+      "id": "civil_penalty",
+      "label": "Civil penalty",
+      "definition": "Administrative fixed penalty for negligent or incorrect information under the relevant scheme rules."
+    },
+    {
+      "id": "special_payment_arrangement",
+      "definition": "A catch-up arrangement for missed council tax payments. It may be agreed before summons through self-serve online access, or after summons through a council-managed assessed arrangement."
+    },
+    {
+      "id": "vulnerability_referral",
+      "definition": "Referral of a potentially vulnerable case back from enforcement agents to the council for review."
+    },
+    {
+      "id": "support_path",
+      "definition": "Support-led recovery pathway prioritising affordability, signposting and modified arrangements."
+    }
+  ],
+  "customer_states": [
+    {
+      "id": "cannot_pay",
+      "label": "Cannot pay",
+      "definition": "Resident is assessed as lacking the means to clear the debt on standard terms."
+    },
+    {
+      "id": "temporary_hardship",
+      "label": "Temporary hardship",
+      "definition": "Resident is facing a short-term financial shock affecting ability to pay."
+    },
+    {
+      "id": "vulnerable",
+      "label": "Vulnerable",
+      "definition": "Resident has indicators requiring modified, safeguarded or referred-back handling."
+    },
+    {
+      "id": "engaging_but_struggling",
+      "label": "Engaging but struggling",
+      "definition": "Resident is cooperating and seeking an affordable route to pay."
+    },
+    {
+      "id": "non_engaging",
+      "label": "Non-engaging",
+      "definition": "Resident is not responding or not providing required information."
+    },
+    {
+      "id": "will_not_pay",
+      "label": "Will not pay",
+      "definition": "Resident appears able to pay but refuses meaningful engagement or repeatedly defaults without reasonable explanation."
+    }
+  ],
+  "payment_arrangement_types": [
+    {
+      "id": "pre_summons_special_payment_arrangement",
+      "label": "Pre-summons special payment arrangement",
+      "definition": "A self-serve catch-up arrangement for missed council tax payments before summons, normally available online and intended to bring the account back up to date within the financial year."
+    },
+    {
+      "id": "post_summons_special_payment_arrangement",
+      "label": "Post-summons special payment arrangement",
+      "definition": "A council-managed catch-up arrangement for missed council tax payments after summons or liability order stage, usually requiring financial information and often an upfront payment."
+    },
+    {
+      "id": "standard_financial_statement",
+      "label": "Standard Financial Statement",
+      "definition": "A recognised financial statement from an accredited organisation that can be accepted as evidence when assessing post-summons arrangements."
+    },
+    {
+      "id": "income_and_expenditure_assessment",
+      "label": "Income and expenditure assessment",
+      "definition": "A financial assessment used in exceptional circumstances where payment within the financial year may not be achievable on standard arrangement terms."
+    }
+  ],
+  "profiles": {
+    "authoring_profile": {
+      "purpose": "Long-form governed policy vocabulary for curation, audit, source trace and schema authoring."
+    },
+    "runtime_profile": {
+      "purpose": "Operational vocabulary for decision resolution, candidate ranking, conflict handling and response orchestration."
+    }
+  },
+  "runtime_vocabularies": {
+    "candidate_types": [
+      {
+        "id": "final_outcome",
+        "label": "Final outcome"
+      },
+      {
+        "id": "intermediate_reasoning",
+        "label": "Intermediate reasoning"
+      },
+      {
+        "id": "alternative_path",
+        "label": "Alternative path"
+      },
+      {
+        "id": "blocking_condition",
+        "label": "Blocking condition"
+      }
+    ],
+    "resolution_modes": [
+      {
+        "id": "recall",
+        "label": "Recall mode"
+      },
+      {
+        "id": "resolution",
+        "label": "Resolution mode"
+      }
+    ],
+    "special_payment_arrangement_semantics": {
+      "user_facing_purpose": "How to catch up a missed council tax payment before or after escalation.",
+      "plain_english_summary": "If a resident has missed a council tax instalment, a special payment arrangement may help them catch up what they owe.",
+      "access_channels": {
+        "online": {
+          "available": true,
+          "channel": "My Gloucester account",
+          "mode": "self_serve",
+          "primarily_for": "pre_summons"
+        },
+        "phone": {
+          "available": true,
+          "channel": "Council contact route",
+          "mode": "assisted",
+          "primarily_for": "pre_summons_or_post_summons_support"
+        },
+        "email": {
+          "available": true,
+          "channel": "Council contact route",
+          "mode": "assisted_or_follow_up"
+        }
+      },
+      "primary_user_trigger": "missed_council_tax_payment",
+      "preferred_user_framing": "catch_up_missed_payment"
+    }
+  }
+}
