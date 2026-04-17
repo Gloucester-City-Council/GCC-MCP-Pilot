@@ -1,8 +1,7 @@
 /**
- * Schema loader - loads the council tax schema pack at cold start
- * Loads four v2.5.3 documents (facts, rules, taxonomy, results) from schemas/CouncilTax/
- * and builds a merged view that preserves backward-compatible JSON Pointer paths.
- * Computes SHA-256 hash and extracts version metadata.
+ * Schema loader - loads the council tax schema pack at cold start.
+ * Uses the v2.5.6 runtime-first document set (facts, rules, taxonomy, results),
+ * while preserving backward-compatible merged paths used by existing tools.
  */
 
 const fs = require('fs');
@@ -19,13 +18,13 @@ let cachedFinancialYear = null;
 let loadError = null;
 
 /**
- * Schema file manifest - the four v2.5.3 documents
+ * Schema file manifest - the four v2.5.6 documents
  */
 const SCHEMA_FILES = {
-    facts: 'council_tax_facts.v2.5.3.json',
-    rules: 'council_tax_rules.v2.5.3.json',
-    taxonomy: 'council_tax_taxonomy.v2.5.3.json',
-    results: 'council_tax_results.v2.5.3.json'
+    facts: 'council_tax_facts.v2.5.6.json',
+    rules: 'council_tax_rules.v2.5.6.json',
+    taxonomy: 'council_tax_taxonomy.v2.5.6.json',
+    results: 'council_tax_results.v2.5.6.json'
 };
 
 /**
@@ -81,17 +80,27 @@ function buildMergedSchema(docs) {
         open_issues: facts.open_issues || [],
         sources: facts.sources || [],
         cross_document_index: facts.cross_document_index || {},
+        profiles: {
+            facts: facts.profiles || {},
+            rules: rules.profiles || {},
+            taxonomy: taxonomy.profiles || {},
+            results: results.profiles || {}
+        },
 
         // Charge outputs from results document (2026/27 approved rates)
         charge_outputs: results.charge_outputs || {},
         evidence_requirements: results.evidence_requirements || [],
         execution_readiness: results.execution_readiness || {},
+        runtime_contract: results.runtime_contract || {},
+        consumer_contract: results.consumer_contract || {},
+        supporting_context: results.supporting_context || {},
 
         // Rules from rules document
         rule_sets: rules.rule_sets || {},
         executable_rules: rules.executable_rule_slices || {},
         calculation_order: rules.calculation_order || [],
         conflict_resolution: rules.conflict_resolution || {},
+        runtime_resolver_contract: rules.runtime_resolver_contract || {},
 
         // Taxonomy controlled vocabulary
         taxonomy: {
@@ -109,6 +118,18 @@ function buildMergedSchema(docs) {
             calc_stages: taxonomy.calc_stages || [],
             rule_types: taxonomy.rule_types || [],
             effect_types: taxonomy.effect_types || []
+        },
+
+        // Runtime-first sections for API execution
+        runtime_vocabularies: taxonomy.runtime_vocabularies || {},
+        runtime_case_model: facts.runtime_case_model || {},
+        runtime: {
+            taxonomy_runtime_vocabularies: taxonomy.runtime_vocabularies || {},
+            facts_runtime_case_model: facts.runtime_case_model || {},
+            rules_runtime_resolver_contract: rules.runtime_resolver_contract || {},
+            results_runtime_contract: results.runtime_contract || {},
+            results_consumer_contract: results.consumer_contract || {},
+            results_supporting_context: results.supporting_context || {}
         }
     };
 }
