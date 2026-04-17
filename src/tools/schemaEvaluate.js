@@ -62,8 +62,8 @@ function evaluateSinglePersonDiscount(facts) {
             likelihood = 'likely';
             reasons.push(`${disregarded} adult(s) in your household may be disregarded for council tax purposes (students, carers, SMI, apprentices), leaving 1 counting adult`);
         } else if (countingAdults === 0) {
-            likelihood = 'likely';
-            reasons.push('All adults may be disregarded — you may qualify for a full exemption rather than a discount');
+            likelihood = 'unlikely';
+            reasons.push('All adults may be disregarded — full exemption routes usually take precedence over single person discount');
         } else {
             likelihood = 'unlikely';
             reasons.push(`${countingAdults} counting adults in the household — the single person discount requires only 1 counting adult`);
@@ -95,6 +95,8 @@ function evaluateStudentDiscount(facts) {
     let likelihood = 'unclear';
     let name = 'Student Exemption/Discount';
     let amount = 'Up to 100%';
+    let mechanism = 'exemption';
+    let candidateRole = 'final_outcome';
 
     if (facts.adults === facts.students) {
         likelihood = 'likely';
@@ -103,9 +105,11 @@ function evaluateStudentDiscount(facts) {
         reasons.push('All adults in the household are full-time students — you are likely exempt from council tax entirely under Class N');
     } else if (facts.students > 0 && facts.adults === 2 && facts.students === 1) {
         likelihood = 'likely';
-        name = 'Single Person Discount (student disregard)';
-        amount = '25% discount';
-        reasons.push('One full-time student with one non-student — the student is disregarded, so you may get the 25% single person discount');
+        name = 'Student Disregard Logic';
+        amount = 'Supports 25% single person discount assessment';
+        mechanism = 'disregard';
+        candidateRole = 'support_logic';
+        reasons.push('One full-time student with one non-student — the student is disregarded for counting-adult logic');
     } else if (facts.students > 0) {
         likelihood = 'unclear';
         reasons.push('Some household members are students — we need to assess the full household to determine whether a discount or exemption applies');
@@ -116,11 +120,12 @@ function evaluateStudentDiscount(facts) {
         ruleId: 'rule.exemption.student.all_residents',
         name,
         amount,
-        mechanism: 'exemption',
+        mechanism,
         legalBasis: 'Council Tax (Exempt Dwellings) Order 1992, Class N; LGFA 1992 Sch 1 para 4',
         likelihood,
         jsonPath: '/exemptions',
         reasons,
+        candidateRole,
         howToApply: 'Apply online. You will need your student certificate or UCAS confirmation',
         evidence: 'Student certificate from your university or college confirming full-time status'
     };
@@ -370,6 +375,91 @@ function evaluateDiscountEligibility(facts) {
     return candidates;
 }
 
+const LIKELIHOOD_SCORE = { likely: 80, unclear: 20, unlikely: -120 };
+const ROLE_SCORE = { final_outcome: 30, fallback: 20, support_logic: 0, rejected: -20 };
+const MECHANISM_BASE_SCORE = {
+    exemption: 600,
+    premium: 500,
+    reduction: 400,
+    discount_full: 350,
+    discount_partial: 300,
+    discount: 250,
+    disregard: 100,
+    unknown: 50
+};
+
+function extractPercent(amount) {
+    if (typeof amount !== 'string') return 0;
+    const matches = [...amount.matchAll(/(\d+)\s*%/g)].map(m => Number(m[1]));
+    if (matches.length === 0) return 0;
+    return Math.max(...matches);
+}
+
+function getSpecificityScore(candidate, facts) {
+    const id = candidate.id;
+    if (id === 'care-leavers-discount') return facts.age !== undefined ? 40 : 20;
+    if (id === 'student-discount' && candidate.name.includes('Household Exemption')) return 45;
+    if (id === 'disabled-band-reduction') return 35;
+    if (id === 'empty-property-premium') return facts.property_empty_years !== undefined ? 45 : 25;
+    if (id === 'smi-discount') return 40;
+    if (id === 'single-person-discount') return 10;
+    return 15;
+}
+
+function getMechanismBucket(candidate) {
+    if (candidate.mechanism === 'exemption') return 'exemption';
+    if (candidate.mechanism === 'premium') return 'premium';
+    if (candidate.mechanism === 'reduction') return 'reduction';
+    if (candidate.mechanism === 'disregard') return 'disregard';
+    if (candidate.mechanism === 'discount') {
+        const percent = extractPercent(candidate.amount);
+        if (percent >= 100) return 'discount_full';
+        if (percent > 0 && percent < 100) return 'discount_partial';
+        return 'discount';
+    }
+    return 'unknown';
+}
+
+function applyApplicabilityRules(candidates, facts, normalisedHousehold) {
+    const propertyStateDominates = Boolean(normalisedHousehold.property_empty || normalisedHousehold.second_home);
+    return candidates.map(candidate => {
+        const next = { ...candidate };
+        if (!next.candidateRole) {
+            next.candidateRole = next.likelihood === 'unlikely' ? 'rejected' : 'final_outcome';
+        }
+
+        if (next.id === 'single-person-discount' && normalisedHousehold.counting_adults === 0) {
+            next.candidateRole = 'rejected';
+            next.likelihood = 'unlikely';
+            next.reasons = [...next.reasons, 'Counting adults is zero, so single person discount is not the primary outcome route'];
+        }
+
+        if (propertyStateDominates && next.mechanism !== 'premium') {
+            next.candidateRole = 'rejected';
+            next.likelihood = 'unlikely';
+            next.reasons = [...next.reasons, 'Property-state premium rules dominate occupancy discounts/reductions for this scenario'];
+        }
+
+        return next;
+    });
+}
+
+function rankCandidates(candidates, facts) {
+    return candidates
+        .map(candidate => {
+            const percent = extractPercent(candidate.amount);
+            const mechanismBucket = getMechanismBucket(candidate);
+            const score =
+                (MECHANISM_BASE_SCORE[mechanismBucket] || MECHANISM_BASE_SCORE.unknown) +
+                (LIKELIHOOD_SCORE[candidate.likelihood] || 0) +
+                (ROLE_SCORE[candidate.candidateRole] || 0) +
+                getSpecificityScore(candidate, facts) +
+                percent;
+            return { ...candidate, _score: score, _mechanismBucket: mechanismBucket, _impactPercent: percent };
+        })
+        .sort((a, b) => b._score - a._score);
+}
+
 function toNormalisedHousehold(facts) {
     const adults = Number.isFinite(facts.adults) ? facts.adults : 0;
     const students = Number.isFinite(facts.students) ? facts.students : 0;
@@ -410,9 +500,9 @@ function selectBestOutcome(candidates) {
 }
 
 function splitCandidateOptions(candidates) {
-    const likely = candidates.filter(c => c.likelihood === 'likely');
-    const unclear = candidates.filter(c => c.likelihood === 'unclear');
-    const unlikely = candidates.filter(c => c.likelihood === 'unlikely');
+    const likely = candidates.filter(c => c.likelihood === 'likely' && c.candidateRole === 'final_outcome');
+    const unclear = candidates.filter(c => c.likelihood === 'unclear' || c.candidateRole === 'fallback');
+    const unlikely = candidates.filter(c => c.likelihood === 'unlikely' || c.candidateRole === 'rejected');
 
     return {
         supporting_candidates: likely.slice(1),
@@ -431,6 +521,30 @@ function buildConfidence(bestOutcome, missingCriticalFacts) {
         best_outcome_likelihood: bestOutcome ? bestOutcome.likelihood : 'unclear',
         missing_critical_facts_count: missingCriticalFacts.length
     };
+}
+
+function buildReviewReasons(missingCriticalFacts, unresolvedConflicts, candidates) {
+    const reasons = [];
+    if (missingCriticalFacts.length > 0) {
+        reasons.push(`Missing critical facts: ${missingCriticalFacts.length}`);
+    }
+    if (unresolvedConflicts.length > 0) {
+        reasons.push(`Unresolved conflicts: ${unresolvedConflicts.length}`);
+    }
+    const unclearCandidates = candidates.filter(c => c.likelihood === 'unclear');
+    if (unclearCandidates.length > 0) {
+        reasons.push('One or more outcomes remain unclear and need review');
+    }
+    return reasons;
+}
+
+function buildBestOutcomeRationale(bestOutcome, rankedCandidates) {
+    if (!bestOutcome) return 'No eligible outcome could be resolved from the supplied facts.';
+    const runnerUp = rankedCandidates.find(c => c.id !== bestOutcome.id && c.candidateRole !== 'rejected');
+    if (!runnerUp) {
+        return `${bestOutcome.name} selected because it is the only applicable high-confidence outcome.`;
+    }
+    return `${bestOutcome.name} outranked ${runnerUp.name} due to precedence (${bestOutcome._mechanismBucket}), specificity and estimated bill impact.`;
 }
 
 function loadRuntimeProfiles() {
@@ -454,6 +568,7 @@ function projectResult(result, projectionMode) {
     if (mode === 'trace') {
         return {
             best_outcome: result.best_outcome,
+            why_best_outcome_won: result.why_best_outcome_won,
             facts: result.facts,
             missing_critical_facts: result.missing_critical_facts,
             unresolved_conflicts: result.unresolved_conflicts,
@@ -468,6 +583,7 @@ function projectResult(result, projectionMode) {
 
     return {
         best_outcome: result.best_outcome,
+        why_best_outcome_won: result.why_best_outcome_won,
         options: result.options,
         facts: result.facts,
         missing_critical_facts: result.missing_critical_facts,
@@ -484,22 +600,53 @@ function projectResult(result, projectionMode) {
 function runRuntimeResolver(facts, rulesetId, projectionMode) {
     const runtimeProfiles = loadRuntimeProfiles();
     const normalisedHousehold = toNormalisedHousehold(facts);
-    const candidates = evaluateDiscountEligibility(facts);
-    const bestOutcome = selectBestOutcome(candidates);
+    const rawCandidates = evaluateDiscountEligibility(facts);
+    const applicableCandidates = applyApplicabilityRules(rawCandidates, facts, normalisedHousehold);
+    const rankedCandidates = rankCandidates(applicableCandidates, facts);
+    const finalOutcomePool = rankedCandidates.filter(c => c.candidateRole === 'final_outcome');
+    const bestOutcome = selectBestOutcome(finalOutcomePool.length > 0 ? finalOutcomePool : rankedCandidates.filter(c => c.candidateRole !== 'rejected'));
     const missingCriticalFacts = getMissingFacts(facts);
-    const derivedFacts = buildDerivedFacts(facts, candidates);
-    const rulesUsed = candidates.map(c => c.ruleId).filter(Boolean);
+    const unresolvedConflicts = [];
+    if (rankedCandidates.length > 1 && rankedCandidates[0]._score === rankedCandidates[1]._score) {
+        unresolvedConflicts.push({
+            type: 'equal_rank',
+            candidates: [rankedCandidates[0].id, rankedCandidates[1].id],
+            note: 'Two candidates tied in resolver score'
+        });
+    }
+    const reviewReasons = buildReviewReasons(missingCriticalFacts, unresolvedConflicts, rankedCandidates);
+    const derivedFacts = {
+        ...buildDerivedFacts(facts, rankedCandidates),
+        review_reasons: reviewReasons
+    };
+    if (derivedFacts.requires_manual_review && reviewReasons.length === 0) {
+        derivedFacts.review_reasons.push('Manual review triggered by policy guard rails');
+    }
+    const rulesUsed = rankedCandidates.map(c => c.ruleId).filter(Boolean);
+    const bestOutcomeWithoutInternals = bestOutcome ? {
+        ...bestOutcome,
+        _score: undefined,
+        _mechanismBucket: undefined,
+        _impactPercent: undefined
+    } : null;
+    const cleanedCandidates = rankedCandidates.map(c => ({
+        ...c,
+        _score: undefined,
+        _mechanismBucket: undefined,
+        _impactPercent: undefined
+    }));
 
     const runtimeResult = {
-        best_outcome: bestOutcome,
-        options: splitCandidateOptions(candidates),
+        best_outcome: bestOutcomeWithoutInternals,
+        why_best_outcome_won: buildBestOutcomeRationale(bestOutcome, rankedCandidates),
+        options: splitCandidateOptions(cleanedCandidates),
         facts: {
             input_facts: facts,
             derived_facts: derivedFacts,
             normalised_household: normalisedHousehold
         },
         missing_critical_facts: missingCriticalFacts,
-        unresolved_conflicts: [],
+        unresolved_conflicts: unresolvedConflicts,
         confidence: buildConfidence(bestOutcome, missingCriticalFacts),
         trace: {
             resolver_version: '2.5.6-runtime',
