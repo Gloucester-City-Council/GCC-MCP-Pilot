@@ -13,7 +13,7 @@ const schemaGet = require('../tools/schemaGet');
 const schemaSearch = require('../tools/schemaSearch');
 const schemaTodos = require('../tools/schemaTodos');
 const schemaEvaluate = require('../tools/schemaEvaluate');
-const { getSchemaVersion, getSchemaHash, isSchemaLoaded, getFinancialYear } = require('../schema/loader');
+const { getSchemaVersion, getSchemaHash, isSchemaLoaded, getFinancialYear, getDocumentPack } = require('../schema/loader');
 
 const TOOLS = [
     {
@@ -134,7 +134,7 @@ async function handleMcpRequest(request, context) {
                                 hash: getSchemaHash(),
                                 loaded: isSchemaLoaded(),
                                 financialYear: getFinancialYear(),
-                                documentPack: 'v2.5.6 (facts, rules, taxonomy, results)',
+                                documentPack: getDocumentPack(),
                                 status: 'council-approved'
                             }
                         },
