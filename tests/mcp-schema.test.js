@@ -18,7 +18,8 @@ describe('mcpSchema request handling', () => {
             getSchemaVersion: () => '2.5.6',
             getSchemaHash: () => 'abc123',
             isSchemaLoaded: () => true,
-            getFinancialYear: () => '2026/27'
+            getFinancialYear: () => '2026/27',
+            getDocumentPack: () => 'v2.5.6 (facts, rules, taxonomy, results)'
         }));
     }
 

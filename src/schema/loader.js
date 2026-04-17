@@ -15,17 +15,73 @@ let cachedDocuments = null;
 let cachedHash = null;
 let cachedVersion = null;
 let cachedFinancialYear = null;
+let cachedDocumentPack = null;
 let loadError = null;
 
 /**
- * Schema file manifest - the four v2.5.6 documents
+ * Schema file pattern:
+ * council_tax_<document>.v<version>.json
  */
-const SCHEMA_FILES = {
-    facts: 'council_tax_facts.v2.5.6.json',
-    rules: 'council_tax_rules.v2.5.6.json',
-    taxonomy: 'council_tax_taxonomy.v2.5.6.json',
-    results: 'council_tax_results.v2.5.6.json'
-};
+const FILE_PATTERN = /^council_tax_(facts|rules|taxonomy|results)\.v(\d+(?:\.\d+)*)\.json$/;
+const REQUIRED_DOC_TYPES = ['facts', 'rules', 'taxonomy', 'results'];
+
+function compareVersions(a, b) {
+    const aParts = String(a).split('.').map(part => parseInt(part, 10) || 0);
+    const bParts = String(b).split('.').map(part => parseInt(part, 10) || 0);
+    const maxLen = Math.max(aParts.length, bParts.length);
+    for (let i = 0; i < maxLen; i += 1) {
+        const diff = (aParts[i] || 0) - (bParts[i] || 0);
+        if (diff !== 0) return diff;
+    }
+    return 0;
+}
+
+function discoverSchemaPack(schemaDir) {
+    const preferredVersion = process.env.MCP_SCHEMA_VERSION
+        ? String(process.env.MCP_SCHEMA_VERSION).replace(/^v/i, '')
+        : null;
+    const byVersion = new Map();
+    const files = fs.readdirSync(schemaDir);
+
+    for (const filename of files) {
+        const match = filename.match(FILE_PATTERN);
+        if (!match) continue;
+
+        const [, docType, version] = match;
+        if (!byVersion.has(version)) {
+            byVersion.set(version, {});
+        }
+        byVersion.get(version)[docType] = filename;
+    }
+
+    const completeVersions = Array.from(byVersion.entries())
+        .filter(([, docs]) => REQUIRED_DOC_TYPES.every(type => docs[type]))
+        .map(([version]) => version)
+        .sort((a, b) => compareVersions(b, a));
+
+    if (completeVersions.length === 0) {
+        throw new Error(`No complete council tax schema pack found in ${schemaDir}`);
+    }
+
+    const selectedVersion = preferredVersion && completeVersions.includes(preferredVersion)
+        ? preferredVersion
+        : completeVersions[0];
+
+    if (preferredVersion && selectedVersion !== preferredVersion) {
+        console.warn(`Requested MCP_SCHEMA_VERSION=${preferredVersion} not found as a complete pack. Using ${selectedVersion} instead.`);
+    }
+
+    const selectedFiles = byVersion.get(selectedVersion);
+    return {
+        version: selectedVersion,
+        files: {
+            facts: selectedFiles.facts,
+            rules: selectedFiles.rules,
+            taxonomy: selectedFiles.taxonomy,
+            results: selectedFiles.results
+        }
+    };
+}
 
 /**
  * Build a merged schema view from the four documents.
@@ -151,10 +207,11 @@ function loadSchema() {
         const schemaDir = getSchemaDir();
         const absoluteDir = path.resolve(process.cwd(), schemaDir);
 
+        const discoveredPack = discoverSchemaPack(absoluteDir);
         const docs = {};
         const hashInput = crypto.createHash('sha256');
 
-        for (const [key, filename] of Object.entries(SCHEMA_FILES)) {
+        for (const [key, filename] of Object.entries(discoveredPack.files)) {
             const filePath = path.join(absoluteDir, filename);
             const content = fs.readFileSync(filePath, 'utf8');
             docs[key] = JSON.parse(content);
@@ -171,8 +228,9 @@ function loadSchema() {
         const factsMeta = docs.facts.document_meta || {};
         cachedVersion = factsMeta.version || factsMeta.document_version || 'unknown';
         cachedFinancialYear = factsMeta.financial_year || 'unknown';
+        cachedDocumentPack = `v${discoveredPack.version} (facts, rules, taxonomy, results)`;
 
-        console.log(`Council Tax schema pack loaded: version=${cachedVersion}, financial_year=${cachedFinancialYear}, hash=${cachedHash.substring(0, 20)}...`);
+        console.log(`Council Tax schema pack loaded: version=${cachedVersion}, financial_year=${cachedFinancialYear}, pack=${cachedDocumentPack}, hash=${cachedHash.substring(0, 20)}...`);
 
         return cachedSchema;
     } catch (err) {
@@ -239,6 +297,17 @@ function getFinancialYear() {
 }
 
 /**
+ * Get loaded schema document pack identifier
+ * @returns {string|null} e.g. "v2.5.6 (facts, rules, taxonomy, results)"
+ */
+function getDocumentPack() {
+    if (cachedSchema === null && loadError === null) {
+        loadSchema();
+    }
+    return cachedDocumentPack;
+}
+
+/**
  * Check if schema is loaded successfully
  * @returns {boolean} True if loaded
  */
@@ -266,6 +335,7 @@ function reloadSchema() {
     cachedHash = null;
     cachedVersion = null;
     cachedFinancialYear = null;
+    cachedDocumentPack = null;
     loadError = null;
     return loadSchema();
 }
@@ -276,7 +346,9 @@ module.exports = {
     getSchemaHash,
     getSchemaVersion,
     getFinancialYear,
+    getDocumentPack,
     isSchemaLoaded,
     getLoadError,
-    reloadSchema
+    reloadSchema,
+    discoverSchemaPack
 };
