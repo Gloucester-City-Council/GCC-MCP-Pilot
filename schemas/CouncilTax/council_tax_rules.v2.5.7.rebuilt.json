@@ -4857,6 +4857,167 @@
           "refer_back_to_council": true,
           "avoid_inappropriate_enforcement": true
         }
+      },
+      {
+        "rule_id": "rule.cts.pension_credit_claimant",
+        "name": "Council Tax Support — Pension Credit claimant",
+        "stage": "apply_local_council_tax_support",
+        "rule_type": "eligibility",
+        "mechanism": "council_tax_support",
+        "source_rule_refs": [
+          "adjustment_catalogue.council_tax_support"
+        ],
+        "inputs_required": [
+          "person.receiving_pension_credit"
+        ],
+        "conditions": [
+          {
+            "fact": "person.receiving_pension_credit",
+            "operator": "equals",
+            "value": true
+          }
+        ],
+        "effect": {
+          "effect_type": "percentage_reduction",
+          "value": 100,
+          "unit": "percent",
+          "apply_to": "bill_after_statutory_adjustments"
+        },
+        "condition_combination": "all",
+        "precedence": 90,
+        "confidence": "high",
+        "status": "production-candidate",
+        "explanation_template": {
+          "template_type": "decision_summary",
+          "applies_when": "eligible",
+          "text": "Pension Credit recipients are entitled to maximum Council Tax Support (100%)"
+        },
+        "requires_evidence": [
+          "pension_credit_award_letter"
+        ]
+      },
+      {
+        "rule_id": "rule.cts.benefits_claimant",
+        "name": "Council Tax Support — Benefits claimant (savings under £16,000)",
+        "stage": "apply_local_council_tax_support",
+        "rule_type": "eligibility",
+        "mechanism": "council_tax_support",
+        "source_rule_refs": [
+          "adjustment_catalogue.council_tax_support"
+        ],
+        "inputs_required": [
+          "person.on_qualifying_benefit",
+          "person.savings"
+        ],
+        "conditions": [
+          {
+            "fact": "person.on_qualifying_benefit",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "fact": "person.savings",
+            "operator": "less_than",
+            "value": 16000
+          }
+        ],
+        "effect": {
+          "effect_type": "percentage_reduction",
+          "value": 100,
+          "unit": "percent",
+          "apply_to": "bill_after_statutory_adjustments"
+        },
+        "condition_combination": "all",
+        "precedence": 85,
+        "confidence": "high",
+        "status": "production-candidate",
+        "explanation_template": {
+          "template_type": "decision_summary",
+          "applies_when": "eligible",
+          "text": "Benefits claimant with savings below £16,000 is likely eligible for full Council Tax Support"
+        },
+        "requires_evidence": [
+          "benefit_award_letter",
+          "savings_evidence"
+        ]
+      },
+      {
+        "rule_id": "rule.cts.low_income",
+        "name": "Council Tax Support — Low income (savings under £16,000)",
+        "stage": "apply_local_council_tax_support",
+        "rule_type": "eligibility",
+        "mechanism": "council_tax_support",
+        "source_rule_refs": [
+          "adjustment_catalogue.council_tax_support"
+        ],
+        "inputs_required": [
+          "person.savings"
+        ],
+        "conditions": [
+          {
+            "fact": "person.savings",
+            "operator": "less_than",
+            "value": 16000
+          }
+        ],
+        "effect": {
+          "effect_type": "means_tested_reduction",
+          "description": "Amount determined by income and household assessment",
+          "apply_to": "bill_after_statutory_adjustments"
+        },
+        "condition_combination": "all",
+        "precedence": 75,
+        "confidence": "medium",
+        "status": "production-candidate",
+        "explanation_template": {
+          "template_type": "decision_summary",
+          "applies_when": "eligible",
+          "text": "May be eligible for Council Tax Support — amount depends on full income assessment"
+        },
+        "requires_evidence": [
+          "income_evidence",
+          "savings_evidence"
+        ]
+      },
+      {
+        "rule_id": "rule.cts.savings_above_threshold",
+        "name": "Council Tax Support — Savings above £16,000 threshold (ineligible)",
+        "stage": "apply_local_council_tax_support",
+        "rule_type": "eligibility",
+        "mechanism": "council_tax_support",
+        "source_rule_refs": [
+          "adjustment_catalogue.council_tax_support"
+        ],
+        "inputs_required": [
+          "person.savings",
+          "person.receiving_pension_credit"
+        ],
+        "conditions": [
+          {
+            "fact": "person.savings",
+            "operator": "greater_than_or_equal",
+            "value": 16000
+          },
+          {
+            "fact": "person.receiving_pension_credit",
+            "operator": "equals",
+            "value": false
+          }
+        ],
+        "effect": {
+          "effect_type": "no_adjustment",
+          "reason": "Savings at or above £16,000 — not eligible for Council Tax Support"
+        },
+        "condition_combination": "all",
+        "precedence": 70,
+        "confidence": "high",
+        "status": "production-candidate",
+        "explanation_template": {
+          "template_type": "decision_summary",
+          "applies_when": "eligible",
+          "text": "Savings at or above £16,000 — not eligible unless receiving Pension Credit Guarantee"
+        },
+        "requires_evidence": []
       }
     ],
     "execution_model": {
