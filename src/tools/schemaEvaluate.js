@@ -53,7 +53,7 @@ function evaluateSinglePersonDiscount(facts) {
         reasons.push('Only 1 adult in the household — you are likely entitled to the 25% single person discount');
     } else if (facts.adults === 0) {
         likelihood = 'unclear';
-        reasons.push('Number of adults not specified — we need this to assess eligibility');
+        reasons.push('Zero adults are recorded in this household — if the property has no adult residents, the owner is typically liable and different rules may apply. Please verify the number of adults.');
     } else if (facts.adults > 1) {
         const disregarded = (facts.students || 0) + (facts.carers || 0) + (facts.severely_mentally_impaired || 0) + (facts.apprentice ? 1 : 0);
         const countingAdults = facts.adults - disregarded;
@@ -317,8 +317,8 @@ function getMissingFacts(facts) {
         missing.push('adults — how many adults (aged 18+) live at the property?');
     }
 
-    if (facts.students === undefined && facts.adults > 1) {
-        missing.push('students — are any adults full-time students?');
+    if (facts.students === undefined && facts.adults >= 1) {
+        missing.push('students — are any adults full-time students? (affects Class N exemption and disregard logic)');
     }
 
     if (facts.age === undefined && facts.care_leaver) {
@@ -634,12 +634,27 @@ function runRuntimeResolver(facts, rulesetId, projectionMode) {
         derivedFacts.review_reasons.push('Manual review triggered by policy guard rails');
     }
     const rulesUsed = rankedCandidates.map(c => c.ruleId).filter(Boolean);
+    const noResidentFallback = !bestOutcome ? {
+        id: 'no-resident-guidance',
+        name: 'No Resident Adults — Owner Liability',
+        amount: 'Standard charge applies (owner liable)',
+        mechanism: 'guidance',
+        likelihood: 'unclear',
+        reasons: [
+            'No adult residents have been recorded. Where a property has no residents, the owner is usually liable for council tax.',
+            'If the property is empty, exemptions or a discount may apply depending on how long it has been unoccupied and the reason.',
+            'Please provide the number of adults (18+) living at the property, or confirm the property is empty or unoccupied.'
+        ],
+        howToApply: 'Contact Gloucester City Council Revenues team to clarify your liability',
+        legalBasis: 'Local Government Finance Act 1992, ss.6-9 (liability hierarchy)'
+    } : null;
+
     const bestOutcomeWithoutInternals = bestOutcome ? {
         ...bestOutcome,
         _score: undefined,
         _mechanismBucket: undefined,
         _impactPercent: undefined
-    } : null;
+    } : noResidentFallback;
     const cleanedCandidates = rankedCandidates.map(c => ({
         ...c,
         _score: undefined,

@@ -76,6 +76,27 @@ describe('schemaEvaluate resolver precedence', () => {
         expect(result.result.best_outcome.id).toBe('smi-discount');
     });
 
+    it('1 adult who is a full-time student -> Class N exemption must win over single person discount', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1, students: 1 } });
+        expect(result.ok).toBe(true);
+        expect(result.result.best_outcome.id).toBe('student-discount');
+        expect(result.result.best_outcome.name).toContain('Student Household Exemption');
+    });
+
+    it('1 adult with no student info -> students flagged as missing critical fact', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1 } });
+        expect(result.ok).toBe(true);
+        const missing = result.result.missing_critical_facts;
+        expect(missing.some(f => f.includes('students'))).toBe(true);
+    });
+
+    it('adults=0 -> returns no-resident guidance rather than null best_outcome', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 0 } });
+        expect(result.ok).toBe(true);
+        expect(result.result.best_outcome).not.toBeNull();
+        expect(result.result.best_outcome.id).toBe('no-resident-guidance');
+    });
+
     it('manual review consistency provides reasons when required', () => {
         const result = execute({
             rulesetId: 'discount_eligibility',
