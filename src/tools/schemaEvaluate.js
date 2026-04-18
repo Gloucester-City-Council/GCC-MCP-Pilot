@@ -96,11 +96,15 @@ function lookupCatalogueEntry(rule, adj) {
 
 // ─── Display helpers ─────────────────────────────────────────────────────────
 
-function formatEffect(effect, catalogueItem) {
+function formatEffect(effect, catalogueItem, mechanism) {
     if (effect) {
         const t = effect.effect_type;
         const v = effect.value;
-        if (t === 'set_zero_charge') return '100% exemption — no council tax due';
+        if (t === 'set_zero_charge') {
+            return mechanism === 'exemption'
+                ? '100% exemption — no council tax due'
+                : '100% discount (nil charge)';
+        }
         if (t === 'percentage_reduction' && v === 100) return '100% discount';
         if (t === 'percentage_reduction') return `${v}% off your bill`;
         if (t === 'percentage_premium') return `${v}% premium (total bill = ${100 + v}% of standard charge)`;
@@ -149,7 +153,7 @@ function candidateId(rule, catalogueEntry) {
 function buildCandidate(rule, result, likelihood, catalogueEntry) {
     const item = catalogueEntry ? catalogueEntry.item : null;
     const effect = result.effect;
-    const amount = formatEffect(effect, item);
+    const amount = formatEffect(effect, item, rule.mechanism);
     const reasons = likelihood === 'likely'
         ? buildReasons(rule, result, effect)
         : ['Not eligible based on the information provided'];
@@ -194,6 +198,9 @@ function getMissingFacts(facts) {
     if (facts.has_disabled_adaptations === undefined && facts.disabled_resident) {
         missing.push('has_disabled_adaptations — does the property have qualifying adaptations (extra bathroom, wheelchair room, etc.)?');
     }
+    if (facts.has_disabled_adaptations && facts.property_band === undefined) {
+        missing.push('property_band — what is your council tax valuation band (A–H)? (determines the exact reduction amount)');
+    }
     if (facts.property_empty && facts.property_empty_years === undefined) {
         missing.push('property_empty_years — how long has the property been empty? (affects premium level)');
     }
@@ -205,27 +212,25 @@ function getMissingFacts(facts) {
 
 // ─── Likelihood assessment ────────────────────────────────────────────────────
 
+// Branching facts whose absence makes an eligible-but-no-effect rule 'unclear'.
+const BRANCHING_INPUTS = { 'property.valuation_band': ['property_band'] };
+
 // Returns 'likely' | 'unclear' | 'unlikely'
 function assessLikelihood(ruleResult, rule, userFacts) {
-    if (!ruleResult || !ruleResult.eligible) {
-        // Eligible = false: check if any inputs_required fact was not supplied
-        const required = rule.inputs_required || [];
-        const INPUTS_TO_USERKEYS = {
-            'residents': ['adults'],
-            'property.has_disabled_adaptation': ['has_disabled_adaptations'],
-            'property.empty_duration_years': ['property_empty_years'],
-            'property.valuation_band': ['property_band'],
-            'person.receives_qualifying_smi_benefit': ['smi_qualifying_benefit'],
-        };
-        const missingInput = required.some(inp => {
-            const keys = INPUTS_TO_USERKEYS[inp];
-            return keys && keys.some(k => userFacts[k] === undefined);
-        });
-        return missingInput ? 'unclear' : 'unlikely';
+    if (!ruleResult || !ruleResult.eligible) return 'unlikely';
+
+    // Rule fired but no effect branch matched
+    if (!ruleResult.effect) {
+        const hasMissingBranchFact = (rule.branching_effects || []).some(branch =>
+            (branch.when || []).some(c => {
+                const keys = BRANCHING_INPUTS[c.fact];
+                return keys && keys.some(k => userFacts[k] === undefined);
+            })
+        );
+        return hasMissingBranchFact ? 'unclear' : 'unlikely';
     }
 
-    // Eligible = true: check effect isn't a no-op
-    if (ruleResult.effect && ruleResult.effect.effect_type === 'no_adjustment') return 'unlikely';
+    if (ruleResult.effect.effect_type === 'no_adjustment') return 'unlikely';
     return 'likely';
 }
 
@@ -303,7 +308,16 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
     });
 
     const finalPool = ranked.filter(c => c.candidateRole === 'final_outcome');
-    const bestOutcome = finalPool.length > 0 ? finalPool[0] : null;
+    // Fall back to the best 'unclear' candidate only when the user provided at least one
+    // scenario-specific fact — otherwise return null so the no-resident guidance appears.
+    const hasScenarioFacts = Boolean(
+        userFacts.has_disabled_adaptations || userFacts.disabled_resident ||
+        userFacts.property_empty || userFacts.second_home || userFacts.care_leaver ||
+        (userFacts.severely_mentally_impaired > 0) || (userFacts.students > 0)
+    );
+    const bestOutcome = finalPool.length > 0
+        ? finalPool[0]
+        : (hasScenarioFacts ? ranked.filter(c => c.candidateRole === 'alternative').find(Boolean) : null) || null;
 
     const missingCriticalFacts = getMissingFacts(userFacts);
 
