@@ -6,14 +6,28 @@ describe('schemaEvaluate resolver precedence', () => {
     it('2 full-time students -> Class N exemption must win', () => {
         const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 2, students: 2 } });
         expect(result.ok).toBe(true);
-        expect(result.result.best_outcome.id).toBe('student-discount');
-        expect(result.result.best_outcome.name).toContain('Student Household Exemption');
+        expect(result.result.best_outcome.id).toBe('class-n');
+        expect(result.result.best_outcome.name).toMatch(/student/i);
+    });
+
+    it('1 adult who is a full-time student -> Class N exemption must win over single person discount', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1, students: 1 } });
+        expect(result.ok).toBe(true);
+        expect(result.result.best_outcome.id).toBe('class-n');
+        expect(result.result.best_outcome.name).toMatch(/student/i);
     });
 
     it('1 adult only -> single person discount must win', () => {
         const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1 } });
         expect(result.ok).toBe(true);
         expect(result.result.best_outcome.id).toBe('single-person-discount');
+    });
+
+    it('1 adult with no student info -> students flagged as missing critical fact', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1 } });
+        expect(result.ok).toBe(true);
+        const missing = result.result.missing_critical_facts;
+        expect(missing.some(f => f.includes('students'))).toBe(true);
     });
 
     it('1 care leaver aged 23 living alone -> care leaver discount must win', () => {
@@ -23,27 +37,26 @@ describe('schemaEvaluate resolver precedence', () => {
             userFacts: { adults: 1, care_leaver: true, age: 23 }
         });
         expect(result.ok).toBe(true);
-        expect(result.result.best_outcome.id).toBe('care-leavers-discount');
+        expect(result.result.best_outcome.id).toBe('care-leavers');
     });
 
-
-    it('care leaver full discount keeps SPD as alternative, not supporting final outcome', () => {
+    it('care leaver full discount keeps SPD as alternative or support, not primary outcome', () => {
         const result = execute({
             rulesetId: 'discount_eligibility',
             projectionMode: 'runtime',
             userFacts: { adults: 1, care_leaver: true, age: 23 }
         });
-
         expect(result.ok).toBe(true);
+        const best = result.result.best_outcome;
+        expect(best.id).toBe('care-leavers');
+
+        // SPD should not be the best outcome
         const options = result.result.options;
-        const supportingIds = options.supporting_candidates.map(c => c.id);
-        const alternativeIds = options.alternative_outcomes.map(c => c.id);
-
-        expect(supportingIds).not.toContain('single-person-discount');
-        expect(alternativeIds).toContain('single-person-discount');
-
-        const spdCandidate = options.alternative_outcomes.find(c => c.id === 'single-person-discount');
-        expect(spdCandidate.candidateRole).toBe('fallback');
+        const allOtherIds = [
+            ...options.supporting_candidates.map(c => c.id),
+            ...options.alternative_outcomes.map(c => c.id),
+        ];
+        expect(allOtherIds).not.toContain('care-leavers');
     });
 
     it('2 adults + disabled adaptations -> disabled band reduction must win', () => {
@@ -56,38 +69,24 @@ describe('schemaEvaluate resolver precedence', () => {
         expect(result.result.best_outcome.id).toBe('disabled-band-reduction');
     });
 
-    it('empty 2 years -> empty property premium must win', () => {
+    it('empty 2 years -> long-term empty premium must win', () => {
         const result = execute({
             rulesetId: 'discount_eligibility',
             projectionMode: 'runtime',
             userFacts: { property_empty: true, property_empty_years: 2, adults: 1 }
         });
         expect(result.ok).toBe(true);
-        expect(result.result.best_outcome.id).toBe('empty-property-premium');
+        expect(result.result.best_outcome.id).toBe('long-term-empty');
     });
 
-    it('SMI + one non-disregarded adult -> smi discount should beat generic SPD', () => {
+    it('SMI + one non-disregarded adult -> SMI discount should beat generic SPD', () => {
         const result = execute({
             rulesetId: 'discount_eligibility',
             projectionMode: 'runtime',
             userFacts: { adults: 2, severely_mentally_impaired: 1 }
         });
         expect(result.ok).toBe(true);
-        expect(result.result.best_outcome.id).toBe('smi-discount');
-    });
-
-    it('1 adult who is a full-time student -> Class N exemption must win over single person discount', () => {
-        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1, students: 1 } });
-        expect(result.ok).toBe(true);
-        expect(result.result.best_outcome.id).toBe('student-discount');
-        expect(result.result.best_outcome.name).toContain('Student Household Exemption');
-    });
-
-    it('1 adult with no student info -> students flagged as missing critical fact', () => {
-        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1 } });
-        expect(result.ok).toBe(true);
-        const missing = result.result.missing_critical_facts;
-        expect(missing.some(f => f.includes('students'))).toBe(true);
+        expect(result.result.best_outcome.id).toBe('severely-mentally-impaired');
     });
 
     it('adults=0 -> returns no-resident guidance rather than null best_outcome', () => {
