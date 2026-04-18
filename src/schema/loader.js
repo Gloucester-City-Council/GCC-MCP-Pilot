@@ -22,7 +22,7 @@ let loadError = null;
  * Schema file pattern:
  * council_tax_<document>.v<version>.json
  */
-const FILE_PATTERN = /^council_tax_(facts|rules|taxonomy|results)\.v(\d+(?:\.\d+)*)\.json$/;
+const FILE_PATTERN = /^council_tax_(facts|rules|taxonomy|results)\.v(\d+(?:\.\d+)*)(?:\.rebuilt)?\.json$/;
 const REQUIRED_DOC_TYPES = ['facts', 'rules', 'taxonomy', 'results'];
 
 function compareVersions(a, b) {

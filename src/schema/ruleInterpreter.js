@@ -176,6 +176,9 @@ function buildCaseContext(userFacts) {
             hours_of_care_per_week: carers > 0 ? (userFacts.care_hours_per_week || 40) : 0,
             cared_for_receives_qualifying_benefit: carers > 0,
             relationship_to_cared_for: userFacts.carer_relationship || 'non_relation',
+            receiving_pension_credit: Boolean(userFacts.receiving_pension_credit),
+            on_qualifying_benefit: Boolean(userFacts.on_qualifying_benefit),
+            savings: Number.isFinite(userFacts.savings) ? userFacts.savings : undefined,
         },
         derived: {
             // Pre-computed so branching_effects can reference it without a separate disregard pass

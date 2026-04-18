@@ -29,6 +29,7 @@ const OUTCOME_STAGES = new Set([
     'apply_local_discretionary_reductions',
     'apply_premiums',
     'discounts',
+    'apply_local_council_tax_support',
 ]);
 
 // Where source_rule_refs doesn't map directly to a catalogue item ID, these
@@ -37,6 +38,10 @@ const CATALOGUE_OVERRIDES = {
     'rule.exemption.student.all_residents': { section: 'exemptions', id: 'class-n' },
     'rule.premium.empty_property_long_term': { section: 'property_premiums', id: 'empty_homes_premium' },
     'rule.premium.second_home': { section: 'property_premiums', id: 'second_homes_premium' },
+    'rule.cts.pension_credit_claimant': { section: 'council_tax_support', id: 'council-tax-support' },
+    'rule.cts.benefits_claimant': { section: 'council_tax_support', id: 'council-tax-support' },
+    'rule.cts.low_income': { section: 'council_tax_support', id: 'council-tax-support' },
+    'rule.cts.savings_above_threshold': { section: 'council_tax_support', id: 'council-tax-support' },
 };
 
 // Scores used to rank candidates by how beneficial they are to the user.
@@ -45,6 +50,7 @@ const EFFECT_SCORE = {
     percentage_reduction: v => 500 + (v || 0),
     band_shift: 450,
     fractional_reduction: 450,
+    means_tested_reduction: 400,
     mark_disregarded: 100,
     percentage_premium: v => 200 + (v || 0),
     no_adjustment: -50,
@@ -72,6 +78,8 @@ function searchCatalogueSection(adj, section, id) {
     if (Array.isArray(adj[section].items)) {
         return adj[section].items.find(i => i.id === id) || null;
     }
+    // council_tax_support is a flat object (the section itself is the item)
+    if (section === 'council_tax_support') return adj[section];
     // property_premiums uses named keys, not an items array
     return adj[section][id] || null;
 }
@@ -86,7 +94,7 @@ function lookupCatalogueEntry(rule, adj) {
     for (const ref of (rule.source_rule_refs || [])) {
         const id = extractIdFromRef(ref);
         if (!id) continue;
-        for (const section of ['discounts', 'exemptions', 'property_premiums']) {
+        for (const section of ['discounts', 'exemptions', 'property_premiums', 'council_tax_support']) {
             const item = searchCatalogueSection(adj, section, id);
             if (item) return { section, item };
         }
@@ -110,6 +118,7 @@ function formatEffect(effect, catalogueItem, mechanism) {
         if (t === 'percentage_premium') return `${v}% premium (total bill = ${100 + v}% of standard charge)`;
         if (t === 'band_shift') return 'Bill reduced to one band lower than actual valuation band';
         if (t === 'fractional_reduction') return `${v} reduction on Band A charge`;
+        if (t === 'means_tested_reduction') return 'Potential Council Tax Support — amount depends on income and savings assessment';
         if (t === 'no_adjustment') return 'No discount applies given current household composition';
     }
     return catalogueItem ? String(catalogueItem.effect || catalogueItem.premium_rate || 'See policy') : 'See policy';
@@ -135,6 +144,7 @@ function buildReasons(rule, result, effect) {
         else if (t === 'percentage_reduction') reasons.push(`A ${v}% reduction applies to your council tax bill`);
         else if (t === 'percentage_premium') reasons.push(`A ${v}% premium is added to your council tax bill`);
         else if (t === 'band_shift') reasons.push('Your property is charged at one band lower than its actual valuation band');
+        else if (t === 'means_tested_reduction') reasons.push('You may qualify for Council Tax Support — a formal income and savings assessment is required');
     }
     if (reasons.length === 0 && rule.explanation_template) {
         reasons.push(rule.explanation_template.text || rule.name);
@@ -147,7 +157,7 @@ function buildReasons(rule, result, effect) {
 function candidateId(rule, catalogueEntry) {
     if (!catalogueEntry) return rule.rule_id;
     const item = catalogueEntry.item;
-    return item.id || item.premium_id || item.class || rule.rule_id;
+    return item.id || item.scheme_id || item.premium_id || item.class || rule.rule_id;
 }
 
 function buildCandidate(rule, result, likelihood, catalogueEntry) {
@@ -161,7 +171,7 @@ function buildCandidate(rule, result, likelihood, catalogueEntry) {
     const candidate = {
         id: candidateId(rule, catalogueEntry),
         ruleId: rule.rule_id,
-        name: item ? (item.name || item.premium_name || rule.name) : rule.name,
+        name: item ? (item.name || item.scheme_name || item.premium_name || rule.name) : rule.name,
         amount,
         mechanism: rule.mechanism,
         legalBasis: item && item.legal_basis ? (item.legal_basis.legislation || '') : '',
@@ -206,6 +216,9 @@ function getMissingFacts(facts) {
     }
     if (facts.severely_mentally_impaired > 0 && facts.smi_qualifying_benefit === undefined) {
         missing.push('smi_qualifying_benefit — does the person with SMI receive a qualifying benefit (PIP, DLA, Attendance Allowance, ESA support group, UC limited capability, or IS with disability premium)?');
+    }
+    if (facts.savings === undefined && !facts.property_empty && !facts.second_home && Number.isFinite(facts.adults) && facts.adults >= 1) {
+        missing.push('savings — do you have savings or investments above £16,000? (affects Council Tax Support eligibility)');
     }
     return missing;
 }
@@ -295,7 +308,11 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
         const next = { ...c };
         delete next._score;
         delete next._effect;
-        if (hasPremium && c.mechanism !== 'premium' && c.mechanism !== 'guidance') {
+        if (c.mechanism === 'council_tax_support') {
+            // CTS is means-tested financial assistance, assessed separately after statutory adjustments.
+            // Keep it in its own bucket so it never displaces a statutory outcome as best_outcome.
+            next.candidateRole = 'cts_candidate';
+        } else if (hasPremium && c.mechanism !== 'premium' && c.mechanism !== 'guidance') {
             next.candidateRole = 'rejected';
             next.likelihood = 'unlikely';
             next.reasons = [...(next.reasons || []), 'Property-state premium applies — occupancy discounts do not apply in this scenario'];
@@ -333,6 +350,7 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
             ],
             alternative_outcomes: ranked.filter(c => c.candidateRole === 'alternative'),
             rejected_outcomes: ranked.filter(c => c.candidateRole === 'rejected'),
+            council_tax_support_options: ranked.filter(c => c.candidateRole === 'cts_candidate'),
         },
         facts: {
             input_facts: userFacts,

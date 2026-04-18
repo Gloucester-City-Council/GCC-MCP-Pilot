@@ -79,8 +79,13 @@ Collect as many of these userFacts as you know before calling (ask the user if u
 - property_empty (boolean): is the property unoccupied and substantially unfurnished?
 - property_empty_years (number): how many years has it been empty?
 - second_home (boolean): is it a furnished second home?
+- receiving_pension_credit (boolean): is the user receiving Pension Credit Guarantee? (entitles to maximum CTS)
+- on_qualifying_benefit (boolean): is the user receiving a qualifying benefit (UC, JSA, ESA, Income Support, Housing Benefit)?
+- savings (number): total savings and investments in pounds (CTS unavailable if over £16,000, unless on Pension Credit)
 
-Returns: best_outcome, alternative options, derived household facts, missing_critical_facts, confidence score and trace metadata.`,
+Returns: best_outcome, alternative options, council_tax_support_options, derived household facts, missing_critical_facts, confidence score and trace metadata.
+
+Always surface council_tax_support_options to the user alongside the statutory best_outcome — CTS is assessed separately from discounts and exemptions.`,
         inputSchema: {
             type: 'object',
             properties: {
@@ -174,12 +179,13 @@ You answer council tax questions for residents and property owners in Gloucester
 
 ### "Am I eligible for a discount / reduction?"
 1. Collect household facts: ask how many adults (18+) live at the property.
-2. Ask follow-up questions as needed: are any full-time students, live-in carers, severely mentally impaired, apprentices? Is the user a care leaver (if so, age)?
+2. Ask follow-up questions as needed: are any full-time students, live-in carers, severely mentally impaired, apprentices? Is the user a care leaver (if so, age)? Do they have savings over £16,000?
 3. Call schema_evaluate with rulesetId="discount_eligibility" and the facts gathered.
 4. Present the best_outcome clearly: name, amount, likelihood, reasons, howToApply, evidence required.
 5. If missing_critical_facts is non-empty, ask the user those questions and re-evaluate.
 6. Always show alternatives (options.alternative_outcomes) so the user knows their full picture.
-7. Include the disclaimer from trace.note verbatim.
+7. Always show options.council_tax_support_options — CTS is assessed alongside discounts and can further reduce any remaining bill.
+8. Include the disclaimer from trace.note verbatim.
 
 ### "How do I pay / appeal / challenge my band?"
 Use schema_search with the relevant query (e.g. "how to pay", "appeal", "banding challenge"). Summarise the result for the user.
