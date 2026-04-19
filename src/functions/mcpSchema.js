@@ -115,6 +115,12 @@ const TOOL_HANDLERS = {
     schema_todos: schemaTodos.execute,
     schema_evaluate: schemaEvaluate.execute
 };
+const TOOL_ALIASES = {
+    '/schema_get': 'schema_get',
+    '/schema_search': 'schema_search',
+    '/schema_todos': 'schema_todos',
+    '/schema_evaluate': 'schema_evaluate'
+};
 const AVAILABLE_TOOL_NAMES = Object.keys(TOOL_HANDLERS).join(', ');
 
 const UK_DATE_FORMATTER = new Intl.DateTimeFormat('en-GB');
@@ -126,6 +132,12 @@ function getDateContext() {
         current_date_uk: UK_DATE_FORMATTER.format(now),
         timestamp: now.toISOString()
     };
+}
+
+function resolveToolName(rawName) {
+    if (!rawName) return null;
+    if (TOOL_HANDLERS[rawName]) return rawName;
+    return TOOL_ALIASES[rawName] || null;
 }
 
 async function handleMcpRequest(request, context) {
@@ -217,7 +229,21 @@ Use schema_search with "council tax support" or "hardship". Mention Council Tax 
             return null;
 
         case 'tools/list':
-            return { jsonrpc: '2.0', result: { tools: TOOLS }, id };
+            return {
+                jsonrpc: '2.0',
+                result: {
+                    tools: TOOLS.map(tool => ({
+                        ...tool,
+                        logicalId: tool.name,
+                    })),
+                    registry: {
+                        version: 'schema-tools-v1',
+                        stableIdentifiers: true,
+                        note: 'Use tool.name/logicalId for calls. Any transport path/link IDs are internal and may refresh.',
+                    }
+                },
+                id
+            };
 
         case 'tools/call': {
             const { name, arguments: args } = params || {};
@@ -227,15 +253,29 @@ Use schema_search with "council tax support" or "hardship". Mention Council Tax 
                 return { jsonrpc: '2.0', error: { code: -32602, message: 'Invalid params: tool name is required' }, id };
             }
 
-            const handler = TOOL_HANDLERS[name];
+            const resolvedName = resolveToolName(name);
+            const handler = resolvedName ? TOOL_HANDLERS[resolvedName] : null;
             if (!handler) {
-                return { jsonrpc: '2.0', error: { code: -32602, message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES}` }, id };
+                return {
+                    jsonrpc: '2.0',
+                    error: {
+                        code: -32602,
+                        message: `Unknown tool: ${name}. Available: ${AVAILABLE_TOOL_NAMES}`,
+                        data: {
+                            code: 'TOOL_REDISCOVER_REQUIRED',
+                            reason: 'tool re-registered or stale tool reference',
+                            action: 'Call tools/list and rebind to logicalId/name',
+                            registryVersion: 'schema-tools-v1',
+                        }
+                    },
+                    id
+                };
             }
 
             try {
-                context.log(`Executing schema tool: ${name}`);
+                context.log(`Executing schema tool: ${resolvedName}`);
                 const result = await Promise.resolve(handler(args || {}));
-                context.log(`Schema tool completed [${name}] in ${Date.now() - toolStart}ms`);
+                context.log(`Schema tool completed [${resolvedName}] in ${Date.now() - toolStart}ms`);
 
                 const wrappedResult = {
                     ...getDateContext(),
@@ -258,7 +298,7 @@ Use schema_search with "council tax support" or "hardship". Mention Council Tax 
                     result: {
                         content: [{
                             type: 'text',
-                            text: JSON.stringify({ error: error.message, tool: name, note: 'An unexpected error occurred executing the schema tool.' }, null, 2)
+                                text: JSON.stringify({ error: error.message, tool: name, note: 'An unexpected error occurred executing the schema tool.' }, null, 2)
                         }],
                         isError: true
                     },

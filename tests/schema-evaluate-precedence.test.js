@@ -94,6 +94,22 @@ describe('schemaEvaluate resolver precedence', () => {
         expect(result.ok).toBe(true);
         expect(result.result.best_outcome).not.toBeNull();
         expect(result.result.best_outcome.id).toBe('no-resident-guidance');
+        expect(result.result.best_outcome.outcome_state).toBe('guidance_fallback');
+    });
+
+    it('empty facts keep unknown adults as null in normalised household', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: {} });
+        expect(result.ok).toBe(true);
+        expect(result.result.facts.normalised_household.adults).toBeNull();
+    });
+
+    it('contradictory counts return structured unresolved_conflicts', () => {
+        const result = execute({ rulesetId: 'discount_eligibility', projectionMode: 'runtime', userFacts: { adults: 1, students: 2 } });
+        expect(result.ok).toBe(true);
+        expect(Array.isArray(result.result.unresolved_conflicts)).toBe(true);
+        expect(result.result.unresolved_conflicts.length).toBeGreaterThan(0);
+        expect(result.result.unresolved_conflicts[0].code).toBe('impossible_household_count');
+        expect(result.result.best_outcome.outcome_state).toBe('validation_conflict');
     });
 
     it('manual review consistency provides reasons when required', () => {
