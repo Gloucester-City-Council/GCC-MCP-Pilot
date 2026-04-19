@@ -121,7 +121,9 @@ function formatEffect(effect, catalogueItem, mechanism) {
         if (t === 'means_tested_reduction') return 'Potential Council Tax Support — amount depends on income and savings assessment';
         if (t === 'no_adjustment') return 'No discount applies given current household composition';
     }
-    return catalogueItem ? String(catalogueItem.effect || catalogueItem.premium_rate || 'See policy') : 'See policy';
+    const raw = catalogueItem ? (catalogueItem.effect || catalogueItem.premium_rate) : null;
+    if (!raw) return 'See policy';
+    return typeof raw === 'string' ? raw : (raw.premium || 'See policy');
 }
 
 const DERIVED_LABELS = {
