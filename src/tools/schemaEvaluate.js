@@ -267,6 +267,53 @@ const NO_RESIDENT_GUIDANCE = {
     howToApply: 'Contact Gloucester City Council Revenues team to clarify your liability',
 };
 
+function detectFactConflicts(userFacts) {
+    const conflicts = [];
+    const numericCountFields = ['adults', 'students', 'carers', 'severely_mentally_impaired'];
+
+    for (const field of numericCountFields) {
+        const value = userFacts[field];
+        if (value === undefined) continue;
+        if (!Number.isFinite(value) || value < 0 || !Number.isInteger(value)) {
+            conflicts.push({
+                code: 'invalid_count',
+                field,
+                message: `${field} must be a non-negative integer`,
+                observed: value,
+            });
+        }
+    }
+
+    if (Number.isFinite(userFacts.adults) && Number.isFinite(userFacts.students) && userFacts.students > userFacts.adults) {
+        conflicts.push({
+            code: 'impossible_household_count',
+            field: 'students',
+            message: 'students cannot exceed adults in the same household',
+            observed: { adults: userFacts.adults, students: userFacts.students },
+        });
+    }
+
+    if (Number.isFinite(userFacts.adults) && Number.isFinite(userFacts.carers) && userFacts.carers > userFacts.adults) {
+        conflicts.push({
+            code: 'impossible_household_count',
+            field: 'carers',
+            message: 'carers cannot exceed adults in the same household',
+            observed: { adults: userFacts.adults, carers: userFacts.carers },
+        });
+    }
+
+    if (Number.isFinite(userFacts.adults) && Number.isFinite(userFacts.severely_mentally_impaired) && userFacts.severely_mentally_impaired > userFacts.adults) {
+        conflicts.push({
+            code: 'impossible_household_count',
+            field: 'severely_mentally_impaired',
+            message: 'severely_mentally_impaired cannot exceed adults in the same household',
+            observed: { adults: userFacts.adults, severely_mentally_impaired: userFacts.severely_mentally_impaired },
+        });
+    }
+
+    return conflicts;
+}
+
 // ─── Main resolver ────────────────────────────────────────────────────────────
 
 function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
@@ -340,8 +387,13 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
 
     const missingCriticalFacts = getMissingFacts(userFacts);
 
+    const resolvedBestOutcome = bestOutcome || {
+        ...NO_RESIDENT_GUIDANCE,
+        outcome_state: 'guidance_fallback',
+    };
+
     const result = {
-        best_outcome: bestOutcome || NO_RESIDENT_GUIDANCE,
+        best_outcome: resolvedBestOutcome,
         why_best_outcome_won: bestOutcome
             ? `${bestOutcome.name} selected — mechanism: ${bestOutcome.mechanism}, score: highest eligible candidate`
             : 'No eligible outcome resolved from the supplied facts — owner-liability guidance returned',
@@ -362,16 +414,18 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
                 review_reasons: missingCriticalFacts.length > 0 ? [`Missing critical facts: ${missingCriticalFacts.length}`] : [],
             },
             normalised_household: {
-                adults: Number.isFinite(userFacts.adults) ? userFacts.adults : 0,
+                adults: Number.isFinite(userFacts.adults) ? userFacts.adults : null,
                 counting_adults: caseCtx.derived.counted_adults_after_disregards,
-                disregarded_adults: Math.max(0, (Number.isFinite(userFacts.adults) ? userFacts.adults : 0) - caseCtx.derived.counted_adults_after_disregards),
+                disregarded_adults: Number.isFinite(userFacts.adults)
+                    ? Math.max(0, userFacts.adults - caseCtx.derived.counted_adults_after_disregards)
+                    : null,
             },
         },
         missing_critical_facts: missingCriticalFacts,
         unresolved_conflicts: [],
         confidence: buildConfidence(bestOutcome, missingCriticalFacts),
         trace: {
-            resolver_version: '2.5.7-schema-driven',
+            resolver_version: '2.5.8-schema-driven',
             projection_mode: projectionMode,
             ruleset_id: rulesetId,
             rules_evaluated: allRules.filter(r => OUTCOME_STAGES.has(r.stage)).length,
@@ -379,6 +433,12 @@ function runRuntimeResolver(userFacts, rulesetId, projectionMode) {
             note: "This is guidance based on Gloucester City Council's approved 2026/27 council tax policy. Your actual entitlement depends on your individual circumstances and a formal assessment by the council's Revenues team.",
         },
     };
+
+    if (result.confidence.overall <= 0.25 && result.options.council_tax_support_options.length > 2) {
+        const [primary, ...secondary] = result.options.council_tax_support_options;
+        result.options.council_tax_support_options = [primary];
+        result.options.secondary_council_tax_support_options = secondary;
+    }
 
     return projectResult(result, projectionMode);
 }
@@ -447,6 +507,54 @@ function execute(input = {}) {
     }
     if (!PROJECTION_MODES.includes(projectionMode)) {
         return createError(ERROR_CODES.BAD_REQUEST, `Unknown projectionMode "${projectionMode}"`, { availableProjectionModes: PROJECTION_MODES });
+    }
+
+    const conflicts = detectFactConflicts(userFacts);
+    if (conflicts.length > 0) {
+        return createSuccess({
+            rulesetId,
+            userFacts,
+            projectionMode,
+            best_outcome: {
+                ...NO_RESIDENT_GUIDANCE,
+                outcome_state: 'validation_conflict',
+            },
+            why_best_outcome_won: 'Input validation conflicts detected — eligibility was not resolved',
+            options: {
+                supporting_candidates: [],
+                alternative_outcomes: [],
+                rejected_outcomes: [],
+                council_tax_support_options: [],
+            },
+            facts: {
+                input_facts: userFacts,
+                derived_facts: {
+                    has_likely_outcome: false,
+                    requires_manual_review: true,
+                    review_reasons: ['Input validation conflicts must be resolved before evaluation'],
+                },
+                normalised_household: {
+                    adults: Number.isFinite(userFacts.adults) ? userFacts.adults : null,
+                    counting_adults: null,
+                    disregarded_adults: null,
+                },
+            },
+            missing_critical_facts: getMissingFacts(userFacts),
+            unresolved_conflicts: conflicts,
+            confidence: {
+                overall: 0,
+                best_outcome_likelihood: 'unclear',
+                missing_critical_facts_count: getMissingFacts(userFacts).length,
+            },
+            trace: {
+                resolver_version: '2.5.8-schema-driven',
+                projection_mode: projectionMode,
+                ruleset_id: rulesetId,
+                rules_evaluated: 0,
+                rules_used: [],
+                note: "Input conflicts were detected. Please correct the facts and retry before relying on this guidance.",
+            },
+        });
     }
 
     try {
