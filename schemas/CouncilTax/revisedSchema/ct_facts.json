@@ -1,0 +1,784 @@
+{
+  "$schema": "gloucester-ct/facts/1.0",
+  "authority": {
+    "name": "Gloucester City Council",
+    "area": "Gloucester City",
+    "billing_authority_type": "district_council"
+  },
+  "valuation": {
+    "system": "Valuation Office Agency (VOA) banding on 1 April 1991 values",
+    "legislation": "Local Government Finance Act 1992",
+    "bands": [
+      {
+        "band": "A",
+        "property_value_1991": "Up to \u00a340,000"
+      },
+      {
+        "band": "B",
+        "property_value_1991": "\u00a340,001 to \u00a352,000"
+      },
+      {
+        "band": "C",
+        "property_value_1991": "\u00a352,001 to \u00a368,000"
+      },
+      {
+        "band": "D",
+        "property_value_1991": "\u00a368,001 to \u00a388,000"
+      },
+      {
+        "band": "E",
+        "property_value_1991": "\u00a388,001 to \u00a3120,000"
+      },
+      {
+        "band": "F",
+        "property_value_1991": "\u00a3120,001 to \u00a3160,000"
+      },
+      {
+        "band": "G",
+        "property_value_1991": "\u00a3160,001 to \u00a3320,000"
+      },
+      {
+        "band": "H",
+        "property_value_1991": "Over \u00a3320,000"
+      }
+    ],
+    "rates": {
+      "2026_27": {
+        "financial_year": "2026/27",
+        "status": "current",
+        "city_increase_pct": 2.99,
+        "resolution": "Full Council 26 February 2026",
+        "tax_base_band_d_equiv": 40327.8,
+        "council_tax_requirement_gbp": 9845226.0,
+        "bands": [
+          {
+            "band": "A",
+            "gloucester_city_gbp": 162.75,
+            "county_council_gbp": 1175.64,
+            "police_pcc_gbp": 227.05,
+            "total_gbp": 1565.44,
+            "total_quedgeley_gbp": 1595.99
+          },
+          {
+            "band": "B",
+            "gloucester_city_gbp": 189.88,
+            "county_council_gbp": 1371.58,
+            "police_pcc_gbp": 264.9,
+            "total_gbp": 1826.36,
+            "total_quedgeley_gbp": 1862.0
+          },
+          {
+            "band": "C",
+            "gloucester_city_gbp": 217.0,
+            "county_council_gbp": 1567.52,
+            "police_pcc_gbp": 302.74,
+            "total_gbp": 2087.26,
+            "total_quedgeley_gbp": 2127.99
+          },
+          {
+            "band": "D",
+            "gloucester_city_gbp": 244.13,
+            "county_council_gbp": 1763.46,
+            "police_pcc_gbp": 340.58,
+            "total_gbp": 2348.17,
+            "total_quedgeley_gbp": 2393.99
+          },
+          {
+            "band": "E",
+            "gloucester_city_gbp": 298.38,
+            "county_council_gbp": 2155.34,
+            "police_pcc_gbp": 416.26,
+            "total_gbp": 2869.98,
+            "total_quedgeley_gbp": 2925.98
+          },
+          {
+            "band": "F",
+            "gloucester_city_gbp": 352.63,
+            "county_council_gbp": 2547.22,
+            "police_pcc_gbp": 491.95,
+            "total_gbp": 3391.8,
+            "total_quedgeley_gbp": 3457.99
+          },
+          {
+            "band": "G",
+            "gloucester_city_gbp": 406.88,
+            "county_council_gbp": 2939.1,
+            "police_pcc_gbp": 567.63,
+            "total_gbp": 3913.61,
+            "total_quedgeley_gbp": 3989.98
+          },
+          {
+            "band": "H",
+            "gloucester_city_gbp": 488.26,
+            "county_council_gbp": 3526.92,
+            "police_pcc_gbp": 681.16,
+            "total_gbp": 4696.34,
+            "total_quedgeley_gbp": 4787.98
+          }
+        ],
+        "quedgeley_precept": {
+          "precept_gbp": 309207.1,
+          "tax_base": 6748.3,
+          "band_d_addition_gbp": 45.82
+        }
+      },
+      "2025_26": {
+        "financial_year": "2025/26",
+        "status": "archived",
+        "bands": [
+          {
+            "band": "A",
+            "gloucester_city_gbp": 158.03,
+            "county_council_gbp": 1119.77,
+            "police_pcc_gbp": 214.72,
+            "total_gbp": 1492.52
+          },
+          {
+            "band": "B",
+            "gloucester_city_gbp": 184.36,
+            "county_council_gbp": 1306.39,
+            "police_pcc_gbp": 250.51,
+            "total_gbp": 1741.26
+          },
+          {
+            "band": "C",
+            "gloucester_city_gbp": 210.7,
+            "county_council_gbp": 1493.02,
+            "police_pcc_gbp": 286.29,
+            "total_gbp": 1990.01
+          },
+          {
+            "band": "D",
+            "gloucester_city_gbp": 237.04,
+            "county_council_gbp": 1679.65,
+            "police_pcc_gbp": 322.08,
+            "total_gbp": 2238.77
+          },
+          {
+            "band": "E",
+            "gloucester_city_gbp": 289.72,
+            "county_council_gbp": 2052.91,
+            "police_pcc_gbp": 393.65,
+            "total_gbp": 2736.28
+          },
+          {
+            "band": "F",
+            "gloucester_city_gbp": 342.39,
+            "county_council_gbp": 2426.16,
+            "police_pcc_gbp": 465.23,
+            "total_gbp": 3233.78
+          },
+          {
+            "band": "G",
+            "gloucester_city_gbp": 395.07,
+            "county_council_gbp": 2799.42,
+            "police_pcc_gbp": 536.8,
+            "total_gbp": 3731.29
+          },
+          {
+            "band": "H",
+            "gloucester_city_gbp": 474.08,
+            "county_council_gbp": 3359.3,
+            "police_pcc_gbp": 644.16,
+            "total_gbp": 4477.54
+          }
+        ]
+      }
+    }
+  },
+  "liability": {
+    "legislation": "Local Government Finance Act 1992, Part 1, ss.6-9",
+    "hierarchy": [
+      {
+        "priority": 1,
+        "liable_person": "Resident freeholder (owner-occupier)"
+      },
+      {
+        "priority": 2,
+        "liable_person": "Resident leaseholder (long leasehold)"
+      },
+      {
+        "priority": 3,
+        "liable_person": "Resident tenant"
+      },
+      {
+        "priority": 4,
+        "liable_person": "Resident licensee (has permission to occupy)"
+      },
+      {
+        "priority": 5,
+        "liable_person": "Owner (if no residents)"
+      }
+    ],
+    "joint_and_several": "Where multiple people fall at the same hierarchy level, each is jointly and severally liable for the full amount.",
+    "special_cases": {
+      "hmo": "Houses in Multiple Occupation \u2014 owner is the liable person, not individual tenants.",
+      "care_homes": "Resident is liable unless a qualifying exemption applies.",
+      "empty_properties": "Owner is the liable person."
+    }
+  },
+  "discounts": [
+    {
+      "id": "single-person-discount",
+      "name": "Single Person Discount",
+      "mechanism": "person_based",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1",
+      "effect": "25%",
+      "eligibility": "Only one person aged 18 or over lives in the property as their sole or main residence",
+      "eligibility_note": "Some people are 'disregarded' and don't count as adults for Council Tax purposes",
+      "change_notification_days": "21 days",
+      "change_notification_examples": [
+        "Someone moves in",
+        "You move out",
+        "Someone in household turns 18"
+      ]
+    },
+    {
+      "id": "severely-mentally-impaired",
+      "name": "Severely Mentally Impaired Discount",
+      "mechanism": "person_based",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(7)",
+      "effect": "Either 25% or 100% depending on household composition",
+      "eligibility": [
+        "Person is severely mentally impaired (certified by doctor)",
+        "Person receives qualifying benefit"
+      ],
+      "evidence_required": "Medical certificate from doctor confirming severe mental impairment",
+      "qualifying_benefits": [
+        "Attendance Allowance",
+        "Disability Living Allowance (middle or higher rate care component)",
+        "Personal Independence Payment (daily living component)",
+        "Constant Attendance Allowance",
+        "Severe Disablement Allowance",
+        "Employment and Support Allowance (support group)",
+        "Universal Credit (limited capability for work element)",
+        "Incapacity Benefit",
+        "Income Support (including disability premium)"
+      ]
+    },
+    {
+      "id": "care-leavers",
+      "name": "Care Leavers Discount",
+      "mechanism": "person_based",
+      "legal_basis_type": "local_discretionary",
+      "legislation": "Local Government Finance Act 1992, Section 13(1)(c) \u2014 discretionary reduction",
+      "effect": "100%",
+      "eligibility": {
+        "age_range": "18\u201324 inclusive. Discount ceases from 25th birthday.",
+        "age_history": "Original scheme (April 2019) covered 18\u201321 only. Extended to 18\u201324 by Cabinet 10 January 2024, effective 1 April 2024.",
+        "care_leaver_definition": "Formerly a child in care of Gloucestershire County Council OR any other local authority in England, and became a 'Former Relevant Child' under Children (Leaving Care) Act 2000.",
+        "residency": "Must be resident and liable for Council Tax in Gloucester City Council area.",
+        "liability_requirement": "Must be the liable person \u2014 bill must be in their name. No discount where resident is in HMO and not the Council Tax payer.",
+        "property": "Occupied properties only.",
+        "verification": "Care leaver status confirmed by Gloucestershire County Council's 11-25 Permanency Service, who will seek confirmation from other local authorities where needed.",
+        "geographic_scope": "Applies to Former Relevant Children of any local authority in England (not limited to Gloucestershire CC \u2014 extended April 2024)."
+      }
+    },
+    {
+      "id": "carer-disregard",
+      "name": "Carer Disregard",
+      "mechanism": "person_based",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(5)",
+      "effect": "Carer is disregarded - may result in 25% discount if only one other adult",
+      "eligibility": [
+        "Provides care for at least 35 hours per week",
+        "Person cared for receives qualifying benefit",
+        "Person cared for is NOT your spouse, partner, or child under 18"
+      ]
+    },
+    {
+      "id": "full-time-students",
+      "name": "Full-time Student Disregard",
+      "mechanism": "student",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(4)",
+      "effect": "Students disregarded - 100% discount if all adults are students, otherwise may result in 25% if one student with one other adult",
+      "eligibility": [
+        "Enrolled on full-time course of education",
+        "Course lasts at least one academic year",
+        "At least 24 weeks per year",
+        "At least 21 hours study per week during term time"
+      ]
+    },
+    {
+      "id": "apprentices-youth-trainees",
+      "name": "Apprentice and Youth Trainee Disregard",
+      "mechanism": "student",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2(6)",
+      "effect": "Disregarded - may result in discount depending on household",
+      "eligibility": {
+        "apprentices": "Undertaking apprenticeship under Apprenticeships, Skills, Children and Learning Act 2009",
+        "youth_trainees": "Youth training under specified schemes"
+      }
+    },
+    {
+      "id": "school-college-leavers",
+      "name": "School/College Leaver Disregard (Age 18-19)",
+      "mechanism": "student",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1",
+      "effect": "Disregarded until 1 November",
+      "eligibility": "Left school or college after 30 April, aged 18-19"
+    },
+    {
+      "id": "disabled-band-reduction",
+      "name": "Disabled Band Reduction",
+      "mechanism": "property_based",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Section 13(2) and Schedule 1A",
+      "effect": "One band lower (Band A gets 1/9th reduction)",
+      "eligibility": [
+        "Property is main home of disabled person (adult or child)",
+        "Property has been adapted or has features essential for disabled person's needs"
+      ]
+    },
+    {
+      "id": "unoccupied-unfurnished",
+      "name": "Empty Property Discount (Unoccupied and Unfurnished)",
+      "mechanism": "property_based",
+      "legal_basis_type": "local_discretionary",
+      "legislation": "Local Government Finance Act 1992, Schedule 1A, Paragraph 4",
+      "effect": "25% for up to 6 months",
+      "eligibility": "Property is unoccupied and unfurnished"
+    },
+    {
+      "id": "major-repair",
+      "name": "Major Repair Discount",
+      "mechanism": "property_based",
+      "legal_basis_type": "local_discretionary",
+      "legislation": "Local Government Finance Act 1992, Schedule 1A, Paragraph 4",
+      "effect": "25% for up to 12 months",
+      "eligibility": "Property unoccupied and undergoing major structural alteration or repair to make it habitable"
+    },
+    {
+      "id": "annexe-discount",
+      "name": "Annexe Discount",
+      "mechanism": "property_based",
+      "legal_basis_type": "local_discretionary",
+      "legislation": "Local Government Finance Act 1992, Schedule 1A",
+      "effect": "50%",
+      "eligibility": [
+        "Annexe occupied by relative of council tax payer of main property, OR",
+        "Annexe used as part of main property (not separately let)"
+      ]
+    },
+    {
+      "id": "job-related-second-home",
+      "name": "Job-Related Second Home Discount",
+      "mechanism": "property_based",
+      "legal_basis_type": "local_discretionary",
+      "legislation": "Local Government Finance Act 1992, Schedule 1A",
+      "effect": "50%",
+      "eligibility": [
+        "Employer requires you to live in property (job-related accommodation)",
+        "You are also liable for Council Tax on a second furnished property"
+      ],
+      "eligibility_note": "Applies to the furnished second home, not the job-related property"
+    },
+    {
+      "id": "hospital-care-patients",
+      "name": "Hospital/Care Patients",
+      "mechanism": "disregard",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "eligibility": [
+        "Long-term hospital patients",
+        "Residential care/nursing home residents",
+        "Hospice residents",
+        "Hostel residents (providing high level of care)"
+      ]
+    },
+    {
+      "id": "persons-in-detention",
+      "name": "Persons in Detention",
+      "mechanism": "disregard",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "eligibility": [
+        "Persons in prison",
+        "Persons on remand",
+        "Persons detained under Mental Health Act 1983"
+      ]
+    },
+    {
+      "id": "members-of-religious-communities",
+      "name": "Members of Religious Communities",
+      "mechanism": "disregard",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "eligibility": "Members of religious communities whose principal occupation is prayer, contemplation, education, or relief of suffering"
+    },
+    {
+      "id": "foreign-spouses-dependants-of-students",
+      "name": "Foreign Spouses/Dependants of Students",
+      "mechanism": "disregard",
+      "legal_basis_type": "statutory",
+      "legislation": "Local Government Finance Act 1992, Schedule 1, Paragraph 2",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "eligibility": "Non-British spouses/dependants of students prevented by Home Office from working or claiming benefits"
+    }
+  ],
+  "exemptions": [
+    {
+      "id": "class-f",
+      "class": "F",
+      "name": "Death of liable person (deceased estate)",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property unoccupied since death of liable person. No other joint owners or tenants. Probate/letters of administration not yet granted, or granted within last 6 months.",
+      "duration": "Indefinite until probate granted, then up to 6 months after grant",
+      "note": "Where there are other residents, no exemption applies. Death of one joint owner does not trigger Class F."
+    },
+    {
+      "id": "class-l",
+      "class": "L",
+      "name": "Repossessed property",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Mortgagee (e.g. building society) has taken possession of unoccupied property under mortgage terms",
+      "duration": "While in possession",
+      "note": "Property must be unoccupied. Previously in schema as Class B \u2014 corrected: Class B is charity-owned empty property."
+    },
+    {
+      "id": "class-b",
+      "class": "B",
+      "name": "Charity-owned empty property",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property owned by a charity, unoccupied, last used for charitable purposes",
+      "duration": "Up to 6 months"
+    },
+    {
+      "id": "class-i",
+      "class": "I",
+      "name": "Last occupier receiving care (not in care home)",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 last occupier has moved elsewhere (not a care home or hospital) to receive personal care due to old age, disablement, illness, alcohol or drug dependence, or mental disorder",
+      "duration": "Indefinite while circumstances continue"
+    },
+    {
+      "id": "class-e",
+      "class": "E",
+      "name": "Last occupier now in care home or hospital",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 last occupier's sole or main residence is now a hospital, care home or nursing home where they are receiving care",
+      "duration": "Indefinite while circumstances continue"
+    },
+    {
+      "id": "class-j",
+      "class": "J",
+      "name": "Last occupier providing care elsewhere",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 last occupier has moved elsewhere to provide personal care to another person due to old age, disablement, illness, alcohol or drug dependence, or mental disorder",
+      "duration": "Indefinite while circumstances continue"
+    },
+    {
+      "id": "class-d",
+      "class": "D",
+      "name": "Last occupier in prison or detention",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 liable person is detained in prison, hospital by court order, or immigration detention. Does not apply if detained for non-payment of council tax or a fine.",
+      "duration": "While detained"
+    },
+    {
+      "id": "class-k",
+      "class": "K",
+      "name": "Last occupier is a student",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 last occupier is a student and has been a student for the whole period since leaving, or became a student within 6 weeks of leaving",
+      "duration": "While occupier remains a student"
+    },
+    {
+      "id": "class-g",
+      "class": "G",
+      "name": "Occupation prohibited by law",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 occupation prohibited by law or by action of a public body (e.g. closing order, demolition order, planning condition)",
+      "duration": "While prohibition continues"
+    },
+    {
+      "id": "class-h",
+      "class": "H",
+      "name": "Awaiting occupation by minister of religion",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied dwelling held for occupation by a minister of religion as a residence from which to perform their duties",
+      "duration": "While held for that purpose"
+    },
+    {
+      "id": "class-o",
+      "class": "O",
+      "name": "Armed forces accommodation (MOD-owned)",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Living accommodation owned by the Secretary of State for Defence, held for the purposes of armed forces accommodation. Applies whether occupied or unoccupied.",
+      "duration": "Indefinite"
+    },
+    {
+      "id": "class-q",
+      "class": "Q",
+      "name": "Trustee in bankruptcy",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied \u2014 property is in the hands of a qualifying person in their capacity as Trustee in Bankruptcy under the Insolvency Act 1986 or Bankruptcy Act 1914. Applies even if jointly owned.",
+      "duration": "While in hands of trustee",
+      "note": "Does not cover unoccupied dwellings where the liable person is a company in liquidation"
+    },
+    {
+      "id": "class-t",
+      "class": "T",
+      "name": "Annexe that cannot be let separately",
+      "occupancy_category": "unoccupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Unoccupied annexe forming part of a single property that includes another dwelling, which cannot be let separately without a breach of planning control (s.171A Town and Country Planning Act 1990)",
+      "duration": "While unoccupied and planning restriction continues",
+      "note": "Exemption applies whether furnished or unfurnished"
+    },
+    {
+      "id": "class-n",
+      "class": "N",
+      "name": "All residents are full-time students",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property occupied only by full-time students (and/or student nurses, foreign spouses/dependants of students, and school/college leavers). Also applies during vacation where students hold a tenancy and intend to return.",
+      "duration": "While all occupiers qualify as students"
+    },
+    {
+      "id": "class-s",
+      "class": "S",
+      "name": "Under-18 residents only",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property occupied only by persons under the age of 18. Owner/landlord name appears on the bill as persons under 18 cannot be liable.",
+      "duration": "While all occupiers are under 18"
+    },
+    {
+      "id": "class-w",
+      "class": "W",
+      "name": "Annexe occupied by dependent relative",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Annexe forming part of a single property, occupied by a dependent relative of the resident in the main dwelling. Dependent relative = aged 65+, or substantially and permanently disabled, or severely mentally impaired.",
+      "duration": "While conditions met",
+      "note": "Annexe defined as a dwelling forming part of a single property that cannot be let separately without breach of planning controls"
+    },
+    {
+      "id": "class-u",
+      "class": "U",
+      "name": "Severely mentally impaired only",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property occupied only by person(s) who are severely mentally impaired and would otherwise be liable for council tax. Exemption also applies where occupied jointly by severely mentally impaired persons and full-time students.",
+      "duration": "While conditions met",
+      "note": "Liable person must be severely mentally impaired. If someone else is liable (e.g. HMO or care home), exemption does not apply. Doctor certification and qualifying benefit required."
+    },
+    {
+      "id": "class-p",
+      "class": "P",
+      "name": "Visiting forces",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended; Visiting Forces Act 1952, s.12",
+      "eligibility": "Property occupied by a person with a relevant association with a visiting force from a country to which the Visiting Forces Act 1952 applies, or their non-British dependants",
+      "duration": "While visiting force association continues"
+    },
+    {
+      "id": "class-v",
+      "class": "V",
+      "name": "Diplomats and international organisations",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Property where a person who would otherwise be liable is a non-British diplomat or member of an international organisation headquartered in the UK",
+      "duration": "While diplomatic status continues"
+    },
+    {
+      "id": "class-m",
+      "class": "M",
+      "name": "Student halls of residence",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Accommodation owned or managed by a prescribed educational establishment and used as student accommodation",
+      "duration": "Indefinite"
+    },
+    {
+      "id": "class-r",
+      "class": "R",
+      "name": "Caravan pitch or boat mooring (unoccupied)",
+      "occupancy_category": "occupied",
+      "legislation": "Council Tax (Exempt Dwellings) Order 1992 (SI 1992/558), Article 3, as amended",
+      "eligibility": "Caravan pitch not occupied by a caravan, or boat mooring not occupied by a boat. A pitch or mooring is a dwelling only where used as a person's sole or main residence.",
+      "duration": "While pitch/mooring is unoccupied"
+    }
+  ],
+  "premiums": {
+    "empty_homes": {
+      "id": "empty-homes-premium",
+      "name": "Long-term Empty Homes Premium",
+      "legislation": "Local Government Finance Act 1992 ss.11B-11C (as amended by Levelling-up and Regeneration Act 2023)",
+      "policy_resolution": "Full Council 7 February 2024",
+      "effective_date": "2025-04-01",
+      "property_based": true,
+      "note": "Premium attaches to the property \u2014 purchasing an empty property inherits its accumulated premium.",
+      "levels": [
+        {
+          "empty_years_min": 1,
+          "additional_pct": 100,
+          "total_pct": 200,
+          "note": "Threshold reduced from 2 years to 1 year from 1 April 2025"
+        },
+        {
+          "empty_years_min": 5,
+          "additional_pct": 200,
+          "total_pct": 300
+        },
+        {
+          "empty_years_min": 10,
+          "additional_pct": 300,
+          "total_pct": 400
+        }
+      ],
+      "qualifying_exceptions": [
+        "Property where occupation is prohibited by planning restrictions",
+        "Property held by trustee in bankruptcy",
+        "Property of deceased person (for up to 6 months after grant of probate)",
+        "Property repossessed by mortgage lender",
+        "Property undergoing probate",
+        "Property where owner moved to care home",
+        "Property where owner is providing care elsewhere",
+        "Armed forces accommodation"
+      ]
+    },
+    "second_homes": {
+      "id": "second-homes-premium",
+      "name": "Second Homes Premium",
+      "legislation": "Local Government Finance Act 1992 ss.11B-11C (as amended by Levelling-up and Regeneration Act 2023)",
+      "policy_resolution": "Full Council 25 January 2024",
+      "effective_date": "2025-04-01",
+      "definition": "Furnished property not occupied as any person's sole or main residence",
+      "additional_pct": 100,
+      "total_pct": 200,
+      "qualifying_exceptions": [
+        "job_related: 50% discount may apply \u2014 see job-related-second-home discount"
+      ]
+    }
+  },
+  "council_tax_support": {
+    "id": "council-tax-support",
+    "name": "Council Tax Support",
+    "also_known_as": "Council Tax Reduction",
+    "mechanism": "financial_assessment_reduction",
+    "note": "Not a discount. Liability is reduced following a means-tested financial assessment.",
+    "legislation": "Local Government Finance Act 1992, Section 13A",
+    "scheme_type": "Default Scheme (mirrors original Council Tax Benefit rules with local amendments)",
+    "current_scheme_year": "2026/27",
+    "scheme_approved": "Full Council 29 January 2026",
+    "effective_date": "2026-04-01",
+    "replaced": "Council Tax Benefit (abolished April 2013)"
+  },
+  "enforcement": {
+    "legislation": "Council Tax (Administration and Enforcement) Regulations 1992",
+    "stages": [
+      {
+        "stage": 1,
+        "name": "Reminder notice",
+        "trigger": "Missed instalment",
+        "action": "Reminder notice issued",
+        "required_response": "Bring account up to date within 7 days AND continue with instalments",
+        "note": "Partial payment does not stop recovery action"
+      },
+      {
+        "stage": 2,
+        "name": "Second reminder notice",
+        "trigger": "Second missed instalment",
+        "action": "Second reminder notice issued",
+        "required_response": "Bring account up to date within 7 days AND continue with instalments",
+        "note": "If further instalments missed, no further reminder notices will be issued"
+      },
+      {
+        "stage": 3,
+        "name": "Final notice",
+        "trigger": "Failure to bring account up to date within 7 days of second reminder, OR further missed payment in same financial year",
+        "action": "Final notice issued",
+        "required_response": "Pay full balance on account",
+        "consequence": "Court action if not paid"
+      },
+      {
+        "stage": 4,
+        "name": "Liability Order",
+        "trigger": "Full outstanding amount not paid, OR no payment arrangement agreed",
+        "action": "Application to Magistrates Court for Liability Order",
+        "what_it_is": "Court demand for the full amount of Council Tax owed plus costs incurred",
+        "legal_basis": "Council Tax (Administration and Enforcement) Regulations 1992",
+        "note": "Do not ignore a Liability Order \u2014 further enforcement action will follow"
+      }
+    ],
+    "post_liability_order_powers": {
+      "overview": "A Liability Order grants additional recovery powers. The Council will use these proportionately.",
+      "enforcement_agent": {
+        "name": "Enforcement agent (bailiffs)",
+        "description": "Enforcement agents instructed to recover money owed plus their additional costs",
+        "powers": "Can take goods belonging to the debtor to cover costs"
+      },
+      "attachment_of_earnings": {
+        "name": "Deductions from earnings",
+        "description": "Employer legally required to deduct money from salary each month and pay directly to Council",
+        "basis": "Amount depends on earnings level. Continues until full amount paid.",
+        "employer_obligation": "This is a legal order \u2014 employer must comply"
+      },
+      "attachment_of_benefits": {
+        "name": "Deductions from benefits",
+        "description": "DWP instructed to take money from eligible benefits and pay directly to Council"
+      },
+      "charging_order": {
+        "name": "Charging order",
+        "threshold": "Debt over \u00a31,000",
+        "description": "Order means Council Tax debt can be claimed from property equity when property is sold (after mortgage paid)",
+        "additional_power": "Council may be able to insist on sale of property"
+      },
+      "bankruptcy": {
+        "name": "Bankruptcy",
+        "threshold": "Liability Order granted AND debt over \u00a35,000",
+        "process": [
+          "Statutory demand issued \u2014 full amount to be paid within 21 days",
+          "If unpaid, bankruptcy petition submitted to court",
+          "If granted: possible loss of home, bank accounts may be frozen, credit affected, official receiver investigates affairs"
+        ],
+        "note": "Official receiver may control spending for a considerable period"
+      },
+      "committal": {
+        "name": "Committal (prison)",
+        "trigger": "Non-payment following enforcement agent stage",
+        "process": "Application to Magistrates Court for committal hearing",
+        "maximum_sentence": "Up to 90 days imprisonment",
+        "important": "If committal summons received, contact Council immediately and seek legal advice. Paying in full before hearing means court attendance not required. Failure to attend summons may result in warrant for arrest."
+      }
+    },
+    "vulnerability_principle": "Vulnerability and hardship must be actively considered before and throughout any enforcement action."
+  },
+  "appeals": {
+    "valuation_band": {
+      "decision_body": "Valuation Office Agency (VOA)",
+      "escalation": "Valuation Tribunal for England if unresolved with VOA"
+    },
+    "billing_and_discounts": {
+      "decision_body": "Gloucester City Council Revenues",
+      "escalation": "Valuation Tribunal for England"
+    },
+    "council_tax_support": {
+      "decision_body": "Gloucester City Council \u2014 internal review",
+      "escalation": "Independent tribunal"
+    }
+  }
+}

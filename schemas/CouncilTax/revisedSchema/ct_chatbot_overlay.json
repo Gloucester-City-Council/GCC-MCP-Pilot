@@ -1,0 +1,229 @@
+{
+  "$schema": "gloucester-ct/overlay/chatbot/1.0",
+  "overlay_type": "chatbot",
+  "description": "AI interpreter overlay. Contains intake trees, plain-English summaries, resolution principles, framing guidance, and follow-up question sets. Not a source of policy truth \u2014 always defer to ct_facts and ct_rules for authoritative content.",
+  "framing": {
+    "scope": "This assistant covers Gloucester City Council Tax for the 2026/27 financial year. It cannot make binding decisions or access individual account records.",
+    "tone_principles": [
+      "Lead with the most beneficial outcome for the resident first.",
+      "Present special payment arrangements primarily as the way to catch up on missed payments \u2014 not as a last resort.",
+      "Flag vulnerability or hardship signals and signpost additional support proactively.",
+      "Distinguish clearly between 'disregarded' (person not counted) and 'exempt' (no liability) \u2014 residents often confuse them.",
+      "Always make clear that a final determination rests with the council and encourage the resident to apply."
+    ],
+    "resolution_principles": [
+      "Where disregards are identified, emit them as intermediate reasoning before resolving the final adult count.",
+      "Multiple adjustments may apply simultaneously \u2014 do not stop at the first match.",
+      "Premiums apply to the property, not the owner \u2014 flag this when a resident is considering purchasing an empty property.",
+      "Council Tax Support is means-tested and not a discount \u2014 use different language for it.",
+      "SMI households and care leavers should be routed to application promptly \u2014 these are often unclaimed."
+    ],
+    "out_of_scope": [
+      "Individual account balances or arrears amounts",
+      "Binding eligibility determinations",
+      "Holiday lets business rates transition (officer judgement required)",
+      "Most non-student exemption classes (officer verification required)"
+    ]
+  },
+  "intake_trees": {
+    "initial_triage": {
+      "description": "Questions to ask first to route the resident to the right topic",
+      "questions": [
+        {
+          "id": "q_property_band",
+          "text": "Do you know which Council Tax band your property is in (A\u2013H)?",
+          "routes": {
+            "yes": "rates_lookup",
+            "no": "band_explanation"
+          }
+        },
+        {
+          "id": "q_sole_occupant",
+          "text": "Is there only one adult aged 18 or over living at the property?",
+          "routes": {
+            "yes": "single_person_discount",
+            "no": "q_disregards"
+          }
+        },
+        {
+          "id": "q_disregards",
+          "text": "Is any adult in the property a full-time student, carer, severely mentally impaired, apprentice, or student nurse?",
+          "routes": {
+            "yes": "disregards_deep_dive",
+            "no": "q_empty_or_second"
+          }
+        },
+        {
+          "id": "q_empty_or_second",
+          "text": "Is the property empty, a second home, or an annexe?",
+          "routes": {
+            "yes": "property_adjustments",
+            "no": "q_financial_difficulty"
+          }
+        },
+        {
+          "id": "q_financial_difficulty",
+          "text": "Are you struggling to pay your Council Tax, or on a low income?",
+          "routes": {
+            "yes": "council_tax_support",
+            "no": "q_other"
+          }
+        }
+      ]
+    },
+    "disregards_deep_dive": {
+      "description": "Questions to identify which disregards may apply",
+      "questions": [
+        {
+          "id": "q_student",
+          "text": "Is the person a full-time student at a college or university (course at least 1 year, 24 weeks/year, 21 hrs/week)?",
+          "fact_input": "person.is_full_time_student"
+        },
+        {
+          "id": "q_carer_hours",
+          "text": "Does the person provide at least 35 hours of care per week to someone who is not their spouse, partner or child under 18?",
+          "fact_input": "person.hours_of_care_per_week"
+        },
+        {
+          "id": "q_carer_benefit",
+          "text": "Does the person they care for receive a qualifying disability benefit (e.g. PIP, Attendance Allowance, DLA)?",
+          "fact_input": "person.cared_for_receives_qualifying_benefit"
+        },
+        {
+          "id": "q_smi",
+          "text": "Has a doctor certified that a person in the property is severely mentally impaired, and do they receive a qualifying benefit?",
+          "fact_input": "person.is_severely_mentally_impaired"
+        }
+      ]
+    },
+    "property_adjustments": {
+      "description": "Questions for property-based reductions",
+      "questions": [
+        {
+          "id": "q_disabled_adaptation",
+          "text": "Has the property been adapted for a disabled resident's needs (e.g. extra bathroom, wider doorways, essential room)?",
+          "fact_input": "property.has_disabled_adaptation"
+        },
+        {
+          "id": "q_empty_duration",
+          "text": "How long has the property been empty and unfurnished?",
+          "fact_input": "property.empty_duration_years"
+        },
+        {
+          "id": "q_second_home_furnished",
+          "text": "Is the property furnished but not used as anyone's main or sole residence?",
+          "fact_input": "property.is_furnished_second_home"
+        },
+        {
+          "id": "q_annexe",
+          "text": "Is there an annexe attached to the main property? Is it occupied by a relative or used as part of the main home?",
+          "fact_input": "property.has_annexe"
+        }
+      ]
+    }
+  },
+  "discount_topics": {
+    "single-person-discount": {
+      "plain_english_summary": "Single Person Discount: 25% reduction. Only one person aged 18 or over lives in the property as their sole or main residence",
+      "effect": "25%",
+      "resident_question": "Do you think you might qualify for the Single Person Discount?"
+    },
+    "severely-mentally-impaired": {
+      "plain_english_summary": "Severely Mentally Impaired Discount: Either 25% or 100% depending on household composition reduction. See eligibility details.",
+      "effect": "Either 25% or 100% depending on household composition",
+      "resident_question": "Do you think you might qualify for the Severely Mentally Impaired Discount?"
+    },
+    "care-leavers": {
+      "plain_english_summary": "Care Leavers Discount: 100% reduction. See eligibility details.",
+      "effect": "100%",
+      "resident_question": "Do you think you might qualify for the Care Leavers Discount?"
+    },
+    "carer-disregard": {
+      "plain_english_summary": "Carer Disregard: Carer is disregarded - may result in 25% discount if only one other adult reduction. See eligibility details.",
+      "effect": "Carer is disregarded - may result in 25% discount if only one other adult",
+      "resident_question": "Do you think you might qualify for the Carer Disregard?"
+    },
+    "full-time-students": {
+      "plain_english_summary": "Full-time Student Disregard: Students disregarded - 100% discount if all adults are students, otherwise may result in 25% if one student with one other adult reduction. See eligibility details.",
+      "effect": "Students disregarded - 100% discount if all adults are students, otherwise may result in 25% if one student with one other adult",
+      "resident_question": "Do you think you might qualify for the Full-time Student Disregard?"
+    },
+    "apprentices-youth-trainees": {
+      "plain_english_summary": "Apprentice and Youth Trainee Disregard: Disregarded - may result in discount depending on household reduction. See eligibility details.",
+      "effect": "Disregarded - may result in discount depending on household",
+      "resident_question": "Do you think you might qualify for the Apprentice and Youth Trainee Disregard?"
+    },
+    "school-college-leavers": {
+      "plain_english_summary": "School/College Leaver Disregard (Age 18-19): Disregarded until 1 November reduction. Left school or college after 30 April, aged 18-19",
+      "effect": "Disregarded until 1 November",
+      "resident_question": "Do you think you might qualify for the School/College Leaver Disregard (Age 18-19)?"
+    },
+    "disabled-band-reduction": {
+      "plain_english_summary": "Disabled Band Reduction: One band lower (Band A gets 1/9th reduction) reduction. See eligibility details.",
+      "effect": "One band lower (Band A gets 1/9th reduction)",
+      "resident_question": "Do you think you might qualify for the Disabled Band Reduction?"
+    },
+    "unoccupied-unfurnished": {
+      "plain_english_summary": "Empty Property Discount (Unoccupied and Unfurnished): 25% for up to 6 months reduction. Property is unoccupied and unfurnished",
+      "effect": "25% for up to 6 months",
+      "resident_question": "Do you think you might qualify for the Empty Property Discount (Unoccupied and Unfurnished)?"
+    },
+    "major-repair": {
+      "plain_english_summary": "Major Repair Discount: 25% for up to 12 months reduction. Property unoccupied and undergoing major structural alteration or repair to make it habitable",
+      "effect": "25% for up to 12 months",
+      "resident_question": "Do you think you might qualify for the Major Repair Discount?"
+    },
+    "annexe-discount": {
+      "plain_english_summary": "Annexe Discount: 50% reduction. See eligibility details.",
+      "effect": "50%",
+      "resident_question": "Do you think you might qualify for the Annexe Discount?"
+    },
+    "job-related-second-home": {
+      "plain_english_summary": "Job-Related Second Home Discount: 50% reduction. See eligibility details.",
+      "effect": "50%",
+      "resident_question": "Do you think you might qualify for the Job-Related Second Home Discount?"
+    },
+    "hospital-care-patients": {
+      "plain_english_summary": "Hospital/Care Patients: Disregarded - not counted as adults for Council Tax reduction. See eligibility details.",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "resident_question": "Do you think you might qualify for the Hospital/Care Patients?"
+    },
+    "persons-in-detention": {
+      "plain_english_summary": "Persons in Detention: Disregarded - not counted as adults for Council Tax reduction. See eligibility details.",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "resident_question": "Do you think you might qualify for the Persons in Detention?"
+    },
+    "members-of-religious-communities": {
+      "plain_english_summary": "Members of Religious Communities: Disregarded - not counted as adults for Council Tax reduction. Members of religious communities whose principal occupation is prayer, contemplation, education, or relief of suffering",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "resident_question": "Do you think you might qualify for the Members of Religious Communities?"
+    },
+    "foreign-spouses-dependants-of-students": {
+      "plain_english_summary": "Foreign Spouses/Dependants of Students: Disregarded - not counted as adults for Council Tax reduction. Non-British spouses/dependants of students prevented by Home Office from working or claiming benefits",
+      "effect": "Disregarded - not counted as adults for Council Tax",
+      "resident_question": "Do you think you might qualify for the Foreign Spouses/Dependants of Students?"
+    }
+  },
+  "suggested_followups_by_topic": {
+    "single-person-discount": [
+      "Has anyone else moved in recently?",
+      "Is anyone in the property disregarded (e.g. student, carer, SMI)?"
+    ],
+    "council-tax-support": [
+      "Are you working, claiming benefits, or retired?",
+      "Do you own or rent your home?"
+    ],
+    "empty-homes-premium": [
+      "When did the property become empty?",
+      "Are any exceptions likely to apply (e.g. probate, planning restriction)?"
+    ],
+    "disabled-band-reduction": [
+      "What adaptations does the property have?",
+      "Is the adaptation used regularly by the disabled resident?"
+    ],
+    "enforcement": [
+      "Have you received a Reminder Notice, Final Notice or Liability Order?",
+      "Are you currently in financial difficulty or receiving benefits?"
+    ]
+  }
+}

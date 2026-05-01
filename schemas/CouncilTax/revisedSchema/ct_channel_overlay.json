@@ -1,0 +1,97 @@
+{
+  "$schema": "gloucester-ct/overlay/channel/1.0",
+  "overlay_type": "channel",
+  "description": "Presentation-layer overlay. Maps fact IDs to resident-facing channel information: URLs, application steps, evidence checklists, change-of-circumstances obligations. Join to ct_facts.json on matching id fields.",
+  "global_contact": {
+    "email": "revenues@gloucester.gov.uk",
+    "online_account": "https://www.gloucester.gov.uk/my-gloucester/",
+    "postal_address": "Gloucester City Revenues & Benefits, Eastgate Management Suite, Eastgate Street, Gloucester, GL1 1PA",
+    "main_url": "https://www.gloucester.gov.uk/council-tax/"
+  },
+  "payment": {
+    "standard_instalments": null,
+    "direct_debit_dates": null,
+    "methods": [],
+    "difficulties_options": []
+  },
+  "by_fact_id": {
+    "single-person-discount": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/single-person/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk with 'Reference [Council Tax number]' in subject",
+        "Include Council Tax account reference number"
+      ],
+      "processing_note": "Continue paying until notified of decision",
+      "change_in_circumstances": {
+        "notify_within_days": "21 days",
+        "examples": [
+          "Someone moves in",
+          "You move out",
+          "Someone in household turns 18"
+        ],
+        "consequence": "May receive amended bill and penalty charge"
+      }
+    },
+    "severely-mentally-impaired": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/severely-mentally-impaired/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk",
+        "Include medical certificate and benefit evidence"
+      ]
+    },
+    "care-leavers": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/care-leavers/"
+    },
+    "carer-disregard": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/carers/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk",
+        "Evidence of care arrangement and benefits required"
+      ]
+    },
+    "full-time-students": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/students-and-student-nurses/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk with student certificate"
+      ]
+    },
+    "apprentices-youth-trainees": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/apprentices-and-youth-trainees/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk with apprenticeship agreement"
+      ]
+    },
+    "school-college-leavers": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/school-college-leavers-or-receiving-child-benefit/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk"
+      ]
+    },
+    "disabled-band-reduction": {
+      "url": "https://www.gloucester.gov.uk/council-tax/discounts/disabled-reduction/",
+      "how_to_apply": [
+        "Apply through My Gloucester online account",
+        "Download and email form to revenues@gloucester.gov.uk",
+        "Post form to: Gloucester City Revenues & Benefits, Eastgate Management Suite, Eastgate Street, Gloucester, GL1 1PA"
+      ]
+    },
+    "unoccupied-unfurnished": {
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/empty-properties/"
+    },
+    "major-repair": {
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/empty-properties/"
+    },
+    "annexe-discount": {
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/"
+    },
+    "job-related-second-home": {
+      "url": "https://www.gloucester.gov.uk/council-tax/property-discounts-and-exemptions/second-homes/"
+    }
+  }
+}
