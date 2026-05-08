@@ -51,14 +51,12 @@ function execute(args) {
     // ── Run full pipeline ─────────────────────────────────────────────────────
     const { result, diagnostics, processingState } = run(facts, mode);
 
-    // ── Augment result with submission/revision context ───────────────────────
-    if (submission_revision_id) {
-        result.submission_revision_id = submission_revision_id;
-    }
-    if (rerun_reason) {
-        result.rerun_reason = rerun_reason;
-    }
-    result._schema_versions = SCHEMA_VERSIONS;
+    // ── Submission revision context (audit metadata, sits in the response
+    //    envelope rather than on `result` itself so the result remains
+    //    conformant with assessment-result v2.2 — additionalProperties:false). ─
+    const audit = {};
+    if (submission_revision_id) audit.submission_revision_id = submission_revision_id;
+    if (rerun_reason)           audit.rerun_reason           = rerun_reason;
 
     // ── Version mismatch warnings ─────────────────────────────────────────────
     const versionWarnings = [];
@@ -73,6 +71,7 @@ function execute(args) {
         processing_state: processingState,
         result,
         diagnostics,
+        ...(Object.keys(audit).length > 0 ? { audit } : {}),
         ...(versionWarnings.length > 0 ? { version_warnings: versionWarnings } : {}),
         schema_versions: SCHEMA_VERSIONS,
     };

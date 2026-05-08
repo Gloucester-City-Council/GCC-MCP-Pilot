@@ -216,8 +216,8 @@ describe('mapPlanxToGccFacts — full householder with designations and dimensio
         expect(result.mapped_facts.proposal.remaining_rear_garden_depth_m).toBe(12.5);
     });
 
-    it('maps materials_compatibility as matching', () => {
-        expect(result.mapped_facts.proposal.materials_compatibility).toBe('matching');
+    it('maps materials_compatibility as match (matches the GCC enum)', () => {
+        expect(result.mapped_facts.proposal.materials_compatibility).toBe('match');
     });
 
     it('has no flood zone warning when zone is provided', () => {

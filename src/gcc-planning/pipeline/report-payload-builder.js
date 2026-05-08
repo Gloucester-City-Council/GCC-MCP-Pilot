@@ -113,9 +113,14 @@ function build(result, reportStyle, overrides) {
     reportStyle = reportStyle || 'officer_determination';
     const template = STYLE_TEMPLATES[reportStyle] || STYLE_TEMPLATES.officer_determination;
 
-    const isAdvisory = result.planning_merits && result.planning_merits.advisory_only;
-    const dqStatus   = result.data_quality && result.data_quality.status;
-    const dm         = result.recommendation && result.recommendation.decision_mode;
+    // v2.2 schema does not have a planning_merits.advisory_only field. The
+    // advisory caveat is now expressed as a 'ADVISORY_ONLY:' prefixed entry
+    // in manual_review_flags. Detect it both ways for backward compatibility.
+    const manualFlags = (result.planning_merits && result.planning_merits.manual_review_flags) || [];
+    const isAdvisory  = (result.planning_merits && result.planning_merits.advisory_only) ||
+                        manualFlags.some(f => typeof f === 'string' && f.startsWith('ADVISORY_ONLY:'));
+    const dqStatus    = result.data_quality && result.data_quality.status;
+    const dm          = result.recommendation && result.recommendation.decision_mode;
 
     // System instruction (constant across all styles)
     const systemInstruction = buildSystemInstruction(isAdvisory, dqStatus, reportStyle);
@@ -167,6 +172,12 @@ Apply the grounding_rules exactly. Apply the formatting_rules for the ${reportSt
 }
 
 function buildAssessmentData(result) {
+    const merits = result.planning_merits || {};
+    const manualFlags = merits.manual_review_flags || [];
+    // The advisory caveat is stored as the first manual_review_flag prefixed
+    // with 'ADVISORY_ONLY:' when planning merits are advisory.
+    const advisoryFlag = manualFlags.find(f => typeof f === 'string' && f.startsWith('ADVISORY_ONLY:'));
+
     return {
         case_reference:  result.case_reference,
         address:         result.address,
@@ -178,19 +189,19 @@ function buildAssessmentData(result) {
             issues: result.data_quality && result.data_quality.issues,
         },
         validation: {
-            status:          result.validation && result.validation.status,
-            requirements:    result.validation && result.validation.requirements,
-            blocking_issues: result.validation && result.validation.blocking_issues,
+            status:               result.validation && result.validation.status,
+            requirement_outcomes: result.validation && result.validation.requirement_outcomes,
+            blocking_issues:      result.validation && result.validation.blocking_issues,
         },
         planning_merits: {
-            status:              result.planning_merits && result.planning_merits.status,
-            advisory_only:       result.planning_merits && result.planning_merits.advisory_only,
-            advisory_caveat:     result.planning_merits && result.planning_merits.advisory_caveat,
-            rule_outcomes:       result.planning_merits && result.planning_merits.rule_outcomes,
-            manual_review_flags: result.planning_merits && result.planning_merits.manual_review_flags,
+            status:              merits.status,
+            advisory_only:       Boolean(advisoryFlag),
+            advisory_caveat:     advisoryFlag || null,
+            rule_outcomes:       merits.rule_outcomes,
+            manual_review_flags: manualFlags,
         },
         consultations: result.consultations,
-        cil_screening: result.cil_screening,
+        cil:           result.cil,
         recommendation: result.recommendation,
     };
 }

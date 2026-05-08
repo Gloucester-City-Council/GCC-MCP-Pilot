@@ -71,7 +71,12 @@ function execute(args) {
         missing_facts: missingFacts,
         data_quality: {
             status: dataQualityStatus,
-            issues: dataQualityIssues.map(i => ({ code: i.code, message: i.message, severity: i.severity })),
+            issues: dataQualityIssues.map(i => ({
+            issue_code:  i.code,
+            severity:    i.severity,
+            description: i.message,
+            ...(i.field ? { facts_affected: [i.field] } : {}),
+        })),
         },
         schema_versions: SCHEMA_VERSIONS,
         note: 'This tool returns policy merits only. No recommendation is computed here. Use build_assessment_result for the full pipeline with a recommendation.',

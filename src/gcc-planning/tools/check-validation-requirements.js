@@ -31,15 +31,16 @@ function execute(args) {
     const validation = runValidation(canonicalFacts, scope, mode);
 
     // Group requirements by status for easier consumption
+    const requirements = validation.requirements;
     const byStatus = {
-        met:           validation.requirements.filter(r => r.status === 'met'),
-        missing:       validation.requirements.filter(r => r.status === 'missing'),
-        not_checked:   validation.requirements.filter(r => r.status === 'not_checked'),
-        cannot_assess: validation.requirements.filter(r => r.status === 'cannot_assess'),
+        met:           requirements.filter(r => r.status === 'met'),
+        missing:       requirements.filter(r => r.status === 'missing'),
+        not_checked:   requirements.filter(r => r.status === 'not_checked'),
+        cannot_assess: requirements.filter(r => r.status === 'cannot_assess'),
     };
 
     const summary = {
-        total:         validation.requirements.length,
+        total:         requirements.length,
         met:           byStatus.met.length,
         missing:       byStatus.missing.length,
         cannot_assess: byStatus.cannot_assess.length,
@@ -49,11 +50,17 @@ function execute(args) {
         validation_status: validation.validationStatus,
         mode_applied: mode,
         summary,
-        requirements: validation.requirements,
+        // Schema-aligned key name so this matches result.validation.requirement_outcomes.
+        requirement_outcomes: requirements,
         blocking_issues: validation.blockingIssues,
         data_quality: {
             status: dataQualityStatus,
-            issues: dataQualityIssues.map(i => ({ code: i.code, message: i.message, severity: i.severity })),
+            issues: dataQualityIssues.map(i => ({
+                issue_code:  i.code,
+                severity:    i.severity,
+                description: i.message,
+                ...(i.field ? { facts_affected: [i.field] } : {}),
+            })),
         },
         schema_versions: SCHEMA_VERSIONS,
         note: 'Validation is authoritative regardless of data quality status (plan Section 3.2). It checks document submission, not site fact correctness.',

@@ -93,12 +93,30 @@ function normalise(rawFacts) {
     }
 
     // ── Determine data quality status ─────────────────────────────────────────
+    // Enum (data_quality_status): clean | warnings | conflicted | insufficient
+    //   insufficient → there is not enough core context to proceed at all.
+    //                  Triggered when site.address is missing AND no
+    //                  proposal_type is set — i.e. the input is essentially empty.
+    //   conflicted   → some context is present but a blocking issue prevents
+    //                  reliable assessment (e.g. lawful use unconfirmed,
+    //                  address mismatch).
+    //   warnings     → only warning-severity issues raised.
+    //   clean        → no issues raised.
     const hasBlocking = issues.some(i => i.severity === 'blocking');
     const hasWarnings = issues.some(i => i.severity === 'warning');
+    const hasAddress  = Boolean(site && typeof site.address === 'string' && site.address.trim().length > 0);
+    const hasProposal = Boolean(proposal && Array.isArray(proposal.proposal_type) && proposal.proposal_type.length > 0)
+                        || Boolean(proposal && typeof proposal.proposal_type === 'string' && proposal.proposal_type.trim().length > 0);
+    const isInsufficient = !hasAddress && !hasProposal;
 
     let dataQualityStatus;
-    if (hasBlocking && isLawfulUseRouteBlocked) {
-        dataQualityStatus = 'conflicted';
+    if (isInsufficient) {
+        dataQualityStatus = 'insufficient';
+        issues.push({
+            code: 'insufficient_context',
+            message: 'Neither site.address nor proposal.proposal_type is set — cannot proceed with a meaningful assessment.',
+            severity: 'blocking',
+        });
     } else if (hasBlocking) {
         dataQualityStatus = 'conflicted';
     } else if (hasWarnings) {
