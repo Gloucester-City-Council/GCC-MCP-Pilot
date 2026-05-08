@@ -24,7 +24,7 @@ function execute(args) {
         return {
             valid: false,
             schema_valid: false,
-            issues: [{ code: 'missing_facts', message: 'A "facts" object is required.', severity: 'blocking' }],
+            issues: [toIssue({ code: 'missing_facts', message: 'A "facts" object is required.', severity: 'blocking' })],
             schema_versions: SCHEMA_VERSIONS,
         };
     }
@@ -37,7 +37,7 @@ function execute(args) {
         return {
             valid: false,
             schema_valid: false,
-            issues: missingTopLevel.map(f => ({
+            issues: missingTopLevel.map(f => toIssue({
                 code: `missing_section_${f}`,
                 message: `Required top-level section "${f}" is missing or not an object.`,
                 severity: 'blocking',
@@ -57,7 +57,7 @@ function execute(args) {
     // Enum checks for key fields
     const enumIssues = validateEnums(facts);
 
-    const allIssues = [...blockingIssues, ...enumIssues, ...warnings];
+    const allIssues = [...blockingIssues, ...enumIssues, ...warnings].map(toIssue);
     const isValid = blockingIssues.length === 0 && enumIssues.length === 0;
 
     return {
@@ -73,6 +73,16 @@ function execute(args) {
         note: isValid
             ? 'Facts object passes structural and data quality validation.'
             : `Facts object has ${blockingIssues.length + enumIssues.length} blocking issue(s). Review the issues list before proceeding.`,
+    };
+}
+
+// Normalise an internal issue into the schema-compliant data_quality issue shape.
+function toIssue(i) {
+    return {
+        issue_code:  i.code,
+        severity:    i.severity,
+        description: i.message,
+        ...(i.field ? { facts_affected: [i.field] } : {}),
     };
 }
 

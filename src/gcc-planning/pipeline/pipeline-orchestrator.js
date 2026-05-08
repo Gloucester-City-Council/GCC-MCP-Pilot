@@ -151,17 +151,28 @@ function validateSchema(facts) {
 function buildSchemaInvalidResult(rawFacts, reason) {
     const caseRef = (rawFacts && rawFacts.application && rawFacts.application.application_reference)
         || 'UNREF-SCHEMA-INVALID';
+    // Returns a result conforming to the v2.2 schema. application_route falls
+    // back to a permitted enum value because the schema only allows the four
+    // GCC householder route values (no "unknown" route).
     return {
-        case_reference: caseRef,
-        address: '',
+        case_reference:  caseRef,
+        address:         '',
         assessment_date: new Date().toISOString().split('T')[0],
-        scope: { application_route: 'unknown', modules_considered: [], modules_applied: [], modules_skipped: [] },
-        data_quality: { status: 'insufficient', issues: [{ code: 'schema_invalid', message: reason, severity: 'blocking' }] },
-        validation: { status: 'not_run', requirements: [], blocking_issues: [reason] },
+        scope: {
+            application_route:  'householder_planning_permission',
+            modules_considered: [],
+            modules_applied:    [],
+            modules_skipped:    [],
+        },
+        data_quality: {
+            status: 'insufficient',
+            issues: [{ issue_code: 'schema_invalid', severity: 'blocking', description: reason }],
+        },
+        validation:      { status: 'not_run', requirement_outcomes: [], blocking_issues: [reason] },
         planning_merits: { status: 'not_run', rule_outcomes: [], manual_review_flags: [] },
-        consultations: { consultees: [] },
-        cil_screening: { status: 'not_assessed' },
-        recommendation: { decision_mode: 'invalid', confidence: 'high', reason_summary: [reason] },
+        consultations:   { status: 'not_run', items: [] },
+        cil:             { applicability: 'not_run', notes: ['CIL screening not run — facts schema invalid.'] },
+        recommendation:  { decision_mode: 'invalid', reason_summary: [reason], confidence: 'high' },
     };
 }
 

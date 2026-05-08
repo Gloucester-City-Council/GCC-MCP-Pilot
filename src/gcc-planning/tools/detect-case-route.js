@@ -51,7 +51,12 @@ function execute(args) {
         data_quality: {
             status: dataQualityStatus,
             lawful_use_route_blocked: isLawfulUseRouteBlocked,
-            issues: dataQualityIssues.map(i => ({ code: i.code, message: i.message, severity: i.severity })),
+            issues: dataQualityIssues.map(i => ({
+                issue_code:  i.code,
+                severity:    i.severity,
+                description: i.message,
+                ...(i.field ? { facts_affected: [i.field] } : {}),
+            })),
         },
         schema_versions: SCHEMA_VERSIONS,
         note: 'Route detection is authoritative for the submitted route only. Use build_assessment_result for a full pipeline assessment including route correctness checks.',

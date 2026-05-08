@@ -583,7 +583,8 @@ function mapProposalSection(planx, unmapped, warnings) {
         gcc.distance_to_boundary_mm = Math.round(boundaryDistM * 1000);
     }
 
-    // Materials compatibility — PlanX stores in data.proposal.materials
+    // Materials compatibility — PlanX stores in data.proposal.materials.
+    // Maps onto the GCC facts enum: match | compatible | incompatible | unknown.
     const materials = proposal.materials;
     if (materials) {
         const matchesExisting = coalesce(
@@ -591,9 +592,11 @@ function mapProposalSection(planx, unmapped, warnings) {
             get(materials, ['match_existing']),
         );
         if (matchesExisting === true || matchesExisting === 'yes') {
-            gcc.materials_compatibility = 'matching';
+            gcc.materials_compatibility = 'match';
         } else if (matchesExisting === false || matchesExisting === 'no') {
-            gcc.materials_compatibility = 'contrasting';
+            // PlanX cannot tell us whether the contrasting choice is compatible
+            // or incompatible from the form data alone — flag for officer review.
+            gcc.materials_compatibility = 'unknown';
         }
     }
 
