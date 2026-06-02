@@ -30,24 +30,10 @@ function parseSseResponse(text, requestId) {
 }
 
 /**
- * Call a tool on the uk-tenders MCP endpoint.
- * Supports both plain JSON and Streamable HTTP (SSE) MCP transports.
- * @param {string} toolName - e.g. 'search_tenders'
- * @param {Record<string, unknown>} args - Tool arguments
- * @returns {Promise<unknown>} Parsed tool result
+ * POST a JSON-RPC message to the endpoint and return the raw Response.
+ * Throws on timeout, network failure, or 403.
  */
-async function callTool(toolName, args = {}) {
-    const requestId = _requestId++;
-    const payload = {
-        jsonrpc: '2.0',
-        method: 'tools/call',
-        params: {
-            name: toolName,
-            arguments: args,
-        },
-        id: requestId,
-    };
-
+async function post(body, sessionHeaders = {}) {
     let response;
     try {
         response = await fetch(UK_TENDERS_ENDPOINT, {
@@ -55,8 +41,9 @@ async function callTool(toolName, args = {}) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json, text/event-stream',
+                ...sessionHeaders,
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(body),
             signal: AbortSignal.timeout(TIMEOUT_MS),
         });
     } catch (err) {
@@ -70,6 +57,70 @@ async function callTool(toolName, args = {}) {
         const reason = await response.text().catch(() => 'no detail');
         throw new Error(`UK Tenders endpoint rejected the request (403 Forbidden — ${reason.slice(0, 200)}). The endpoint may require this host to be allowlisted.`);
     }
+
+    return response;
+}
+
+/**
+ * Perform the MCP initialize handshake and return any session headers to
+ * include on subsequent requests (e.g. Mcp-Session-Id).
+ * The Function App is stateless so this runs on every tool call.
+ */
+async function initSession() {
+    const initResponse = await post({
+        jsonrpc: '2.0',
+        method: 'initialize',
+        params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'gcc-procurement-mcp', version: '1.0.0' },
+        },
+        id: _requestId++,
+    });
+
+    if (!initResponse.ok) {
+        const body = await initResponse.text().catch(() => '');
+        throw new Error(`UK Tenders initialization failed HTTP ${initResponse.status}: ${body.slice(0, 200)}`);
+    }
+
+    // Consume body to release the connection
+    await initResponse.text().catch(() => {});
+
+    // Streamable HTTP transport may return a session ID to thread through subsequent requests
+    const sessionId = initResponse.headers.get('mcp-session-id');
+    const sessionHeaders = sessionId ? { 'Mcp-Session-Id': sessionId } : {};
+
+    // Send the required initialized notification — fire-and-forget, ignore response
+    await post({ jsonrpc: '2.0', method: 'notifications/initialized', params: {} }, sessionHeaders)
+        .then(r => r.text().catch(() => {}))
+        .catch(() => {});
+
+    return sessionHeaders;
+}
+
+/**
+ * Call a tool on the uk-tenders MCP endpoint.
+ * @param {string} toolName - e.g. 'search_tenders'
+ * @param {Record<string, unknown>} args - Tool arguments
+ * @returns {Promise<unknown>} Parsed tool result
+ */
+async function callTool(toolName, args = {}) {
+    // MCP requires initialize → initialized before tools/call.
+    // Handshake on every call since the Function App holds no session state.
+    const sessionHeaders = await initSession();
+
+    const requestId = _requestId++;
+    const payload = {
+        jsonrpc: '2.0',
+        method: 'tools/call',
+        params: {
+            name: toolName,
+            arguments: args,
+        },
+        id: requestId,
+    };
+
+    const response = await post(payload, sessionHeaders);
 
     if (!response.ok) {
         const body = await response.text().catch(() => '');
