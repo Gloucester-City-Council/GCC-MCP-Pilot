@@ -1,7 +1,5 @@
 'use strict';
 
-const axios = require('axios');
-
 const UK_TENDERS_ENDPOINT = 'https://tenders.run.cns.me/mcp';
 const TIMEOUT_MS = 15000;
 
@@ -24,34 +22,40 @@ async function callTool(toolName, args = {}) {
         id: _requestId++,
     };
 
-    console.log(`[uk-tenders] → ${toolName}`, JSON.stringify(args));
-
     let response;
     try {
-        response = await axios.post(UK_TENDERS_ENDPOINT, payload, {
+        response = await fetch(UK_TENDERS_ENDPOINT, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json, text/event-stream',
             },
-            timeout: TIMEOUT_MS,
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(TIMEOUT_MS),
         });
     } catch (err) {
-        const status = err.response?.status;
-        const body = err.response?.data;
-        console.error(`[uk-tenders] ✗ HTTP ${status ?? err.code} —`, typeof body === 'string' ? body.slice(0, 200) : JSON.stringify(body ?? err.message));
-        if (err.code === 'ECONNABORTED' || err.code === 'ETIMEDOUT') {
+        if (err.name === 'TimeoutError' || err.name === 'AbortError') {
             throw new Error('UK Tenders endpoint timed out — try again or narrow your query');
-        }
-        if (status === 403) {
-            const reason = (typeof body === 'string' ? body : JSON.stringify(body)) || 'no detail';
-            throw new Error(`UK Tenders endpoint rejected the request (403 Forbidden — ${reason}). The endpoint may require this host to be allowlisted.`);
         }
         throw new Error(`UK Tenders endpoint unreachable: ${err.message}`);
     }
 
-    console.log(`[uk-tenders] ← HTTP ${response.status}`, JSON.stringify(response.data).slice(0, 200));
+    if (response.status === 403) {
+        const reason = await response.text().catch(() => 'no detail');
+        throw new Error(`UK Tenders endpoint rejected the request (403 Forbidden — ${reason.slice(0, 200)}). The endpoint may require this host to be allowlisted.`);
+    }
 
-    const body = response.data;
+    if (!response.ok) {
+        const body = await response.text().catch(() => '');
+        throw new Error(`UK Tenders endpoint returned HTTP ${response.status}: ${body.slice(0, 200)}`);
+    }
+
+    let body;
+    try {
+        body = await response.json();
+    } catch (err) {
+        throw new Error(`UK Tenders endpoint returned invalid JSON: ${err.message}`);
+    }
 
     // JSON-RPC error
     if (body.error) {
