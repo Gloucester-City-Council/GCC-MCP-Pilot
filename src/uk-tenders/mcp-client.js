@@ -6,12 +6,38 @@ const TIMEOUT_MS = 15000;
 let _requestId = 1;
 
 /**
+ * Parse an SSE response body and return the JSON-RPC message matching requestId.
+ * SSE format: one or more "data: {json}\n\n" blocks. Pings and notifications
+ * (no id field) are skipped; the block whose id matches is returned.
+ */
+function parseSseResponse(text, requestId) {
+    for (const block of text.split('\n\n')) {
+        let data = null;
+        for (const line of block.split('\n')) {
+            if (line.startsWith('data: ')) {
+                data = line.slice(6).trim();
+            }
+        }
+        if (!data) continue;
+        try {
+            const msg = JSON.parse(data);
+            if (msg.id === requestId) return msg;
+        } catch {
+            // skip malformed events
+        }
+    }
+    throw new Error('UK Tenders SSE response contained no message matching the request');
+}
+
+/**
  * Call a tool on the uk-tenders MCP endpoint.
+ * Supports both plain JSON and Streamable HTTP (SSE) MCP transports.
  * @param {string} toolName - e.g. 'search_tenders'
  * @param {Record<string, unknown>} args - Tool arguments
  * @returns {Promise<unknown>} Parsed tool result
  */
 async function callTool(toolName, args = {}) {
+    const requestId = _requestId++;
     const payload = {
         jsonrpc: '2.0',
         method: 'tools/call',
@@ -19,7 +45,7 @@ async function callTool(toolName, args = {}) {
             name: toolName,
             arguments: args,
         },
-        id: _requestId++,
+        id: requestId,
     };
 
     let response;
@@ -50,11 +76,18 @@ async function callTool(toolName, args = {}) {
         throw new Error(`UK Tenders endpoint returned HTTP ${response.status}: ${body.slice(0, 200)}`);
     }
 
+    const contentType = response.headers.get('content-type') || '';
     let body;
-    try {
-        body = await response.json();
-    } catch (err) {
-        throw new Error(`UK Tenders endpoint returned invalid JSON: ${err.message}`);
+
+    if (contentType.includes('text/event-stream')) {
+        const text = await response.text();
+        body = parseSseResponse(text, requestId);
+    } else {
+        try {
+            body = await response.json();
+        } catch (err) {
+            throw new Error(`UK Tenders endpoint returned invalid JSON: ${err.message}`);
+        }
     }
 
     // JSON-RPC error
