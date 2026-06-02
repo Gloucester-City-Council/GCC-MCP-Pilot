@@ -177,11 +177,11 @@ Call uk_tenders_search_frameworks before gcc_procurement_determine_route when ro
                     id,
                 };
             } catch (error) {
-                context.log.error(`Procurement tool error [${name}]: ${error.message}`);
+                console.error(`Procurement tool error [${name}]: ${error.message}`);
                 if (error && error.stack) {
-                    context.log.error(`Procurement tool error stack [${name}]: ${error.stack}`);
+                    console.error(`Procurement tool error stack [${name}]: ${error.stack}`);
                 }
-                context.log.error(`Procurement tool failed [${name}] after ${Date.now() - toolStart}ms`);
+                console.error(`Procurement tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -228,7 +228,7 @@ app.http('mcpProcurement', {
 
         // Schema failed to load at startup — surface the error rather than crashing
         if (_moduleLoadError) {
-            context.log.error('Procurement MCP unavailable — schema load error:', _moduleLoadError.message);
+            console.error('Procurement MCP unavailable — schema load error:', _moduleLoadError.message);
             return {
                 status: 503,
                 headers: { 'Content-Type': 'application/json' },
@@ -248,9 +248,9 @@ app.http('mcpProcurement', {
             try {
                 body = await request.json();
             } catch (parseError) {
-                context.log.error('Failed to parse request body:', parseError);
+                console.error('Failed to parse request body:', parseError);
                 if (parseError && parseError.stack) {
-                    context.log.error('MCP Procurement parse error stack:', parseError.stack);
+                    console.error('MCP Procurement parse error stack:', parseError.stack);
                 }
                 return {
                     status: 400,
@@ -281,9 +281,9 @@ app.http('mcpProcurement', {
                 body: JSON.stringify(response),
             };
         } catch (error) {
-            context.log.error('MCP Procurement unhandled error:', error);
+            console.error('MCP Procurement unhandled error:', error);
             if (error && error.stack) {
-                context.log.error('MCP Procurement unhandled error stack:', error.stack);
+                console.error('MCP Procurement unhandled error stack:', error.stack);
             }
 
             return {
