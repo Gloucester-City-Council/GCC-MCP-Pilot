@@ -27,12 +27,21 @@ async function callTool(toolName, args = {}) {
     let response;
     try {
         response = await axios.post(UK_TENDERS_ENDPOINT, payload, {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json, text/event-stream',
+            },
             timeout: TIMEOUT_MS,
         });
     } catch (err) {
         if (err.code === 'ECONNABORTED' || err.code === 'ETIMEDOUT') {
             throw new Error('UK Tenders endpoint timed out — try again or narrow your query');
+        }
+        const status = err.response?.status;
+        const body = err.response?.data;
+        if (status === 403) {
+            const reason = (typeof body === 'string' ? body : JSON.stringify(body)) || 'no detail';
+            throw new Error(`UK Tenders endpoint rejected the request (403 Forbidden — ${reason}). The endpoint may require this host to be allowlisted.`);
         }
         throw new Error(`UK Tenders endpoint unreachable: ${err.message}`);
     }
