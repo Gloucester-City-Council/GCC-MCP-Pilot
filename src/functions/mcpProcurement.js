@@ -25,6 +25,17 @@ try {
     // Log at startup so the error appears in Azure Application Insights / Log Stream
     console.error('GCC Procurement MCP: module load failed —', err.message);
 }
+
+let _ukTendersLoadError = null;
+try {
+    const ukTenders = require('../uk-tenders/index');
+    TOOLS = [...TOOLS, ...ukTenders.TOOLS];
+    Object.assign(TOOL_HANDLERS, ukTenders.TOOL_HANDLERS);
+} catch (err) {
+    _ukTendersLoadError = err;
+    console.error('UK Tenders MCP proxy: module load failed —', err.message);
+}
+
 const AVAILABLE_TOOL_NAMES = () => Object.keys(TOOL_HANDLERS).join(', ');
 
 // ─── Date context helper (matches mcpSchema.js pattern) ──────────────────────
@@ -90,7 +101,15 @@ All rules are derived from ${SERVER_INFO.schemaFile || 'procurement-contracts-sc
 - gcc_procurement_explain_rule     — Plain English explanation of any rule, threshold, or conflict
 
 ⚠️ ADVISORY: This engine reflects the constitutional position as encoded in the schema.
-For live procurement decisions always verify with the Head of Procurement and One Legal.`,
+For live procurement decisions always verify with the Head of Procurement and One Legal.
+
+📊 UK TENDERS MARKET INTELLIGENCE
+Four tools proxy to tenders.run.cns.me/mcp (677k+ UK procurement records, OGL v3.0):
+- uk_tenders_search_frameworks — find frameworks to call off before procuring
+- uk_tenders_peer_benchmarks — what have peers paid for this category?
+- uk_tenders_top_suppliers — active suppliers in this market
+- uk_tenders_data_status — index freshness per source
+Call uk_tenders_search_frameworks before gcc_procurement_determine_route when route is unknown. Values = contract ceilings, not spend.`,
                     },
                 },
                 id,
