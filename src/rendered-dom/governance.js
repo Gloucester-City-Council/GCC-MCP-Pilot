@@ -1,105 +1,42 @@
 'use strict';
 
-function renderedSnapshotGovernance() {
+function evaluationGovernance({ jsExecuted = false, cssApplied = false } = {}) {
   return {
     finding_classification: 'not_tested',
-    scope: 'headless_browser_rendered_snapshot',
+    scope: 'jsdom_dom_evaluation',
+    engine: 'jsdom + axe-core',
     claim_boundary: {
       can_claim: [
-        'A headless Chromium rendered snapshot was captured for this URL.',
-        'The page model summarises the rendered DOM state at capture time.',
-      ],
-      cannot_claim: [
-        'Do not say this represents all users or browser environments.',
-        'Do not say the page is accessible.',
-        'Do not say a full accessibility audit has been completed.',
-      ],
-    },
-    limitations: [
-      'Captured in a fresh unauthenticated headless browser context.',
-      'Dynamic content may vary by cookies, geography, time, feature flags, or network state.',
-      'Not a substitute for manual keyboard or assistive technology testing.',
-    ],
-  };
-}
-
-function selectorFragmentGovernance(matchCount) {
-  return {
-    scope: 'rendered_selector_fragment',
-    claim_boundary: {
-      can_claim: [
-        `This selector matched ${matchCount} rendered node(s) in the captured snapshot.`,
-      ],
-      cannot_claim: [
-        'Do not say the whole page has been tested.',
-        'Do not say interaction behaviour has been verified without an interaction trace.',
-      ],
-    },
-  };
-}
-
-function ariaSnapshotGovernance() {
-  return {
-    scope: 'aria_snapshot',
-    claim_boundary: {
-      can_claim: ['An ARIA accessibility snapshot was captured for the selected rendered content.'],
-      cannot_claim: [
-        'Do not say a screen reader user experience has been fully tested.',
-        'Do not say the component is accessible.',
-      ],
-    },
-    next_evidence_required: [
-      'Keyboard navigation test',
-      'Screen reader smoke test',
-      'Focus order verification',
-    ],
-  };
-}
-
-function accessibilityScanGovernance() {
-  return {
-    scope: 'automated_accessibility_scan',
-    claim_boundary: {
-      can_claim: [
-        'axe-core reported the listed automatically detectable violations for this rendered snapshot.',
+        'axe-core reported the listed automatically detectable violations for this HTML/CSS evaluation.',
+        'The page model reflects the DOM state after CSS application' +
+          (jsExecuted ? ' and JavaScript execution.' : ' without JavaScript execution.'),
       ],
       cannot_claim: [
         'Do not say the page is WCAG compliant.',
         'Do not say the page is fully accessible.',
-        'Do not say manual testing is unnecessary.',
-        'Do not say no WCAG issues exist beyond the automated scan.',
+        'Do not say colour contrast has been definitively checked — background stacking requires manual or browser review.',
+        'Do not say dynamic interactions have been tested.',
       ],
     },
     limitations: [
-      'Automated scans detect only a subset of WCAG violations.',
-      'Manual keyboard, screen reader, and user testing are still required.',
+      'Background colour stacking through the visual hierarchy is not computed. ' +
+        'Colour contrast elements are surfaced in accessibility_mcp_handoff for the accessibility MCP to assess.',
+      jsExecuted
+        ? 'JavaScript was executed but some browser APIs (layout, IntersectionObserver, etc.) are absent in jsdom.'
+        : 'JavaScript was not executed. Dynamic content injected by JS is not present in this evaluation.',
+      'Focus order, keyboard navigation, and interaction states require manual or browser-based testing.',
     ],
   };
 }
 
-function interactionSnapshotGovernance() {
+function selectorGovernance(matchCount) {
   return {
-    scope: 'scripted_interaction_snapshot',
+    scope: 'jsdom_selector_inspection',
     claim_boundary: {
-      can_claim: ['The scripted interaction completed in the headless browser.'],
+      can_claim: [`Selector matched ${matchCount} node(s) in the stored evaluation.`],
       cannot_claim: [
-        'Do not say all keyboard interactions work.',
-        'Do not say assistive technology behaviour has been verified.',
-      ],
-    },
-  };
-}
-
-function comparisonGovernance() {
-  return {
-    scope: 'static_rendered_comparison',
-    claim_boundary: {
-      can_claim: [
-        'The comparison reflects differences between raw HTML source and browser-rendered state.',
-      ],
-      cannot_claim: [
-        'Do not say JS-dependency is an accessibility failure without further testing.',
-        'Do not say the page is inaccessible based on this comparison alone.',
+        'Do not say interaction behaviour has been verified.',
+        'Do not say layout dimensions are accurate — jsdom has no layout engine.',
       ],
     },
   };
@@ -108,20 +45,12 @@ function comparisonGovernance() {
 function errorGovernance(scope) {
   return {
     finding_classification: 'not_tested',
-    scope: scope || 'rendered_browser_snapshot',
+    scope: scope || 'jsdom_dom_evaluation',
     claim_boundary: {
-      can_claim: ['The rendered capture did not complete.'],
-      cannot_claim: ['Do not make accessibility claims from this failed capture.'],
+      can_claim: ['The evaluation did not complete.'],
+      cannot_claim: ['Do not make accessibility claims from a failed evaluation.'],
     },
   };
 }
 
-module.exports = {
-  renderedSnapshotGovernance,
-  selectorFragmentGovernance,
-  ariaSnapshotGovernance,
-  accessibilityScanGovernance,
-  interactionSnapshotGovernance,
-  comparisonGovernance,
-  errorGovernance,
-};
+module.exports = { evaluationGovernance, selectorGovernance, errorGovernance };
