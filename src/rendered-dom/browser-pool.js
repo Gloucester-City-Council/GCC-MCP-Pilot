@@ -1,5 +1,24 @@
 'use strict';
 
+/**
+ * Browser pool for the Rendered DOM MCP.
+ *
+ * Supports two modes, selected by environment variable:
+ *
+ *   RENDERED_DOM_BROWSER_WS_URL is SET (required for Windows / Consumption plan)
+ *     Connects to a remote Chromium instance via Chrome DevTools Protocol (CDP).
+ *     The remote browser must expose a WebSocket CDP endpoint, e.g.:
+ *       - Browserless SaaS:   wss://chrome.browserless.io?token=YOUR_TOKEN
+ *       - Self-hosted Browserless on Azure Container Apps:
+ *                             wss://your-app.region.azurecontainerapps.io?token=TOKEN
+ *     Context isolation still works: each request gets its own browser context.
+ *     Do NOT set this on local Linux dev — local launch is faster there.
+ *
+ *   RENDERED_DOM_BROWSER_WS_URL is NOT SET (Linux App Service plan or local dev)
+ *     Launches a local headless Chromium process. Requires `playwright` and
+ *     `npx playwright install chromium` to have run in the environment.
+ */
+
 const MAX_CONCURRENT = 3;
 const QUEUE_TIMEOUT_MS = 15_000;
 
@@ -18,12 +37,11 @@ function resolveViewport(name) {
   return VIEWPORTS[name] || VIEWPORTS.desktop;
 }
 
-// Lazy-loads playwright so the module can be required even if playwright is absent.
 function getChromium() {
   try {
     return require('playwright').chromium;
   } catch {
-    throw new Error('RENDER_FAILED: playwright is not installed. Run: npm install playwright && npx playwright install chromium');
+    throw new Error('RENDER_FAILED: playwright is not installed. Run: npm install playwright');
   }
 }
 
@@ -32,17 +50,33 @@ async function getBrowser() {
   if (launching) return launching;
 
   const chromium = getChromium();
-  launching = chromium.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
-  }).then(b => {
-    browser = b;
-    launching = null;
-    return b;
-  }).catch(err => {
-    launching = null;
-    throw err;
-  });
+  const wsEndpoint = process.env.RENDERED_DOM_BROWSER_WS_URL || null;
+
+  if (wsEndpoint) {
+    // Remote browser — Windows / Consumption plan path
+    launching = chromium.connectOverCDP(wsEndpoint).then(b => {
+      browser = b;
+      launching = null;
+      return b;
+    }).catch(err => {
+      launching = null;
+      const hint = 'Check RENDERED_DOM_BROWSER_WS_URL in Azure App Settings points to a running Browserless instance.';
+      throw new Error(`RENDER_FAILED: Remote browser connection failed. ${hint} (${err.message})`);
+    });
+  } else {
+    // Local browser — Linux App Service or local dev
+    launching = chromium.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+    }).then(b => {
+      browser = b;
+      launching = null;
+      return b;
+    }).catch(err => {
+      launching = null;
+      throw new Error(`RENDER_FAILED: Local browser launch failed. ${err.message}`);
+    });
+  }
 
   return launching;
 }
@@ -70,13 +104,9 @@ function releaseSlot() {
 }
 
 /**
- * Runs fn(page, context) inside a fresh browser context.
+ * Runs fn(page, context) inside a fresh isolated browser context.
  * Always closes the context after fn resolves or rejects.
- *
- * options:
- *   viewport      - 'desktop' | 'mobile' | 'tablet' | { width, height }
- *   resourceMode  - 'accurate' | 'balanced' | 'fast'
- *   timeoutMs     - navigation timeout (default 30000)
+ * Never closes the browser itself (remote browsers are shared).
  */
 async function withPage(options, fn) {
   await waitForSlot();
@@ -94,13 +124,17 @@ async function withPage(options, fn) {
     ignoreHTTPSErrors: false,
     javaScriptEnabled: true,
     permissions: [],
-    geolocation: null,
   });
   context.setDefaultTimeout(timeoutMs);
   context.setDefaultNavigationTimeout(timeoutMs);
 
   const page = await context.newPage();
-  await applyResourceBlocking(page, options.resourceMode || 'balanced');
+
+  // Resource blocking — may be silently skipped if the remote browser
+  // does not support request interception at the CDP level.
+  try {
+    await applyResourceBlocking(page, options.resourceMode || 'balanced');
+  } catch { /* non-fatal: proceed without blocking */ }
 
   try {
     return await fn(page, context);
@@ -136,7 +170,11 @@ async function applyResourceBlocking(page, mode) {
 }
 
 async function closeBrowser() {
-  if (browser) { await browser.close(); browser = null; }
+  // Only close local browser processes — never close a remote connection.
+  if (browser && !process.env.RENDERED_DOM_BROWSER_WS_URL) {
+    await browser.close();
+    browser = null;
+  }
 }
 
 module.exports = { withPage, closeBrowser, resolveViewport };

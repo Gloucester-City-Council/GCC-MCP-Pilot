@@ -1,7 +1,5 @@
 name: Deploy to Azure Function App - func-mpc-poc
 
-# Triggers on push to main (excluding docs/workflow-only changes).
-# Workflow dispatch allows manual deploys from the Actions tab.
 on:
   push:
     branches:
@@ -16,21 +14,25 @@ env:
   NODE_VERSION: '18.x'
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Azure App Settings required for the Rendered DOM MCP (set via Azure Portal
-# or az CLI — these are NOT stored in this file):
+# Rendered DOM MCP — required Azure App Settings (set via Portal or az CLI):
 #
-#   PLAYWRIGHT_BROWSERS_PATH = 0
-#     Stores Chromium relative to the playwright package install rather than
-#     ~/.cache/ms-playwright, keeping it inside the deployment directory.
+#   RENDERED_DOM_BROWSER_WS_URL
+#     WebSocket CDP endpoint for the remote Chromium instance.
+#     The Function App never runs a browser locally — it connects here.
 #
-#   FUNCTIONS_EXTENSION_VERSION = ~4
-#   WEBSITE_RUN_FROM_PACKAGE    = 0
-#     Required for scm-do-build-during-deployment to work correctly.
+#     Option A — Browserless SaaS (no infra, free tier available):
+#       wss://chrome.browserless.io?token=YOUR_BROWSERLESS_TOKEN
+#       Sign up at https://www.browserless.io
 #
-# The Azure Function App must use Linux Premium plan (EP1 or higher).
-# Consumption plan does not provide sufficient memory or disk for headless
-# Chromium. The Rendered DOM MCP tools return RENDER_FAILED gracefully if
-# the browser is unavailable, so other MCPs are unaffected.
+#     Option B — Self-hosted Browserless on Azure Container Apps:
+#       Deploy ghcr.io/browserless/chromium to a Container App.
+#       Set TOKEN env var on the container. Endpoint becomes:
+#       wss://<app>.<region>.azurecontainerapps.io?token=YOUR_TOKEN
+#       See: https://docs.browserless.io/docker/
+#
+#   No other Playwright configuration is required.
+#   The playwright npm package (client library) is deployed with the app
+#   and works on Windows / Consumption plan — it only connects, never launches.
 # ─────────────────────────────────────────────────────────────────────────────
 
 jobs:
@@ -46,21 +48,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # CI=true is set automatically by GitHub Actions.
-      # scripts/install-playwright.js detects this and skips the Chromium
-      # download — test suite mocks Playwright so no real browser is needed.
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies and run tests
+        run: |
+          npm ci
+          npm test
 
-      - name: Run tests
-        run: npm test
-
-      # Deploys source package to Azure (node_modules excluded via .funcignore).
-      # scm-do-build-during-deployment=true triggers a Kudu remote build:
-      #   1. Azure runs `npm install` on the server.
-      #   2. Our postinstall script (scripts/install-playwright.js) runs.
-      #   3. CI is not set in Kudu, so Chromium is downloaded.
-      #   4. The function app starts with Chromium available.
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
