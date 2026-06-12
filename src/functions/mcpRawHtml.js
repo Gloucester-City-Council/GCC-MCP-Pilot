@@ -161,7 +161,32 @@ const TOOLS = [
                     type: 'array',
                     items: { type: 'string' },
                     default: ['wcag2a', 'wcag2aa', 'wcag21aa'],
-                    description: 'WCAG rule tags for axe-core (e.g. ["wcag2a","wcag2aa","wcag21aa","wcag22aa"]).',
+                    description: 'WCAG rule tags for axe-core (e.g. ["wcag2a","wcag2aa","wcag21aa","wcag22aa"]). Ignored when standard is set.',
+                },
+                standard: {
+                    type: 'string',
+                    enum: ['WCAG_2_1_AA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
+                    description: [
+                        'Named evaluation standard. Selects the axe tags AND returns a coverage object',
+                        '(automated / partially_automated / manual_required / not_applicable).',
+                        'WCAG_2_2_AAA gathers evidence relevant to AAA review — it does not claim to test AAA,',
+                        'since criteria like reading level, help mechanisms, and target size need interpretation.',
+                    ].join(' '),
+                },
+                fail_on: {
+                    type: 'object',
+                    properties: {
+                        critical: { type: 'boolean' },
+                        serious: { type: 'boolean' },
+                        moderate: { type: 'boolean' },
+                        minor: { type: 'boolean' },
+                        incomplete: { type: 'boolean' },
+                    },
+                    description: 'CI quality-gate policy. Returns gate.failed=true when violations of the flagged impacts (or any incomplete results, if incomplete:true) are present.',
+                },
+                baseline_id: {
+                    type: 'string',
+                    description: 'snapshot_id of a previous evaluation to diff against. Returns regression { new_violations, resolved_violations, unchanged_violations }. Snapshots live 15 minutes.',
                 },
                 max_text_chars: {
                     type: 'integer',
@@ -212,7 +237,27 @@ const TOOLS = [
                     type: 'array',
                     items: { type: 'string' },
                     default: ['wcag2a', 'wcag2aa', 'wcag21aa'],
-                    description: 'WCAG rule tags for axe-core.',
+                    description: 'WCAG rule tags for axe-core. Ignored when standard is set.',
+                },
+                standard: {
+                    type: 'string',
+                    enum: ['WCAG_2_1_AA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
+                    description: 'Named evaluation standard — same behaviour as evaluate_page (returns a coverage object).',
+                },
+                fail_on: {
+                    type: 'object',
+                    properties: {
+                        critical: { type: 'boolean' },
+                        serious: { type: 'boolean' },
+                        moderate: { type: 'boolean' },
+                        minor: { type: 'boolean' },
+                        incomplete: { type: 'boolean' },
+                    },
+                    description: 'CI quality-gate policy — same behaviour as evaluate_page.',
+                },
+                baseline_id: {
+                    type: 'string',
+                    description: 'snapshot_id of a previous evaluation to diff against for regression reporting.',
                 },
                 max_text_chars: { type: 'integer', default: 8000 },
                 return_passes: { type: 'boolean', default: false },
@@ -362,7 +407,7 @@ const MANIFEST = {
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-web-get-mcp',
-        version: '2.0.0',
+        version: '2.1.0',
         instructions: `🌐 WEB GET MCP
 
 Fetches and evaluates public web pages — raw HTML retrieval plus
@@ -388,6 +433,17 @@ COLOUR CONTRAST:
   stacking is not computed without a layout engine). The elements_for_contrast_review
   payload surfaces those elements with their declared CSS colour values so the
   accessibility MCP can assess them.
+
+AAA MODE:
+  Pass standard='WCAG_2_2_AAA' to run all AAA-tagged axe rules and receive a
+  coverage object stating what was automated, what evidence was gathered for
+  interpretation, and what needs manual review. The claim boundary is
+  "evidence gathered relevant to AAA review" — never "AAA tested".
+
+CI / REGRESSION MODE:
+  fail_on={critical:true,serious:true} returns gate.failed for use as a
+  quality gate. baseline_id=<previous snapshot_id> returns a regression
+  diff (new / resolved / unchanged violations) against an earlier run.
 
 TOKEN DISCIPLINE:
   evaluate_page returns a compact page model — not raw HTML.

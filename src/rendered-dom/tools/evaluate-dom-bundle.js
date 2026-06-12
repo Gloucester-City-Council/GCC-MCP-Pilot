@@ -17,6 +17,9 @@ async function evaluateDomBundle(args) {
     js = [],
     base_url = 'https://example.com',
     tags = DEFAULT_TAGS,
+    standard = null,
+    fail_on = null,
+    baseline_id = null,
     max_text_chars = 8_000,
     return_passes = false,
   } = args || {};
@@ -42,6 +45,10 @@ async function evaluateDomBundle(args) {
       finalUrl: base_url,
       status: null,
       tags,
+      standard,
+      failOn: fail_on,
+      baselineId: baseline_id,
+      cssSource: 'supplied_css',
       maxTextChars: max_text_chars,
       returnPasses: return_passes,
     });

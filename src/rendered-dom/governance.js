@@ -2,7 +2,11 @@
 
 function evaluationGovernance({ jsExecuted = false, cssApplied = false } = {}) {
   return {
-    finding_classification: 'not_tested',
+    // Automated checks DID run (axe, DOM structure, CSS application) — what
+    // has not happened is browser/manual compliance testing. The two fields
+    // keep those statements separate for downstream systems.
+    finding_classification: 'automated_static_dom_evaluation',
+    compliance_claim: 'no_compliance_claim',
     scope: 'jsdom_dom_evaluation',
     engine: 'jsdom + axe-core',
     claim_boundary: {
@@ -44,7 +48,8 @@ function selectorGovernance(matchCount) {
 
 function errorGovernance(scope) {
   return {
-    finding_classification: 'not_tested',
+    finding_classification: 'evaluation_incomplete',
+    compliance_claim: 'no_compliance_claim',
     scope: scope || 'jsdom_dom_evaluation',
     claim_boundary: {
       can_claim: ['The evaluation did not complete.'],

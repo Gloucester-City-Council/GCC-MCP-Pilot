@@ -59,7 +59,7 @@ describe('handleMcpRequest — initialize', () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'initialize', id: 1 }, mockContext);
     expect(result.result.protocolVersion).toBe('2024-11-05');
     expect(result.result.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(result.result.serverInfo.version).toBe('2.0.0');
+    expect(result.result.serverInfo.version).toBe('2.1.0');
     expect(result.result.capabilities).toEqual({ tools: {} });
   });
 });
@@ -318,7 +318,8 @@ describe('governance', () => {
 
   it('evaluationGovernance has correct structure', () => {
     const g = gov.evaluationGovernance({});
-    expect(g.finding_classification).toBe('not_tested');
+    expect(g.finding_classification).toBe('automated_static_dom_evaluation');
+    expect(g.compliance_claim).toBe('no_compliance_claim');
     expect(g.scope).toBe('jsdom_dom_evaluation');
     expect(g.engine).toBe('jsdom + axe-core');
     expect(Array.isArray(g.claim_boundary.can_claim)).toBe(true);
@@ -352,9 +353,10 @@ describe('governance', () => {
     expect(g.claim_boundary.can_claim[0]).toContain('5');
   });
 
-  it('errorGovernance sets finding_classification to not_tested', () => {
+  it('errorGovernance classifies failed runs as evaluation_incomplete', () => {
     const g = gov.errorGovernance('jsdom_dom_evaluation');
-    expect(g.finding_classification).toBe('not_tested');
+    expect(g.finding_classification).toBe('evaluation_incomplete');
+    expect(g.compliance_claim).toBe('no_compliance_claim');
     expect(g.scope).toBe('jsdom_dom_evaluation');
   });
 
@@ -443,7 +445,7 @@ describe('evaluate_page — fetch governance', () => {
     expect(parsed.error.code).toBe('ROBOTS_DISALLOWED');
     expect(parsed.robots.checked).toBe(true);
     expect(parsed.robots.origin).toBe('https://robots-blocked.example.org');
-    expect(parsed.governance.finding_classification).toBe('not_tested');
+    expect(parsed.governance.finding_classification).toBe('evaluation_incomplete');
   });
 });
 
@@ -828,7 +830,7 @@ describe('HTTP trigger handler', () => {
     const manifest = JSON.parse(response.body);
     expect(response.status).toBe(200);
     expect(manifest.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(manifest.serverInfo.version).toBe('2.0.0');
+    expect(manifest.serverInfo.version).toBe('2.1.0');
   });
 
   it('returns 400 on unparseable JSON body', async () => {
@@ -855,5 +857,239 @@ describe('HTTP trigger handler', () => {
     expect(response.status).toBe(200);
     const body = JSON.parse(response.body);
     expect(body.result.tools).toHaveLength(4);
+  });
+});
+
+// ─── Evaluation output enrichments ───────────────────────────────────────────
+
+describe('evaluation output enrichments', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+  const { inspectDomSelector } = require('../src/rendered-dom/tools/inspect-dom-selector');
+
+  it('visible_text_excerpt keeps block boundaries between headings and paragraphs', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><main><h1>Example Domain</h1><p>This domain is for use in examples.</p><ul><li>First item</li><li>Second item</li></ul></main></body></html>',
+    });
+    const text = result.page_model.visible_text_excerpt;
+    expect(text).toContain('Example Domain\nThis domain');
+    expect(text).toContain('First item\nSecond item');
+    expect(text).not.toContain('DomainThis');
+  });
+
+  it('extracts colour declarations from inline <style> blocks with source labels', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title><style>body { background: #eee; } h1 { color: #333; }</style></head><body><h1>Hi</h1></body></html>',
+    });
+    const decls = result.accessibility_mcp_handoff.css_colour_declarations;
+    expect(decls).toContainEqual({ source: 'inline_style_block', selector: 'body', property: 'background', value: '#eee' });
+    expect(decls).toContainEqual({ source: 'inline_style_block', selector: 'h1', property: 'color', value: '#333' });
+  });
+
+  it('extracts declarations from style attributes separately', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><p id="intro" style="color: #777; font-size: 12px">Text</p></body></html>',
+    });
+    const colour = result.accessibility_mcp_handoff.css_colour_declarations;
+    const font = result.accessibility_mcp_handoff.css_font_declarations;
+    expect(colour).toContainEqual({ source: 'style_attribute', selector: 'p#intro', property: 'color', value: '#777' });
+    expect(font).toContainEqual({ source: 'style_attribute', selector: 'p#intro', property: 'font-size', value: '12px' });
+  });
+
+  it('labels supplied CSS declarations with source supplied_css', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><p>Text</p></body></html>',
+      css: ['p { color: #444; }'],
+    });
+    const decls = result.accessibility_mcp_handoff.css_colour_declarations;
+    expect(decls.some(d => d.source === 'supplied_css' && d.property === 'color')).toBe(true);
+  });
+
+  it('explains accessible name sources for buttons', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><button aria-label="Save draft">Save</button><button>Cancel</button></body></html>',
+    });
+    const [save, cancel] = result.page_model.buttons;
+    expect(save.name).toBe('Save draft');
+    expect(save.name_source).toBe('aria-label');
+    expect(cancel.name).toBe('Cancel');
+    expect(cancel.name_source).toBe('text_content');
+  });
+
+  it('explains label sources for form fields', async () => {
+    const result = await evaluateDomBundle({
+      html: `<html lang="en"><head><title>t</title></head><body><form>
+        <label for="email">Email</label><input id="email" type="email">
+        <input type="text" aria-label="Search term">
+      </form></body></html>`,
+    });
+    const [email, search] = result.page_model.forms[0].fields;
+    expect(email.label_source).toBe('label_for');
+    expect(search.label_source).toBe('aria-label');
+  });
+
+  it('returns schema and engine versions', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+    });
+    expect(result.schema_version).toBe('web-get-evaluation-v1');
+    expect(result.evaluation.tool_version).toBe('2.1.0');
+    expect(result.evaluation.axe_version).toMatch(/^\d+\.\d+\.\d+/);
+    expect(Array.isArray(result.evaluation.tags_run)).toBe(true);
+  });
+
+  it('suggests component selectors that exist on the page', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><main><form><input aria-label="q"><button>Go</button></form></main></body></html>',
+    });
+    const suggested = result.suggested_component_selectors;
+    expect(suggested).toContain('main');
+    expect(suggested).toContain('form');
+    expect(suggested).toContain('button');
+    expect(suggested).not.toContain('video');
+  });
+
+  it('inspect_dom_selector returns schema_version and accessible_name_source', async () => {
+    const evaluated = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><nav aria-label="Main"><a href="/">Home</a></nav></body></html>',
+    });
+    const inspected = await inspectDomSelector({
+      snapshot_id: evaluated.snapshot.snapshot_id,
+      selector: 'nav',
+    });
+    expect(inspected.schema_version).toBe('web-get-inspection-v1');
+    expect(inspected.nodes[0].accessible_name).toBe('Main');
+    expect(inspected.nodes[0].accessible_name_source).toBe('aria-label');
+  });
+
+  it('reports a js_audit with dom_delta and blocked network calls', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      js: [
+        'try { new XMLHttpRequest(); } catch {} document.body.innerHTML = "<form><input aria-label=\'q\'></form>";',
+      ],
+    });
+    expect(result.js_audit.executed).toBe(1);
+    expect(result.js_audit.network_calls_blocked).toBeGreaterThanOrEqual(1);
+    expect(result.js_audit.dom_delta.nodes_added).toBeGreaterThanOrEqual(2);
+    expect(result.js_audit.dom_delta.forms_added).toBe(1);
+    expect(result.js_audit.dom_delta.aria_attributes_added).toBe(1);
+  });
+});
+
+// ─── WCAG standards mode ──────────────────────────────────────────────────────
+
+describe('evaluate_dom_bundle — standard mode', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+
+  it('WCAG_2_2_AAA returns a coverage object with honest claim boundaries', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h1>Hi</h1></body></html>',
+      standard: 'WCAG_2_2_AAA',
+    });
+    expect(result.standard).toBe('WCAG_2_2_AAA');
+    expect(result.evaluation.tags_run).toContain('wcag2aaa');
+    expect(result.coverage.statement).toContain('gathered evidence');
+    expect(result.coverage.automated.length).toBeGreaterThan(0);
+    expect(result.coverage.partially_automated.length).toBeGreaterThan(0);
+    expect(result.coverage.manual_required.length).toBeGreaterThan(0);
+    // No audio/video on this page, so media criteria are not applicable
+    expect(result.coverage.not_applicable.some(c => c.includes('1.2.6'))).toBe(true);
+  });
+
+  it('media criteria move to manual_required when media is present', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><video src="x.mp4"></video></body></html>',
+      standard: 'WCAG_2_2_AAA',
+    });
+    expect(result.coverage.manual_required.some(c => c.includes('1.2.6'))).toBe(true);
+    expect(result.coverage.not_applicable.some(c => c.includes('1.2.6'))).toBe(false);
+  });
+
+  it('rejects unknown standards', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html><body></body></html>',
+      standard: 'WCAG_9_9_ZZZ',
+    });
+    expect(result.error.code).toBe('STANDARD_UNKNOWN');
+    expect(result.error.message).toContain('WCAG_2_2_AAA');
+  });
+});
+
+// ─── CI gate and regression mode ──────────────────────────────────────────────
+
+describe('evaluate_dom_bundle — gate and regression', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+
+  const BROKEN = '<html lang="en"><head><title>t</title></head><body><img src="x.png"></body></html>';
+  const FIXED = '<html lang="en"><head><title>t</title></head><body><img src="x.png" alt="Logo"></body></html>';
+
+  it('gate fails on critical violations when fail_on.critical is set', async () => {
+    const result = await evaluateDomBundle({ html: BROKEN, fail_on: { critical: true } });
+    expect(result.gate.failed).toBe(true);
+    expect(result.gate.failing_violations.some(v => v.id === 'image-alt')).toBe(true);
+  });
+
+  it('gate passes when fail_on only covers impacts that are absent', async () => {
+    const result = await evaluateDomBundle({ html: FIXED, fail_on: { critical: true, serious: true } });
+    expect(result.gate.failed).toBe(false);
+    expect(result.gate.failing_violations).toHaveLength(0);
+  });
+
+  it('rejects a non-object fail_on', async () => {
+    const result = await evaluateDomBundle({ html: FIXED, fail_on: 'critical' });
+    expect(result.error.code).toBe('FAIL_ON_INVALID');
+  });
+
+  it('regression reports resolved violations against a baseline', async () => {
+    const baseline = await evaluateDomBundle({ html: BROKEN });
+    const followUp = await evaluateDomBundle({ html: FIXED, baseline_id: baseline.snapshot.snapshot_id });
+    expect(followUp.regression.resolved_violations).toBeGreaterThanOrEqual(1);
+    expect(followUp.regression.resolved_violation_ids).toContain('image-alt');
+    expect(followUp.regression.new_violations).toBe(0);
+  });
+
+  it('regression reports new violations when the page regresses', async () => {
+    const baseline = await evaluateDomBundle({ html: FIXED });
+    const followUp = await evaluateDomBundle({ html: BROKEN, baseline_id: baseline.snapshot.snapshot_id });
+    expect(followUp.regression.new_violations).toBeGreaterThanOrEqual(1);
+    expect(followUp.regression.new_violation_ids).toContain('image-alt');
+  });
+
+  it('reports BASELINE_NOT_FOUND for unknown baseline ids', async () => {
+    const result = await evaluateDomBundle({ html: FIXED, baseline_id: 'snap_does_not_exist' });
+    expect(result.regression.error.code).toBe('BASELINE_NOT_FOUND');
+  });
+});
+
+// ─── Contrast ancestor background walk ────────────────────────────────────────
+
+describe('ancestorBackground', () => {
+  const { createEnvironment, ancestorBackground } = require('../src/rendered-dom/jsdom-evaluator');
+
+  it('finds the nearest declared ancestor background', () => {
+    const { window, document } = createEnvironment({
+      html: '<html><body><div><h1>Hi</h1></div></body></html>',
+      cssStrings: ['body { background-color: #eee; }'],
+    });
+    const result = ancestorBackground(document.querySelector('h1'), window);
+    expect(result.value).toBe('rgb(238, 238, 238)');
+    expect(result.source).toBe('body');
+    window.close();
+  });
+
+  it('returns none_declared when no ancestor declares a background', () => {
+    const { window, document } = createEnvironment({
+      html: '<html><body><h1>Hi</h1></body></html>',
+    });
+    const result = ancestorBackground(document.querySelector('h1'), window);
+    expect(result.value).toBeNull();
+    expect(result.source).toBe('none_declared');
+    window.close();
   });
 });

@@ -69,6 +69,7 @@ async function inspectDomSelector(args) {
     }
 
     return {
+      schema_version: 'web-get-inspection-v1',
       snapshot_id,
       selector,
       matches: result.matches,
