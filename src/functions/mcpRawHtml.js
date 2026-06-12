@@ -407,7 +407,7 @@ const MANIFEST = {
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-web-get-mcp',
-        version: '2.1.0',
+        version: '2.1.1',
         instructions: `🌐 WEB GET MCP
 
 Fetches and evaluates public web pages — raw HTML retrieval plus

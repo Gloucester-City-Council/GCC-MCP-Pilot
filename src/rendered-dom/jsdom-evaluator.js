@@ -239,6 +239,8 @@ function extractPageModel(document, window, options = {}) {
 
   // Returns { name, source } so audits can explain WHY the accessible name
   // is what it is (aria-label beats aria-labelledby beats title beats text).
+  // The text fallback is block-aware: container landmarks summarise as
+  // newline-separated lines, not concatenated text.
   function accessibleName(el) {
     const ariaLabel = el.getAttribute('aria-label');
     if (ariaLabel) return { name: ariaLabel.trim(), source: 'aria-label' };
@@ -251,7 +253,7 @@ function extractPageModel(document, window, options = {}) {
     }
     const title = el.getAttribute('title');
     if (title) return { name: title.trim(), source: 'title' };
-    const text = textOf(el, 200);
+    const text = truncate(blockAwareText(el), 200);
     return text ? { name: text, source: 'text_content' } : { name: null, source: null };
   }
 
@@ -412,7 +414,7 @@ function extractNodes(document, window, selector, options = {}) {
     if (label) return { name: label.trim(), source: 'aria-label' };
     const title = el.getAttribute('title');
     if (title) return { name: title.trim(), source: 'title' };
-    const text = (el.textContent || '').trim().substring(0, 200);
+    const text = truncate(blockAwareText(el), 200);
     return text ? { name: text, source: 'text_content' } : { name: null, source: null };
   }
 
@@ -431,7 +433,7 @@ function extractNodes(document, window, selector, options = {}) {
       node.accessible_name_source = an.source;
     }
 
-    node.text_excerpt = truncate((el.textContent || '').trim().replace(/\s+/g, ' '), 500);
+    node.text_excerpt = truncate(blockAwareText(el), 500);
 
     if (include.has('html')) {
       node.html_excerpt = truncate(el.outerHTML, maxHtmlChars);
@@ -578,13 +580,32 @@ function extractContrastElements(violations, incomplete, document, window) {
 const COMPONENT_SELECTOR_CANDIDATES = [
   'header', 'nav', 'main', 'form', 'footer', 'aside', 'table',
   '[role="dialog"]', '[role="alert"]', '[aria-expanded]', '[aria-live]',
-  'button', 'input', 'select', 'img', 'iframe', 'video', 'audio',
+  'a', 'button', 'input', 'select', 'img', 'iframe', 'video', 'audio',
 ];
 
+// Container elements with ids are usually mount points for dynamic content
+// (#app, #root, #dynamic) — worth suggesting by id, post-JS execution.
+const ID_CONTAINER_Q = 'div[id], section[id], article[id], ul[id], ol[id], table[id]';
+const SAFE_ID_RE = /^[A-Za-z][\w-]*$/;
+const MAX_ID_SUGGESTIONS = 5;
+
 function suggestComponentSelectors(document) {
-  return COMPONENT_SELECTOR_CANDIDATES.filter(sel => {
+  const suggestions = COMPONENT_SELECTOR_CANDIDATES.filter(sel => {
     try { return document.querySelector(sel) !== null; } catch { return false; }
   });
+
+  try {
+    let idCount = 0;
+    for (const el of document.querySelectorAll(ID_CONTAINER_Q)) {
+      if (idCount >= MAX_ID_SUGGESTIONS) break;
+      if (SAFE_ID_RE.test(el.id)) {
+        suggestions.push(`#${el.id}`);
+        idCount++;
+      }
+    }
+  } catch { /* id scan is best-effort */ }
+
+  return suggestions;
 }
 
 module.exports = {
