@@ -59,7 +59,7 @@ describe('handleMcpRequest — initialize', () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'initialize', id: 1 }, mockContext);
     expect(result.result.protocolVersion).toBe('2024-11-05');
     expect(result.result.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(result.result.serverInfo.version).toBe('2.1.0');
+    expect(result.result.serverInfo.version).toBe('2.1.1');
     expect(result.result.capabilities).toEqual({ tools: {} });
   });
 });
@@ -830,7 +830,7 @@ describe('HTTP trigger handler', () => {
     const manifest = JSON.parse(response.body);
     expect(response.status).toBe(200);
     expect(manifest.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(manifest.serverInfo.version).toBe('2.1.0');
+    expect(manifest.serverInfo.version).toBe('2.1.1');
   });
 
   it('returns 400 on unparseable JSON body', async () => {
@@ -934,7 +934,7 @@ describe('evaluation output enrichments', () => {
       html: '<html lang="en"><head><title>t</title></head><body></body></html>',
     });
     expect(result.schema_version).toBe('web-get-evaluation-v1');
-    expect(result.evaluation.tool_version).toBe('2.1.0');
+    expect(result.evaluation.tool_version).toBe('2.1.1');
     expect(result.evaluation.axe_version).toMatch(/^\d+\.\d+\.\d+/);
     expect(Array.isArray(result.evaluation.tags_run)).toBe(true);
   });
@@ -1091,5 +1091,62 @@ describe('ancestorBackground', () => {
     expect(result.value).toBeNull();
     expect(result.source).toBe('none_declared');
     window.close();
+  });
+});
+
+// ─── Block-aware names, richer suggestions, gate reason (v2.1.1) ─────────────
+
+describe('v2.1.1 refinements', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+  const { inspectDomSelector } = require('../src/rendered-dom/tools/inspect-dom-selector');
+
+  const BUNDLE_HTML = '<html lang="en"><head><title>Bundle test</title></head><body>' +
+    '<main><h2>Bundle test</h2><button>Save</button></main></body></html>';
+  const INJECT_JS = 'document.querySelector("main").insertAdjacentHTML("beforeend", ' +
+    '"<div id=\'dynamic\'><p>Injected content</p><a href=\'/next\'>Continue</a></div>");';
+
+  it('container landmark names are newline-separated, not concatenated', async () => {
+    const result = await evaluateDomBundle({ html: BUNDLE_HTML, js: [INJECT_JS] });
+    const main = result.page_model.landmarks.find(l => l.tag === 'main');
+    expect(main.name).toBe('Bundle test\nSave\nInjected content\nContinue');
+    expect(main.name_source).toBe('text_content');
+  });
+
+  it('selector inspection text excerpts are block-aware', async () => {
+    const evaluated = await evaluateDomBundle({ html: BUNDLE_HTML, js: [INJECT_JS] });
+    const inspected = await inspectDomSelector({
+      snapshot_id: evaluated.snapshot.snapshot_id,
+      selector: 'main',
+    });
+    expect(inspected.nodes[0].text_excerpt).toBe('Bundle test\nSave\nInjected content\nContinue');
+    expect(inspected.nodes[0].accessible_name).toContain('Bundle test\nSave');
+  });
+
+  it('suggested selectors include links and dynamic container ids', async () => {
+    const result = await evaluateDomBundle({ html: BUNDLE_HTML, js: [INJECT_JS] });
+    expect(result.suggested_component_selectors).toContain('a');
+    expect(result.suggested_component_selectors).toContain('#dynamic');
+  });
+
+  it('gate includes a human-readable reason and violation counts', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><img src="x.png"></body></html>',
+      fail_on: { critical: true, serious: true },
+    });
+    expect(result.gate.failed).toBe(true);
+    expect(result.gate.reason).toBe('critical axe violation: image-alt');
+    expect(result.gate.violation_counts.critical).toBeGreaterThanOrEqual(1);
+    expect(result.gate.violation_counts.serious).toBe(0);
+  });
+
+  it('gate reason is null when the gate passes', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><p>Fine</p></body></html>',
+      fail_on: { critical: true, serious: true },
+    });
+    expect(result.gate.failed).toBe(false);
+    expect(result.gate.reason).toBeNull();
   });
 });

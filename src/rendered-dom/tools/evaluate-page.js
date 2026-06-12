@@ -29,7 +29,7 @@ const MAX_FONT_DECLARATIONS = 200;
 // Output contract versioning — bump when the result shape or extraction
 // rules change, so historic results can be interpreted downstream.
 const EVALUATION_SCHEMA_VERSION = 'web-get-evaluation-v1';
-const TOOL_VERSION = '2.1.0';
+const TOOL_VERSION = '2.1.1';
 
 let jsdomVersion = null;
 try { jsdomVersion = require('jsdom/package.json').version; } catch { /* exports map may hide it */ }
@@ -112,12 +112,31 @@ function formatViolations(violations, maxViolations = MAX_VIOLATIONS) {
 /**
  * Quality-gate evaluation: which violations trip the caller's fail_on policy.
  */
+const IMPACT_ORDER = ['critical', 'serious', 'moderate', 'minor'];
+
 function buildGate(axeResults, failOn) {
-  const failingImpacts = ['critical', 'serious', 'moderate', 'minor'].filter(i => failOn[i]);
-  const failing = axeResults.violations.filter(v => failingImpacts.includes(v.impact));
+  const failingImpacts = IMPACT_ORDER.filter(i => failOn[i]);
+  const failing = axeResults.violations
+    .filter(v => failingImpacts.includes(v.impact))
+    .sort((a, b) => IMPACT_ORDER.indexOf(a.impact) - IMPACT_ORDER.indexOf(b.impact));
   const incompleteCount = failOn.incomplete ? axeResults.incomplete.length : 0;
+
+  const violationCounts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
+  for (const v of axeResults.violations) {
+    if (violationCounts[v.impact] !== undefined) violationCounts[v.impact]++;
+  }
+
+  let reason = null;
+  if (failing.length > 0) {
+    reason = `${failing[0].impact} axe violation: ${failing[0].id}`;
+  } else if (incompleteCount > 0) {
+    reason = `${incompleteCount} incomplete axe result(s) counted by fail_on.incomplete`;
+  }
+
   return {
     failed: failing.length > 0 || incompleteCount > 0,
+    reason,
+    violation_counts: violationCounts,
     fail_on: failOn,
     failing_violations: failing.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length })),
     incomplete_counted: failOn.incomplete ? axeResults.incomplete.length : null,
