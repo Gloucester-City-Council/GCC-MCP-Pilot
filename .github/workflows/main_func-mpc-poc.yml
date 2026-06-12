@@ -13,12 +13,34 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '18.x'
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Rendered DOM MCP — required Azure App Settings (set via Portal or az CLI):
+#
+#   RENDERED_DOM_BROWSER_WS_URL
+#     WebSocket CDP endpoint for the remote Chromium instance.
+#     The Function App never runs a browser locally — it connects here.
+#
+#     Option A — Browserless SaaS (no infra, free tier available):
+#       wss://chrome.browserless.io?token=YOUR_BROWSERLESS_TOKEN
+#       Sign up at https://www.browserless.io
+#
+#     Option B — Self-hosted Browserless on Azure Container Apps:
+#       Deploy ghcr.io/browserless/chromium to a Container App.
+#       Set TOKEN env var on the container. Endpoint becomes:
+#       wss://<app>.<region>.azurecontainerapps.io?token=YOUR_TOKEN
+#       See: https://docs.browserless.io/docker/
+#
+#   No other Playwright configuration is required.
+#   The playwright npm package (client library) is deployed with the app
+#   and works on Windows / Consumption plan — it only connects, never launches.
+# ─────────────────────────────────────────────────────────────────────────────
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node ${{ env.NODE_VERSION }}
@@ -26,12 +48,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 'Install dependencies and run tests'
+      - name: Install dependencies and run tests
         run: |
           npm ci
           npm test
 
-      - name: 'Deploy to Azure Functions'
+      - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
           app-name: 'func-mpc-poc'
