@@ -1,12 +1,22 @@
 'use strict';
 
-const ALLOWED_ORIGINS = [
-  'https://careers.gloucester.gov.uk',
-  'https://www.gloucester.gov.uk',
-  'https://gloucester.gov.uk',
-  'https://staging.gloucester.gov.uk',
-  'https://example.com',
-];
+/**
+ * Optional origin allowlist for evaluate_page, read from the
+ * EVALUATE_PAGE_ALLOWED_ORIGINS app setting (comma-separated origins,
+ * e.g. "https://www.gloucester.gov.uk,https://careers.gloucester.gov.uk").
+ *
+ * Unset or empty (the default) means no allowlist: any public http(s) URL
+ * is permitted, governed by the same SSRF guard, robots.txt respect, and
+ * per-domain rate limiting as fetch_raw_html. Read at call time so the
+ * setting can be changed in Azure without a redeploy.
+ */
+function getAllowedOrigins() {
+  const raw = process.env.EVALUATE_PAGE_ALLOWED_ORIGINS || '';
+  return raw
+    .split(',')
+    .map(s => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+}
 
 const PRIVATE_IP_RE =
   /^(10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+|127\.\d+\.\d+\.\d+|169\.254\.\d+\.\d+|::1|0\.0\.0\.0)$/;
@@ -51,13 +61,16 @@ function validateUrl(url) {
   const ssrf = ssrfCheck(parsed.hostname.toLowerCase());
   if (ssrf.blocked) return { allowed: false, code: ssrf.code, message: ssrf.message };
 
-  const origin = `${parsed.protocol}//${parsed.host}`;
-  if (!ALLOWED_ORIGINS.some(o => origin === o || origin.startsWith(o + '/'))) {
-    return {
-      allowed: false,
-      code: 'URL_NOT_ALLOWED',
-      message: `Origin '${origin}' is not in the allowed list. Permitted: ${ALLOWED_ORIGINS.join(', ')}`,
-    };
+  const allowedOrigins = getAllowedOrigins();
+  if (allowedOrigins.length > 0) {
+    const origin = `${parsed.protocol}//${parsed.host}`;
+    if (!allowedOrigins.some(o => origin === o || origin.startsWith(o + '/'))) {
+      return {
+        allowed: false,
+        code: 'URL_NOT_ALLOWED',
+        message: `Origin '${origin}' is not in the allowed list. Permitted: ${allowedOrigins.join(', ')}`,
+      };
+    }
   }
   return { allowed: true };
 }
@@ -80,4 +93,4 @@ function validateResourceUrl(url) {
   return { allowed: true };
 }
 
-module.exports = { validateUrl, validateResourceUrl, ALLOWED_ORIGINS };
+module.exports = { validateUrl, validateResourceUrl, getAllowedOrigins };

@@ -1,12 +1,15 @@
 'use strict';
 
 const { validateUrl, validateResourceUrl } = require('../url-guard');
+const { checkFetchPolicy } = require('../../web-get/fetch-governance');
 const snapshotStore = require('../snapshot-store');
 const { createEnvironment, runAxe, extractPageModel, extractContrastElements, DEFAULT_TAGS } = require('../jsdom-evaluator');
 const { extractColourDeclarations, extractFontDeclarations } = require('../css-analyser');
 const { evaluationGovernance, errorGovernance } = require('../governance');
 const { truncate } = require('../extraction');
 
+const USER_AGENT = 'RenderedDOMMCP/1.0 (Azure Function MCP; respects robots.txt)';
+const ROBOTS_BOT_NAME = 'RenderedDOMMCP';
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_CSS_FILES = 15;
 const MAX_CSS_BYTES = 500_000;
@@ -32,7 +35,7 @@ async function fetchText(url, maxBytes) {
   const guard = validateResourceUrl(url);
   if (!guard.allowed) return null;
   try {
-    const res = await timedFetch(url, { headers: { 'User-Agent': 'RenderedDOMMCP/1.0' } });
+    const res = await timedFetch(url, { headers: { 'User-Agent': USER_AGENT } });
     if (!res.ok) return null;
     const text = await res.text();
     return maxBytes ? text.substring(0, maxBytes) : text;
@@ -83,7 +86,15 @@ function formatViolations(violations, maxViolations = MAX_VIOLATIONS) {
 
 async function runEvaluation({ html, cssStrings, jsStrings, baseUrl, sourceUrl, finalUrl, status, tags, maxTextChars, returnPasses }) {
   const { window, document } = createEnvironment({ html, cssStrings, jsStrings, baseUrl });
+  try {
+    return await runEvaluationInWindow({ window, document, html, cssStrings, jsStrings, baseUrl, sourceUrl, finalUrl, status, tags, maxTextChars, returnPasses });
+  } finally {
+    // Cancels any timers page JS scheduled and frees jsdom resources
+    try { window.close(); } catch { /* already closed */ }
+  }
+}
 
+async function runEvaluationInWindow({ window, document, html, cssStrings, jsStrings, baseUrl, sourceUrl, finalUrl, status, tags, maxTextChars, returnPasses }) {
   let axeResults;
   try {
     axeResults = await runAxe(window, tags);
@@ -100,7 +111,9 @@ async function runEvaluation({ html, cssStrings, jsStrings, baseUrl, sourceUrl, 
   const fontDeclarations = cssStrings.flatMap(css => extractFontDeclarations(css)).slice(0, 200);
 
   const snapshotId = snapshotStore.create({ url: sourceUrl, finalUrl });
-  snapshotStore.setArtifact(snapshotId, 'html', html);
+  // Store the evaluated DOM (CSS injected, JS applied) rather than the raw
+  // input HTML so inspect_dom_selector sees the same document axe scanned.
+  snapshotStore.setArtifact(snapshotId, 'html', '<!DOCTYPE html>\n' + document.documentElement.outerHTML);
   snapshotStore.setArtifact(snapshotId, 'page_model', pageModel);
   snapshotStore.setArtifact(snapshotId, 'axe_results', axeResults);
 
@@ -172,10 +185,20 @@ async function evaluatePage(args) {
     };
   }
 
+  // Same fetch governance as fetch_raw_html: robots.txt + per-domain rate limit
+  const policy = await checkFetchPolicy(new URL(url), USER_AGENT, ROBOTS_BOT_NAME);
+  if (!policy.allowed) {
+    return {
+      error: { code: 'ROBOTS_DISALLOWED', message: policy.reason, retryable: false },
+      robots: policy.robots,
+      governance: errorGovernance('jsdom_dom_evaluation'),
+    };
+  }
+
   // Fetch HTML
   let html, status, finalUrl;
   try {
-    const res = await timedFetch(url, { headers: { 'User-Agent': 'RenderedDOMMCP/1.0' } });
+    const res = await timedFetch(url, { headers: { 'User-Agent': USER_AGENT } });
     finalUrl = res.url;
     status = res.status;
 
@@ -201,6 +224,7 @@ async function evaluatePage(args) {
 
   const cssStrings = await fetchLinkedCss(discoveryDoc, finalUrl);
   const jsStrings = include_js ? await fetchLinkedJs(discoveryDoc, finalUrl) : [];
+  discoveryDom.window.close();
 
   return runEvaluation({
     html, cssStrings, jsStrings,

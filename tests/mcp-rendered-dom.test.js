@@ -11,7 +11,8 @@ jest.doMock('@azure/functions', () => ({
 }));
 
 // ─── Load the module under test ───────────────────────────────────────────────
-const { handleMcpRequest, TOOLS } = require('../src/functions/mcpRenderedDom');
+// The rendered DOM tools are served by the unified Web Get MCP
+const { handleMcpRequest, TOOLS } = require('../src/functions/mcpRawHtml');
 
 const mockContext = {
   log: Object.assign(jest.fn(), { error: jest.fn() }),
@@ -57,7 +58,7 @@ describe('handleMcpRequest — initialize', () => {
   it('returns correct manifest', async () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'initialize', id: 1 }, mockContext);
     expect(result.result.protocolVersion).toBe('2024-11-05');
-    expect(result.result.serverInfo.name).toBe('gcc-rendered-dom-mcp');
+    expect(result.result.serverInfo.name).toBe('gcc-web-get-mcp');
     expect(result.result.serverInfo.version).toBe('2.0.0');
     expect(result.result.capabilities).toEqual({ tools: {} });
   });
@@ -66,14 +67,15 @@ describe('handleMcpRequest — initialize', () => {
 // ─── Tools list ───────────────────────────────────────────────────────────────
 
 describe('handleMcpRequest — tools/list', () => {
-  it('returns exactly three tools', async () => {
+  it('returns exactly four tools', async () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'tools/list', id: 1 }, mockContext);
-    expect(result.result.tools).toHaveLength(3);
+    expect(result.result.tools).toHaveLength(4);
   });
 
-  it('returns evaluate_page, evaluate_dom_bundle, inspect_dom_selector', async () => {
+  it('returns fetch_raw_html, evaluate_page, evaluate_dom_bundle, inspect_dom_selector', async () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'tools/list', id: 1 }, mockContext);
     const names = result.result.tools.map(t => t.name);
+    expect(names).toContain('fetch_raw_html');
     expect(names).toContain('evaluate_page');
     expect(names).toContain('evaluate_dom_bundle');
     expect(names).toContain('inspect_dom_selector');
@@ -156,6 +158,10 @@ describe('handleMcpRequest — tools/call dispatch', () => {
 describe('url-guard — validateUrl', () => {
   const { validateUrl } = require('../src/rendered-dom/url-guard');
 
+  afterEach(() => {
+    delete process.env.EVALUATE_PAGE_ALLOWED_ORIGINS;
+  });
+
   it('allows example.com', () => {
     expect(validateUrl('https://example.com/path').allowed).toBe(true);
   });
@@ -165,6 +171,29 @@ describe('url-guard — validateUrl', () => {
     expect(validateUrl('https://careers.gloucester.gov.uk/jobs').allowed).toBe(true);
     expect(validateUrl('https://gloucester.gov.uk/').allowed).toBe(true);
     expect(validateUrl('https://staging.gloucester.gov.uk/').allowed).toBe(true);
+  });
+
+  it('allows any public origin when no allowlist is configured', () => {
+    expect(validateUrl('https://any-public-site.org/page').allowed).toBe(true);
+  });
+
+  it('enforces EVALUATE_PAGE_ALLOWED_ORIGINS when set', () => {
+    process.env.EVALUATE_PAGE_ALLOWED_ORIGINS =
+      'https://www.gloucester.gov.uk, https://careers.gloucester.gov.uk/';
+
+    expect(validateUrl('https://www.gloucester.gov.uk/jobs').allowed).toBe(true);
+    expect(validateUrl('https://careers.gloucester.gov.uk/vacancies').allowed).toBe(true);
+
+    const r = validateUrl('https://evil.com/steal');
+    expect(r.allowed).toBe(false);
+    expect(r.code).toBe('URL_NOT_ALLOWED');
+  });
+
+  it('SSRF guard still applies when an allowlist is configured', () => {
+    process.env.EVALUATE_PAGE_ALLOWED_ORIGINS = 'https://www.gloucester.gov.uk';
+    const r = validateUrl('http://169.254.169.254/latest/meta-data/');
+    expect(r.allowed).toBe(false);
+    expect(r.code).toBe('SSRF_BLOCKED');
   });
 
   it('blocks localhost', () => {
@@ -193,12 +222,6 @@ describe('url-guard — validateUrl', () => {
 
   it('blocks file:// protocol', () => {
     const r = validateUrl('file:///etc/passwd');
-    expect(r.allowed).toBe(false);
-    expect(r.code).toBe('URL_NOT_ALLOWED');
-  });
-
-  it('blocks disallowed domain', () => {
-    const r = validateUrl('https://evil.com/steal');
     expect(r.allowed).toBe(false);
     expect(r.code).toBe('URL_NOT_ALLOWED');
   });
@@ -344,7 +367,12 @@ describe('governance', () => {
 // ─── evaluate_page — URL guard integration ────────────────────────────────────
 
 describe('evaluate_page — URL guard', () => {
-  it('blocks disallowed domain', async () => {
+  afterEach(() => {
+    delete process.env.EVALUATE_PAGE_ALLOWED_ORIGINS;
+  });
+
+  it('blocks disallowed domain when an allowlist is configured', async () => {
+    process.env.EVALUATE_PAGE_ALLOWED_ORIGINS = 'https://www.gloucester.gov.uk';
     const result = await handleMcpRequest({
       jsonrpc: '2.0',
       method: 'tools/call',
@@ -386,6 +414,36 @@ describe('evaluate_page — URL guard', () => {
     }, mockContext);
     const parsed = JSON.parse(result.result.content[0].text);
     expect(parsed.error.code).toBe('URL_INVALID');
+  });
+});
+
+// ─── evaluate_page — fetch governance (robots.txt) ────────────────────────────
+
+describe('evaluate_page — fetch governance', () => {
+  const realFetch = global.fetch;
+
+  afterEach(() => {
+    global.fetch = realFetch;
+  });
+
+  it('blocks paths disallowed by robots.txt', async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      text: jest.fn().mockResolvedValue('User-agent: *\nDisallow: /private'),
+    });
+
+    const result = await handleMcpRequest({
+      jsonrpc: '2.0',
+      method: 'tools/call',
+      params: { name: 'evaluate_page', arguments: { url: 'https://robots-blocked.example.org/private/page' } },
+      id: 1,
+    }, mockContext);
+
+    const parsed = JSON.parse(result.result.content[0].text);
+    expect(parsed.error.code).toBe('ROBOTS_DISALLOWED');
+    expect(parsed.robots.checked).toBe(true);
+    expect(parsed.robots.origin).toBe('https://robots-blocked.example.org');
+    expect(parsed.governance.finding_classification).toBe('not_tested');
   });
 });
 
@@ -630,13 +688,138 @@ describe('evaluate_dom_bundle — jsdom + axe-core evaluation', () => {
   });
 });
 
+// ─── JS execution containment ─────────────────────────────────────────────────
+
+describe('evaluate_dom_bundle — JS execution containment', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+  const { inspectDomSelector } = require('../src/rendered-dom/tools/inspect-dom-selector');
+
+  const realFetch = global.fetch;
+  afterEach(() => {
+    global.fetch = realFetch;
+  });
+
+  it('executes supplied JS and reflects DOM mutations in the page model', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      js: ['document.body.innerHTML = "<h1>Injected heading</h1>";'],
+    });
+    expect(result.page_model.headings).toHaveLength(1);
+    expect(result.page_model.headings[0].text).toBe('Injected heading');
+    expect(result.evaluation.js_executed).toBe(true);
+  });
+
+  it('does not execute dynamically injected script tags or fetch their src', async () => {
+    const fetchSpy = jest.fn();
+    global.fetch = fetchSpy;
+
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><main><h2 id="probe">untouched</h2></main></body></html>',
+      js: [`
+        const s = document.createElement('script');
+        s.src = 'https://evil.example.com/more.js';
+        s.textContent = 'document.getElementById("probe").textContent = "script tag executed";';
+        document.body.appendChild(s);
+        const inline = document.createElement('script');
+        inline.textContent = 'document.getElementById("probe").textContent = "inline executed";';
+        document.body.appendChild(inline);
+      `],
+    });
+
+    expect(result.error).toBeUndefined();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(result.page_model.headings[0].text).toBe('untouched');
+  });
+
+  it('blocks XHR, fetch, and WebSocket for page JS', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h2 id="probe">pending</h2></body></html>',
+      js: [`
+        const outcomes = [];
+        for (const name of ['XMLHttpRequest', 'WebSocket', 'EventSource']) {
+          try { new window[name]('https://evil.example.com'); outcomes.push(name + ':open'); }
+          catch { outcomes.push(name + ':blocked'); }
+        }
+        try { window.fetch('https://evil.example.com'); outcomes.push('fetch:open'); }
+        catch { outcomes.push('fetch:blocked'); }
+        document.getElementById('probe').textContent = outcomes.join(' ');
+      `],
+    });
+
+    const probe = result.page_model.headings[0].text;
+    expect(probe).toContain('XMLHttpRequest:blocked');
+    expect(probe).toContain('WebSocket:blocked');
+    expect(probe).toContain('EventSource:blocked');
+    expect(probe).toContain('fetch:blocked');
+  });
+
+  it('interrupts a script that loops forever and still completes the evaluation', async () => {
+    const started = Date.now();
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h1>Survives</h1></body></html>',
+      js: ['while (true) {}'],
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.page_model.headings[0].text).toBe('Survives');
+    // Per-script CPU timeout is 1.5s — well under the 30s test timeout
+    expect(Date.now() - started).toBeLessThan(10_000);
+  });
+
+  it('a runaway first script does not starve later scripts of the DOM result', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      js: [
+        'while (true) {}',
+        'document.body.innerHTML = "<h1>Second script ran</h1>";',
+      ],
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.page_model.headings[0].text).toBe('Second script ran');
+  });
+
+  it('caps timer scheduling so timer chains cannot run unbounded', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h2 id="probe">x</h2></body></html>',
+      js: [`
+        let accepted = 0;
+        for (let i = 0; i < 1000; i++) {
+          if (window.setTimeout(() => {}, 60000)) accepted++;
+        }
+        document.getElementById('probe').textContent = 'accepted:' + accepted;
+      `],
+    });
+    const probe = result.page_model.headings[0].text;
+    const accepted = parseInt(probe.split(':')[1], 10);
+    expect(accepted).toBeLessThanOrEqual(200);
+  });
+
+  it('inspect_dom_selector sees JS-applied DOM and supplied CSS from the snapshot', async () => {
+    const evaluated = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      css: ['h1 { color: rgb(18, 52, 86); }'],
+      js: ['document.body.innerHTML = "<h1>Injected heading</h1>";'],
+    });
+
+    const inspected = await inspectDomSelector({
+      snapshot_id: evaluated.snapshot.snapshot_id,
+      selector: 'h1',
+    });
+
+    expect(inspected.matches).toBe(1);
+    expect(inspected.nodes[0].text_excerpt).toBe('Injected heading');
+    expect(inspected.nodes[0].computed_styles.color).toBe('rgb(18, 52, 86)');
+  });
+});
+
 // ─── HTTP trigger handler ─────────────────────────────────────────────────────
 
 describe('HTTP trigger handler', () => {
-  it('is registered as mcpRenderedDom on route mcp-rendered-dom', () => {
+  it('is registered as mcpRawHtml on route mcp-raw-html', () => {
     expect(httpMock).toHaveBeenCalledWith(
-      'mcpRenderedDom',
-      expect.objectContaining({ route: 'mcp-rendered-dom' })
+      'mcpRawHtml',
+      expect.objectContaining({ route: 'mcp-raw-html' })
     );
   });
 
@@ -644,7 +827,7 @@ describe('HTTP trigger handler', () => {
     const response = await registeredHandler({ method: 'GET' }, mockContext);
     const manifest = JSON.parse(response.body);
     expect(response.status).toBe(200);
-    expect(manifest.serverInfo.name).toBe('gcc-rendered-dom-mcp');
+    expect(manifest.serverInfo.name).toBe('gcc-web-get-mcp');
     expect(manifest.serverInfo.version).toBe('2.0.0');
   });
 
@@ -664,13 +847,13 @@ describe('HTTP trigger handler', () => {
     expect(response.status).toBe(204);
   });
 
-  it('returns 200 with three tools in list', async () => {
+  it('returns 200 with four tools in list', async () => {
     const response = await registeredHandler(
       { method: 'POST', json: jest.fn().mockResolvedValue({ jsonrpc: '2.0', method: 'tools/list', id: 1 }) },
       mockContext
     );
     expect(response.status).toBe(200);
     const body = JSON.parse(response.body);
-    expect(body.result.tools).toHaveLength(3);
+    expect(body.result.tools).toHaveLength(4);
   });
 });
