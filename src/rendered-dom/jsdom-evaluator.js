@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const vm = require('vm');
-const { truncate, STYLE_WHITELIST } = require('./extraction');
+const { truncate, STYLE_WHITELIST, blockAwareText, elementDescriptor } = require('./extraction');
 
 // Read axe-core source once at module load — cached by Node's module system.
 let axeSource = null;
@@ -39,9 +39,12 @@ const MIN_INTERVAL_MS = 50; // setInterval(fn, 0) gets clamped to this
  * script cannot download and execute further scripts (XHR + eval chains).
  * Combined with runScripts:'outside-only' (dynamically injected <script>
  * tags never execute) this closes the recursive script-loading hole.
+ * Returns a counter object whose .count records blocked call attempts.
  */
 function disableNetworkApis(window) {
+  const blocked = { count: 0 };
   function NetworkDisabled() {
+    blocked.count++;
     throw new Error('Network access is disabled in this evaluation environment');
   }
   for (const name of ['XMLHttpRequest', 'WebSocket', 'EventSource', 'fetch']) {
@@ -49,6 +52,31 @@ function disableNetworkApis(window) {
       Object.defineProperty(window, name, { value: NetworkDisabled, configurable: true, writable: true });
     } catch { /* property may be non-configurable in future jsdom versions */ }
   }
+  return blocked;
+}
+
+const BTN_Q = 'button,[role="button"],input[type="submit"],input[type="button"],input[type="reset"]';
+
+// Cheap structural counts used to report what page JS actually changed.
+function domStats(document) {
+  let ariaAttributes = 0;
+  try {
+    for (const el of document.querySelectorAll('*')) {
+      for (const attr of el.attributes) {
+        if (attr.name.startsWith('aria-')) ariaAttributes++;
+      }
+    }
+  } catch { /* leave at counted-so-far */ }
+
+  const count = q => { try { return document.querySelectorAll(q).length; } catch { return 0; } };
+  return {
+    nodes: count('*'),
+    buttons: count(BTN_Q),
+    forms: count('form'),
+    links: count('a[href]'),
+    images: count('img'),
+    aria_attributes: ariaAttributes,
+  };
 }
 
 /**
@@ -101,26 +129,34 @@ function createEnvironment({ html, cssStrings = [], jsStrings = [], baseUrl = 'h
   const { window } = dom;
   const { document } = window;
 
-  // Inject CSS sheets in order
+  // Inject CSS sheets in order — marked so inline-CSS extraction can tell
+  // page-authored <style> blocks apart from the ones we add here.
   for (const css of cssStrings) {
     if (!css) continue;
     const style = document.createElement('style');
+    style.setAttribute('data-mcp-injected', 'true');
     style.textContent = css;
     document.head.appendChild(style);
   }
 
   // Execute JS files in order — errors are non-fatal (missing browser APIs are common)
+  let jsAudit = null;
   if (jsStrings.some(Boolean)) {
-    disableNetworkApis(window);
+    const before = domStats(document);
+    const blocked = disableNetworkApis(window);
     const restoreTimers = capTimers(window);
 
     let context = null;
     try { context = dom.getInternalVMContext(); } catch { /* fall back to window.eval below */ }
 
+    let executed = 0;
+    let timeouts = 0;
+    let errors = 0;
+    let skippedBudgetExhausted = 0;
     let budget = JS_TOTAL_BUDGET_MS;
     for (const js of jsStrings) {
       if (!js) continue;
-      if (budget <= 0) break;
+      if (budget <= 0) { skippedBudgetExhausted++; continue; }
       const started = Date.now();
       try {
         if (context) {
@@ -128,14 +164,38 @@ function createEnvironment({ html, cssStrings = [], jsStrings = [], baseUrl = 'h
         } else {
           window.eval(js);
         }
-      } catch { /* timeouts and missing browser APIs are non-fatal */ }
+        executed++;
+      } catch (err) {
+        // Timed-out scripts still ran until interruption; other errors are
+        // usually missing browser APIs — both non-fatal.
+        if (err && err.code === 'ERR_SCRIPT_EXECUTION_TIMEOUT') timeouts++;
+        else errors++;
+      }
       budget -= Date.now() - started;
     }
 
     restoreTimers();
+
+    const after = domStats(document);
+    jsAudit = {
+      scripts_supplied: jsStrings.filter(Boolean).length,
+      executed,
+      timeouts,
+      errors,
+      skipped_budget_exhausted: skippedBudgetExhausted,
+      network_calls_blocked: blocked.count,
+      dom_delta: {
+        nodes_added: after.nodes - before.nodes,
+        buttons_added: after.buttons - before.buttons,
+        forms_added: after.forms - before.forms,
+        links_added: after.links - before.links,
+        images_added: after.images - before.images,
+        aria_attributes_added: after.aria_attributes - before.aria_attributes,
+      },
+    };
   }
 
-  return { window, document };
+  return { window, document, jsAudit };
 }
 
 /**
@@ -177,19 +237,22 @@ function extractPageModel(document, window, options = {}) {
     return (el.textContent || '').trim().replace(/\s+/g, ' ').substring(0, max);
   }
 
+  // Returns { name, source } so audits can explain WHY the accessible name
+  // is what it is (aria-label beats aria-labelledby beats title beats text).
   function accessibleName(el) {
     const ariaLabel = el.getAttribute('aria-label');
-    if (ariaLabel) return ariaLabel.trim();
+    if (ariaLabel) return { name: ariaLabel.trim(), source: 'aria-label' };
     const labelledBy = el.getAttribute('aria-labelledby');
     if (labelledBy) {
       const parts = labelledBy.split(/\s+/)
         .map(id => document.getElementById(id)?.textContent?.trim())
         .filter(Boolean);
-      if (parts.length) return parts.join(' ');
+      if (parts.length) return { name: parts.join(' '), source: 'aria-labelledby' };
     }
     const title = el.getAttribute('title');
-    if (title) return title.trim();
-    return textOf(el, 200) || null;
+    if (title) return { name: title.trim(), source: 'title' };
+    const text = textOf(el, 200);
+    return text ? { name: text, source: 'text_content' } : { name: null, source: null };
   }
 
   // Headings
@@ -205,10 +268,12 @@ function extractPageModel(document, window, options = {}) {
   try {
     document.querySelectorAll(LANDMARK_Q).forEach(el => {
       if (isVisible(el)) {
+        const an = accessibleName(el);
         landmarks.push({
           tag: el.tagName.toLowerCase(),
           role: el.getAttribute('role') || el.tagName.toLowerCase(),
-          name: accessibleName(el),
+          name: an.name,
+          name_source: an.source,
         });
       }
     });
@@ -219,24 +284,27 @@ function extractPageModel(document, window, options = {}) {
   document.querySelectorAll('a[href]').forEach(a => {
     if (links.length >= maxLinks) return;
     if (isVisible(a)) {
+      const an = accessibleName(a);
       links.push({
         text: textOf(a, 200),
         href: a.getAttribute('href'),
-        name: a.getAttribute('aria-label') || null,
+        name: an.name,
+        name_source: an.source,
         visible: true,
       });
     }
   });
 
   // Buttons
-  const BTN_Q = 'button,[role="button"],input[type="submit"],input[type="button"],input[type="reset"]';
   const buttons = [];
   document.querySelectorAll(BTN_Q).forEach(b => {
     if (buttons.length >= maxButtons) return;
     if (isVisible(b)) {
+      const an = accessibleName(b);
       buttons.push({
         text: (b.textContent || b.value || '').trim().replace(/\s+/g, ' ').substring(0, 200),
-        name: accessibleName(b),
+        name: an.name,
+        name_source: an.source,
         type: b.type || 'button',
         aria_expanded: b.getAttribute('aria-expanded'),
         aria_controls: b.getAttribute('aria-controls'),
@@ -254,6 +322,10 @@ function extractPageModel(document, window, options = {}) {
       const labelEl = f.id ? document.querySelector(`label[for="${f.id}"]`) : null;
       const ariaLabel = f.getAttribute('aria-label');
       const ariaLabelledBy = f.getAttribute('aria-labelledby');
+      const labelSource = labelEl ? 'label_for'
+        : ariaLabel ? 'aria-label'
+        : ariaLabelledBy ? 'aria-labelledby'
+        : null;
       fields.push({
         tag: f.tagName.toLowerCase(),
         type: f.type || null,
@@ -262,6 +334,7 @@ function extractPageModel(document, window, options = {}) {
         placeholder: f.placeholder || null,
         has_label: !!(labelEl || ariaLabel || ariaLabelledBy),
         label_text: labelEl?.textContent?.trim() || ariaLabel || null,
+        label_source: labelSource,
       });
     });
     forms.push({
@@ -289,7 +362,9 @@ function extractPageModel(document, window, options = {}) {
     }
   });
 
-  const bodyText = (document.body?.textContent || '').replace(/\s+/g, ' ').trim();
+  // Block-aware extraction: headings/paragraphs/list items keep newline
+  // boundaries so downstream models don't receive concatenated text.
+  const bodyText = document.body ? blockAwareText(document.body) : '';
 
   return {
     language: document.documentElement.getAttribute('lang') || null,
@@ -334,10 +409,11 @@ function extractNodes(document, window, selector, options = {}) {
 
   function accessibleName(el) {
     const label = el.getAttribute('aria-label');
-    if (label) return label.trim();
+    if (label) return { name: label.trim(), source: 'aria-label' };
     const title = el.getAttribute('title');
-    if (title) return title.trim();
-    return (el.textContent || '').trim().substring(0, 200) || null;
+    if (title) return { name: title.trim(), source: 'title' };
+    const text = (el.textContent || '').trim().substring(0, 200);
+    return text ? { name: text, source: 'text_content' } : { name: null, source: null };
   }
 
   const nodes = toProcess.map((el, i) => {
@@ -350,7 +426,9 @@ function extractNodes(document, window, selector, options = {}) {
     };
 
     if (include.has('accessible_names')) {
-      node.accessible_name = accessibleName(el);
+      const an = accessibleName(el);
+      node.accessible_name = an.name;
+      node.accessible_name_source = an.source;
     }
 
     node.text_excerpt = truncate((el.textContent || '').trim().replace(/\s+/g, ' '), 500);
@@ -403,6 +481,29 @@ function extractNodes(document, window, selector, options = {}) {
   };
 }
 
+const TRANSPARENT_RE = /^(transparent|rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*0\s*\))$/i;
+
+/**
+ * Walks up from an element until an ancestor declares a non-transparent
+ * background colour. This is a heuristic — without a layout engine the
+ * visually painted background can differ (overlaps, images, gradients) —
+ * so the result is labelled declared_ancestor_background, never a final
+ * visual background.
+ */
+function ancestorBackground(el, window) {
+  let current = el.parentElement;
+  while (current) {
+    try {
+      const bg = window.getComputedStyle(current).backgroundColor;
+      if (bg && !TRANSPARENT_RE.test(bg.trim())) {
+        return { value: bg, source: elementDescriptor(current) };
+      }
+    } catch { /* keep walking */ }
+    current = current.parentElement;
+  }
+  return { value: null, source: 'none_declared' };
+}
+
 /**
  * Pulls elements flagged by axe for colour contrast review and enriches them
  * with their declared CSS colour values for the accessibility MCP.
@@ -429,6 +530,7 @@ function extractContrastElements(violations, incomplete, document, window) {
       if (!el) return;
 
       let declared = {};
+      let contrast = null;
       try {
         const cs = window.getComputedStyle(el);
         const parentCs = el.parentElement ? window.getComputedStyle(el.parentElement) : null;
@@ -440,6 +542,18 @@ function extractContrastElements(violations, incomplete, document, window) {
           font_weight: cs.fontWeight || null,
           line_height: cs.lineHeight || null,
         };
+
+        // Ancestor walk: if the element's own background is transparent,
+        // find the nearest declared ancestor background as a candidate.
+        const ownBg = cs.backgroundColor && !TRANSPARENT_RE.test(cs.backgroundColor.trim())
+          ? { value: cs.backgroundColor, source: elementDescriptor(el) }
+          : ancestorBackground(el, window);
+        contrast = {
+          foreground: cs.color || null,
+          background_candidate: ownBg.value,
+          background_source: ownBg.source,
+          confidence: 'heuristic_not_visual',
+        };
       } catch { /* non-fatal */ }
 
       elements.push({
@@ -447,15 +561,30 @@ function extractContrastElements(violations, incomplete, document, window) {
         html_excerpt: truncate(el.outerHTML, 500),
         text: truncate((el.textContent || '').trim(), 200),
         declared_styles: declared,
+        contrast,
         axe_status: finding.id === 'color-contrast' && violations.some(v => v.id === 'color-contrast')
           ? 'violation'
           : 'incomplete',
-        note: 'Background colour stacking not resolved. Pass declared_styles to accessibility MCP for contrast assessment.',
+        note: 'Background candidate is the nearest declared ancestor background, not the visually painted one. Pass contrast + declared_styles to the accessibility MCP for assessment.',
       });
     });
   });
 
   return elements;
+}
+
+// Selectors worth inspecting on most pages — returned so downstream agents
+// can call inspect_dom_selector on real components instead of guessing.
+const COMPONENT_SELECTOR_CANDIDATES = [
+  'header', 'nav', 'main', 'form', 'footer', 'aside', 'table',
+  '[role="dialog"]', '[role="alert"]', '[aria-expanded]', '[aria-live]',
+  'button', 'input', 'select', 'img', 'iframe', 'video', 'audio',
+];
+
+function suggestComponentSelectors(document) {
+  return COMPONENT_SELECTOR_CANDIDATES.filter(sel => {
+    try { return document.querySelector(sel) !== null; } catch { return false; }
+  });
 }
 
 module.exports = {
@@ -464,5 +593,7 @@ module.exports = {
   extractPageModel,
   extractNodes,
   extractContrastElements,
+  ancestorBackground,
+  suggestComponentSelectors,
   DEFAULT_TAGS,
 };
