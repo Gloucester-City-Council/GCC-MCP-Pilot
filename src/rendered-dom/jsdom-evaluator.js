@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const vm = require('vm');
 const { truncate, STYLE_WHITELIST } = require('./extraction');
 
 // Read axe-core source once at module load — cached by Node's module system.
@@ -25,14 +26,67 @@ function getJsdom() {
 
 const DEFAULT_TAGS = ['wcag2a', 'wcag2aa', 'wcag21aa'];
 
+// Page JS execution budget — caps runaway scripts (infinite loops, heavy
+// synchronous work) so a hostile or broken script cannot hang the function.
+const JS_EXEC_TIMEOUT_MS = 1_500; // per script
+const JS_TOTAL_BUDGET_MS = 5_000; // across all scripts in one evaluation
+const MAX_TIMER_CALLBACKS = 200; // total timers page JS may schedule
+const MIN_INTERVAL_MS = 50; // setInterval(fn, 0) gets clamped to this
+
+/**
+ * Stubs jsdom's outbound network APIs before any page JS runs. Evaluated
+ * scripts can mutate the DOM but cannot phone out — which also means a
+ * script cannot download and execute further scripts (XHR + eval chains).
+ * Combined with runScripts:'outside-only' (dynamically injected <script>
+ * tags never execute) this closes the recursive script-loading hole.
+ */
+function disableNetworkApis(window) {
+  function NetworkDisabled() {
+    throw new Error('Network access is disabled in this evaluation environment');
+  }
+  for (const name of ['XMLHttpRequest', 'WebSocket', 'EventSource', 'fetch']) {
+    try {
+      Object.defineProperty(window, name, { value: NetworkDisabled, configurable: true, writable: true });
+    } catch { /* property may be non-configurable in future jsdom versions */ }
+  }
+}
+
+/**
+ * Caps how much deferred work page JS can schedule: a hard limit on total
+ * timer registrations and a minimum interval delay. Returns a restore
+ * function so trusted code run afterwards (axe) gets the real timers.
+ */
+function capTimers(window) {
+  const origSetTimeout = window.setTimeout.bind(window);
+  const origSetInterval = window.setInterval.bind(window);
+  let scheduled = 0;
+
+  window.setTimeout = (fn, delay, ...rest) => {
+    if (++scheduled > MAX_TIMER_CALLBACKS) return 0;
+    return origSetTimeout(fn, delay, ...rest);
+  };
+  window.setInterval = (fn, delay, ...rest) => {
+    if (++scheduled > MAX_TIMER_CALLBACKS) return 0;
+    return origSetInterval(fn, Math.max(delay || 0, MIN_INTERVAL_MS), ...rest);
+  };
+
+  return function restoreTimers() {
+    window.setTimeout = origSetTimeout;
+    window.setInterval = origSetInterval;
+  };
+}
+
 /**
  * Builds a jsdom environment from HTML + pre-fetched CSS strings + optional JS strings.
  *
  * CSS is injected as <style> tags so we control what loads (no unguarded external fetches).
- * JS is executed via window.eval() under runScripts:'outside-only' — safer than 'dangerously'
- * because inline scripts in the HTML don't auto-execute; only what we explicitly pass runs.
+ * JS is executed under runScripts:'outside-only' — safer than 'dangerously' because inline
+ * scripts in the HTML don't auto-execute; only what we explicitly pass runs. Each script
+ * gets a CPU timeout (vm.runInContext), network APIs are stubbed out, and timer scheduling
+ * is capped, so page JS cannot recurse into loading more JS or hang the evaluation.
  *
  * Returns { window, document } ready for querying or axe injection.
+ * Callers should window.close() when finished to cancel any pending timers.
  */
 function createEnvironment({ html, cssStrings = [], jsStrings = [], baseUrl = 'https://example.com' }) {
   const JSDOM = getJsdom();
@@ -56,9 +110,29 @@ function createEnvironment({ html, cssStrings = [], jsStrings = [], baseUrl = 'h
   }
 
   // Execute JS files in order — errors are non-fatal (missing browser APIs are common)
-  for (const js of jsStrings) {
-    if (!js) continue;
-    try { window.eval(js); } catch { /* JS may reference window APIs absent in jsdom */ }
+  if (jsStrings.some(Boolean)) {
+    disableNetworkApis(window);
+    const restoreTimers = capTimers(window);
+
+    let context = null;
+    try { context = dom.getInternalVMContext(); } catch { /* fall back to window.eval below */ }
+
+    let budget = JS_TOTAL_BUDGET_MS;
+    for (const js of jsStrings) {
+      if (!js) continue;
+      if (budget <= 0) break;
+      const started = Date.now();
+      try {
+        if (context) {
+          vm.runInContext(js, context, { timeout: Math.min(JS_EXEC_TIMEOUT_MS, budget) });
+        } else {
+          window.eval(js);
+        }
+      } catch { /* timeouts and missing browser APIs are non-fatal */ }
+      budget -= Date.now() - started;
+    }
+
+    restoreTimers();
   }
 
   return { window, document };

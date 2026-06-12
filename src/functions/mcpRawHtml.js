@@ -150,7 +150,12 @@ const TOOLS = [
                 include_js: {
                     type: 'boolean',
                     default: false,
-                    description: 'If true, fetches and executes linked JS files. Reveals JS-injected content. Off by default for speed and safety.',
+                    description: [
+                        'If true, fetches and executes linked JS files (max 8, 500KB each). Reveals JS-injected content.',
+                        'Execution is contained: scripts cannot make network calls (XHR/fetch/WebSocket are stubbed),',
+                        'dynamically injected script tags never execute, each script has a CPU timeout,',
+                        'and timer scheduling is capped. Off by default for speed and safety.',
+                    ].join(' '),
                 },
                 tags: {
                     type: 'array',
@@ -196,7 +201,7 @@ const TOOLS = [
                     type: 'array',
                     items: { type: 'string' },
                     default: [],
-                    description: 'Array of JavaScript strings to execute after CSS is applied.',
+                    description: 'Array of JavaScript strings to execute after CSS is applied. Same containment as evaluate_page: no network calls, per-script CPU timeout, capped timers.',
                 },
                 base_url: {
                     type: 'string',

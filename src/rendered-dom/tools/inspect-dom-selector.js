@@ -42,17 +42,22 @@ async function inspectDomSelector(args) {
 
   try {
     const { window, document } = createEnvironment({
-      html,
-      cssStrings: [], // CSS is already baked into the stored HTML via the <style> tags we injected
+      html, // serialized post-evaluation DOM — CSS <style> tags are baked in, JS effects applied
+      cssStrings: [],
       jsStrings: [],
       baseUrl: metadata?.url || 'https://example.com',
     });
 
-    const result = extractNodes(document, window, selector, {
-      maxNodes: max_nodes,
-      maxHtmlChars: max_html_chars,
-      include,
-    });
+    let result;
+    try {
+      result = extractNodes(document, window, selector, {
+        maxNodes: max_nodes,
+        maxHtmlChars: max_html_chars,
+        include,
+      });
+    } finally {
+      try { window.close(); } catch { /* already closed */ }
+    }
 
     if (result.error) {
       return {
