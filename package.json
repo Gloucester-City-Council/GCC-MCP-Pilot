@@ -7,7 +7,8 @@
   "scripts": {
     "start": "func start",
     "start:verbose": "func start --verbose",
-    "test": "jest --testPathPatterns=tests/"
+    "test": "jest --testPathPatterns=tests/",
+    "postinstall": "node scripts/install-playwright.js"
   },
   "dependencies": {
     "@axe-core/playwright": "^4.11.3",
