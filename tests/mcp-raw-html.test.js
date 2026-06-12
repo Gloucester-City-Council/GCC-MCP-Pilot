@@ -182,6 +182,6 @@ describe('mcpRawHtml', () => {
 
         const body = JSON.parse(response.body);
         expect(response.status).toBe(200);
-        expect(body.serverInfo.name).toBe('gcc-raw-html-mcp');
+        expect(body.serverInfo.name).toBe('gcc-web-get-mcp');
     });
 });

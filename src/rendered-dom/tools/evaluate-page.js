@@ -1,12 +1,15 @@
 'use strict';
 
 const { validateUrl, validateResourceUrl } = require('../url-guard');
+const { checkFetchPolicy } = require('../../web-get/fetch-governance');
 const snapshotStore = require('../snapshot-store');
 const { createEnvironment, runAxe, extractPageModel, extractContrastElements, DEFAULT_TAGS } = require('../jsdom-evaluator');
 const { extractColourDeclarations, extractFontDeclarations } = require('../css-analyser');
 const { evaluationGovernance, errorGovernance } = require('../governance');
 const { truncate } = require('../extraction');
 
+const USER_AGENT = 'RenderedDOMMCP/1.0 (Azure Function MCP; respects robots.txt)';
+const ROBOTS_BOT_NAME = 'RenderedDOMMCP';
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_CSS_FILES = 15;
 const MAX_CSS_BYTES = 500_000;
@@ -32,7 +35,7 @@ async function fetchText(url, maxBytes) {
   const guard = validateResourceUrl(url);
   if (!guard.allowed) return null;
   try {
-    const res = await timedFetch(url, { headers: { 'User-Agent': 'RenderedDOMMCP/1.0' } });
+    const res = await timedFetch(url, { headers: { 'User-Agent': USER_AGENT } });
     if (!res.ok) return null;
     const text = await res.text();
     return maxBytes ? text.substring(0, maxBytes) : text;
@@ -172,10 +175,20 @@ async function evaluatePage(args) {
     };
   }
 
+  // Same fetch governance as fetch_raw_html: robots.txt + per-domain rate limit
+  const policy = await checkFetchPolicy(new URL(url), USER_AGENT, ROBOTS_BOT_NAME);
+  if (!policy.allowed) {
+    return {
+      error: { code: 'ROBOTS_DISALLOWED', message: policy.reason, retryable: false },
+      robots: policy.robots,
+      governance: errorGovernance('jsdom_dom_evaluation'),
+    };
+  }
+
   // Fetch HTML
   let html, status, finalUrl;
   try {
-    const res = await timedFetch(url, { headers: { 'User-Agent': 'RenderedDOMMCP/1.0' } });
+    const res = await timedFetch(url, { headers: { 'User-Agent': USER_AGENT } });
     finalUrl = res.url;
     status = res.status;
 
