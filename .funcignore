@@ -2,8 +2,9 @@
 .git*
 .github/
 
-# Node - built by Azure during deployment
-node_modules/
+# Node — shipped pre-built from CI (production deps only)
+# Do NOT ignore node_modules: we deploy a ready-made package
+# so Azure doesn't need to run npm install on the remote side.
 
 # MCP Server (not needed for Azure Functions)
 server.js
