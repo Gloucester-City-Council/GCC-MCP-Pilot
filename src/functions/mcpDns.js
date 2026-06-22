@@ -583,7 +583,7 @@ const TOOLS = [
         description: [
             'Queries RDAP (Registration Data Access Protocol) for domain registration data — the modern, structured JSON replacement for WHOIS.',
             'Returns registrar, registration/expiry dates, domain status, nameservers, and registrant/admin/tech contact entities (where available).',
-            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD, with built-in overrides for ccTLDs (uk, de, fr, au, jp, br, etc.) not yet in the bootstrap.',
+            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD, with built-in overrides for ccTLDs (uk, de, fr, au, br, etc.) not yet in the bootstrap.',
             'Useful for checking domain ownership, expiry dates, registrar details, and registration status.',
             'Respects robots.txt and enforces a 2-second per-domain rate limit.',
             'Blocks lookups for private/internal domains (SSRF protection).',
