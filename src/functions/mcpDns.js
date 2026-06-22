@@ -1,7 +1,7 @@
 /**
  * Azure Functions v4 HTTP Trigger — DNS Lookup MCP
  *
- * Exposes three MCP tools: get_dns, get_txt, get_mx
+ * Exposes four MCP tools: get_dns, get_txt, get_mx, get_rdap
  * Endpoint: GET /api/mcp-dns (manifest), POST /api/mcp-dns (tool execution)
  *
  * Performs DNS lookups for public domains using Node.js built-in dns.promises.
@@ -227,6 +227,124 @@ async function applyRateLimit(domain, crawlDelayMs) {
     };
 }
 
+// ─── RDAP helpers ─────────────────────────────────────────────────────────────
+const RDAP_BOOTSTRAP_URL = 'https://data.iana.org/rdap/dns.json';
+const RDAP_FETCH_TIMEOUT_MS = 15_000;
+const RDAP_BOOTSTRAP_CACHE_TTL_MS = 86_400_000; // 24 hours
+
+/** @type {{ fetchedAt: number, services: Array } | null} */
+let rdapBootstrapCache = null;
+
+async function fetchWithTimeout(url, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/rdap+json, application/json',
+                'User-Agent': USER_AGENT,
+            },
+            signal: controller.signal,
+            redirect: 'follow',
+        });
+        return res;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+async function getRdapBaseUrl(domain) {
+    if (rdapBootstrapCache && Date.now() - rdapBootstrapCache.fetchedAt < RDAP_BOOTSTRAP_CACHE_TTL_MS) {
+        return matchRdapService(domain, rdapBootstrapCache.services);
+    }
+
+    const res = await fetchWithTimeout(RDAP_BOOTSTRAP_URL, RDAP_FETCH_TIMEOUT_MS);
+    if (!res.ok) {
+        throw new Error(`IANA RDAP bootstrap returned HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    rdapBootstrapCache = { fetchedAt: Date.now(), services: data.services || [] };
+    return matchRdapService(domain, rdapBootstrapCache.services);
+}
+
+function matchRdapService(domain, services) {
+    const labels = domain.split('.');
+    for (let i = 0; i < labels.length; i++) {
+        const suffix = labels.slice(i).join('.');
+        for (const [tlds, urls] of services) {
+            if (tlds.some(t => t.toLowerCase() === suffix) && urls.length > 0) {
+                return urls[0].replace(/\/+$/, '');
+            }
+        }
+    }
+    return null;
+}
+
+function extractRdapSummary(data) {
+    const summary = {
+        handle: data.handle || null,
+        name: data.ldhName || data.unicodeName || null,
+        status: data.status || [],
+    };
+
+    if (Array.isArray(data.events)) {
+        summary.events = data.events.map(e => ({
+            action: e.eventAction,
+            date: e.eventDate,
+        }));
+    }
+
+    if (Array.isArray(data.nameservers)) {
+        summary.nameservers = data.nameservers.map(ns => ns.ldhName || ns.unicodeName).filter(Boolean);
+    }
+
+    if (Array.isArray(data.entities)) {
+        summary.entities = data.entities.map(ent => {
+            const entry = { roles: ent.roles || [] };
+            if (ent.handle) entry.handle = ent.handle;
+            const fn = extractVcardField(ent, 'fn');
+            if (fn) entry.name = fn;
+            const email = extractVcardField(ent, 'email');
+            if (email) entry.email = email;
+            if (Array.isArray(ent.publicIds)) {
+                entry.publicIds = ent.publicIds;
+            }
+            return entry;
+        });
+    }
+
+    if (data.port43) {
+        summary.port43WhoisServer = data.port43;
+    }
+
+    if (Array.isArray(data.links)) {
+        summary.links = data.links
+            .filter(l => l.rel === 'self' || l.rel === 'related')
+            .map(l => ({ rel: l.rel, href: l.href }));
+    }
+
+    if (Array.isArray(data.notices)) {
+        summary.notices = data.notices.map(n => ({
+            title: n.title,
+            description: Array.isArray(n.description) ? n.description.join(' ') : n.description,
+        }));
+    }
+
+    return summary;
+}
+
+function extractVcardField(entity, fieldName) {
+    if (!Array.isArray(entity.vcardArray) || entity.vcardArray[0] !== 'vcard') return null;
+    const fields = entity.vcardArray[1];
+    if (!Array.isArray(fields)) return null;
+    for (const field of fields) {
+        if (Array.isArray(field) && field[0] === fieldName && field.length >= 4) {
+            return field[3];
+        }
+    }
+    return null;
+}
+
 // ─── DNS resolver helpers ─────────────────────────────────────────────────────
 const SUPPORTED_DNS_TYPES = ['A', 'AAAA', 'CNAME', 'NS', 'SOA', 'CAA'];
 const DEFAULT_DNS_TYPES = ['A', 'AAAA', 'CNAME', 'NS', 'SOA', 'CAA'];
@@ -392,6 +510,27 @@ const TOOLS = [
             required: ['domain'],
         },
     },
+    {
+        name: 'get_rdap',
+        description: [
+            'Queries RDAP (Registration Data Access Protocol) for domain registration data — the modern, structured JSON replacement for WHOIS.',
+            'Returns registrar, registration/expiry dates, domain status, nameservers, and registrant/admin/tech contact entities (where available).',
+            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD.',
+            'Useful for checking domain ownership, expiry dates, registrar details, and registration status.',
+            'Respects robots.txt and enforces a 2-second per-domain rate limit.',
+            'Blocks lookups for private/internal domains (SSRF protection).',
+        ].join(' '),
+        inputSchema: {
+            type: 'object',
+            properties: {
+                domain: {
+                    type: 'string',
+                    description: 'The domain name to look up registration data for (e.g. "example.com"). Must be a public FQDN. Use a second-level domain — subdomains will be stripped to the registrable domain automatically.',
+                },
+            },
+            required: ['domain'],
+        },
+    },
 ];
 
 // ─── Tool handlers ────────────────────────────────────────────────────────────
@@ -521,6 +660,79 @@ async function handleGetMx({ domain: rawDomain }, context) {
     };
 }
 
+async function handleGetRdap({ domain: rawDomain }, context) {
+    const validation = validateDomain(rawDomain);
+    if (!validation.ok) {
+        return { blocked: true, reason: validation.reason };
+    }
+    const { domain } = validation;
+
+    const policy = await checkPolicies(domain);
+    if (policy.blocked) return policy;
+    const { robots, rateLimit } = policy;
+
+    let rdapBaseUrl;
+    try {
+        rdapBaseUrl = await getRdapBaseUrl(domain);
+    } catch (err) {
+        context.log.error(`get_rdap: bootstrap lookup failed — ${err.message}`);
+        return { domain, error: `RDAP bootstrap lookup failed: ${err.message}`, robots, rateLimit };
+    }
+
+    if (!rdapBaseUrl) {
+        context.log(`get_rdap: ${domain} — no RDAP service registered for this TLD`);
+        return {
+            domain,
+            error: 'No RDAP service is registered for this TLD in the IANA bootstrap registry',
+            robots,
+            rateLimit,
+        };
+    }
+
+    const rdapUrl = `${rdapBaseUrl}/domain/${encodeURIComponent(domain)}`;
+    try {
+        const res = await fetchWithTimeout(rdapUrl, RDAP_FETCH_TIMEOUT_MS);
+
+        if (res.status === 404) {
+            context.log(`get_rdap: ${domain} — not found in RDAP`);
+            return { domain, found: false, rdapServer: rdapBaseUrl, robots, rateLimit };
+        }
+
+        if (!res.ok) {
+            context.log(`get_rdap: ${domain} — RDAP server returned HTTP ${res.status}`);
+            return {
+                domain,
+                error: `RDAP server returned HTTP ${res.status}`,
+                rdapServer: rdapBaseUrl,
+                robots,
+                rateLimit,
+            };
+        }
+
+        const data = await res.json();
+        const summary = extractRdapSummary(data);
+
+        context.log(`get_rdap: ${domain} — registration data retrieved`);
+        return {
+            domain,
+            found: true,
+            rdapServer: rdapBaseUrl,
+            registration: summary,
+            robots,
+            rateLimit,
+        };
+    } catch (err) {
+        context.log.error(`get_rdap: ${domain} — fetch error: ${err.message}`);
+        return {
+            domain,
+            error: `RDAP query failed: ${err.message}`,
+            rdapServer: rdapBaseUrl,
+            robots,
+            rateLimit,
+        };
+    }
+}
+
 // ─── MCP manifest ─────────────────────────────────────────────────────────────
 const MANIFEST = {
     protocolVersion: '2024-11-05',
@@ -538,6 +750,7 @@ Performs DNS lookups for public domains.
 - get_dns  — Query A, AAAA, CNAME, NS, SOA, CAA records for a domain
 - get_txt  — Query TXT records with annotation of SPF, DMARC, BIMI, and domain-verification tokens
 - get_mx   — Query MX (mail exchange) records sorted by priority
+- get_rdap — Query RDAP for domain registration data (registrar, dates, status, contacts)
 
 ⚠️  Respects robots.txt. Private/internal domains and reserved TLDs are blocked (SSRF protection).
 Rate limited to one query per domain per 2 seconds (or crawl-delay if longer).
@@ -635,6 +848,9 @@ async function handleMcpRequest(request, context) {
                         break;
                     case 'get_mx':
                         result = await handleGetMx(args, context);
+                        break;
+                    case 'get_rdap':
+                        result = await handleGetRdap(args, context);
                         break;
                 }
 
