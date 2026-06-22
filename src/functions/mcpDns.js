@@ -809,7 +809,7 @@ const MANIFEST = {
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-dns-mcp',
-        version: '1.0.0',
+        version: '1.1.0',
         instructions: `🔍 DNS LOOKUP MCP
 
 Performs DNS lookups for public domains.
