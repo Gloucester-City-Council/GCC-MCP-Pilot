@@ -232,6 +232,69 @@ const RDAP_BOOTSTRAP_URL = 'https://data.iana.org/rdap/dns.json';
 const RDAP_FETCH_TIMEOUT_MS = 15_000;
 const RDAP_BOOTSTRAP_CACHE_TTL_MS = 86_400_000; // 24 hours
 
+// ccTLDs and other TLDs with known RDAP servers not yet in the IANA bootstrap
+const RDAP_CCTLD_OVERRIDES = {
+    'uk':       'https://rdap.nominet.uk',
+    'co.uk':    'https://rdap.nominet.uk',
+    'org.uk':   'https://rdap.nominet.uk',
+    'me.uk':    'https://rdap.nominet.uk',
+    'net.uk':   'https://rdap.nominet.uk',
+    'de':       'https://rdap.denic.de',
+    'jp':       'https://rdap.jprs.jp',
+    'nz':       'https://rdap.irs.net.nz',
+    'co.nz':    'https://rdap.irs.net.nz',
+    'net.nz':   'https://rdap.irs.net.nz',
+    'org.nz':   'https://rdap.irs.net.nz',
+    'ch':       'https://rdap.nic.ch',
+    'li':       'https://rdap.nic.ch',
+    'at':       'https://rdap.nic.at',
+    'cz':       'https://rdap.nic.cz',
+    'sk':       'https://rdap.sk-nic.sk',
+    'se':       'https://rdap.iis.se',
+    'nu':       'https://rdap.iis.se',
+    'no':       'https://rdap.norid.no',
+    'fi':       'https://rdap.fi',
+    'ee':       'https://rdap.tld.ee',
+    'lv':       'https://rdap.nic.lv',
+    'lt':       'https://rdap.domreg.lt',
+    'pl':       'https://rdap.dns.pl',
+    'be':       'https://rdap.dnsbelgium.be',
+    'nl':       'https://rdap.sidn.nl',
+    'fr':       'https://rdap.nic.fr',
+    'it':       'https://rdap.nic.it',
+    'es':       'https://rdap.nic.es',
+    'pt':       'https://rdap.dns.pt',
+    'ie':       'https://rdap.weare.ie',
+    'is':       'https://rdap.isnic.is',
+    'dk':       'https://rdap.punktum.dk',
+    'ru':       'https://rdap.ripn.net',
+    'su':       'https://rdap.ripn.net',
+    'ua':       'https://rdap.hostmaster.ua',
+    'by':       'https://rdap.cctld.by',
+    'br':       'https://rdap.registro.br',
+    'ar':       'https://rdap.nic.ar',
+    'cl':       'https://rdap.nic.cl',
+    'mx':       'https://rdap.mx',
+    'co':       'https://rdap.nic.co',
+    'za':       'https://rdap.registry.net.za',
+    'co.za':    'https://rdap.registry.net.za',
+    'ke':       'https://rdap.kenic.or.ke',
+    'ng':       'https://rdap.nic.net.ng',
+    'au':       'https://rdap.auda.org.au',
+    'com.au':   'https://rdap.auda.org.au',
+    'net.au':   'https://rdap.auda.org.au',
+    'org.au':   'https://rdap.auda.org.au',
+    'cn':       'https://rdap.cnnic.cn',
+    'kr':       'https://rdap.kisa.or.kr',
+    'tw':       'https://rdap.twnic.tw',
+    'in':       'https://rdap.registry.in',
+    'sg':       'https://rdap.sgnic.sg',
+    'hk':       'https://rdap.hkirc.hk',
+    'th':       'https://rdap.thnic.co.th',
+    'my':       'https://rdap.mynic.my',
+    'id':       'https://rdap.pandi.id',
+};
+
 /** @type {{ fetchedAt: number, services: Array } | null} */
 let rdapBootstrapCache = null;
 
@@ -254,6 +317,16 @@ async function fetchWithTimeout(url, timeoutMs) {
 }
 
 async function getRdapBaseUrl(domain) {
+    // Check ccTLD overrides first (most-specific suffix wins)
+    const labels = domain.split('.');
+    for (let i = 0; i < labels.length; i++) {
+        const suffix = labels.slice(i).join('.');
+        if (RDAP_CCTLD_OVERRIDES[suffix]) {
+            return RDAP_CCTLD_OVERRIDES[suffix];
+        }
+    }
+
+    // Fall back to IANA bootstrap registry
     if (rdapBootstrapCache && Date.now() - rdapBootstrapCache.fetchedAt < RDAP_BOOTSTRAP_CACHE_TTL_MS) {
         return matchRdapService(domain, rdapBootstrapCache.services);
     }
@@ -515,7 +588,7 @@ const TOOLS = [
         description: [
             'Queries RDAP (Registration Data Access Protocol) for domain registration data — the modern, structured JSON replacement for WHOIS.',
             'Returns registrar, registration/expiry dates, domain status, nameservers, and registrant/admin/tech contact entities (where available).',
-            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD.',
+            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD, with built-in overrides for ccTLDs (uk, de, fr, au, jp, br, etc.) not yet in the bootstrap.',
             'Useful for checking domain ownership, expiry dates, registrar details, and registration status.',
             'Respects robots.txt and enforces a 2-second per-domain rate limit.',
             'Blocks lookups for private/internal domains (SSRF protection).',
