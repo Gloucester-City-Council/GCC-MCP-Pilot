@@ -229,7 +229,7 @@ async function applyRateLimit(domain, crawlDelayMs) {
 
 // ─── RDAP helpers ─────────────────────────────────────────────────────────────
 const RDAP_BOOTSTRAP_URL = 'https://data.iana.org/rdap/dns.json';
-const RDAP_FETCH_TIMEOUT_MS = 15_000;
+const RDAP_FETCH_TIMEOUT_MS = 8_000;
 const RDAP_BOOTSTRAP_CACHE_TTL_MS = 86_400_000; // 24 hours
 
 // ccTLDs with known RDAP servers not yet in the IANA bootstrap.
@@ -737,17 +737,22 @@ async function handleGetRdap({ domain: rawDomain }, context) {
     }
     const { domain } = validation;
 
-    const policy = await checkPolicies(domain);
+    // Run robots.txt check and RDAP bootstrap lookup in parallel to cut latency
+    const [policy, rdapResult] = await Promise.all([
+        checkPolicies(domain),
+        getRdapBaseUrl(domain).then(url => ({ url })).catch(err => ({ error: err })),
+    ]);
+
     if (policy.blocked) return policy;
     const { robots, rateLimit } = policy;
 
     let rdapBaseUrl;
-    try {
-        rdapBaseUrl = await getRdapBaseUrl(domain);
-    } catch (err) {
-        context.log.error(`get_rdap: bootstrap lookup failed — ${err.message}`);
-        return { domain, error: `RDAP bootstrap lookup failed: ${err.message}`, robots, rateLimit };
+    if (rdapResult.error) {
+        const msg = rdapResult.error.message || String(rdapResult.error);
+        context.error('get_rdap: bootstrap lookup failed - ' + msg);
+        return { domain, error: 'RDAP bootstrap lookup failed: ' + msg, robots, rateLimit };
     }
+    rdapBaseUrl = rdapResult.url;
 
     if (!rdapBaseUrl) {
         context.log(`get_rdap: ${domain} — no RDAP service registered for this TLD`);
@@ -792,7 +797,7 @@ async function handleGetRdap({ domain: rawDomain }, context) {
             rateLimit,
         };
     } catch (err) {
-        context.log.error(`get_rdap: ${domain} — fetch error: ${err.message}`);
+        context.error(`get_rdap: ${domain} — fetch error: ${err.message}`);
         return {
             domain,
             error: `RDAP query failed: ${err.message}`,
@@ -933,11 +938,11 @@ async function handleMcpRequest(request, context) {
                     id,
                 };
             } catch (error) {
-                context.log.error(`DNS tool error: ${error.message}`);
+                context.error(`DNS tool error: ${error.message}`);
                 if (error && error.stack) {
-                    context.log.error(`DNS tool error stack [${name}]: ${error.stack}`);
+                    context.error(`DNS tool error stack [${name}]: ${error.stack}`);
                 }
-                context.log.error(`DNS tool failed [${name}] after ${Date.now() - toolStart}ms`);
+                context.error(`DNS tool failed [${name}] after ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
                     result: {
@@ -984,9 +989,9 @@ app.http('mcpDns', {
             try {
                 body = await request.json();
             } catch (parseError) {
-                context.log.error('MCP DNS parse error:', parseError);
+                context.error('MCP DNS parse error:', parseError);
                 if (parseError && parseError.stack) {
-                    context.log.error('MCP DNS parse error stack:', parseError.stack);
+                    context.error('MCP DNS parse error stack:', parseError.stack);
                 }
                 return {
                     status: 400,
@@ -1013,9 +1018,9 @@ app.http('mcpDns', {
                 body: JSON.stringify(response),
             };
         } catch (error) {
-            context.log.error('MCP DNS unhandled error:', error);
+            context.error('MCP DNS unhandled error:', error);
             if (error && error.stack) {
-                context.log.error('MCP DNS unhandled error stack:', error.stack);
+                context.error('MCP DNS unhandled error stack:', error.stack);
             }
             return {
                 status: 500,
