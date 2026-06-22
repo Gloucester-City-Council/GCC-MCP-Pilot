@@ -20,6 +20,7 @@
 
 const { app } = require('@azure/functions');
 const { Resolver } = require('dns').promises;
+const net = require('net');
 
 // Module-scope resolver pointing at well-known public DNS servers.
 // Google (8.8.8.8 / 8.8.4.4) and Cloudflare (1.1.1.1 / 1.0.0.1) are used
@@ -413,6 +414,70 @@ function extractVcardField(entity, fieldName) {
     return null;
 }
 
+// ─── WHOIS fallback (TCP port 43) ─────────────────────────────────────────────
+const WHOIS_TIMEOUT_MS = 8_000;
+const WHOIS_IANA_SERVER = 'whois.iana.org';
+const WHOIS_SERVER_CACHE_TTL_MS = 86_400_000; // 24 hours
+
+/** @type {Map<string, { fetchedAt: number, server: string | null }>} */
+const whoisServerCache = new Map();
+
+function queryWhoisRaw(server, query, timeoutMs) {
+    return new Promise((resolve, reject) => {
+        const socket = new net.Socket();
+        const chunks = [];
+
+        socket.setTimeout(timeoutMs);
+
+        socket.connect(43, server, () => {
+            socket.write(query + '\r\n');
+        });
+
+        socket.on('data', chunk => {
+            chunks.push(chunk);
+        });
+
+        socket.on('end', () => {
+            resolve(Buffer.concat(chunks).toString('utf8'));
+        });
+
+        socket.on('timeout', () => {
+            socket.destroy();
+            reject(new Error(`WHOIS query to ${server} timed out`));
+        });
+
+        socket.on('error', err => {
+            reject(new Error(`WHOIS connection to ${server} failed: ${err.message}`));
+        });
+    });
+}
+
+async function getWhoisServer(tld) {
+    const cached = whoisServerCache.get(tld);
+    if (cached && Date.now() - cached.fetchedAt < WHOIS_SERVER_CACHE_TTL_MS) {
+        return cached.server;
+    }
+
+    const response = await queryWhoisRaw(WHOIS_IANA_SERVER, tld, WHOIS_TIMEOUT_MS);
+    const match = response.match(/^whois:\s+(\S+)/m);
+    const server = match ? match[1] : null;
+    whoisServerCache.set(tld, { fetchedAt: Date.now(), server });
+    return server;
+}
+
+async function queryWhoisDomain(domain) {
+    const labels = domain.split('.');
+    const tld = labels[labels.length - 1];
+
+    const server = await getWhoisServer(tld);
+    if (!server) return null;
+
+    const raw = await queryWhoisRaw(server, domain, WHOIS_TIMEOUT_MS);
+    if (!raw || !raw.trim()) return null;
+
+    return { server, raw: raw.trim() };
+}
+
 // ─── DNS resolver helpers ─────────────────────────────────────────────────────
 const SUPPORTED_DNS_TYPES = ['A', 'AAAA', 'CNAME', 'NS', 'SOA', 'CAA'];
 const DEFAULT_DNS_TYPES = ['A', 'AAAA', 'CNAME', 'NS', 'SOA', 'CAA'];
@@ -581,10 +646,10 @@ const TOOLS = [
     {
         name: 'get_rdap',
         description: [
-            'Queries RDAP (Registration Data Access Protocol) for domain registration data — the modern, structured JSON replacement for WHOIS.',
-            'Returns registrar, registration/expiry dates, domain status, nameservers, and registrant/admin/tech contact entities (where available).',
-            'Uses the IANA RDAP bootstrap registry to find the authoritative RDAP server for the TLD, with built-in overrides for ccTLDs (uk, de, fr, au, br, etc.) not yet in the bootstrap.',
-            'Useful for checking domain ownership, expiry dates, registrar details, and registration status.',
+            'Queries domain registration data via RDAP (modern JSON protocol) with automatic WHOIS fallback (raw text) for TLDs without RDAP support.',
+            'Returns registrar, registration/expiry dates, domain status, nameservers, and contact entities. RDAP responses are structured JSON; WHOIS responses are raw text for the LLM to interpret.',
+            'Uses the IANA RDAP bootstrap registry with ccTLD overrides (uk, de, fr, au, br, etc.). Falls back to WHOIS over TCP port 43 (via IANA server discovery) when RDAP is unavailable or unreachable.',
+            'Useful for checking domain ownership, expiry dates, registrar details, and registration status across all TLDs.',
             'Respects robots.txt and enforces a 2-second per-domain rate limit.',
             'Blocks lookups for private/internal domains (SSRF protection).',
         ].join(' '),
@@ -728,6 +793,24 @@ async function handleGetMx({ domain: rawDomain }, context) {
     };
 }
 
+async function tryWhoisFallback(domain, context) {
+    try {
+        const result = await queryWhoisDomain(domain);
+        if (!result) return null;
+        context.log(`get_rdap: ${domain} — WHOIS fallback from ${result.server}`);
+        return {
+            domain,
+            found: true,
+            source: 'whois',
+            whoisServer: result.server,
+            rawWhois: result.raw,
+        };
+    } catch (err) {
+        context.error(`get_rdap: ${domain} — WHOIS fallback failed: ${err.message}`);
+        return null;
+    }
+}
+
 async function handleGetRdap({ domain: rawDomain }, context) {
     const validation = validateDomain(rawDomain);
     if (!validation.ok) {
@@ -744,35 +827,44 @@ async function handleGetRdap({ domain: rawDomain }, context) {
     if (policy.blocked) return policy;
     const { robots, rateLimit } = policy;
 
-    let rdapBaseUrl;
+    // RDAP bootstrap lookup failed — try WHOIS fallback
     if (rdapResult.error) {
         const msg = rdapResult.error.message || String(rdapResult.error);
         context.error('get_rdap: bootstrap lookup failed - ' + msg);
+        const whois = await tryWhoisFallback(domain, context);
+        if (whois) return { ...whois, robots, rateLimit };
         return { domain, error: 'RDAP bootstrap lookup failed: ' + msg, robots, rateLimit };
     }
-    rdapBaseUrl = rdapResult.url;
 
+    const rdapBaseUrl = rdapResult.url;
+
+    // No RDAP server for this TLD — try WHOIS fallback
     if (!rdapBaseUrl) {
-        context.log(`get_rdap: ${domain} — no RDAP service registered for this TLD`);
+        context.log(`get_rdap: ${domain} — no RDAP service, trying WHOIS fallback`);
+        const whois = await tryWhoisFallback(domain, context);
+        if (whois) return { ...whois, robots, rateLimit };
         return {
             domain,
-            error: 'No RDAP service is registered for this TLD in the IANA bootstrap registry',
+            error: 'No RDAP or WHOIS service found for this TLD',
             robots,
             rateLimit,
         };
     }
 
+    // Try RDAP first
     const rdapUrl = `${rdapBaseUrl}/domain/${encodeURIComponent(domain)}`;
     try {
         const res = await fetchWithTimeout(rdapUrl, RDAP_FETCH_TIMEOUT_MS);
 
         if (res.status === 404) {
             context.log(`get_rdap: ${domain} — not found in RDAP`);
-            return { domain, found: false, rdapServer: rdapBaseUrl, robots, rateLimit };
+            return { domain, found: false, source: 'rdap', rdapServer: rdapBaseUrl, robots, rateLimit };
         }
 
         if (!res.ok) {
-            context.log(`get_rdap: ${domain} — RDAP server returned HTTP ${res.status}`);
+            context.log(`get_rdap: ${domain} — RDAP HTTP ${res.status}, trying WHOIS fallback`);
+            const whois = await tryWhoisFallback(domain, context);
+            if (whois) return { ...whois, rdapServer: rdapBaseUrl, robots, rateLimit };
             return {
                 domain,
                 error: `RDAP server returned HTTP ${res.status}`,
@@ -785,17 +877,21 @@ async function handleGetRdap({ domain: rawDomain }, context) {
         const data = await res.json();
         const summary = extractRdapSummary(data);
 
-        context.log(`get_rdap: ${domain} — registration data retrieved`);
+        context.log(`get_rdap: ${domain} — registration data retrieved via RDAP`);
         return {
             domain,
             found: true,
+            source: 'rdap',
             rdapServer: rdapBaseUrl,
             registration: summary,
             robots,
             rateLimit,
         };
     } catch (err) {
-        context.error(`get_rdap: ${domain} — fetch error: ${err.message}`);
+        // RDAP query failed (network error, timeout, JSON parse error) — try WHOIS
+        context.error(`get_rdap: ${domain} — RDAP failed (${err.message}), trying WHOIS fallback`);
+        const whois = await tryWhoisFallback(domain, context);
+        if (whois) return { ...whois, rdapServer: rdapBaseUrl, robots, rateLimit };
         return {
             domain,
             error: `RDAP query failed: ${err.message}`,
@@ -823,7 +919,7 @@ Performs DNS lookups for public domains.
 - get_dns  — Query A, AAAA, CNAME, NS, SOA, CAA records for a domain
 - get_txt  — Query TXT records with annotation of SPF, DMARC, BIMI, and domain-verification tokens
 - get_mx   — Query MX (mail exchange) records sorted by priority
-- get_rdap — Query RDAP for domain registration data (registrar, dates, status, contacts)
+- get_rdap — Query RDAP/WHOIS for domain registration data (registrar, dates, status, contacts)
 
 ⚠️  Respects robots.txt. Private/internal domains and reserved TLDs are blocked (SSRF protection).
 Rate limited to one query per domain per 2 seconds (or crawl-delay if longer).
