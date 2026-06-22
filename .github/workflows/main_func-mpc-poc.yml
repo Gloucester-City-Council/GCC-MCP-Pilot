@@ -11,7 +11,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '20.x'
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Rendered DOM MCP — required Azure App Settings (set via Portal or az CLI):
@@ -48,13 +48,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install all dependencies and run tests
+      - name: Install dependencies and run tests
         run: |
           npm ci
           npm test
-
-      - name: Prune to production dependencies
-        run: npm ci --omit=dev
 
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
@@ -63,6 +60,5 @@ jobs:
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6D602EA7A714F8A8B9A13B7DFD7BB4C }}
-          scm-do-build-during-deployment: false
-          enable-oryx-build: false
+          scm-do-build-during-deployment: true
           respect-funcignore: true
