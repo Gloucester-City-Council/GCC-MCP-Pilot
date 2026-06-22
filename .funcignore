@@ -2,7 +2,7 @@
 .git*
 .github/
 
-# Node — Kudu runs npm install during deployment (scm-do-build-during-deployment)
+# Node - built by Azure during deployment
 node_modules/
 
 # MCP Server (not needed for Azure Functions)
