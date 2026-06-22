@@ -244,8 +244,6 @@ const RDAP_CCTLD_OVERRIDES = {
     'me.uk':    'https://rdap.nominet.uk',
     'net.uk':   'https://rdap.nominet.uk',
     'de':       'https://rdap.denic.de',
-    'se':       'https://rdap.se',
-    'nu':       'https://rdap.se',
     'no':       'https://rdap.norid.no',
     'dk':       'https://rdap.dk',
     'fi':       'https://rdap.fi',
