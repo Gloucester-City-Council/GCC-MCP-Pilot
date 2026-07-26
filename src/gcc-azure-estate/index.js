@@ -14,14 +14,15 @@
 
 const common = require('./common');
 const resourceGroups = require('./resource-groups');
+const functionApps = require('./function-apps');
 const staticWebApps = require('./static-web-apps');
 const storageAccounts = require('./storage-accounts');
 const blobContainers = require('./blob-containers');
 
 // Family modules are added here incrementally as each resource family is
-// built (function-apps, cosmos-accounts, cosmos-databases,
-// cosmos-containers, relationships, stack).
-const FAMILY_MODULES = [common, resourceGroups, staticWebApps, storageAccounts, blobContainers];
+// built (cosmos-accounts, cosmos-databases, cosmos-containers,
+// relationships, stack).
+const FAMILY_MODULES = [common, resourceGroups, functionApps, staticWebApps, storageAccounts, blobContainers];
 
 const TOOLS = FAMILY_MODULES.flatMap((m) => m.TOOLS);
 const TOOL_HANDLERS = Object.assign({}, ...FAMILY_MODULES.map((m) => m.TOOL_HANDLERS));
