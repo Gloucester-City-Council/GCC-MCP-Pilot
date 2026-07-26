@@ -21,12 +21,12 @@ const blobContainers = require('./blob-containers');
 const cosmosAccounts = require('./cosmos-accounts');
 const cosmosDatabases = require('./cosmos-databases');
 const cosmosContainers = require('./cosmos-containers');
+const relationships = require('./relationships');
+const stack = require('./stack');
 
-// Family modules are added here incrementally as each resource family is
-// built (relationships, stack).
 const FAMILY_MODULES = [
     common, resourceGroups, functionApps, staticWebApps, storageAccounts, blobContainers,
-    cosmosAccounts, cosmosDatabases, cosmosContainers,
+    cosmosAccounts, cosmosDatabases, cosmosContainers, relationships, stack,
 ];
 
 const TOOLS = FAMILY_MODULES.flatMap((m) => m.TOOLS);
