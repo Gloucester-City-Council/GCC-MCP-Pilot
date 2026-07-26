@@ -1,0 +1,67 @@
+# Azure Estate MCP — instance registry & permission model.
+#
+# Each entry under `instances` is one Azure subscription/environment the
+# Estate MCP is allowed to talk to. `permissions` lists the operation
+# classes granted per resource family — this is the single source of
+# truth enforced by src/gcc-azure-estate/lib/permissions.js. Adding an
+# instance or changing a permission is a config-only change; no code
+# change is required.
+#
+# Global operation classes: inspect, diagnose, compare, plan, create,
+# modify, restart, deploy, network, identity, scale, destructive.
+# "destructive" is reserved — no tool in this build maps to it.
+#
+# subscriptionId below is a placeholder. Fill in the real GCC subscription
+# GUID before this instance can be used against live Azure.
+
+instances:
+  azure-prod:
+    environment: production
+    subscriptionId: "00000000-0000-0000-0000-000000000000"
+    permissions:
+      resource-groups:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+        - create
+      function-apps:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+        - create
+        - modify
+        - identity
+        - deploy
+      static-web-apps:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+      storage:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+        - create
+        - modify
+      blob-containers:
+        - inspect
+        - diagnose
+        - plan
+        - create
+        - modify
+      cosmos:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+        - create
+        - modify
+      stack:
+        - inspect
+        - diagnose
+        - compare
+        - plan
+        - create
