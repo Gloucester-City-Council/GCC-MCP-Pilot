@@ -13,12 +13,13 @@
 'use strict';
 
 const common = require('./common');
+const resourceGroups = require('./resource-groups');
 
 // Family modules are added here incrementally as each resource family is
-// built (resource-groups, function-apps, static-web-apps, storage-accounts,
+// built (function-apps, static-web-apps, storage-accounts,
 // blob-containers, cosmos-accounts, cosmos-databases, cosmos-containers,
 // relationships, stack).
-const FAMILY_MODULES = [common];
+const FAMILY_MODULES = [common, resourceGroups];
 
 const TOOLS = FAMILY_MODULES.flatMap((m) => m.TOOLS);
 const TOOL_HANDLERS = Object.assign({}, ...FAMILY_MODULES.map((m) => m.TOOL_HANDLERS));

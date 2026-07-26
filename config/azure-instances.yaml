@@ -25,6 +25,7 @@ instances:
         - compare
         - plan
         - create
+        - modify
       function-apps:
         - inspect
         - diagnose
