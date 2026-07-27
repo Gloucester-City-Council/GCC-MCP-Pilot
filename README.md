@@ -349,11 +349,17 @@ Tool call results are wrapped in MCP content format:
 
 ## Deployment
 
-CI deploys to the `func-mpc-poc` Function App on every push to `main` via [`.github/workflows/main_func-mpc-poc.yml`](.github/workflows/main_func-mpc-poc.yml) (`Azure/functions-action@v1`, publish-profile zip deploy, server-side Oryx build).
+CI deploys to the `func-mpc-poc` Function App on every push to `main` via [`.github/workflows/main_func-mpc-poc.yml`](.github/workflows/main_func-mpc-poc.yml) (`Azure/functions-action@v1`, publish-profile zip deploy).
 
 ### Run-From-Package (read-only deployment)
 
-`func-mpc-poc` runs with **Run-From-Package**: the Function App's `WEBSITE_RUN_FROM_PACKAGE` application setting is `1`, so each deploy is sealed into an immutable, read-only package instead of being extracted into a writable `wwwroot`. This is a single app setting, not a change to the CI pipeline — the existing zip-deploy workflow above is unaffected; Oryx still builds `node_modules` server-side during each deploy exactly as before, and Kudu seals the built output into the read-only package afterwards.
+`func-mpc-poc` runs with **Run-From-Package**: the Function App's `WEBSITE_RUN_FROM_PACKAGE` application setting is `1`, so each deploy is sealed into an immutable, read-only package instead of being extracted into a writable `wwwroot`.
+
+**This requires the deployed zip to be fully self-contained** — `node_modules` included, built *before* the zip is uploaded. With `WEBSITE_RUN_FROM_PACKAGE=1`, the uploaded zip becomes the final package as-is; there is no reliable post-deploy Kudu/Oryx build step to populate `node_modules` afterwards. (An earlier version of this doc claimed Oryx still builds server-side under Run-From-Package — that was wrong, and shipping a `node_modules`-less zip under this setting produced a fully broken deploy: every function failed to load, since even `@azure/functions` itself couldn't be found.) Accordingly, the workflow:
+- Runs `npm ci && npm test` (full install, including devDependencies, so tests can run).
+- Then runs `npm ci --omit=dev` to reinstall production-only dependencies into `node_modules` before packaging.
+- Deploys with `scm-do-build-during-deployment: false` — Kudu does not attempt its own build; the uploaded package is already complete.
+- `.funcignore` does **not** exclude `node_modules/` — it's a required part of the deployed package now, not something Azure builds for you.
 
 Operationally this means:
 - Deployments are atomic — a deploy either fully replaces the running package or doesn't take effect, no partially-extracted state.
@@ -365,7 +371,7 @@ If `func-mpc-poc` is ever recreated, re-apply this setting once:
 az functionapp config appsettings set --name func-mpc-poc --resource-group <resource-group> --settings WEBSITE_RUN_FROM_PACKAGE=1
 ```
 
-(or Portal: Function App → Configuration → Application settings → add `WEBSITE_RUN_FROM_PACKAGE = 1` → Save.) No other change is required — it's a one-time, GCC-side Azure action, not something this repo's code or CI can apply on your behalf.
+(or Portal: Function App → Configuration → Application settings → add `WEBSITE_RUN_FROM_PACKAGE = 1` → Save.) Also make sure `AzureWebJobsFeatureFlags=EnableWorkerIndexing` is set — required for this repo's Node.js v4 programming model (code-based `app.http(...)` registration, used by every function here) to be indexed at all; without it the Functions host silently lists zero functions. Neither of these settings is something this repo's code or CI can apply on your behalf.
 
 ### Manual publish (local fallback)
 
