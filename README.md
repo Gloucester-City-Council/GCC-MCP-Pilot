@@ -349,7 +349,27 @@ Tool call results are wrapped in MCP content format:
 
 ## Deployment
 
-Deploy to Azure Functions using:
+CI deploys to the `func-mpc-poc` Function App on every push to `main` via [`.github/workflows/main_func-mpc-poc.yml`](.github/workflows/main_func-mpc-poc.yml) (`Azure/functions-action@v1`, publish-profile zip deploy, server-side Oryx build).
+
+### Run-From-Package (read-only deployment)
+
+`func-mpc-poc` runs with **Run-From-Package**: the Function App's `WEBSITE_RUN_FROM_PACKAGE` application setting is `1`, so each deploy is sealed into an immutable, read-only package instead of being extracted into a writable `wwwroot`. This is a single app setting, not a change to the CI pipeline — the existing zip-deploy workflow above is unaffected; Oryx still builds `node_modules` server-side during each deploy exactly as before, and Kudu seals the built output into the read-only package afterwards.
+
+Operationally this means:
+- Deployments are atomic — a deploy either fully replaces the running package or doesn't take effect, no partially-extracted state.
+- The runtime filesystem is read-only. No function in this repo writes to local disk, so this is a safe default; if a future tool ever needs scratch space, use `%TEMP%`/`os.tmpdir()`, which remains writable.
+
+If `func-mpc-poc` is ever recreated, re-apply this setting once:
+
+```bash
+az functionapp config appsettings set --name func-mpc-poc --resource-group <resource-group> --settings WEBSITE_RUN_FROM_PACKAGE=1
+```
+
+(or Portal: Function App → Configuration → Application settings → add `WEBSITE_RUN_FROM_PACKAGE = 1` → Save.) No other change is required — it's a one-time, GCC-side Azure action, not something this repo's code or CI can apply on your behalf.
+
+### Manual publish (local fallback)
+
+For an ad-hoc deploy from a developer machine, outside CI:
 
 ```bash
 func azure functionapp publish <app-name>

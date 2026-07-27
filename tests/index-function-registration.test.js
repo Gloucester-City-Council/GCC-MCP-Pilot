@@ -14,5 +14,6 @@ describe('Azure Functions entrypoint registration', () => {
 
         const registeredNames = httpMock.mock.calls.map(call => call[0]);
         expect(registeredNames).toContain('mcpWebCompiler');
+        expect(registeredNames).toContain('mcpAzureEstate');
     });
 });
