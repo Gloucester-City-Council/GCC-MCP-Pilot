@@ -16,7 +16,7 @@
 const { assertPermitted } = require('../../lib/permissions');
 const { getCosmosClient } = require('../../lib/clients');
 const { validateRequired, AzureEstateError, ERROR_CODES } = require('../../lib/errors');
-const { isNotFoundError, buildThroughputResource, partitionKeysEqual } = require('../../lib/cosmos-helpers');
+const { isNotFoundError, isServerless, buildThroughputResource, partitionKeysEqual } = require('../../lib/cosmos-helpers');
 
 const REQUIRED_FIELDS = [
     'instance', 'resourceGroup', 'accountName', 'databaseName', 'containerName',
@@ -48,15 +48,53 @@ async function execute(args = {}) {
     const built = buildThroughputResource(args.throughputModel);
     if (built.error) throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, built.error);
 
-    let existingContainer = null;
+    const dependencies = {};
+    const blockers = [];
+
+    let account = null;
     try {
-        const existing = await client.sqlResources.getSqlContainer(args.resourceGroup, args.accountName, args.databaseName, args.containerName);
-        existingContainer = existing.resource || {};
+        account = await client.databaseAccounts.get(args.resourceGroup, args.accountName);
+        dependencies.account = { satisfied: true };
     } catch (err) {
         if (!isNotFoundError(err)) throw err;
+        dependencies.account = { satisfied: false, message: `Cosmos DB account "${args.accountName}" does not exist.` };
+        blockers.push('account');
     }
 
-    const blockers = [];
+    if (account) {
+        const accountIsServerless = isServerless(account);
+        if (args.throughputModel.mode === 'Serverless' && !accountIsServerless) {
+            dependencies.throughputModel = { satisfied: false, message: `throughputModel.mode is "Serverless" but account "${args.accountName}" is provisioned capacity.` };
+            blockers.push('throughputModelMismatch');
+        } else if (args.throughputModel.mode !== 'Serverless' && accountIsServerless) {
+            dependencies.throughputModel = { satisfied: false, message: `Account "${args.accountName}" is a serverless account — it cannot host a container with explicit (${args.throughputModel.mode}) throughput.` };
+            blockers.push('throughputModelMismatch');
+        } else {
+            dependencies.throughputModel = { satisfied: true };
+        }
+    }
+
+    if (account) {
+        try {
+            await client.sqlResources.getSqlDatabase(args.resourceGroup, args.accountName, args.databaseName);
+            dependencies.database = { satisfied: true };
+        } catch (err) {
+            if (!isNotFoundError(err)) throw err;
+            dependencies.database = { satisfied: false, message: `Database "${args.databaseName}" does not exist in Cosmos account "${args.accountName}".` };
+            blockers.push('database');
+        }
+    }
+
+    let existingContainer = null;
+    if (account && dependencies.database.satisfied) {
+        try {
+            const existing = await client.sqlResources.getSqlContainer(args.resourceGroup, args.accountName, args.databaseName, args.containerName);
+            existingContainer = existing.resource || {};
+        } catch (err) {
+            if (!isNotFoundError(err)) throw err;
+        }
+    }
+
     let partitionKeyImmutabilityViolation = null;
 
     if (existingContainer) {
@@ -73,6 +111,7 @@ async function execute(args = {}) {
     return {
         containerName: args.containerName,
         databaseName: args.databaseName,
+        dependencies,
         containerAlreadyExists: !!existingContainer,
         partitionKeyImmutabilityViolation,
         proposedConfiguration: {

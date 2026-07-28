@@ -13,6 +13,15 @@
  * (paths, kind, or version) is a hard PARTITION_KEY_IMMUTABLE failure —
  * never a silent no-op, never a warning, and this tool never "creates or
  * updates" a partition key implicitly.
+ *
+ * Fails fast with DEPENDENCY_MISSING if the database doesn't exist yet,
+ * and with BAD_REQUEST on a throughputModel/account capacity-mode
+ * mismatch — mirroring azure_cosmos_database_create's checks. Without
+ * these, submitting a create against a missing database or a
+ * serverless/provisioned mismatch still reaches Azure as an accepted
+ * async operation that only fails once polled, which can take far
+ * longer to surface than a same-request validation error — long enough
+ * to look like a hung tool call to a client with a shorter timeout.
  */
 
 'use strict';
@@ -20,7 +29,7 @@
 const { assertPermitted } = require('../../lib/permissions');
 const { getCosmosClient } = require('../../lib/clients');
 const { validateRequired, AzureEstateError, ERROR_CODES } = require('../../lib/errors');
-const { isNotFoundError, buildThroughputResource, partitionKeysEqual } = require('../../lib/cosmos-helpers');
+const { isNotFoundError, isServerless, buildThroughputResource, partitionKeysEqual } = require('../../lib/cosmos-helpers');
 
 const REQUIRED_FIELDS = [
     'instance', 'resourceGroup', 'accountName', 'databaseName', 'containerName',
@@ -48,6 +57,41 @@ async function execute(args = {}) {
 
     const built = buildThroughputResource(args.throughputModel);
     if (built.error) throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, built.error);
+
+    let account;
+    try {
+        account = await client.databaseAccounts.get(args.resourceGroup, args.accountName);
+    } catch (err) {
+        if (isNotFoundError(err)) {
+            throw new AzureEstateError(
+                ERROR_CODES.DEPENDENCY_MISSING,
+                `Cosmos DB account "${args.accountName}" does not exist in resource group "${args.resourceGroup}" (instance "${instance.name}") — create it first.`,
+                { missingDependency: 'account', accountName: args.accountName }
+            );
+        }
+        throw err;
+    }
+
+    const accountIsServerless = isServerless(account);
+    if (args.throughputModel.mode === 'Serverless' && !accountIsServerless) {
+        throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `throughputModel.mode is "Serverless" but account "${args.accountName}" is provisioned capacity.`);
+    }
+    if (args.throughputModel.mode !== 'Serverless' && accountIsServerless) {
+        throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `Account "${args.accountName}" is a serverless account — it cannot host a container with explicit (${args.throughputModel.mode}) throughput.`);
+    }
+
+    try {
+        await client.sqlResources.getSqlDatabase(args.resourceGroup, args.accountName, args.databaseName);
+    } catch (err) {
+        if (isNotFoundError(err)) {
+            throw new AzureEstateError(
+                ERROR_CODES.DEPENDENCY_MISSING,
+                `Database "${args.databaseName}" does not exist in Cosmos account "${args.accountName}" (instance "${instance.name}") — create it first.`,
+                { missingDependency: 'database', databaseName: args.databaseName }
+            );
+        }
+        throw err;
+    }
 
     // Partition-key immutability check — this must run before any write.
     let existingResource = null;
