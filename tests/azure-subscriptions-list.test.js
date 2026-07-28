@@ -65,4 +65,38 @@ describe('azure_subscriptions_list (tools/common/subscriptions-list.js)', () => 
 
         expect(result).toEqual({ subscriptions: [], totalCount: 0 });
     });
+
+    it('follows nextLink across multiple pages rather than truncating results', async () => {
+        mockCredential('the-token');
+        const NEXT_LINK = 'https://management.azure.com/subscriptions?api-version=2022-12-01&$skiptoken=abc';
+
+        global.fetch = jest.fn(async (url, options) => {
+            expect(options.headers.Authorization).toBe('Bearer the-token');
+            if (url === 'https://management.azure.com/subscriptions?api-version=2022-12-01') {
+                return {
+                    ok: true,
+                    json: async () => ({
+                        value: [{ subscriptionId: 'sub-1', displayName: 'Page One', state: 'Enabled', tenantId: 'tenant-1' }],
+                        nextLink: NEXT_LINK,
+                    }),
+                };
+            }
+            if (url === NEXT_LINK) {
+                return {
+                    ok: true,
+                    json: async () => ({
+                        value: [{ subscriptionId: 'sub-2', displayName: 'Page Two', state: 'Enabled', tenantId: 'tenant-1' }],
+                    }),
+                };
+            }
+            throw new Error(`Unexpected fetch URL: ${url}`);
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/common/subscriptions-list');
+        const result = await execute();
+
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+        expect(result.totalCount).toBe(2);
+        expect(result.subscriptions.map((s) => s.subscriptionId)).toEqual(['sub-1', 'sub-2']);
+    });
 });
