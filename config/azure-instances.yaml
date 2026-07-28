@@ -17,7 +17,7 @@
 instances:
   azure-prod:
     environment: production
-    subscriptionId: "00000000-0000-0000-0000-000000000000"
+    subscriptionId: "ba02df99-84ea-4833-a138-a5668554274f"
     permissions:
       resource-groups:
         - inspect
