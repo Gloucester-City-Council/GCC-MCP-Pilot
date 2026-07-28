@@ -40,6 +40,15 @@ describe('Azure Estate cosmos-containers family', () => {
         updateSqlContainerThroughputImpl,
         migrateToAutoscaleImpl,
         migrateToManualImpl,
+        // Every create/create_plan test in this file targets an existing,
+        // provisioned (non-serverless) account and database by default —
+        // override these to test the dependency-missing / serverless-
+        // mismatch paths specifically.
+        accountExists = true,
+        accountIsServerless = false,
+        databaseExists = true,
+        getDatabaseAccountImpl,
+        getSqlDatabaseImpl,
     } = {}) {
         const getSqlContainer = getSqlContainerImpl || jest.fn(async (rg, acct, db, containerName) => {
             const found = containers.find((c) => (c.resource || {}).id === containerName);
@@ -52,10 +61,22 @@ describe('Azure Estate cosmos-containers family', () => {
             return { resource: throughputByContainer[containerName] };
         });
 
+        const getDatabaseAccount = getDatabaseAccountImpl || jest.fn(async () => {
+            if (!accountExists) throw notFound();
+            return accountIsServerless ? { capabilities: [{ name: 'EnableServerless' }] } : { capabilities: [] };
+        });
+
+        const getSqlDatabase = getSqlDatabaseImpl || jest.fn(async () => {
+            if (!databaseExists) throw notFound();
+            return { resource: { id: 'orders' } };
+        });
+
         return {
+            databaseAccounts: { get: getDatabaseAccount },
             sqlResources: {
                 listSqlContainers: () => asyncIterable(containers),
                 getSqlContainer,
+                getSqlDatabase,
                 createUpdateSqlContainer: createUpdateSqlContainerImpl || jest.fn((rg, acct, db, containerName, body) => poller({ resource: { id: containerName, ...body.resource } })),
                 getSqlContainerThroughput,
                 updateSqlContainerThroughput: updateSqlContainerThroughputImpl || jest.fn((rg, acct, db, containerName, body) => poller({ resource: body.resource })),
@@ -285,6 +306,80 @@ describe('Azure Estate cosmos-containers family', () => {
             },
             options: { autoscaleSettings: { maxThroughput: 4000 } },
         });
+    });
+
+    it('azure_cosmos_container_create fails fast with DEPENDENCY_MISSING when the database does not exist, instead of reaching Azure as a slow async operation', async () => {
+        setupClients(mockCosmosClient({ containers: [], databaseExists: false, accountIsServerless: true }));
+
+        const { execute } = require('../src/gcc-azure-estate/tools/cosmos-containers/create');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({
+            ...BASE_ARGS,
+            containerName: 'worlds',
+            partitionKey: { paths: ['/worldId'], kind: 'Hash' },
+            throughputModel: { mode: 'Serverless' },
+            indexingPolicy: VALID_INDEXING_POLICY,
+            uniqueKeyPolicy: { uniqueKeys: [] },
+            defaultTtl: null,
+            analyticalStore: { enabled: false },
+        })).rejects.toMatchObject({ code: ERROR_CODES.DEPENDENCY_MISSING, details: { missingDependency: 'database' } });
+    });
+
+    it('azure_cosmos_container_create fails fast with DEPENDENCY_MISSING when the account does not exist', async () => {
+        setupClients(mockCosmosClient({ containers: [], accountExists: false }));
+
+        const { execute } = require('../src/gcc-azure-estate/tools/cosmos-containers/create');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({
+            ...BASE_ARGS,
+            containerName: 'worlds',
+            partitionKey: { paths: ['/worldId'], kind: 'Hash' },
+            throughputModel: { mode: 'Serverless' },
+            indexingPolicy: VALID_INDEXING_POLICY,
+            uniqueKeyPolicy: { uniqueKeys: [] },
+            defaultTtl: null,
+            analyticalStore: { enabled: false },
+        })).rejects.toMatchObject({ code: ERROR_CODES.DEPENDENCY_MISSING, details: { missingDependency: 'account' } });
+    });
+
+    it('azure_cosmos_container_create rejects a Serverless throughputModel against a provisioned (non-serverless) account', async () => {
+        setupClients(mockCosmosClient({ containers: [], accountIsServerless: false }));
+
+        const { execute } = require('../src/gcc-azure-estate/tools/cosmos-containers/create');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({
+            ...BASE_ARGS,
+            containerName: 'worlds',
+            partitionKey: { paths: ['/worldId'], kind: 'Hash' },
+            throughputModel: { mode: 'Serverless' },
+            indexingPolicy: VALID_INDEXING_POLICY,
+            uniqueKeyPolicy: { uniqueKeys: [] },
+            defaultTtl: null,
+            analyticalStore: { enabled: false },
+        })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+    });
+
+    it('azure_cosmos_container_create_plan reports account/database-missing and throughput-mismatch as blockers rather than throwing', async () => {
+        setupClients(mockCosmosClient({ containers: [], accountExists: false }));
+
+        const { execute } = require('../src/gcc-azure-estate/tools/cosmos-containers/create-plan');
+        const result = await execute({
+            ...BASE_ARGS,
+            containerName: 'worlds',
+            partitionKey: { paths: ['/worldId'], kind: 'Hash' },
+            throughputModel: { mode: 'Serverless' },
+            indexingPolicy: VALID_INDEXING_POLICY,
+            uniqueKeyPolicy: { uniqueKeys: [] },
+            defaultTtl: null,
+            analyticalStore: { enabled: false },
+        });
+
+        expect(result.canApply).toBe(false);
+        expect(result.blockers).toContain('account');
+        expect(result.dependencies.account.satisfied).toBe(false);
     });
 
     it('azure_cosmos_container_throughput_plan reports DEPENDENCY_MISSING when there is no container-level throughput', async () => {
