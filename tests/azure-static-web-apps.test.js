@@ -297,8 +297,15 @@ describe('Azure Estate static-web-apps family', () => {
             instance: 'azure-prod', resourceGroup: 'rg-web', name: 'my-swa', functionApp: { name: 'my-func' },
         });
 
+        // Read the real subscriptionId from config rather than hardcoding a
+        // value — this test resolves 'azure-prod' by name (unlike the two
+        // neighboring tests, which pass a hand-built instance object), so it
+        // must track whatever config/azure-instances.yaml actually contains.
+        const { getInstance } = require('../src/gcc-azure-estate/lib/instances');
+        const realSubscriptionId = getInstance('azure-prod').subscriptionId;
+
         expect(result.canApply).toBe(true);
-        expect(result.backendResourceId).toBe('/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-web/providers/Microsoft.Web/sites/my-func');
+        expect(result.backendResourceId).toBe(`/subscriptions/${realSubscriptionId}/resourceGroups/rg-web/providers/Microsoft.Web/sites/my-func`);
         expect(result.steps.find((s) => s.step === 1).status).toBe('satisfied');
     });
 
