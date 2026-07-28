@@ -19,11 +19,6 @@ function cached(key, factory) {
     return _cache.get(key);
 }
 
-function getSubscriptionClient() {
-    const { SubscriptionClient } = require('@azure/arm-subscriptions');
-    return cached('subscriptions', () => new SubscriptionClient(getCredential()));
-}
-
 function getResourceClient(instance) {
     const { ResourceManagementClient } = require('@azure/arm-resources');
     return cached(`resources:${instance.subscriptionId}`, () =>
@@ -77,7 +72,6 @@ function _resetForTests() {
 }
 
 module.exports = {
-    getSubscriptionClient,
     getResourceClient,
     getWebSiteClient,
     getStorageMgmtClient,
