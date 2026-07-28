@@ -53,6 +53,14 @@ jobs:
           npm ci
           npm test
 
+      # func-mpc-poc runs with WEBSITE_RUN_FROM_PACKAGE=1: the zip we upload
+      # becomes the final, immutable, read-only package as-is. There is no
+      # reliable post-deploy Kudu/Oryx build step to populate node_modules
+      # afterwards, so it must already be complete (and production-only,
+      # excluding devDependencies like jest) before we zip and deploy.
+      - name: Install production-only dependencies for deployment package
+        run: npm ci --omit=dev
+
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
@@ -60,5 +68,5 @@ jobs:
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D6D602EA7A714F8A8B9A13B7DFD7BB4C }}
-          scm-do-build-during-deployment: true
+          scm-do-build-during-deployment: false
           respect-funcignore: true

@@ -164,7 +164,13 @@ Resource-group deletion and blob content read/write are permanently out of scope
 
 app.http('mcpAzureEstate', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    // Every other endpoint in this app is 'anonymous', but this one can
+    // actually create/modify real Azure resources under the Function App's
+    // Managed Identity — it requires a function key (?code=... or the
+    // x-functions-key header). Get the key from Portal: Function App ->
+    // Functions -> mcpAzureEstate -> Function Keys, or
+    // `az functionapp function keys list --name func-mpc-poc --function-name mcpAzureEstate`.
+    authLevel: 'function',
     route: 'mcp-azure-estate',
     handler: async (request, context) => {
         const requestStart = Date.now();

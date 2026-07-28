@@ -2,8 +2,12 @@
 .git*
 .github/
 
-# Node - built by Azure during deployment
-node_modules/
+# node_modules is intentionally NOT excluded: with WEBSITE_RUN_FROM_PACKAGE=1
+# the deployed zip becomes the final, immutable, read-only package as-is —
+# there is no reliable post-deploy Kudu/Oryx build step to populate
+# node_modules afterwards. CI installs production dependencies before
+# zipping (see .github/workflows/main_func-mpc-poc.yml) so the package is
+# self-contained.
 
 # MCP Server (not needed for Azure Functions)
 server.js
