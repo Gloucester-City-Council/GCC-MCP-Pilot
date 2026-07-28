@@ -16,6 +16,17 @@
  * fast with a clear "ManagedIdentityCredential authentication failed"
  * error instead of a silent multi-second hang.
  *
+ * If the Function App uses a user-assigned identity (selected via the
+ * AZURE_CLIENT_ID app setting/env var), that selector is passed through
+ * explicitly. DefaultAzureCredential reads AZURE_CLIENT_ID itself and
+ * forwards it as ManagedIdentityCredential's clientId internally
+ * (see createDefaultManagedIdentityCredential in @azure/identity) —
+ * constructing ManagedIdentityCredential directly with no arguments does
+ * NOT do this and silently selects the system-assigned identity instead,
+ * which would either fail outright (no system-assigned identity exists)
+ * or authenticate as the wrong principal entirely (one exists but lacks
+ * the RBAC grants the user-assigned identity was set up with).
+ *
  * Locally, DefaultAzureCredential is kept for developer convenience
  * (falls back to `az login`, VS Code, etc.).
  *
@@ -38,7 +49,10 @@ function getCredential() {
     if (!_credential) {
         if (process.env.WEBSITE_INSTANCE_ID) {
             const { ManagedIdentityCredential } = require('@azure/identity');
-            _credential = new ManagedIdentityCredential();
+            const userAssignedClientId = process.env.AZURE_CLIENT_ID;
+            _credential = userAssignedClientId
+                ? new ManagedIdentityCredential({ clientId: userAssignedClientId })
+                : new ManagedIdentityCredential();
         } else {
             const { DefaultAzureCredential } = require('@azure/identity');
             _credential = new DefaultAzureCredential();
