@@ -85,6 +85,35 @@ describe('mcpAzureEstate request handling', () => {
         expect(text.data.registeredInstances).toContain('azure-prod');
     });
 
+    it('still returns a well-formed tool error when context.log.error does not exist (matches the real Azure Functions runtime shape that crashed in production)', async () => {
+        const handler = await loadHandler();
+        // Deliberately NOT using mockLog() here — that helper always attaches
+        // a working .error, which is exactly why this bug shipped
+        // undetected: a plain jest.fn() with no .error/.warn sub-methods is
+        // what the live Function App's context.log actually looked like.
+        const bareLog = jest.fn();
+
+        const response = await handler(
+            {
+                json: async () => ({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    // Missing required fields throws a BAD_REQUEST AzureEstateError
+                    // before any Azure call — enough to exercise the catch block.
+                    params: { name: 'azure_function_app_logs_query', arguments: {} },
+                    id: 4,
+                }),
+            },
+            { log: bareLog }
+        );
+
+        expect(response.status).toBe(200);
+        const body = JSON.parse(response.body);
+        expect(body.result.isError).toBe(true);
+        const text = JSON.parse(body.result.content[0].text);
+        expect(text.code).toBe('BAD_REQUEST');
+    });
+
     it('returns a JSON-RPC error for an unknown tool', async () => {
         const handler = await loadHandler();
         const response = await handler(

@@ -16,6 +16,26 @@ const { app } = require('@azure/functions');
 const { AzureEstateError, ERROR_CODES } = require('../gcc-azure-estate/lib/errors');
 const { wrapToolResult } = require('../gcc-azure-estate/lib/response');
 
+// context.log.error isn't guaranteed to exist across Azure Functions
+// runtime versions (see src/functions/mcpNotes.js's identical guard) — an
+// unhandled "context.log.error is not a function" here would crash out of
+// the tools/call try/catch entirely, turning a normal tool error into an
+// opaque 500 with no useful message. Every tool failure in this MCP was
+// silently hitting exactly that until this was added.
+function logError(context, ...args) {
+    try {
+        if (typeof context.log.error === 'function') {
+            context.log.error(...args);
+        } else if (typeof context.error === 'function') {
+            context.error(...args);
+        } else {
+            console.error(...args);
+        }
+    } catch (_) {
+        console.error(...args);
+    }
+}
+
 // Wrap module load so a config/dependency failure returns a 503 rather
 // than crashing the entire Azure Functions worker process (which would
 // take down all other endpoints too) — same defensive pattern as
@@ -124,9 +144,9 @@ Resource-group deletion and blob content read/write are permanently out of scope
                 const isEstateError = error instanceof AzureEstateError;
                 const code = isEstateError ? error.code : ERROR_CODES.INTERNAL_ERROR;
 
-                context.log.error(`Azure Estate tool error [${name}] (${code}): ${error.message}`);
-                if (error && error.stack) context.log.error(`Azure Estate tool error stack [${name}]: ${error.stack}`);
-                context.log.error(`Azure Estate tool failed [${name}] after ${Date.now() - toolStart}ms`);
+                logError(context, `Azure Estate tool error [${name}] (${code}): ${error.message}`);
+                if (error && error.stack) logError(context, `Azure Estate tool error stack [${name}]: ${error.stack}`);
+                logError(context, `Azure Estate tool failed [${name}] after ${Date.now() - toolStart}ms`);
 
                 return {
                     jsonrpc: '2.0',
