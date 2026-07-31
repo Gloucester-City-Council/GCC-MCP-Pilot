@@ -66,6 +66,18 @@ function getBlobServiceClient(accountName) {
         new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, getCredential()));
 }
 
+/**
+ * Data-plane Log Analytics/Application Insights query client — read-only
+ * KQL queries against a resource's linked Application Insights component
+ * (see tools/function-apps/logs-*.js). Not scoped to a subscriptionId;
+ * cached as a single instance since queries target a resource ID, not
+ * the client itself.
+ */
+function getLogsQueryClient() {
+    const { LogsQueryClient } = require('@azure/monitor-query-logs');
+    return cached('logsQuery', () => new LogsQueryClient(getCredential()));
+}
+
 /** Reset cached clients — test-only helper. */
 function _resetForTests() {
     _cache.clear();
@@ -79,5 +91,6 @@ module.exports = {
     getAppInsightsClient,
     getMonitorClient,
     getBlobServiceClient,
+    getLogsQueryClient,
     _resetForTests,
 };

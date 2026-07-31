@@ -220,6 +220,120 @@ function buildStorageConnectionString(accountName, accountKey) {
     return `DefaultEndpointsProtocol=https;AccountName=${accountName};AccountKey=${accountKey};EndpointSuffix=core.windows.net`;
 }
 
+const APP_INSIGHTS_CONNECTION_STRING_IKEY_PATTERN = /InstrumentationKey=([^;]+)/i;
+
+/** Extracts only the instrumentation key from a settings map — used internally to resolve the linked App Insights *resource*, never returned to a tool caller as-is. */
+function extractInstrumentationKey(properties) {
+    const props = properties || {};
+    if (props.APPINSIGHTS_INSTRUMENTATIONKEY) return props.APPINSIGHTS_INSTRUMENTATIONKEY;
+    const connString = props.APPLICATIONINSIGHTS_CONNECTION_STRING;
+    if (typeof connString === 'string') {
+        const match = connString.match(APP_INSIGHTS_CONNECTION_STRING_IKEY_PATTERN);
+        if (match) return match[1];
+    }
+    return null;
+}
+
+/** Instrumentation keys are GUIDs — normalize case/whitespace before comparing, since the app setting and the ARM component's reported value aren't guaranteed to match byte-for-byte. */
+function normalizeInstrumentationKey(key) {
+    return typeof key === 'string' ? key.trim().toLowerCase() : key;
+}
+
+/** Fetches every ApplicationInsightsComponent in a resource group, following nextLink (this SDK generation returns {value, nextLink}, not an async iterator — see git history of tools/common/subscriptions-list.js for what happens when a page gets dropped silently). */
+async function listAppInsightsComponents(appInsightsClient, resourceGroup) {
+    const components = [];
+    let page = await appInsightsClient.components.listByResourceGroup(resourceGroup);
+    components.push(...(page.value || []));
+    while (page.nextLink) {
+        page = await appInsightsClient.components.listByResourceGroupNext(page.nextLink);
+        components.push(...(page.value || []));
+    }
+    return components;
+}
+
+/**
+ * Resolves the Application Insights *resource* linked to a Function App,
+ * for tools/function-apps/logs-*.js to query. Never guessed beyond what's
+ * actually configured: if `appInsightsName` is supplied, that resource is
+ * fetched directly; otherwise this reads the app's own
+ * APPINSIGHTS_INSTRUMENTATIONKEY / APPLICATIONINSIGHTS_CONNECTION_STRING
+ * setting and matches it against the components in the target resource
+ * group (or `appInsightsResourceGroup` if that differs from the
+ * function app's own group). Throws DEPENDENCY_MISSING with a clear,
+ * actionable message on any resolution failure — never returns a guess.
+ */
+async function resolveAppInsightsForFunctionApp(clients, args) {
+    const { webSiteClient, appInsightsClient } = clients;
+    const { AzureEstateError, ERROR_CODES } = require('../../lib/errors');
+
+    const searchResourceGroup = args.appInsightsResourceGroup || args.resourceGroup;
+
+    if (args.appInsightsName) {
+        try {
+            const component = await appInsightsClient.components.get(searchResourceGroup, args.appInsightsName);
+            return { id: component.id, name: component.name, resourceGroup: searchResourceGroup };
+        } catch (err) {
+            if (err.statusCode === 404) {
+                throw new AzureEstateError(
+                    ERROR_CODES.DEPENDENCY_MISSING,
+                    `Application Insights resource "${args.appInsightsName}" does not exist in resource group "${searchResourceGroup}".`,
+                    { missingDependency: 'appInsights', appInsightsName: args.appInsightsName }
+                );
+            }
+            throw err;
+        }
+    }
+
+    const settings = await webSiteClient.webApps.listApplicationSettings(args.resourceGroup, args.name);
+    const instrumentationKey = extractInstrumentationKey(settings.properties);
+    if (!instrumentationKey) {
+        throw new AzureEstateError(
+            ERROR_CODES.DEPENDENCY_MISSING,
+            `Function App "${args.name}" has no Application Insights linkage configured (no APPINSIGHTS_INSTRUMENTATIONKEY or APPLICATIONINSIGHTS_CONNECTION_STRING app setting). Pass appInsightsName explicitly if the resource exists under a different linkage.`,
+            { missingDependency: 'appInsightsLinkage', functionAppName: args.name }
+        );
+    }
+
+    const normalizedTarget = normalizeInstrumentationKey(instrumentationKey);
+    const components = await listAppInsightsComponents(appInsightsClient, searchResourceGroup);
+    const match = components.find((c) => normalizeInstrumentationKey(c.instrumentationKey) === normalizedTarget);
+    if (!match) {
+        throw new AzureEstateError(
+            ERROR_CODES.DEPENDENCY_MISSING,
+            `Function App "${args.name}" is linked to an Application Insights instrumentation key, but no matching component was found in resource group "${searchResourceGroup}". Pass appInsightsName (and appInsightsResourceGroup, if it lives elsewhere) explicitly.`,
+            { missingDependency: 'appInsightsComponent', searchedResourceGroup: searchResourceGroup }
+        );
+    }
+
+    return { id: match.id, name: match.name, resourceGroup: searchResourceGroup };
+}
+
+/**
+ * Maps a @azure/monitor-query-logs LogsQueryResult into plain row objects
+ * (one object per row, keyed by column name) — much more directly usable
+ * than the SDK's parallel columnDescriptors/rows arrays. Truncates to
+ * maxRows and reports whether truncation happened, since KQL queries can
+ * return far more than any tool caller wants inlined into a response.
+ */
+function mapLogsQueryResult(result, maxRows) {
+    const tables = (result.tables || result.partialTables || []).map((table) => {
+        const columnNames = table.columnDescriptors.map((c) => c.name);
+        const allRows = table.rows.map((row) => Object.fromEntries(columnNames.map((name, i) => [name, row[i]])));
+        return {
+            name: table.name,
+            totalRows: allRows.length,
+            rows: allRows.slice(0, maxRows),
+            truncated: allRows.length > maxRows,
+        };
+    });
+
+    return {
+        status: result.status,
+        tables,
+        partialError: result.partialError ? { code: result.partialError.code, message: result.partialError.message } : null,
+    };
+}
+
 module.exports = {
     classifySettingName,
     buildSettingsMetadata,
@@ -231,6 +345,8 @@ module.exports = {
     isFunctionApp,
     assessCreateDependencies,
     buildStorageConnectionString,
+    resolveAppInsightsForFunctionApp,
+    mapLogsQueryResult,
     SECRET_NAME_PATTERN,
     KEYVAULT_REF_PATTERN,
     STORAGE_ACCOUNT_NAME_PATTERN,
