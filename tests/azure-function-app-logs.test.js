@@ -6,9 +6,10 @@ function notFound() {
     return err;
 }
 
-function mockWebSiteClient({ appSettings = {} } = {}) {
+function mockWebSiteClient({ appSettings = {}, siteTags = {}, getImpl } = {}) {
     return {
         webApps: {
+            get: getImpl || jest.fn(async () => ({ tags: siteTags })),
             listApplicationSettings: jest.fn(async () => ({ properties: appSettings })),
         },
     };
@@ -83,6 +84,64 @@ describe('Application Insights resolution (tools/function-apps/shared.js)', () =
         const result = await execute(BASE_ARGS);
 
         expect(result.applicationInsights.name).toBe('ai-page-2');
+    });
+
+    it('resolves via the hidden-link tag when no instrumentation-key app setting exists', async () => {
+        const getComponent = jest.fn(async (rg, name) => ({ id: `/subscriptions/x/resourceGroups/${rg}/providers/microsoft.insights/components/${name}`, name, instrumentationKey: 'ikey' }));
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: {},
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/microsoft.insights/components/world-resolve-api' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ getComponentImpl: getComponent }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(getComponent).toHaveBeenCalledWith('rg-rpg-engine', 'world-resolve-api', { abortSignal: expect.anything() });
+        expect(result.applicationInsights).toEqual({ name: 'world-resolve-api', resourceGroup: 'rg-rpg-engine' });
+    });
+
+    it('resolves via the hidden-link tag even when the component lives in a different resource group than the Function App', async () => {
+        const getComponent = jest.fn(async (rg, name) => ({ id: `/subscriptions/x/resourceGroups/${rg}/providers/microsoft.insights/components/${name}`, name, instrumentationKey: 'ikey' }));
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: {},
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-shared-monitoring/providers/microsoft.insights/components/ai-shared' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ getComponentImpl: getComponent }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights).toEqual({ name: 'ai-shared', resourceGroup: 'rg-shared-monitoring' });
+    });
+
+    it('falls through to instrumentation-key matching when the hidden-link tag points at a deleted component', async () => {
+        const component = { id: '/id/fallback', name: 'ai-fallback', instrumentationKey: 'ikey-fallback' };
+        const getComponent = jest.fn(async (rg, name) => {
+            if (name === 'ai-fallback') return component;
+            const err = new Error('not found');
+            err.statusCode = 404;
+            throw err;
+        });
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey-fallback' },
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/microsoft.insights/components/deleted-ai' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ components: [component], getComponentImpl: getComponent }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights.name).toBe('ai-fallback');
     });
 
     it('throws DEPENDENCY_MISSING when the Function App has no Application Insights linkage at all', async () => {

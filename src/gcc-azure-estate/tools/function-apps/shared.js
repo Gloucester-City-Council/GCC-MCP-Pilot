@@ -222,6 +222,30 @@ function buildStorageConnectionString(accountName, accountKey) {
 
 const APP_INSIGHTS_CONNECTION_STRING_IKEY_PATTERN = /InstrumentationKey=([^;]+)/i;
 
+// Azure itself stamps this tag on a Function App's site resource whenever
+// Application Insights is linked via the Portal's "Application Insights"
+// blade — present regardless of whether an APPINSIGHTS_INSTRUMENTATIONKEY
+// or APPLICATIONINSIGHTS_CONNECTION_STRING app setting exists. Some linkage
+// paths (e.g. workspace-based Application Insights configured without an
+// app setting) leave this tag as the *only* signal, which is why it's
+// checked ahead of the instrumentation-key heuristic below.
+const HIDDEN_LINK_APP_INSIGHTS_TAG_PATTERN = /^hidden-link:\s*\/app-insights-resource-id$/i;
+const APP_INSIGHTS_RESOURCE_ID_PATTERN = /\/resourceGroups\/([^/]+)\/providers\/microsoft\.insights\/components\/([^/]+)$/i;
+
+/** Finds the App Insights resource ID from a site's tags, if Azure has linked one. Never guesses — returns null when the tag is absent. */
+function findAppInsightsResourceIdFromTags(tags) {
+    if (!tags) return null;
+    const key = Object.keys(tags).find((k) => HIDDEN_LINK_APP_INSIGHTS_TAG_PATTERN.test(k));
+    return key ? tags[key] : null;
+}
+
+function parseAppInsightsResourceId(resourceId) {
+    if (typeof resourceId !== 'string') return null;
+    const match = resourceId.match(APP_INSIGHTS_RESOURCE_ID_PATTERN);
+    if (!match) return null;
+    return { resourceGroup: match[1], name: match[2] };
+}
+
 /** Extracts only the instrumentation key from a settings map — used internally to resolve the linked App Insights *resource*, never returned to a tool caller as-is. */
 function extractInstrumentationKey(properties) {
     const props = properties || {};
@@ -254,13 +278,19 @@ async function listAppInsightsComponents(appInsightsClient, resourceGroup, abort
 /**
  * Resolves the Application Insights *resource* linked to a Function App,
  * for tools/function-apps/logs-*.js to query. Never guessed beyond what's
- * actually configured: if `appInsightsName` is supplied, that resource is
- * fetched directly; otherwise this reads the app's own
- * APPINSIGHTS_INSTRUMENTATIONKEY / APPLICATIONINSIGHTS_CONNECTION_STRING
- * setting and matches it against the components in the target resource
- * group (or `appInsightsResourceGroup` if that differs from the
- * function app's own group). Throws DEPENDENCY_MISSING with a clear,
- * actionable message on any resolution failure — never returns a guess.
+ * actually configured, tried in this order:
+ *   1. `appInsightsName`, if the caller supplied it — fetched directly.
+ *   2. The site's `hidden-link: /app-insights-resource-id` tag, which Azure
+ *      sets itself on link and which names the exact resource (including
+ *      its own resource group) with no app-setting or naming-convention
+ *      guess involved.
+ *   3. The app's own APPINSIGHTS_INSTRUMENTATIONKEY /
+ *      APPLICATIONINSIGHTS_CONNECTION_STRING setting, matched against the
+ *      components in the target resource group (or
+ *      `appInsightsResourceGroup` if that differs from the function app's
+ *      own group).
+ * Throws DEPENDENCY_MISSING with a clear, actionable message on any
+ * resolution failure — never returns a guess.
  *
  * `args.abortSignal`, when supplied, bounds every ARM call this makes. Log
  * tools pass in the same deadline signal they reuse for the log query
@@ -287,6 +317,21 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
                 );
             }
             throw err;
+        }
+    }
+
+    const site = await webSiteClient.webApps.get(args.resourceGroup, args.name, { abortSignal });
+    const taggedResourceId = findAppInsightsResourceIdFromTags(site.tags);
+    if (taggedResourceId) {
+        const parsed = parseAppInsightsResourceId(taggedResourceId);
+        if (parsed) {
+            try {
+                const component = await appInsightsClient.components.get(parsed.resourceGroup, parsed.name, { abortSignal });
+                return { id: component.id, name: component.name, resourceGroup: parsed.resourceGroup };
+            } catch (err) {
+                if (err.statusCode !== 404) throw err;
+                // Tag points at a component that no longer exists — fall through to the instrumentation-key path below.
+            }
         }
     }
 
