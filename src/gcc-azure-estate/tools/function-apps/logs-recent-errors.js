@@ -23,8 +23,20 @@ const DEFAULT_MAX_ROWS = 50;
 const HARD_MAX_ROWS = 500;
 const SERVER_TIMEOUT_SECONDS = 60;
 
-function buildQuery(maxRows) {
+/** Escapes a value for embedding in a double-quoted KQL string literal. */
+function escapeKqlStringLiteral(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+// Scoped by cloud_RoleName (the App Insights field Azure Functions
+// populates with the site name) — without this, a component shared by
+// multiple Function Apps returns every app's exceptions/traces, all
+// mislabeled as belonging to the one requested. =~ is KQL's
+// case-insensitive equality, since cloud_RoleName casing isn't guaranteed
+// to match the ARM resource name exactly.
+function buildQuery(functionAppName, maxRows) {
     return `union isfuzzy=true exceptions, traces
+| where cloud_RoleName =~ "${escapeKqlStringLiteral(functionAppName)}"
 | where severityLevel >= 3 or itemType == "exception"
 | order by timestamp desc
 | take ${maxRows}
@@ -39,6 +51,9 @@ async function execute(args = {}) {
     if (typeof timespanMinutes !== 'number' || timespanMinutes <= 0 || timespanMinutes > MAX_TIMESPAN_MINUTES) {
         throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `timespanMinutes must be a positive number, at most ${MAX_TIMESPAN_MINUTES} (7 days)`);
     }
+    if (args.maxRows !== undefined && (typeof args.maxRows !== 'number' || !Number.isInteger(args.maxRows) || args.maxRows <= 0)) {
+        throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, 'maxRows must be a positive integer');
+    }
     const maxRows = Math.min(args.maxRows || DEFAULT_MAX_ROWS, HARD_MAX_ROWS);
 
     const instance = assertPermitted(args.instance, 'function-apps', 'inspect');
@@ -52,7 +67,7 @@ async function execute(args = {}) {
     );
 
     const timespan = { duration: `PT${timespanMinutes}M` };
-    const query = buildQuery(maxRows);
+    const query = buildQuery(args.name, maxRows);
 
     let result;
     try {

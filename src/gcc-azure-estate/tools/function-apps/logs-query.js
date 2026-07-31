@@ -32,6 +32,9 @@ async function execute(args = {}) {
         throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `timespanMinutes must not exceed ${MAX_TIMESPAN_MINUTES} (7 days)`);
     }
 
+    if (args.maxRows !== undefined && (typeof args.maxRows !== 'number' || !Number.isInteger(args.maxRows) || args.maxRows <= 0)) {
+        throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, 'maxRows must be a positive integer');
+    }
     const maxRows = Math.min(args.maxRows || DEFAULT_MAX_ROWS, HARD_MAX_ROWS);
 
     const instance = assertPermitted(args.instance, 'function-apps', 'inspect');

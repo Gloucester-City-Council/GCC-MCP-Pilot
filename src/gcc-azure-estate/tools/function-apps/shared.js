@@ -234,6 +234,11 @@ function extractInstrumentationKey(properties) {
     return null;
 }
 
+/** Instrumentation keys are GUIDs — normalize case/whitespace before comparing, since the app setting and the ARM component's reported value aren't guaranteed to match byte-for-byte. */
+function normalizeInstrumentationKey(key) {
+    return typeof key === 'string' ? key.trim().toLowerCase() : key;
+}
+
 /** Fetches every ApplicationInsightsComponent in a resource group, following nextLink (this SDK generation returns {value, nextLink}, not an async iterator — see git history of tools/common/subscriptions-list.js for what happens when a page gets dropped silently). */
 async function listAppInsightsComponents(appInsightsClient, resourceGroup) {
     const components = [];
@@ -289,8 +294,9 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
         );
     }
 
+    const normalizedTarget = normalizeInstrumentationKey(instrumentationKey);
     const components = await listAppInsightsComponents(appInsightsClient, searchResourceGroup);
-    const match = components.find((c) => c.instrumentationKey === instrumentationKey);
+    const match = components.find((c) => normalizeInstrumentationKey(c.instrumentationKey) === normalizedTarget);
     if (!match) {
         throw new AzureEstateError(
             ERROR_CODES.DEPENDENCY_MISSING,

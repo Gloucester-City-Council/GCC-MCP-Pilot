@@ -141,6 +141,20 @@ describe('Application Insights resolution (tools/function-apps/shared.js)', () =
         await expect(execute({ ...BASE_ARGS, appInsightsName: 'does-not-exist' }))
             .rejects.toMatchObject({ code: ERROR_CODES.DEPENDENCY_MISSING, details: { missingDependency: 'appInsights' } });
     });
+
+    it('matches instrumentation keys case-insensitively and tolerates surrounding whitespace', async () => {
+        const component = { id: '/id/mixed-case', name: 'ai-mixed-case', instrumentationKey: 'ABCD1234-EF56-7890-ABCD-1234567890AB' };
+        setupClients({
+            webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: ' abcd1234-ef56-7890-abcd-1234567890ab ' } }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights.name).toBe('ai-mixed-case');
+    });
 });
 
 describe('azure_function_app_logs_query', () => {
@@ -204,6 +218,17 @@ describe('azure_function_app_logs_query', () => {
         await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 20000 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
     });
 
+    it('rejects a negative, zero, or non-integer maxRows instead of silently defaulting or under-truncating', async () => {
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-query');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        // Without validation, maxRows: -1 would make Array.prototype.slice(0, -1)
+        // return nearly the whole result instead of enforcing a maximum.
+        await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10, maxRows: -1 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+        await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10, maxRows: 0 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+        await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10, maxRows: 1.5 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+    });
+
     it('wraps a query failure as an AzureEstateError rather than letting the raw SDK error escape', async () => {
         setupClients({
             webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey' } }),
@@ -226,9 +251,13 @@ describe('azure_function_app_logs_recent_errors', () => {
 
     const component = { id: '/id', name: 'ai-world-resolve', instrumentationKey: 'ikey' };
 
-    it('builds a canned exceptions+traces union query and returns entries', async () => {
+    it('builds a canned exceptions+traces union query scoped to cloud_RoleName and returns entries', async () => {
         const queryResource = jest.fn(async (resourceId, query, timespan) => {
             expect(query).toMatch(/union isfuzzy=true exceptions, traces/);
+            // Scoping by cloud_RoleName matters: without it, a component shared by
+            // multiple Function Apps would return every app's errors, all
+            // mislabeled as belonging to the one requested.
+            expect(query).toMatch(/where cloud_RoleName =~ "world-resolve-api"/);
             expect(query).toMatch(/take 50/);
             expect(timespan).toEqual({ duration: 'PT60M' });
             return SUCCESSFUL_RESULT;
@@ -244,6 +273,32 @@ describe('azure_function_app_logs_recent_errors', () => {
 
         expect(result.totalEntries).toBe(2);
         expect(result.entries[0]).toEqual({ timestamp: '2026-01-01T00:00:00Z', message: 'first' });
+    });
+
+    it('escapes double quotes in the Function App name before embedding it in KQL', async () => {
+        const queryResource = jest.fn(async (resourceId, query) => {
+            expect(query).toMatch(/cloud_RoleName =~ "weird\\"name"/);
+            return SUCCESSFUL_RESULT;
+        });
+        setupClients({
+            webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey' } }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: queryResource }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        await execute({ ...BASE_ARGS, name: 'weird"name' });
+
+        expect(queryResource).toHaveBeenCalledTimes(1);
+    });
+
+    it('rejects a negative, zero, or non-integer maxRows', async () => {
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({ ...BASE_ARGS, maxRows: -1 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+        await expect(execute({ ...BASE_ARGS, maxRows: 0 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
+        await expect(execute({ ...BASE_ARGS, maxRows: 2.5 })).rejects.toMatchObject({ code: ERROR_CODES.BAD_REQUEST });
     });
 
     it('respects a custom timespanMinutes and maxRows', async () => {
