@@ -2,7 +2,7 @@
  * Azure Functions v4 HTTP Trigger — Web Get MCP
  *
  * One MCP server, four tools:
- *   fetch_raw_html       — raw HTML source + cleaned readable text
+ *   fetch_raw_html       — raw HTML/RESTful JSON fetch (any method, headers, payload) + cleaned readable text
  *   evaluate_page        — jsdom DOM emulation + axe-core WCAG scan of a URL
  *   evaluate_dom_bundle  — same evaluation over caller-supplied HTML/CSS/JS
  *   inspect_dom_selector — selector-level inspection of a stored evaluation
@@ -53,6 +53,86 @@ function validateUrl(rawUrl) {
         return { ok: false, reason: `Requests to private/internal hosts are not permitted (${parsed.hostname})` };
     }
     return { ok: true, parsed };
+}
+
+// ─── RESTful request helpers ───────────────────────────────────────────────────
+const ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+const METHODS_WITHOUT_BODY = ['GET', 'HEAD'];
+const SENSITIVE_HEADER_NAMES = ['authorization', 'cookie', 'proxy-authorization', 'x-api-key', 'api-key', 'x-auth-token'];
+const MAX_REQUEST_BODY_BYTES = 1_000_000;
+
+function validateRequestOptions({ method, headers, json, body }) {
+    const normalizedMethod = (typeof method === 'string' && method.trim()) ? method.trim().toUpperCase() : 'GET';
+    if (!ALLOWED_METHODS.includes(normalizedMethod)) {
+        return { ok: false, reason: `Unsupported method "${method}". Allowed: ${ALLOWED_METHODS.join(', ')}` };
+    }
+
+    if (headers !== undefined) {
+        if (typeof headers !== 'object' || headers === null || Array.isArray(headers)) {
+            return { ok: false, reason: 'headers must be an object of string key/value pairs' };
+        }
+        for (const [key, value] of Object.entries(headers)) {
+            if (typeof value === 'object') {
+                return { ok: false, reason: `Header "${key}" must have a string value` };
+            }
+            if (key.trim().toLowerCase() === 'host') {
+                return { ok: false, reason: 'The "Host" header cannot be overridden' };
+            }
+        }
+    }
+
+    if (json !== undefined && body !== undefined) {
+        return { ok: false, reason: 'Provide either json or body, not both' };
+    }
+    if (body !== undefined && typeof body !== 'string') {
+        return { ok: false, reason: 'body must be a string — use json for object/array payloads' };
+    }
+    if ((json !== undefined || body !== undefined) && METHODS_WITHOUT_BODY.includes(normalizedMethod)) {
+        return { ok: false, reason: `method ${normalizedMethod} cannot carry a request body (json/body were provided)` };
+    }
+
+    let requestBody;
+    if (json !== undefined) {
+        try {
+            requestBody = JSON.stringify(json);
+        } catch (err) {
+            return { ok: false, reason: `json payload could not be serialised: ${err.message}` };
+        }
+    } else if (body !== undefined) {
+        requestBody = body;
+    }
+
+    if (requestBody !== undefined && Buffer.byteLength(requestBody, 'utf8') > MAX_REQUEST_BODY_BYTES) {
+        return { ok: false, reason: `Request body exceeds the ${MAX_REQUEST_BODY_BYTES}-byte limit` };
+    }
+
+    const finalHeaders = buildRequestHeaders(headers, json !== undefined);
+    return { ok: true, method: normalizedMethod, headers: finalHeaders, requestBody };
+}
+
+function buildRequestHeaders(customHeaders, hasJsonBody) {
+    const byLowerName = new Map();
+    const set = (name, value) => byLowerName.set(name.toLowerCase(), { name, value: String(value) });
+
+    set('User-Agent', USER_AGENT);
+    if (customHeaders) {
+        for (const [name, value] of Object.entries(customHeaders)) set(name, value);
+    }
+    if (hasJsonBody && !byLowerName.has('content-type')) {
+        set('Content-Type', 'application/json');
+    }
+
+    const result = {};
+    for (const { name, value } of byLowerName.values()) result[name] = value;
+    return result;
+}
+
+function redactHeaders(headersObj) {
+    const redacted = {};
+    for (const [name, value] of Object.entries(headersObj)) {
+        redacted[name] = SENSITIVE_HEADER_NAMES.includes(name.toLowerCase()) ? '[redacted]' : value;
+    }
+    return redacted;
 }
 
 // ─── Content cleanup helpers ──────────────────────────────────────────────────
@@ -106,11 +186,15 @@ const TOOLS = [
     {
         name: 'fetch_raw_html',
         description: [
-            'Fetches the raw HTML source of a URL.',
+            'Fetches a URL — raw HTML pages as well as RESTful JSON APIs.',
+            'Supports GET, POST, PUT, PATCH, DELETE, HEAD and OPTIONS, custom request headers,',
+            'and a JSON or raw string request payload.',
             'Respects robots.txt (checks * and RawHTMLMCP user-agent rules).',
             'Enforces a minimum 2-second per-domain rate limit (or crawl-delay if longer).',
             'Blocks requests to private/internal IP ranges to prevent SSRF.',
-            'Returns: statusCode, contentType, bodyLength, body (raw HTML), and readableText (cleaned visible text).',
+            'Returns: statusCode, contentType, bodyLength, body (raw response text), and readableText',
+            '(cleaned visible text, for HTML/text responses).',
+            'For JSON responses (content-type contains "json"), the parsed value is also returned as json.',
             'readableText strips scripts/styles/json-ld/image tags and other non-content noise.',
             'Optionally includes response headers.',
         ].join(' '),
@@ -120,6 +204,35 @@ const TOOLS = [
                 url: {
                     type: 'string',
                     description: 'The URL to fetch. Must use http or https.',
+                },
+                method: {
+                    type: 'string',
+                    enum: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+                    default: 'GET',
+                    description: 'HTTP method to use. GET and HEAD cannot carry a request body.',
+                },
+                headers: {
+                    type: 'object',
+                    additionalProperties: { type: 'string' },
+                    description: [
+                        'Extra request headers as key/value pairs, e.g. { "Authorization": "Bearer ...",',
+                        '"Accept": "application/json" }. Merged with the default User-Agent (custom values win).',
+                        'The "Host" header cannot be overridden.',
+                    ].join(' '),
+                },
+                json: {
+                    description: [
+                        'JSON-serialisable request payload (object or array). Sent as the request body and',
+                        'sets Content-Type: application/json unless headers already specifies one.',
+                        'Mutually exclusive with body. Not allowed with method GET or HEAD.',
+                    ].join(' '),
+                },
+                body: {
+                    type: 'string',
+                    description: [
+                        'Raw string request body, for non-JSON payloads (e.g. form-encoded or XML).',
+                        'Mutually exclusive with json. Not allowed with method GET or HEAD.',
+                    ].join(' '),
                 },
                 include_headers: {
                     type: 'boolean',
@@ -296,15 +409,22 @@ const TOOLS = [
 ];
 
 // ─── Tool handlers ────────────────────────────────────────────────────────────
-async function handleFetchRawHtml({ url, include_headers = false }, context) {
+async function handleFetchRawHtml({ url, include_headers = false, method, headers, json, body }, context) {
     // 1. Validate URL
-    const validation = validateUrl(url);
-    if (!validation.ok) {
-        return { blocked: true, reason: validation.reason };
+    const urlValidation = validateUrl(url);
+    if (!urlValidation.ok) {
+        return { blocked: true, reason: urlValidation.reason };
     }
-    const { parsed } = validation;
+    const { parsed } = urlValidation;
 
-    // 2. robots.txt + per-domain rate limit
+    // 2. Validate method/headers/payload shape
+    const requestValidation = validateRequestOptions({ method, headers, json, body });
+    if (!requestValidation.ok) {
+        return { error: true, reason: requestValidation.reason };
+    }
+    const { method: requestMethod, headers: requestHeaders, requestBody } = requestValidation;
+
+    // 3. robots.txt + per-domain rate limit
     const policy = await checkFetchPolicy(parsed, USER_AGENT, ROBOTS_BOT_NAME);
     const robotsContext = policy.robots;
     if (!policy.allowed) {
@@ -318,14 +438,16 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
     }
     const rateLimit = policy.rateLimit;
 
-    // 3. Fetch the target URL
+    // 4. Fetch the target URL
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
     let response;
     try {
         response = await fetch(url, {
-            headers: { 'User-Agent': USER_AGENT },
+            method: requestMethod,
+            headers: requestHeaders,
+            body: requestBody,
             signal: controller.signal,
             redirect: 'follow',
         });
@@ -351,29 +473,50 @@ async function handleFetchRawHtml({ url, include_headers = false }, context) {
         };
     }
 
-    const body = await response.text();
+    const responseBody = await response.text();
     const contentType = response.headers.get('content-type') || '';
-    const readableText = extractReadableText(body);
+
+    let readableText = '';
+    let parsedJson;
+    let jsonParseError;
+    if (/json/i.test(contentType)) {
+        try {
+            parsedJson = responseBody ? JSON.parse(responseBody) : null;
+        } catch (err) {
+            jsonParseError = `Response declared a JSON content-type but failed to parse: ${err.message}`;
+        }
+    } else {
+        readableText = extractReadableText(responseBody);
+    }
 
     const result = {
         url: response.url, // may differ from input if redirected
+        method: requestMethod,
         statusCode: response.status,
         contentType,
-        bodyLength: body.length,
-        body,
+        bodyLength: responseBody.length,
+        body: responseBody,
         readableText,
         readableTextLength: readableText.length,
         robots: robotsContext,
         rateLimit,
+        request: {
+            method: requestMethod,
+            headers: redactHeaders(requestHeaders),
+            bodyLength: requestBody !== undefined ? Buffer.byteLength(requestBody, 'utf8') : 0,
+        },
     };
 
+    if (parsedJson !== undefined) result.json = parsedJson;
+    if (jsonParseError) result.jsonParseError = jsonParseError;
+
     if (include_headers) {
-        const headers = {};
-        response.headers.forEach((value, key) => { headers[key] = value; });
-        result.headers = headers;
+        const responseHeaders = {};
+        response.headers.forEach((value, key) => { responseHeaders[key] = value; });
+        result.headers = responseHeaders;
     }
 
-    context.log(`fetch_raw_html: ${response.status} ${response.url} (${body.length} bytes)`);
+    context.log(`fetch_raw_html: ${requestMethod} ${response.status} ${response.url} (${responseBody.length} bytes)`);
     return result;
 }
 
@@ -407,19 +550,29 @@ const MANIFEST = {
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-web-get-mcp',
-        version: '2.1.1',
+        version: '2.2.0',
         instructions: `🌐 WEB GET MCP
 
-Fetches and evaluates public web pages — raw HTML retrieval plus
-browser-free DOM emulation (jsdom) with axe-core WCAG scanning.
+Fetches and evaluates public web pages and RESTful JSON APIs — raw HTML/HTTP
+retrieval plus browser-free DOM emulation (jsdom) with axe-core WCAG scanning.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 TOOLS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- fetch_raw_html       — Fetch raw HTML source + cleaned readable text
+- fetch_raw_html       — Fetch a URL: raw HTML/text, or a RESTful JSON API call
 - evaluate_page        — Fetch a URL, load its CSS, run axe, get page model
 - evaluate_dom_bundle  — Same evaluation over HTML/CSS/JS strings you supply
 - inspect_dom_selector — Examine a specific component from a stored evaluation
+
+RESTful FETCHES:
+  fetch_raw_html accepts method (GET/POST/PUT/PATCH/DELETE/HEAD/OPTIONS),
+  headers (custom request headers merged over the default User-Agent), and
+  a json or body payload. json is auto-serialised with Content-Type:
+  application/json; body sends a raw string for non-JSON payloads (only one
+  of the two, and neither is allowed with GET/HEAD). Responses whose
+  content-type contains "json" are parsed and returned as json in addition
+  to the raw body. Sensitive request headers (Authorization, Cookie, etc.)
+  are redacted in the echoed request.headers.
 
 TYPICAL ACCESSIBILITY WORKFLOW:
   1. evaluate_page(url)

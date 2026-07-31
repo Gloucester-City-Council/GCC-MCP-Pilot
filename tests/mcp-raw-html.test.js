@@ -171,6 +171,131 @@ describe('mcpRawHtml', () => {
         expect(payload.robots.origin).toBe('https://example.com');
     });
 
+    it('sends a JSON payload with a POST request and parses a JSON response', async () => {
+        const fetchMock = jest.fn()
+            .mockResolvedValueOnce({ ok: false })
+            .mockResolvedValueOnce({
+                ok: true,
+                status: 201,
+                url: 'https://api.example.com/widgets',
+                headers: {
+                    get: (key) => (key === 'content-type' ? 'application/json' : null),
+                    forEach: jest.fn(),
+                },
+                text: jest.fn().mockResolvedValue('{"id":42,"name":"Widget"}'),
+            });
+
+        const handler = loadWithMocks(fetchMock);
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: {
+                        name: 'fetch_raw_html',
+                        arguments: {
+                            url: 'https://api.example.com/widgets',
+                            method: 'POST',
+                            headers: { Authorization: 'Bearer secret-token', Accept: 'application/json' },
+                            json: { name: 'Widget' },
+                        },
+                    },
+                    id: 5,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+
+        expect(payload.statusCode).toBe(201);
+        expect(payload.method).toBe('POST');
+        expect(payload.json).toEqual({ id: 42, name: 'Widget' });
+        expect(payload.request.headers['Content-Type']).toBe('application/json');
+        expect(payload.request.headers.Authorization).toBe('[redacted]');
+        expect(payload.request.headers.Accept).toBe('application/json');
+
+        const [, fetchOptions] = fetchMock.mock.calls[1];
+        expect(fetchOptions.method).toBe('POST');
+        expect(fetchOptions.body).toBe(JSON.stringify({ name: 'Widget' }));
+        expect(fetchOptions.headers.Authorization).toBe('Bearer secret-token');
+        expect(fetchOptions.headers['Content-Type']).toBe('application/json');
+    });
+
+    it('rejects a GET request that carries a json payload', async () => {
+        const handler = loadWithMocks(jest.fn());
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: {
+                        name: 'fetch_raw_html',
+                        arguments: { url: 'https://example.com/', method: 'GET', json: { a: 1 } },
+                    },
+                    id: 6,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.error).toBe(true);
+        expect(payload.reason).toMatch(/cannot carry a request body/);
+    });
+
+    it('rejects an unsupported HTTP method', async () => {
+        const handler = loadWithMocks(jest.fn());
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: {
+                        name: 'fetch_raw_html',
+                        arguments: { url: 'https://example.com/', method: 'TRACE' },
+                    },
+                    id: 7,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.error).toBe(true);
+        expect(payload.reason).toMatch(/Unsupported method/);
+    });
+
+    it('rejects an attempt to override the Host header', async () => {
+        const handler = loadWithMocks(jest.fn());
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: {
+                        name: 'fetch_raw_html',
+                        arguments: { url: 'https://example.com/', headers: { Host: 'evil.example.com' } },
+                    },
+                    id: 8,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const payload = JSON.parse(body.result.content[0].text);
+        expect(payload.error).toBe(true);
+        expect(payload.reason).toMatch(/Host/);
+    });
+
     it('serves the manifest on GET requests', async () => {
         const handler = loadWithMocks(jest.fn());
         const response = await handler(
