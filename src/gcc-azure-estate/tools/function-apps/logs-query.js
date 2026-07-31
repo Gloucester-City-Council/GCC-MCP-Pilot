@@ -20,6 +20,14 @@ const MAX_TIMESPAN_MINUTES = 10080; // 7 days
 const DEFAULT_MAX_ROWS = 200;
 const HARD_MAX_ROWS = 500;
 const SERVER_TIMEOUT_SECONDS = 60;
+// serverTimeoutInSeconds only bounds how long Azure Monitor spends
+// *processing* the query — it does not abort the underlying HTTP call if
+// the request itself never completes (network issue, or the Managed
+// Identity failing to acquire a token for this query API's audience,
+// which is a different audience than every other tool in this MCP uses).
+// Without a client-side abort, that class of failure hangs indefinitely
+// instead of surfacing a clear, fast error.
+const CLIENT_TIMEOUT_MS = 90_000;
 
 async function execute(args = {}) {
     const missing = validateRequired(args, ['instance', 'resourceGroup', 'name', 'query', 'timespanMinutes']);
@@ -51,8 +59,18 @@ async function execute(args = {}) {
 
     let result;
     try {
-        result = await logsClient.queryResource(appInsights.id, args.query, timespan, { serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS });
+        result = await logsClient.queryResource(appInsights.id, args.query, timespan, {
+            serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
+            abortSignal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+        });
     } catch (err) {
+        if (err.name === 'AbortError' || err.name === 'TimeoutError') {
+            throw new AzureEstateError(
+                ERROR_CODES.INTERNAL_ERROR,
+                `Log query timed out after ${CLIENT_TIMEOUT_MS / 1000}s without a response from Azure Monitor. If this happens consistently, check that the Function App's Managed Identity has a role granting Log Analytics/Application Insights query access (e.g. Monitoring Reader) — ARM Reader/Contributor alone may not cover this data-plane API.`,
+                { query: args.query }
+            );
+        }
         throw new AzureEstateError(ERROR_CODES.INTERNAL_ERROR, `Log query failed: ${err.message}`, { query: args.query });
     }
 
