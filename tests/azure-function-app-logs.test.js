@@ -241,6 +241,26 @@ describe('azure_function_app_logs_query', () => {
 
         await expect(execute({ ...BASE_ARGS, query: 'not valid kql {{{', timespanMinutes: 10 })).rejects.toBeInstanceOf(AzureEstateError);
     });
+
+    it('passes an abortSignal to queryResource and reports a clear, actionable error on timeout — never a silent hang', async () => {
+        const queryResource = jest.fn(async (resourceId, query, timespan, options) => {
+            expect(options.abortSignal).toBeDefined();
+            const err = new Error('The operation was aborted');
+            err.name = 'AbortError';
+            throw err;
+        });
+        setupClients({
+            webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey' } }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: queryResource }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-query');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10 }))
+            .rejects.toMatchObject({ code: ERROR_CODES.INTERNAL_ERROR, message: expect.stringContaining('Monitoring Reader') });
+    });
 });
 
 describe('azure_function_app_logs_recent_errors', () => {
@@ -317,5 +337,25 @@ describe('azure_function_app_logs_recent_errors', () => {
         await execute({ ...BASE_ARGS, timespanMinutes: 120, maxRows: 5 });
 
         expect(queryResource).toHaveBeenCalledTimes(1);
+    });
+
+    it('passes an abortSignal to queryResource and reports a clear, actionable error on timeout — never a silent hang', async () => {
+        const queryResource = jest.fn(async (resourceId, query, timespan, options) => {
+            expect(options.abortSignal).toBeDefined();
+            const err = new Error('The operation was aborted');
+            err.name = 'AbortError';
+            throw err;
+        });
+        setupClients({
+            webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey' } }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: queryResource }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute(BASE_ARGS))
+            .rejects.toMatchObject({ code: ERROR_CODES.INTERNAL_ERROR, message: expect.stringContaining('Monitoring Reader') });
     });
 });

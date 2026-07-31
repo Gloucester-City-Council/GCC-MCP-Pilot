@@ -22,6 +22,9 @@ const DEFAULT_TIMESPAN_MINUTES = 60;
 const DEFAULT_MAX_ROWS = 50;
 const HARD_MAX_ROWS = 500;
 const SERVER_TIMEOUT_SECONDS = 60;
+// See logs-query.js's CLIENT_TIMEOUT_MS comment: serverTimeoutInSeconds
+// bounds query *processing* time, not the HTTP call itself.
+const CLIENT_TIMEOUT_MS = 90_000;
 
 /** Escapes a value for embedding in a double-quoted KQL string literal. */
 function escapeKqlStringLiteral(value) {
@@ -71,8 +74,17 @@ async function execute(args = {}) {
 
     let result;
     try {
-        result = await logsClient.queryResource(appInsights.id, query, timespan, { serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS });
+        result = await logsClient.queryResource(appInsights.id, query, timespan, {
+            serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
+            abortSignal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+        });
     } catch (err) {
+        if (err.name === 'AbortError' || err.name === 'TimeoutError') {
+            throw new AzureEstateError(
+                ERROR_CODES.INTERNAL_ERROR,
+                `Log query timed out after ${CLIENT_TIMEOUT_MS / 1000}s without a response from Azure Monitor. If this happens consistently, check that the Function App's Managed Identity has a role granting Log Analytics/Application Insights query access (e.g. Monitoring Reader) — ARM Reader/Contributor alone may not cover this data-plane API.`
+            );
+        }
         throw new AzureEstateError(ERROR_CODES.INTERNAL_ERROR, `Log query failed: ${err.message}`);
     }
 
