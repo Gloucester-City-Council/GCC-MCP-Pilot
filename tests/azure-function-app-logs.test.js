@@ -124,7 +124,7 @@ describe('Application Insights resolution (tools/function-apps/shared.js)', () =
         const result = await execute({ ...BASE_ARGS, appInsightsName: 'ai-explicit' });
 
         expect(listSettings).not.toHaveBeenCalled();
-        expect(getComponent).toHaveBeenCalledWith('rg-rpg-engine', 'ai-explicit');
+        expect(getComponent).toHaveBeenCalledWith('rg-rpg-engine', 'ai-explicit', { abortSignal: expect.anything() });
         expect(result.applicationInsights.name).toBe('ai-explicit');
     });
 

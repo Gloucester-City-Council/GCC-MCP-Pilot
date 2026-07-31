@@ -21,10 +21,13 @@ const MAX_TIMESPAN_MINUTES = 10080; // 7 days
 const DEFAULT_TIMESPAN_MINUTES = 60;
 const DEFAULT_MAX_ROWS = 50;
 const HARD_MAX_ROWS = 500;
-const SERVER_TIMEOUT_SECONDS = 60;
-// See logs-query.js's CLIENT_TIMEOUT_MS comment: serverTimeoutInSeconds
-// bounds query *processing* time, not the HTTP call itself.
-const CLIENT_TIMEOUT_MS = 90_000;
+// See logs-query.js's matching comment: CLIENT_TIMEOUT_MS is a single
+// tool-wide deadline started before resolveAppInsightsForFunctionApp's ARM
+// lookups, not just a budget for queryResource — otherwise a slow
+// resolution alone can exceed the calling MCP client's own ~30s patience
+// before the query is even sent.
+const SERVER_TIMEOUT_SECONDS = 15;
+const CLIENT_TIMEOUT_MS = 20_000;
 
 /** Escapes a value for embedding in a double-quoted KQL string literal. */
 function escapeKqlStringLiteral(value) {
@@ -64,9 +67,15 @@ async function execute(args = {}) {
     const appInsightsClient = getAppInsightsClient(instance);
     const logsClient = getLogsQueryClient();
 
+    // One deadline for the whole tool call, started before any ARM call —
+    // see the CLIENT_TIMEOUT_MS comment above.
+    const abortSignal = AbortSignal.timeout(CLIENT_TIMEOUT_MS);
+
     const appInsights = await resolveAppInsightsForFunctionApp(
         { webSiteClient, appInsightsClient },
-        { resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup }
+        {
+            resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
+        }
     );
 
     const timespan = { duration: `PT${timespanMinutes}M` };
@@ -76,7 +85,7 @@ async function execute(args = {}) {
     try {
         result = await logsClient.queryResource(appInsights.id, query, timespan, {
             serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
-            abortSignal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+            abortSignal,
         });
     } catch (err) {
         if (err.name === 'AbortError' || err.name === 'TimeoutError') {
