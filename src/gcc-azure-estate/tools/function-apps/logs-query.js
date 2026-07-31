@@ -19,15 +19,17 @@ const { resolveAppInsightsForFunctionApp, mapLogsQueryResult } = require('./shar
 const MAX_TIMESPAN_MINUTES = 10080; // 7 days
 const DEFAULT_MAX_ROWS = 200;
 const HARD_MAX_ROWS = 500;
-const SERVER_TIMEOUT_SECONDS = 60;
-// serverTimeoutInSeconds only bounds how long Azure Monitor spends
-// *processing* the query — it does not abort the underlying HTTP call if
-// the request itself never completes (network issue, or the Managed
+// The calling MCP client gives up and shows its own generic "connector
+// not responding" message somewhere around ~30s, well before either of
+// these fires if left at their original, more generous values — so this
+// tool's only chance to report anything useful is to time out itself
+// safely inside that external ceiling. serverTimeoutInSeconds bounds how
+// long Azure Monitor spends *processing* the query; CLIENT_TIMEOUT_MS is
+// a hard abort on the HTTP call itself (network issue, or the Managed
 // Identity failing to acquire a token for this query API's audience,
 // which is a different audience than every other tool in this MCP uses).
-// Without a client-side abort, that class of failure hangs indefinitely
-// instead of surfacing a clear, fast error.
-const CLIENT_TIMEOUT_MS = 90_000;
+const SERVER_TIMEOUT_SECONDS = 15;
+const CLIENT_TIMEOUT_MS = 20_000;
 
 async function execute(args = {}) {
     const missing = validateRequired(args, ['instance', 'resourceGroup', 'name', 'query', 'timespanMinutes']);

@@ -21,10 +21,12 @@ const MAX_TIMESPAN_MINUTES = 10080; // 7 days
 const DEFAULT_TIMESPAN_MINUTES = 60;
 const DEFAULT_MAX_ROWS = 50;
 const HARD_MAX_ROWS = 500;
-const SERVER_TIMEOUT_SECONDS = 60;
-// See logs-query.js's CLIENT_TIMEOUT_MS comment: serverTimeoutInSeconds
-// bounds query *processing* time, not the HTTP call itself.
-const CLIENT_TIMEOUT_MS = 90_000;
+// See logs-query.js's matching comment: the calling MCP client gives up
+// with its own generic "connector not responding" message around ~30s,
+// so this tool's only chance to report anything useful is to time out
+// safely inside that external ceiling, not at Azure Monitor's own pace.
+const SERVER_TIMEOUT_SECONDS = 15;
+const CLIENT_TIMEOUT_MS = 20_000;
 
 /** Escapes a value for embedding in a double-quoted KQL string literal. */
 function escapeKqlStringLiteral(value) {
