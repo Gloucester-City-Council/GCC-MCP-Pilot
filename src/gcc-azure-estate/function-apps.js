@@ -24,6 +24,8 @@ const configApply = require('./tools/function-apps/config-apply');
 const slotCreate = require('./tools/function-apps/slot-create');
 const slotSwapPlan = require('./tools/function-apps/slot-swap-plan');
 const slotSwap = require('./tools/function-apps/slot-swap');
+const logsQuery = require('./tools/function-apps/logs-query');
+const logsRecentErrors = require('./tools/function-apps/logs-recent-errors');
 
 const READ_ONLY_ANNOTATIONS = { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true };
 const WRITE_ANNOTATIONS = { readOnlyHint: false, destructiveHint: false, openWorldHint: false, idempotentHint: false };
@@ -40,6 +42,10 @@ const FUNCTION_APP_TARGET = {
     name: { type: 'string', description: 'Function App name.' },
 };
 const FUNCTION_APP_SIDE = { type: 'object', properties: { ...FUNCTION_APP_TARGET }, required: ['instance', 'resourceGroup', 'name'] };
+const APP_INSIGHTS_OVERRIDE_PROPERTIES = {
+    appInsightsName: { type: 'string', description: 'Application Insights resource name, if it can\'t be auto-resolved from the Function App\'s own instrumentation key/connection string setting.' },
+    appInsightsResourceGroup: { type: 'string', description: 'Resource group of the Application Insights resource, if it differs from the Function App\'s own resource group. Defaults to resourceGroup.' },
+};
 
 const TOOLS = [
     {
@@ -264,6 +270,37 @@ const TOOLS = [
             required: ['instance', 'resourceGroup', 'name', 'sourceSlot'],
         },
     },
+    {
+        name: 'azure_function_app_logs_query',
+        description: '⭐ Runs a caller-supplied KQL query against a Function App\'s linked Application Insights resource (traces, exceptions, requests, dependencies, customEvents). Bounded by a required timespanMinutes (max 7 days) and truncated to maxRows — never an unbounded query. Use azure_function_app_logs_recent_errors instead if you just want "what\'s been failing recently" without writing KQL.',
+        annotations: READ_ONLY_ANNOTATIONS,
+        inputSchema: {
+            type: 'object',
+            properties: {
+                ...FUNCTION_APP_TARGET,
+                query: { type: 'string', description: 'A KQL query, e.g. "requests | where success == false | order by timestamp desc".' },
+                timespanMinutes: { type: 'number', description: 'How far back to query, in minutes. Required — never unbounded. Max 10080 (7 days).' },
+                maxRows: { type: 'number', description: 'Maximum rows to return per table. Default 200, hard cap 500.' },
+                ...APP_INSIGHTS_OVERRIDE_PROPERTIES,
+            },
+            required: ['instance', 'resourceGroup', 'name', 'query', 'timespanMinutes'],
+        },
+    },
+    {
+        name: 'azure_function_app_logs_recent_errors',
+        description: 'Guided troubleshooting shortcut: recent exceptions and high-severity traces for a Function App, no KQL required. Runs a canned query against the app\'s linked Application Insights resource. For anything more specific, use azure_function_app_logs_query directly.',
+        annotations: READ_ONLY_ANNOTATIONS,
+        inputSchema: {
+            type: 'object',
+            properties: {
+                ...FUNCTION_APP_TARGET,
+                timespanMinutes: { type: 'number', description: 'How far back to look, in minutes. Default 60, max 10080 (7 days).' },
+                maxRows: { type: 'number', description: 'Maximum entries to return. Default 50, hard cap 500.' },
+                ...APP_INSIGHTS_OVERRIDE_PROPERTIES,
+            },
+            required: ['instance', 'resourceGroup', 'name'],
+        },
+    },
 ];
 
 const TOOL_HANDLERS = {
@@ -283,6 +320,8 @@ const TOOL_HANDLERS = {
     azure_function_slot_create: slotCreate.execute,
     azure_function_slot_swap_plan: slotSwapPlan.execute,
     azure_function_slot_swap: slotSwap.execute,
+    azure_function_app_logs_query: logsQuery.execute,
+    azure_function_app_logs_recent_errors: logsRecentErrors.execute,
 };
 
 module.exports = { TOOLS, TOOL_HANDLERS };
