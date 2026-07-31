@@ -71,23 +71,27 @@ async function execute(args = {}) {
     // see the CLIENT_TIMEOUT_MS comment above.
     const abortSignal = AbortSignal.timeout(CLIENT_TIMEOUT_MS);
 
-    const appInsights = await resolveAppInsightsForFunctionApp(
-        { webSiteClient, appInsightsClient },
-        {
-            resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
-        }
-    );
-
     const timespan = { duration: `PT${timespanMinutes}M` };
     const query = buildQuery(args.name, maxRows);
 
+    // See logs-query.js's matching comment: resolution and the query share
+    // one timeout-handling boundary, so a deadline firing mid-resolution
+    // still surfaces the actionable message instead of a raw abort error.
+    let appInsights;
     let result;
     try {
+        appInsights = await resolveAppInsightsForFunctionApp(
+            { webSiteClient, appInsightsClient },
+            {
+                resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
+            }
+        );
         result = await logsClient.queryResource(appInsights.id, query, timespan, {
             serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
             abortSignal,
         });
     } catch (err) {
+        if (err instanceof AzureEstateError) throw err;
         if (err.name === 'AbortError' || err.name === 'TimeoutError') {
             throw new AzureEstateError(
                 ERROR_CODES.INTERNAL_ERROR,

@@ -138,6 +138,29 @@ describe('Application Insights resolution (tools/function-apps/shared.js)', () =
         expect(result.applicationInsights.name).toBe('ai-real');
     });
 
+    it('propagates a non-404 hidden-link lookup failure instead of masking it as missing linkage', async () => {
+        const permissionError = Object.assign(new Error('Forbidden'), { statusCode: 403 });
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                // Key Vault reference — the fallback path can't extract a key
+                // at all, so a swallowed error here would misreport as
+                // DEPENDENCY_MISSING instead of surfacing the real 403.
+                appSettings: { APPLICATIONINSIGHTS_CONNECTION_STRING: '@Microsoft.KeyVault(SecretUri=https://kv/secret)' },
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/Microsoft.Insights/components/func-rpg-engine' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ getComponentImpl: jest.fn(async () => { throw permissionError; }) }),
+            logsQueryClient: mockLogsQueryClient(),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute(BASE_ARGS)).rejects.toMatchObject({
+            code: ERROR_CODES.INTERNAL_ERROR,
+            message: expect.stringContaining('Forbidden'),
+        });
+    });
+
     it('follows nextLink when listing components across pages', async () => {
         const component = { id: '/id', name: 'ai-page-2', instrumentationKey: 'ikey-on-page-2' };
         setupClients({
@@ -328,6 +351,25 @@ describe('azure_function_app_logs_query', () => {
         await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10 }))
             .rejects.toMatchObject({ code: ERROR_CODES.INTERNAL_ERROR, message: expect.stringContaining('Monitoring Reader') });
     });
+
+    it('reports the same actionable timeout error when the abort fires during App Insights resolution, not just the query', async () => {
+        const abortDuringResolution = jest.fn(async () => {
+            const err = new Error('The operation was aborted');
+            err.name = 'AbortError';
+            throw err;
+        });
+        setupClients({
+            webSiteClient: { webApps: { get: abortDuringResolution, listApplicationSettings: abortDuringResolution } },
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-query');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute({ ...BASE_ARGS, query: 'traces', timespanMinutes: 10 }))
+            .rejects.toMatchObject({ code: ERROR_CODES.INTERNAL_ERROR, message: expect.stringContaining('Monitoring Reader') });
+    });
 });
 
 describe('azure_function_app_logs_recent_errors', () => {
@@ -417,6 +459,25 @@ describe('azure_function_app_logs_recent_errors', () => {
             webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey' } }),
             appInsightsClient: mockAppInsightsClient({ components: [component] }),
             logsQueryClient: mockLogsQueryClient({ queryResourceImpl: queryResource }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const { ERROR_CODES } = require('../src/gcc-azure-estate/lib/errors');
+
+        await expect(execute(BASE_ARGS))
+            .rejects.toMatchObject({ code: ERROR_CODES.INTERNAL_ERROR, message: expect.stringContaining('Monitoring Reader') });
+    });
+
+    it('reports the same actionable timeout error when the abort fires during App Insights resolution, not just the query', async () => {
+        const abortDuringResolution = jest.fn(async () => {
+            const err = new Error('The operation was aborted');
+            err.name = 'AbortError';
+            throw err;
+        });
+        setupClients({
+            webSiteClient: { webApps: { get: abortDuringResolution, listApplicationSettings: abortDuringResolution } },
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
         });
 
         const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');

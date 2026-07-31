@@ -56,22 +56,31 @@ async function execute(args = {}) {
     // see the CLIENT_TIMEOUT_MS comment above.
     const abortSignal = AbortSignal.timeout(CLIENT_TIMEOUT_MS);
 
-    const appInsights = await resolveAppInsightsForFunctionApp(
-        { webSiteClient, appInsightsClient },
-        {
-            resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
-        }
-    );
-
     const timespan = { duration: `PT${args.timespanMinutes}M` };
 
+    // Resolution and the query itself share one timeout-handling boundary
+    // — not just the query call — so a deadline that fires mid-resolution
+    // (a slow ARM lookup, not just a slow KQL query) still surfaces the
+    // same actionable message instead of a raw abort error escaping
+    // uncaught. A DEPENDENCY_MISSING from resolution (no linkage
+    // configured, an explicit appInsightsName that doesn't exist) is
+    // already a clear, well-formed error in its own right and passes
+    // through unchanged.
+    let appInsights;
     let result;
     try {
+        appInsights = await resolveAppInsightsForFunctionApp(
+            { webSiteClient, appInsightsClient },
+            {
+                resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
+            }
+        );
         result = await logsClient.queryResource(appInsights.id, args.query, timespan, {
             serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
             abortSignal,
         });
     } catch (err) {
+        if (err instanceof AzureEstateError) throw err;
         if (err.name === 'AbortError' || err.name === 'TimeoutError') {
             throw new AzureEstateError(
                 ERROR_CODES.INTERNAL_ERROR,

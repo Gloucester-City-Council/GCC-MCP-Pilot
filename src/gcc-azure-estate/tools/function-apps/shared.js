@@ -326,11 +326,15 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
             return { id: component.id, name: component.name, resourceGroup: parsed.resourceGroup };
         }
     } catch (err) {
-        // An abort mid-lookup will only fail again identically on the
-        // fallback path below — surface it now rather than mask it.
-        if (err.name === 'AbortError' || (abortSignal && abortSignal.aborted)) throw err;
-        // Otherwise best-effort only (tag missing, or the tagged component
-        // no longer exists) — fall through to instrumentation-key matching.
+        // A stale tag — the tagged component has since been deleted — is
+        // the only failure here worth silently falling back on. Everything
+        // else (permission denied, throttling, an aborted deadline, any
+        // other service error) is a real problem, and for an app whose
+        // instrumentation key is a Key Vault reference (the scenario this
+        // hidden-link path exists for), the fallback below can't extract a
+        // key at all — so swallowing a non-404 here would surface a
+        // misleading "no linkage configured" instead of the actual error.
+        if (err.statusCode !== 404) throw err;
     }
 
     const settings = await webSiteClient.webApps.listApplicationSettings(args.resourceGroup, args.name, { abortSignal });
