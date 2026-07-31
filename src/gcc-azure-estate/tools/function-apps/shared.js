@@ -13,6 +13,13 @@ const SECRET_NAME_PATTERN = /key|secret|token|conn(ection)?str(ing)?|password|pw
 const KEYVAULT_REF_PATTERN = /^@Microsoft\.KeyVault\(/i;
 const STORAGE_ACCOUNT_NAME_PATTERN = /AccountName=([^;]+)/i;
 const SERVER_FARM_ID_PATTERN = /resourceGroups\/([^/]+)\/providers\/Microsoft\.Web\/serverfarms\/([^/]+)/i;
+const APP_INSIGHTS_RESOURCE_ID_PATTERN = /resourceGroups\/([^/]+)\/providers\/Microsoft\.Insights\/components\/([^/]+)/i;
+// The tag the Portal itself sets on a site resource when Application
+// Insights is linked via the "Application Insights" blade — the
+// authoritative link, independent of whatever's (or isn't) readable in app
+// settings. Key has historically appeared with and without the space after
+// the colon, so match loosely rather than by exact string.
+const HIDDEN_LINK_APP_INSIGHTS_TAG_PATTERN = /^hidden-link:\s*\/app-insights-resource-id$/i;
 
 // Well-known Azure App Service setting names that carry a secret value
 // despite not literally matching SECRET_NAME_PATTERN by substring — kept
@@ -98,6 +105,20 @@ function parseServerFarmId(id) {
     const match = id.match(SERVER_FARM_ID_PATTERN);
     if (!match) return null;
     return { resourceGroup: match[1], name: match[2] };
+}
+
+function parseAppInsightsResourceId(id) {
+    if (typeof id !== 'string') return null;
+    const match = id.match(APP_INSIGHTS_RESOURCE_ID_PATTERN);
+    if (!match) return null;
+    return { resourceGroup: match[1], name: match[2] };
+}
+
+/** Finds the hidden-link App Insights resource ID among a site's tags, tolerating the key's inconsistent spacing. */
+function findHiddenLinkAppInsightsId(tags) {
+    if (!tags) return null;
+    const key = Object.keys(tags).find((k) => HIDDEN_LINK_APP_INSIGHTS_TAG_PATTERN.test(k));
+    return key ? tags[key] : null;
 }
 
 /** Best-effort hosting-plan summary — never throws; failures are surfaced as a flag, not an exception. */
@@ -254,13 +275,20 @@ async function listAppInsightsComponents(appInsightsClient, resourceGroup, abort
 /**
  * Resolves the Application Insights *resource* linked to a Function App,
  * for tools/function-apps/logs-*.js to query. Never guessed beyond what's
- * actually configured: if `appInsightsName` is supplied, that resource is
- * fetched directly; otherwise this reads the app's own
- * APPINSIGHTS_INSTRUMENTATIONKEY / APPLICATIONINSIGHTS_CONNECTION_STRING
- * setting and matches it against the components in the target resource
- * group (or `appInsightsResourceGroup` if that differs from the
- * function app's own group). Throws DEPENDENCY_MISSING with a clear,
- * actionable message on any resolution failure — never returns a guess.
+ * actually configured, tried in this order:
+ *   1. `appInsightsName`, if the caller supplied one — fetched directly.
+ *   2. The site's `hidden-link: /app-insights-resource-id` tag — the exact
+ *      resource ID the Portal itself writes when App Insights is linked via
+ *      its "Application Insights" blade. Authoritative, and independent of
+ *      whether the instrumentation key is actually readable from app
+ *      settings (e.g. behind a Key Vault reference) or of naming
+ *      conventions matching between the app and the component.
+ *   3. Falling back to APPINSIGHTS_INSTRUMENTATIONKEY /
+ *      APPLICATIONINSIGHTS_CONNECTION_STRING app-setting matching against
+ *      components in the target resource group, for older apps that
+ *      predate the hidden-link tag.
+ * Throws DEPENDENCY_MISSING with a clear, actionable message only once
+ * every path above is exhausted — never returns a guess.
  *
  * `args.abortSignal`, when supplied, bounds every ARM call this makes. Log
  * tools pass in the same deadline signal they reuse for the log query
@@ -290,12 +318,27 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
         }
     }
 
+    try {
+        const site = await webSiteClient.webApps.get(args.resourceGroup, args.name, { abortSignal });
+        const parsed = parseAppInsightsResourceId(findHiddenLinkAppInsightsId(site.tags));
+        if (parsed) {
+            const component = await appInsightsClient.components.get(parsed.resourceGroup, parsed.name, { abortSignal });
+            return { id: component.id, name: component.name, resourceGroup: parsed.resourceGroup };
+        }
+    } catch (err) {
+        // An abort mid-lookup will only fail again identically on the
+        // fallback path below — surface it now rather than mask it.
+        if (err.name === 'AbortError' || (abortSignal && abortSignal.aborted)) throw err;
+        // Otherwise best-effort only (tag missing, or the tagged component
+        // no longer exists) — fall through to instrumentation-key matching.
+    }
+
     const settings = await webSiteClient.webApps.listApplicationSettings(args.resourceGroup, args.name, { abortSignal });
     const instrumentationKey = extractInstrumentationKey(settings.properties);
     if (!instrumentationKey) {
         throw new AzureEstateError(
             ERROR_CODES.DEPENDENCY_MISSING,
-            `Function App "${args.name}" has no Application Insights linkage configured (no APPINSIGHTS_INSTRUMENTATIONKEY or APPLICATIONINSIGHTS_CONNECTION_STRING app setting). Pass appInsightsName explicitly if the resource exists under a different linkage.`,
+            `Function App "${args.name}" has no Application Insights linkage configured (no hidden-link tag, and no APPINSIGHTS_INSTRUMENTATIONKEY or APPLICATIONINSIGHTS_CONNECTION_STRING app setting). Pass appInsightsName explicitly if the resource exists under a different linkage.`,
             { missingDependency: 'appInsightsLinkage', functionAppName: args.name }
         );
     }

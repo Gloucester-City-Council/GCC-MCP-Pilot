@@ -6,10 +6,11 @@ function notFound() {
     return err;
 }
 
-function mockWebSiteClient({ appSettings = {} } = {}) {
+function mockWebSiteClient({ appSettings = {}, siteTags = {}, getSiteImpl } = {}) {
     return {
         webApps: {
             listApplicationSettings: jest.fn(async () => ({ properties: appSettings })),
+            get: getSiteImpl || jest.fn(async () => ({ tags: siteTags })),
         },
     };
 }
@@ -69,6 +70,72 @@ describe('Application Insights resolution (tools/function-apps/shared.js)', () =
         const result = await execute(BASE_ARGS);
 
         expect(result.applicationInsights).toEqual({ name: 'ai-world-resolve', resourceGroup: 'rg-rpg-engine' });
+    });
+
+    it('resolves via the hidden-link tag even when no instrumentation key is readable from app settings (e.g. a Key Vault reference)', async () => {
+        const component = { id: '/id/tagged', name: 'func-rpg-engine', instrumentationKey: 'whatever' };
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: { APPLICATIONINSIGHTS_CONNECTION_STRING: '@Microsoft.KeyVault(SecretUri=https://kv/secret)' },
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/Microsoft.Insights/components/func-rpg-engine' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights).toEqual({ name: 'func-rpg-engine', resourceGroup: 'rg-rpg-engine' });
+    });
+
+    it('prefers the hidden-link tag over instrumentation-key matching when both are present', async () => {
+        const taggedComponent = { id: '/id/tagged', name: 'from-tag', instrumentationKey: 'ikey-123' };
+        const keyMatchedComponent = { id: '/id/key-matched', name: 'from-key-match', instrumentationKey: 'ikey-123' };
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey-123' },
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/Microsoft.Insights/components/from-tag' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ components: [taggedComponent, keyMatchedComponent] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights.name).toBe('from-tag');
+    });
+
+    it('falls back to instrumentation-key matching when the hidden-link tag is absent', async () => {
+        const component = { id: '/id', name: 'ai-untagged', instrumentationKey: 'ikey-untagged' };
+        setupClients({
+            webSiteClient: mockWebSiteClient({ appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey-untagged' }, siteTags: {} }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights.name).toBe('ai-untagged');
+    });
+
+    it('falls back to instrumentation-key matching when the tagged component no longer exists', async () => {
+        const component = { id: '/id', name: 'ai-real', instrumentationKey: 'ikey-real' };
+        setupClients({
+            webSiteClient: mockWebSiteClient({
+                appSettings: { APPINSIGHTS_INSTRUMENTATIONKEY: 'ikey-real' },
+                siteTags: { 'hidden-link: /app-insights-resource-id': '/subscriptions/x/resourceGroups/rg-rpg-engine/providers/Microsoft.Insights/components/deleted-component' },
+            }),
+            appInsightsClient: mockAppInsightsClient({ components: [component] }),
+            logsQueryClient: mockLogsQueryClient({ queryResourceImpl: jest.fn(async () => SUCCESSFUL_RESULT) }),
+        });
+
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/logs-recent-errors');
+        const result = await execute(BASE_ARGS);
+
+        expect(result.applicationInsights.name).toBe('ai-real');
     });
 
     it('follows nextLink when listing components across pages', async () => {
