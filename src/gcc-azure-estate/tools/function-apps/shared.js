@@ -240,12 +240,12 @@ function normalizeInstrumentationKey(key) {
 }
 
 /** Fetches every ApplicationInsightsComponent in a resource group, following nextLink (this SDK generation returns {value, nextLink}, not an async iterator — see git history of tools/common/subscriptions-list.js for what happens when a page gets dropped silently). */
-async function listAppInsightsComponents(appInsightsClient, resourceGroup) {
+async function listAppInsightsComponents(appInsightsClient, resourceGroup, abortSignal) {
     const components = [];
-    let page = await appInsightsClient.components.listByResourceGroup(resourceGroup);
+    let page = await appInsightsClient.components.listByResourceGroup(resourceGroup, { abortSignal });
     components.push(...(page.value || []));
     while (page.nextLink) {
-        page = await appInsightsClient.components.listByResourceGroupNext(page.nextLink);
+        page = await appInsightsClient.components.listByResourceGroupNext(page.nextLink, { abortSignal });
         components.push(...(page.value || []));
     }
     return components;
@@ -261,16 +261,22 @@ async function listAppInsightsComponents(appInsightsClient, resourceGroup) {
  * group (or `appInsightsResourceGroup` if that differs from the
  * function app's own group). Throws DEPENDENCY_MISSING with a clear,
  * actionable message on any resolution failure — never returns a guess.
+ *
+ * `args.abortSignal`, when supplied, bounds every ARM call this makes. Log
+ * tools pass in the same deadline signal they reuse for the log query
+ * itself, so a slow/hanging resolution can't silently eat the client-side
+ * timeout budget before the query even starts (see logs-query.js).
  */
 async function resolveAppInsightsForFunctionApp(clients, args) {
     const { webSiteClient, appInsightsClient } = clients;
     const { AzureEstateError, ERROR_CODES } = require('../../lib/errors');
 
     const searchResourceGroup = args.appInsightsResourceGroup || args.resourceGroup;
+    const { abortSignal } = args;
 
     if (args.appInsightsName) {
         try {
-            const component = await appInsightsClient.components.get(searchResourceGroup, args.appInsightsName);
+            const component = await appInsightsClient.components.get(searchResourceGroup, args.appInsightsName, { abortSignal });
             return { id: component.id, name: component.name, resourceGroup: searchResourceGroup };
         } catch (err) {
             if (err.statusCode === 404) {
@@ -284,7 +290,7 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
         }
     }
 
-    const settings = await webSiteClient.webApps.listApplicationSettings(args.resourceGroup, args.name);
+    const settings = await webSiteClient.webApps.listApplicationSettings(args.resourceGroup, args.name, { abortSignal });
     const instrumentationKey = extractInstrumentationKey(settings.properties);
     if (!instrumentationKey) {
         throw new AzureEstateError(
@@ -295,7 +301,7 @@ async function resolveAppInsightsForFunctionApp(clients, args) {
     }
 
     const normalizedTarget = normalizeInstrumentationKey(instrumentationKey);
-    const components = await listAppInsightsComponents(appInsightsClient, searchResourceGroup);
+    const components = await listAppInsightsComponents(appInsightsClient, searchResourceGroup, abortSignal);
     const match = components.find((c) => normalizeInstrumentationKey(c.instrumentationKey) === normalizedTarget);
     if (!match) {
         throw new AzureEstateError(

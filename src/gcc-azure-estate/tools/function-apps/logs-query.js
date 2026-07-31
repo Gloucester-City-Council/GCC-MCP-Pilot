@@ -20,14 +20,14 @@ const MAX_TIMESPAN_MINUTES = 10080; // 7 days
 const DEFAULT_MAX_ROWS = 200;
 const HARD_MAX_ROWS = 500;
 // The calling MCP client gives up and shows its own generic "connector
-// not responding" message somewhere around ~30s, well before either of
-// these fires if left at their original, more generous values — so this
-// tool's only chance to report anything useful is to time out itself
-// safely inside that external ceiling. serverTimeoutInSeconds bounds how
-// long Azure Monitor spends *processing* the query; CLIENT_TIMEOUT_MS is
-// a hard abort on the HTTP call itself (network issue, or the Managed
-// Identity failing to acquire a token for this query API's audience,
-// which is a different audience than every other tool in this MCP uses).
+// not responding" message somewhere around ~30s. CLIENT_TIMEOUT_MS is a
+// single tool-wide deadline (not just a budget for queryResource) started
+// *before* resolveAppInsightsForFunctionApp's ARM lookups run — otherwise
+// a slow app-settings fetch or App Insights component listing eats into
+// the client's patience before the query even starts, and we're back to
+// the opaque "connector not responding" message this timeout exists to
+// avoid. serverTimeoutInSeconds separately bounds how long Azure Monitor
+// spends *processing* the query once it's actually sent.
 const SERVER_TIMEOUT_SECONDS = 15;
 const CLIENT_TIMEOUT_MS = 20_000;
 
@@ -52,9 +52,15 @@ async function execute(args = {}) {
     const appInsightsClient = getAppInsightsClient(instance);
     const logsClient = getLogsQueryClient();
 
+    // One deadline for the whole tool call, started before any ARM call —
+    // see the CLIENT_TIMEOUT_MS comment above.
+    const abortSignal = AbortSignal.timeout(CLIENT_TIMEOUT_MS);
+
     const appInsights = await resolveAppInsightsForFunctionApp(
         { webSiteClient, appInsightsClient },
-        { resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup }
+        {
+            resourceGroup: args.resourceGroup, name: args.name, appInsightsName: args.appInsightsName, appInsightsResourceGroup: args.appInsightsResourceGroup, abortSignal,
+        }
     );
 
     const timespan = { duration: `PT${args.timespanMinutes}M` };
@@ -63,7 +69,7 @@ async function execute(args = {}) {
     try {
         result = await logsClient.queryResource(appInsights.id, args.query, timespan, {
             serverTimeoutInSeconds: SERVER_TIMEOUT_SECONDS,
-            abortSignal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+            abortSignal,
         });
     } catch (err) {
         if (err.name === 'AbortError' || err.name === 'TimeoutError') {
