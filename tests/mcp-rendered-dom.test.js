@@ -59,7 +59,7 @@ describe('handleMcpRequest — initialize', () => {
     const result = await handleMcpRequest({ jsonrpc: '2.0', method: 'initialize', id: 1 }, mockContext);
     expect(result.result.protocolVersion).toBe('2024-11-05');
     expect(result.result.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(result.result.serverInfo.version).toBe('2.2.0');
+    expect(result.result.serverInfo.version).toBe('2.3.0');
     expect(result.result.capabilities).toEqual({ tools: {} });
   });
 });
@@ -830,7 +830,7 @@ describe('HTTP trigger handler', () => {
     const manifest = JSON.parse(response.body);
     expect(response.status).toBe(200);
     expect(manifest.serverInfo.name).toBe('gcc-web-get-mcp');
-    expect(manifest.serverInfo.version).toBe('2.2.0');
+    expect(manifest.serverInfo.version).toBe('2.3.0');
   });
 
   it('returns 400 on unparseable JSON body', async () => {
