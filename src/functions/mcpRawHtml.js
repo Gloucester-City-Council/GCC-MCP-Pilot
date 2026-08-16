@@ -25,6 +25,12 @@ const USER_AGENT = 'RawHTMLMCP/1.0 (Azure Function MCP; respects robots.txt)';
 const ROBOTS_BOT_NAME = 'RawHTMLMCP';
 const FETCH_TIMEOUT_MS = 10_000;
 
+// ─── Image handling ────────────────────────────────────────────────────────────
+// Raw bytes, not the base64-inflated size. Keeps the base64 payload under the
+// ~5MB per-image limit that Claude's vision input enforces.
+const MAX_IMAGE_BYTES = 3_750_000;
+const IMAGE_CONTENT_TYPE_RE = /^image\//i;
+
 // ─── SSRF guard ───────────────────────────────────────────────────────────────
 const PRIVATE_HOSTNAME_RE = /^(localhost|.*\.local)$/i;
 const PRIVATE_IP_RE = /^(10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|192\.168\.\d+\.\d+|127\.\d+\.\d+\.\d+|169\.254\.\d+\.\d+|::1|0\.0\.0\.0)$/;
@@ -196,6 +202,11 @@ const TOOLS = [
             '(cleaned visible text, for HTML/text responses).',
             'For JSON responses (content-type contains "json"), the parsed value is also returned as json.',
             'readableText strips scripts/styles/json-ld/image tags and other non-content noise.',
+            'For image responses (content-type starts with "image/"), the bytes are fetched cleanly',
+            `as binary — not mangled through text decoding — and returned as isImage: true with mimeType.`,
+            `Images up to ${MAX_IMAGE_BYTES} bytes are also delivered as an actual MCP image content`,
+            'block alongside the JSON result, so the image renders directly rather than being dumped',
+            'as raw bytes or base64 text; larger images are reported (with their size) but not fetched.',
             'Optionally includes response headers.',
         ].join(' '),
         inputSchema: {
@@ -473,31 +484,15 @@ async function handleFetchRawHtml({ url, include_headers = false, method, header
         };
     }
 
-    const responseBody = await response.text();
     const contentType = response.headers.get('content-type') || '';
-
-    let readableText = '';
-    let parsedJson;
-    let jsonParseError;
-    if (/json/i.test(contentType)) {
-        try {
-            parsedJson = responseBody ? JSON.parse(responseBody) : null;
-        } catch (err) {
-            jsonParseError = `Response declared a JSON content-type but failed to parse: ${err.message}`;
-        }
-    } else {
-        readableText = extractReadableText(responseBody);
-    }
+    const mimeType = contentType.split(';')[0].trim().toLowerCase();
+    const isImage = IMAGE_CONTENT_TYPE_RE.test(mimeType);
 
     const result = {
         url: response.url, // may differ from input if redirected
         method: requestMethod,
         statusCode: response.status,
         contentType,
-        bodyLength: responseBody.length,
-        body: responseBody,
-        readableText,
-        readableTextLength: readableText.length,
         robots: robotsContext,
         rateLimit,
         request: {
@@ -507,8 +502,42 @@ async function handleFetchRawHtml({ url, include_headers = false, method, header
         },
     };
 
-    if (parsedJson !== undefined) result.json = parsedJson;
-    if (jsonParseError) result.jsonParseError = jsonParseError;
+    if (isImage) {
+        // Fetched as bytes, never as text — decoding image bytes as UTF-8
+        // text (as the non-image branch below does) corrupts them.
+        result.isImage = true;
+        result.mimeType = mimeType;
+
+        const declaredLength = parseInt(response.headers.get('content-length') || '', 10);
+        if (Number.isFinite(declaredLength) && declaredLength > MAX_IMAGE_BYTES) {
+            result.bodyLength = declaredLength;
+            result.imageOmitted = `Image is ${declaredLength} bytes (Content-Length), exceeding the ${MAX_IMAGE_BYTES}-byte inline limit — not fetched. Look for a smaller/resized version of the image if one is available.`;
+        } else {
+            const buffer = Buffer.from(await response.arrayBuffer());
+            result.bodyLength = buffer.length;
+            if (buffer.length > MAX_IMAGE_BYTES) {
+                result.imageOmitted = `Image is ${buffer.length} bytes, exceeding the ${MAX_IMAGE_BYTES}-byte inline limit — not returned. Look for a smaller/resized version of the image if one is available.`;
+            } else {
+                result.imageBase64 = buffer.toString('base64');
+            }
+        }
+    } else {
+        const responseBody = await response.text();
+        result.bodyLength = responseBody.length;
+        result.body = responseBody;
+
+        if (/json/i.test(contentType)) {
+            try {
+                result.json = responseBody ? JSON.parse(responseBody) : null;
+            } catch (err) {
+                result.jsonParseError = `Response declared a JSON content-type but failed to parse: ${err.message}`;
+            }
+        } else {
+            const readableText = extractReadableText(responseBody);
+            result.readableText = readableText;
+            result.readableTextLength = readableText.length;
+        }
+    }
 
     if (include_headers) {
         const responseHeaders = {};
@@ -516,7 +545,7 @@ async function handleFetchRawHtml({ url, include_headers = false, method, header
         result.headers = responseHeaders;
     }
 
-    context.log(`fetch_raw_html: ${requestMethod} ${response.status} ${response.url} (${responseBody.length} bytes)`);
+    context.log(`fetch_raw_html: ${requestMethod} ${response.status} ${response.url} (${result.bodyLength} bytes)`);
     return result;
 }
 
@@ -550,7 +579,7 @@ const MANIFEST = {
     capabilities: { tools: {} },
     serverInfo: {
         name: 'gcc-web-get-mcp',
-        version: '2.2.0',
+        version: '2.3.0',
         instructions: `🌐 WEB GET MCP
 
 Fetches and evaluates public web pages and RESTful JSON APIs — raw HTML/HTTP
@@ -573,6 +602,16 @@ RESTful FETCHES:
   content-type contains "json" are parsed and returned as json in addition
   to the raw body. Sensitive request headers (Authorization, Cookie, etc.)
   are redacted in the echoed request.headers.
+
+IMAGE FETCHES:
+  fetch_raw_html on a URL whose response content-type starts with "image/"
+  fetches the bytes cleanly (never decoded as text) and, up to ${MAX_IMAGE_BYTES}
+  bytes, returns them as a real MCP image content block alongside the JSON
+  metadata (isImage, mimeType, bodyLength) — so the image renders directly
+  rather than arriving as mangled text or a base64 string you'd have to
+  reason about. Larger images are reported with their size but not fetched
+  inline (imageOmitted explains why); re-fetch a smaller/resized source if
+  one exists.
 
 TYPICAL ACCESSIBILITY WORKFLOW:
   1. evaluate_page(url)
@@ -610,6 +649,21 @@ evaluate_page can be restricted to specific origins via the
 EVALUATE_PAGE_ALLOWED_ORIGINS app setting (comma-separated; unset = no allowlist).`,
     },
 };
+
+// ─── Tool result → MCP content blocks ─────────────────────────────────────────
+// fetch_raw_html hands back an inline MCP image content block (not just base64
+// buried in JSON text) when it fetched an image cleanly, so the image renders
+// directly for the model instead of being read as an opaque data string.
+function buildResultContent(result) {
+    if (result && typeof result === 'object' && typeof result.imageBase64 === 'string') {
+        const { imageBase64, ...metadata } = result;
+        return [
+            { type: 'image', data: imageBase64, mimeType: result.mimeType || 'application/octet-stream' },
+            { type: 'text', text: JSON.stringify(metadata, null, 2) },
+        ];
+    }
+    return [{ type: 'text', text: JSON.stringify(result, null, 2) }];
+}
 
 // ─── MCP JSON-RPC handler ─────────────────────────────────────────────────────
 async function handleMcpRequest(request, context) {
@@ -694,9 +748,7 @@ async function handleMcpRequest(request, context) {
                 context.log(`Web Get tool completed [${name}] in ${Date.now() - toolStart}ms`);
                 return {
                     jsonrpc: '2.0',
-                    result: {
-                        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-                    },
+                    result: { content: buildResultContent(result) },
                     id,
                 };
             } catch (error) {

@@ -309,4 +309,98 @@ describe('mcpRawHtml', () => {
         expect(response.status).toBe(200);
         expect(body.serverInfo.name).toBe('gcc-web-get-mcp');
     });
+
+    it('fetches a small image as bytes and returns it as an MCP image content block', async () => {
+        const pngBytes = Buffer.from('89504e470d0a1a0a', 'hex'); // PNG magic bytes
+        const fetchMock = jest.fn()
+            .mockResolvedValueOnce({ ok: false })
+            .mockResolvedValueOnce({
+                ok: true,
+                status: 200,
+                url: 'https://example.com/logo.png',
+                headers: {
+                    get: (key) => {
+                        if (key === 'content-type') return 'image/png';
+                        if (key === 'content-length') return String(pngBytes.length);
+                        return null;
+                    },
+                    forEach: jest.fn(),
+                },
+                arrayBuffer: jest.fn().mockResolvedValue(pngBytes.buffer.slice(pngBytes.byteOffset, pngBytes.byteOffset + pngBytes.byteLength)),
+                text: jest.fn(),
+            });
+
+        const handler = loadWithMocks(fetchMock);
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: 'fetch_raw_html', arguments: { url: 'https://example.com/logo.png' } },
+                    id: 9,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        const [imageBlock, textBlock] = body.result.content;
+
+        expect(imageBlock.type).toBe('image');
+        expect(imageBlock.mimeType).toBe('image/png');
+        expect(imageBlock.data).toBe(pngBytes.toString('base64'));
+
+        const payload = JSON.parse(textBlock.text);
+        expect(payload.isImage).toBe(true);
+        expect(payload.mimeType).toBe('image/png');
+        expect(payload.bodyLength).toBe(pngBytes.length);
+        expect(payload.imageBase64).toBeUndefined(); // not duplicated into the text block
+        expect(payload.body).toBeUndefined(); // never decoded as text
+    });
+
+    it('omits oversized images (by Content-Length) instead of fetching them inline', async () => {
+        const arrayBufferMock = jest.fn();
+        const fetchMock = jest.fn()
+            .mockResolvedValueOnce({ ok: false })
+            .mockResolvedValueOnce({
+                ok: true,
+                status: 200,
+                url: 'https://example.com/huge.jpg',
+                headers: {
+                    get: (key) => {
+                        if (key === 'content-type') return 'image/jpeg';
+                        if (key === 'content-length') return '10000000'; // 10MB, over the inline cap
+                        return null;
+                    },
+                    forEach: jest.fn(),
+                },
+                arrayBuffer: arrayBufferMock,
+                text: jest.fn(),
+            });
+
+        const handler = loadWithMocks(fetchMock);
+        const response = await handler(
+            {
+                method: 'POST',
+                json: jest.fn().mockResolvedValue({
+                    jsonrpc: '2.0',
+                    method: 'tools/call',
+                    params: { name: 'fetch_raw_html', arguments: { url: 'https://example.com/huge.jpg' } },
+                    id: 10,
+                }),
+            },
+            { log: Object.assign(jest.fn(), { error: jest.fn() }) }
+        );
+
+        const body = JSON.parse(response.body);
+        expect(body.result.content.length).toBe(1); // no image block — never fetched
+        const payload = JSON.parse(body.result.content[0].text);
+
+        expect(payload.isImage).toBe(true);
+        expect(payload.imageBase64).toBeUndefined();
+        expect(payload.imageOmitted).toMatch(/exceeding the .* limit/);
+        expect(payload.bodyLength).toBe(10000000);
+        expect(arrayBufferMock).not.toHaveBeenCalled();
+    });
 });
