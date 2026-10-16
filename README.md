@@ -91,6 +91,47 @@ GCC-MCP-Pilot/
 
 **Use `list_available_councils` first** to get the exact council names!
 
+## Shields badge MCP
+
+A separate endpoint that builds [Shields.io](https://shields.io) badges. Hand-written Shields URLs break on dashes, underscores and spaces, and a badge that shows a number has to be edited by hand every time the number changes. This MCP does the escaping and adds live badges, which change without anyone editing the page that embeds them.
+
+| Route | Auth | Purpose |
+|-------|------|---------|
+| `POST /api/mcp-shields` | Function key | MCP JSON-RPC endpoint. Can create and change badges. |
+| `GET /api/mcp-shields/badge/{key}` | Anonymous | Read-only JSON that Shields.io fetches to draw a live badge. |
+
+Tools: `badge_static`, `badge_threshold`, `badge_review_stamp`, `badge_wall`, `badge_set`, `badge_list`, `badge_delete`. Every embed uses `label: message` as alt text.
+
+`badge_review_stamp` writes dates out in full, for example `16 Apr 2027`. A `due` stamp is green until `warnDays` (default 30) before the date, orange inside that window, and red once the date has passed.
+
+### Live badges
+
+`badge_set` stores a label, message and colour under a key. The embed URL points Shields at the badge route, so the URL never changes while the value does. Shields caches for a few minutes, so a change is not instant.
+
+Values live in Blob Storage, one blob per badge at `badges/<key>.json`. The function reuses `STORAGE_CONNECTION`, the same setting `mcp-notes` uses, and creates the container on first use.
+
+The badge route is anonymous because Shields has to reach it. Anyone who knows or guesses a key can read that badge's label, message and colour. Keys are not secret. Do not put anything in a badge that you would not put on a public page.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `STORAGE_CONNECTION` | Blob Storage connection string. Already set for `mcp-notes`. | None, required for live badges |
+| `MCP_SHIELDS_CONTAINER` | Container for live badges. | `mcp-shields` |
+| `SHIELDS_PUBLIC_BASE_URL` | Origin used in embed URLs. | `https://$WEBSITE_HOSTNAME` |
+
+The static tools need none of these.
+
+```bash
+# Create a live badge
+curl -X POST "http://localhost:7071/api/mcp-shields?code=<function-key>" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"badge_set","arguments":{"key":"lint-pass-rate","label":"lint pass rate","value":94,"suffix":"%"}},"id":1}'
+
+# Read what Shields will read
+curl http://localhost:7071/api/mcp-shields/badge/lint-pass-rate
+```
+
+Locally, `func start` has no function key check, so `?code=` is only needed once deployed. Get the key from Portal: Function App, Functions, `mcpShields`, Function Keys.
+
 ## Democratic Data Integrity
 
 **IMPORTANT:** This MCP server returns official statutory records of democratic decision-making. AI assistants using this data must follow special handling rules:
