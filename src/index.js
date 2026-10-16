@@ -18,5 +18,6 @@ require('./functions/mcpDns');
 require('./functions/mcpWebCompiler');
 require('./functions/mcpSchemaV2');
 require('./functions/mcpAzureEstate');
+require('./functions/mcpShields');
 
-console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml, mcpNotes, mcpDocExtract, mcpGitHub, mcpDns, mcpWebCompiler, mcpSchemaV2, mcpAzureEstate');
+console.log('Azure Functions loaded: mcp, test-soap, mcpSchema, healthzSchema, mcpProcurement, mcpPlanning, mcpRawHtml, mcpNotes, mcpDocExtract, mcpGitHub, mcpDns, mcpWebCompiler, mcpSchemaV2, mcpAzureEstate, mcpShields');

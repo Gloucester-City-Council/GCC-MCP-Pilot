@@ -15,6 +15,23 @@ describe('Azure Functions entrypoint registration', () => {
         const registeredNames = httpMock.mock.calls.map(call => call[0]);
         expect(registeredNames).toContain('mcpWebCompiler');
         expect(registeredNames).toContain('mcpAzureEstate');
+        expect(registeredNames).toContain('mcpShields');
+        expect(registeredNames).toContain('shieldsBadge');
+    });
+
+    it('serves live badges anonymously and the Shields MCP behind a function key', () => {
+        const httpMock = jest.fn();
+        jest.doMock('@azure/functions', () => ({ app: { http: httpMock } }));
+
+        require('../src/index');
+
+        const byName = Object.fromEntries(httpMock.mock.calls.map(([name, opts]) => [name, opts]));
+        expect(byName.mcpShields.authLevel).toBe('function');
+        expect(byName.mcpShields.route).toBe('mcp-shields');
+        expect(byName.mcpShields.methods).toEqual(['POST']);
+        expect(byName.shieldsBadge.authLevel).toBe('anonymous');
+        expect(byName.shieldsBadge.route).toBe('mcp-shields/badge/{key}');
+        expect(byName.shieldsBadge.methods).toEqual(['GET']);
     });
 
     it('never eagerly loads an Azure SDK package that requires a newer Node than this Function App runs', () => {
