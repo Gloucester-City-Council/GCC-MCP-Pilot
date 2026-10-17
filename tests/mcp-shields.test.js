@@ -160,6 +160,25 @@ describe('badge store', () => {
         expect(endpointJson({ label: 'l', message: 'm', color: 'c', updated: 't' }))
             .toEqual({ schemaVersion: 1, label: 'l', message: 'm', color: 'c' });
     });
+
+    it('adds the look fields only when they are stored, and renames logo to namedLogo', () => {
+        const doc = endpointJson({
+            label: 'l', message: 'm', color: 'c', labelColor: '1b1033', logo: 'bat', logoColor: 'white', style: 'for-the-badge', updated: 't',
+        });
+        expect(doc).toEqual({
+            schemaVersion: 1, label: 'l', message: 'm', color: 'c',
+            labelColor: '1b1033', namedLogo: 'bat', logoColor: 'white', style: 'for-the-badge',
+        });
+        expect(Object.keys(endpointJson({ label: 'l', message: 'm', color: 'c', updated: 't' }))).toHaveLength(4);
+    });
+
+    it('stores the look fields and leaves out the ones not given', async () => {
+        const store = createStore({ containerClient: fakeContainer() });
+        const saved = await store.set('k', { label: 'l', message: 'm', color: 'red', logo: 'bat', style: undefined });
+        expect(saved.logo).toBe('bat');
+        expect(Object.prototype.hasOwnProperty.call(saved, 'style')).toBe(false);
+        expect((await store.get('k')).logo).toBe('bat');
+    });
 });
 
 describe('tools', () => {
@@ -228,6 +247,49 @@ describe('tools', () => {
         expect(await store.get('k')).toBeUndefined();
         await expect(TOOL_HANDLERS.badge_set({ key: 'k', label: 'l' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
         await expect(TOOL_HANDLERS.badge_set({ key: '../x', label: 'l', message: 'm' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+    });
+
+    it('badge_set stores the look and normalises its colours', async () => {
+        const { TOOL_HANDLERS, store } = makeModule();
+        const r = await TOOL_HANDLERS.badge_set({
+            key: 'night-moon', label: 'moon', message: 'full moon', color: '#D8B800',
+            logo: 'bat', logoColor: 'White', labelColor: '#1B1033', style: 'for-the-badge',
+        });
+        expect(r.color).toBe('d8b800');
+        expect(r.labelColor).toBe('1b1033');
+        expect(r.logoColor).toBe('white');
+        expect(r.url).toContain('style=for-the-badge');
+        const stored = await store.get('night-moon');
+        expect(stored.logo).toBe('bat');
+        expect(stored.style).toBe('for-the-badge');
+    });
+
+    it('badge_set rejects a bad look and stores nothing', async () => {
+        const { TOOL_HANDLERS, store } = makeModule();
+        const base = { key: 'k', label: 'l', message: 'm' };
+        await expect(TOOL_HANDLERS.badge_set({ ...base, logo: '../x' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+        await expect(TOOL_HANDLERS.badge_set({ ...base, logo: 'a b' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+        await expect(TOOL_HANDLERS.badge_set({ ...base, labelColor: 'red;' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+        await expect(TOOL_HANDLERS.badge_set({ ...base, logoColor: '<x>' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+        await expect(TOOL_HANDLERS.badge_set({ ...base, style: 'wobbly' })).rejects.toMatchObject({ code: 'INVALID_ARGUMENT' });
+        expect(await store.get('k')).toBeUndefined();
+    });
+
+    it('setting a key again replaces the whole badge, including its look', async () => {
+        const { TOOL_HANDLERS, store } = makeModule();
+        await TOOL_HANDLERS.badge_set({ key: 'k', label: 'l', message: 'm', logo: 'bat', labelColor: 'black' });
+        await TOOL_HANDLERS.badge_set({ key: 'k', label: 'l', message: 'n' });
+        const stored = await store.get('k');
+        expect(stored.message).toBe('n');
+        expect(stored.logo).toBeUndefined();
+        expect(stored.labelColor).toBeUndefined();
+    });
+
+    it('badge_list shows the look of each badge', async () => {
+        const { TOOL_HANDLERS } = makeModule();
+        await TOOL_HANDLERS.badge_set({ key: 'a', label: 'a', message: '1', logo: 'bat' });
+        const listed = await TOOL_HANDLERS.badge_list({});
+        expect(listed.badges[0].logo).toBe('bat');
     });
 
     it('badge_list and badge_delete', async () => {
@@ -316,6 +378,19 @@ describe('public badge route', () => {
         expect(res.status).toBe(200);
         expect(res.headers['Cache-Control']).toBe('public, max-age=60');
         expect(JSON.parse(res.body)).toEqual({ schemaVersion: 1, label: 'runs', message: '7', color: 'green' });
+    });
+
+    it('serves the look fields to Shields, and nothing else', async () => {
+        const mod = makeModule();
+        await mod.store.set('moon', {
+            label: 'moon', message: 'full moon', color: 'd8b800', logo: 'bat', logoColor: 'white', labelColor: '1b1033', style: 'for-the-badge',
+        });
+        const body = JSON.parse((await handleBadgeRequest('moon', context, mod)).body);
+        expect(body).toEqual({
+            schemaVersion: 1, label: 'moon', message: 'full moon', color: 'd8b800',
+            labelColor: '1b1033', namedLogo: 'bat', logoColor: 'white', style: 'for-the-badge',
+        });
+        expect(body.updated).toBeUndefined();
     });
 
     it('accepts a .json suffix and any letter case', async () => {

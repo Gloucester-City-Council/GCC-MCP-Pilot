@@ -53,7 +53,7 @@ Builds Shields.io badges. Two kinds:
 
 Static badges (badge_static, badge_threshold, badge_review_stamp, badge_wall) return a URL plus Markdown and HTML embeds. Nothing is stored.
 
-Live badges (badge_set, badge_list, badge_delete) store a label, message and colour under a key. The embed URL stays the same while the stored value changes, so a badge on a council page or README updates without anyone editing the page. Shields caches live badges for a few minutes, so a change is not instant.
+Live badges (badge_set, badge_list, badge_delete) store a label, message and colour under a key. The embed URL stays the same while the stored value changes, so a badge on a council page or README updates without anyone editing the page. A live badge can store its own look (logo, logoColor, labelColor, style), so every embed of it matches. Setting a key again replaces the whole badge, so repeat the look when you update the value. Shields caches live badges for a few minutes, so a change is not instant.
 
 Review stamps write dates out in full (for example 16 Apr 2027) and turn orange inside warnDays of the due date, then red once it has passed.
 
