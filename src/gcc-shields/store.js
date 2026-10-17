@@ -15,6 +15,7 @@
 'use strict';
 
 const KEY_PATTERN = /^[a-z0-9][a-z0-9._-]{0,63}$/;
+const STYLE_FIELDS = ['labelColor', 'logo', 'logoColor', 'style'];
 const PREFIX = 'badges/';
 const MAX_LIST = 200;
 const READ_CONCURRENCY = 8;
@@ -95,8 +96,12 @@ function createStore(options = {}) {
                 label: entry.label,
                 message: entry.message,
                 color: entry.color,
-                updated: now.toISOString(),
             };
+            // Optional look. Only stored when given, so a plain badge stays plain.
+            for (const field of STYLE_FIELDS) {
+                if (entry[field] !== undefined) full[field] = entry[field];
+            }
+            full.updated = now.toISOString();
             const content = JSON.stringify(full);
             const c = await ensureContainer();
             await c.getBlockBlobClient(`${PREFIX}${k}.json`).upload(content, Buffer.byteLength(content), {
@@ -132,9 +137,18 @@ function createStore(options = {}) {
     };
 }
 
-/** The JSON document Shields' /endpoint badge reads. */
+/**
+ * The JSON document Shields' /endpoint badge reads. Only label, message,
+ * colour and the optional look fields are exposed. "logo" is Shields'
+ * "namedLogo" (a Simple Icons slug).
+ */
 function endpointJson(entry) {
-    return { schemaVersion: 1, label: entry.label, message: entry.message, color: entry.color };
+    const doc = { schemaVersion: 1, label: entry.label, message: entry.message, color: entry.color };
+    if (entry.labelColor !== undefined) doc.labelColor = entry.labelColor;
+    if (entry.logo !== undefined) doc.namedLogo = entry.logo;
+    if (entry.logoColor !== undefined) doc.logoColor = entry.logoColor;
+    if (entry.style !== undefined) doc.style = entry.style;
+    return doc;
 }
 
-module.exports = { createStore, endpointJson, normaliseKey, MAX_LIST };
+module.exports = { createStore, endpointJson, normaliseKey, STYLE_FIELDS, MAX_LIST };

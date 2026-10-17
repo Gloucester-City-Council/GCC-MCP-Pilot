@@ -108,9 +108,11 @@ Tools: `badge_static`, `badge_threshold`, `badge_review_stamp`, `badge_wall`, `b
 
 `badge_set` stores a label, message and colour under a key. The embed URL points Shields at the badge route, so the URL never changes while the value does. Shields caches for a few minutes, so a change is not instant.
 
+A live badge can also carry its own look: `logo` (a [Simple Icons](https://simpleicons.org) slug such as `bat`), `logoColor`, `labelColor` and `style`. These are stored with the badge and served in the JSON, so anyone who embeds the plain URL gets the same badge. Without them a badge is the default flat style with two boxes. Setting a key again replaces the whole badge, including its look, so repeat the look fields on every update.
+
 Values live in Blob Storage, one blob per badge at `badges/<key>.json`. The function reuses `STORAGE_CONNECTION`, the same setting `mcp-notes` uses, and creates the container on first use.
 
-The badge route is anonymous because Shields has to reach it. Anyone who knows or guesses a key can read that badge's label, message and colour. Keys are not secret. Do not put anything in a badge that you would not put on a public page.
+The badge route is anonymous because Shields has to reach it. Anyone who knows or guesses a key can read that badge's label, message, colours, logo name and style. Keys are not secret. Do not put anything in a badge that you would not put on a public page.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -124,7 +126,7 @@ The static tools need none of these.
 # Create a live badge
 curl -X POST "http://localhost:7071/api/mcp-shields?code=<function-key>" \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"badge_set","arguments":{"key":"lint-pass-rate","label":"lint pass rate","value":94,"suffix":"%"}},"id":1}'
+  -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"badge_set","arguments":{"key":"lint-pass-rate","label":"lint pass rate","value":94,"suffix":"%","logo":"github","labelColor":"24292f","style":"for-the-badge"}},"id":1}'
 
 # Read what Shields will read
 curl http://localhost:7071/api/mcp-shields/badge/lint-pass-rate

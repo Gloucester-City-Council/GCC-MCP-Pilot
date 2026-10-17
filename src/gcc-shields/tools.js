@@ -7,7 +7,7 @@
 
 'use strict';
 
-const { STYLES, staticBadgeUrl, endpointBadgeUrl, render } = require('./badge');
+const { STYLES, normaliseColour, staticBadgeUrl, endpointBadgeUrl, render } = require('./badge');
 const { DEFAULT_BANDS, pickColour } = require('./threshold');
 const { reviewedStamp, dueStamp } = require('./stamp');
 const { normaliseKey } = require('./store');
@@ -46,6 +46,21 @@ function optStyle(args) {
     if (args.style === undefined) return undefined;
     if (!STYLES.includes(args.style)) throw invalid(`style must be one of: ${STYLES.join(', ')}`);
     return args.style;
+}
+
+/** Simple Icons slug, for example "bat" or "dungeonsanddragons". */
+function optSlug(args, name) {
+    const v = optString(args, name, 60);
+    if (v !== undefined && !/^[a-z0-9][a-z0-9._-]{0,59}$/i.test(v)) {
+        throw invalid(`${name} must be a Simple Icons slug: letters, digits, dot, underscore or hyphen`);
+    }
+    return v;
+}
+
+/** Validated and normalised, so only a safe colour ever reaches the public JSON. */
+function optColour(args, name) {
+    const v = optString(args, name, 40);
+    return v === undefined ? undefined : wrap(() => normaliseColour(v));
 }
 
 function optBands(args) {
@@ -92,7 +107,7 @@ const BADGE_PROPS = {
 };
 
 function createTools({ store, baseUrl }) {
-    function liveEmbed(key, entry, style) {
+    function liveEmbed(key, entry) {
         const base = baseUrl();
         if (!base) {
             return {
@@ -103,7 +118,10 @@ function createTools({ store, baseUrl }) {
             };
         }
         const jsonUrl = `${base}${BADGE_ROUTE}/${key}`;
-        return { key, ...entry, jsonUrl, ...render(endpointBadgeUrl(jsonUrl, style), entry.label, entry.message) };
+        // The look (logo, colours, style) is carried by the stored JSON. The
+        // style is repeated in the URL so it still applies if Shields ignores
+        // the JSON field.
+        return { key, ...entry, jsonUrl, ...render(endpointBadgeUrl(jsonUrl, entry.style), entry.label, entry.message) };
     }
 
     const TOOLS = [
@@ -159,7 +177,7 @@ function createTools({ store, baseUrl }) {
         },
         {
             name: 'badge_set',
-            description: 'Create or update a live badge under a key. Give `message` directly, or a numeric `value` (with optional suffix and bands) to have the colour chosen. The badge updates wherever it is embedded.',
+            description: 'Create or replace a live badge under a key. Give `message` directly, or a numeric `value` (with optional suffix and bands) to have the colour chosen. Optional `logo`, `logoColor`, `labelColor` and `style` are stored with the badge, so every embed of it gets that look. Setting a key again replaces the whole badge, including its look. The badge updates wherever it is embedded.',
             inputSchema: {
                 type: 'object',
                 properties: {
@@ -168,7 +186,10 @@ function createTools({ store, baseUrl }) {
                     message: { type: 'string' },
                     value: { type: 'number' },
                     suffix: { type: 'string' },
-                    color: { type: 'string' },
+                    color: { type: 'string', description: 'Right-hand colour. Name or hex.' },
+                    labelColor: { type: 'string', description: 'Left-hand colour. Name or hex.' },
+                    logo: { type: 'string', description: 'Simple Icons slug, for example "bat".' },
+                    logoColor: { type: 'string', description: 'Logo colour. Name or hex.' },
                     bands: BANDS_SCHEMA,
                     style: STYLE_SCHEMA,
                 },
@@ -260,16 +281,21 @@ function createTools({ store, baseUrl }) {
             const message = args.message !== undefined
                 ? reqString(args, 'message')
                 : `${reqNumber(args, 'value')}${optString(args, 'suffix', 20) || ''}`;
-            const color = args.color !== undefined
+            const rawColor = args.color !== undefined
                 ? reqString(args, 'color', { max: 40 })
                 : args.value !== undefined
                     ? pickColour(args.value, optBands(args))
                     : 'blue';
-            const style = optStyle(args);
-            // Validate before storing, so a bad colour never reaches the public JSON.
-            wrap(() => staticBadgeUrl({ label, message, color }));
-            const entry = await store.set(key, { label, message, color });
-            return liveEmbed(key, entry, style);
+            // Validate everything before storing, so a bad value never reaches the public JSON.
+            const color = wrap(() => normaliseColour(rawColor));
+            const look = {
+                style: optStyle(args),
+                logo: optSlug(args, 'logo'),
+                logoColor: optColour(args, 'logoColor'),
+                labelColor: optColour(args, 'labelColor'),
+            };
+            const entry = await store.set(key, { label, message, color, ...look });
+            return liveEmbed(key, entry);
         },
 
         async badge_list() {
