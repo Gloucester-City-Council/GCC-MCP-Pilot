@@ -15,6 +15,7 @@ const diagnose = require('./tools/function-apps/diagnose');
 const compare = require('./tools/function-apps/compare');
 const createPlan = require('./tools/function-apps/create-plan');
 const create = require('./tools/function-apps/create');
+const hostingPlanCreate = require('./tools/function-apps/hosting-plan-create');
 const settingsPlan = require('./tools/function-apps/settings-plan');
 const settingsApply = require('./tools/function-apps/settings-apply');
 const identityPlan = require('./tools/function-apps/identity-plan');
@@ -136,6 +137,22 @@ const TOOLS = [
                 tags: { type: 'object', additionalProperties: { type: 'string' } },
             },
             required: ['instance', 'resourceGroup', 'name', 'location', 'hostingPlanName', 'storageAccountName'],
+        },
+    },
+    {
+        name: 'azure_hosting_plan_create',
+        description: 'Creates a Linux hosting plan for Function Apps: Y1 (classic Consumption) or FC1 (Flex Consumption). Fails with CONFLICT if the plan exists. Use the plan name as hostingPlanName in azure_function_app_create.',
+        annotations: WRITE_ANNOTATIONS,
+        inputSchema: {
+            type: 'object',
+            properties: {
+                ...RESOURCE_GROUP_TARGET,
+                name: { type: 'string', description: 'Hosting plan name.' },
+                location: { type: 'string', description: 'Azure region, e.g. "uksouth".' },
+                sku: { type: 'string', enum: ['Y1', 'FC1'], description: 'Y1 = classic Consumption, FC1 = Flex Consumption.' },
+                tags: { type: 'object', additionalProperties: { type: 'string' } },
+            },
+            required: ['instance', 'resourceGroup', 'name', 'location', 'sku'],
         },
     },
     {
@@ -311,6 +328,7 @@ const TOOL_HANDLERS = {
     azure_function_app_compare: compare.execute,
     azure_function_app_create_plan: createPlan.execute,
     azure_function_app_create: create.execute,
+    azure_hosting_plan_create: hostingPlanCreate.execute,
     azure_function_app_settings_plan: settingsPlan.execute,
     azure_function_app_settings_apply: settingsApply.execute,
     azure_function_app_identity_plan: identityPlan.execute,

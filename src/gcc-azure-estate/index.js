@@ -23,10 +23,11 @@ const cosmosDatabases = require('./cosmos-databases');
 const cosmosContainers = require('./cosmos-containers');
 const relationships = require('./relationships');
 const stack = require('./stack');
+const monitoring = require('./monitoring');
 
 const FAMILY_MODULES = [
     common, resourceGroups, functionApps, staticWebApps, storageAccounts, blobContainers,
-    cosmosAccounts, cosmosDatabases, cosmosContainers, relationships, stack,
+    cosmosAccounts, cosmosDatabases, cosmosContainers, relationships, stack, monitoring,
 ];
 
 const TOOLS = FAMILY_MODULES.flatMap((m) => m.TOOLS);

@@ -40,6 +40,9 @@ instances:
         - diagnose
         - compare
         - plan
+      monitoring:
+        - inspect
+        - create
       storage:
         - inspect
         - diagnose
