@@ -40,6 +40,13 @@ instances:
         - diagnose
         - compare
         - plan
+      sql:
+        - inspect
+        - create
+        - network
+      monitoring:
+        - inspect
+        - create
       storage:
         - inspect
         - diagnose

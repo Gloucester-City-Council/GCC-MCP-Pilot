@@ -49,6 +49,18 @@ function getAppInsightsClient(instance) {
         new ApplicationInsightsManagementClient(getCredential(), instance.subscriptionId));
 }
 
+function getOperationalInsightsClient(instance) {
+    const { OperationalInsightsManagementClient } = require('@azure/arm-operationalinsights');
+    return cached(`operationalinsights:${instance.subscriptionId}`, () =>
+        new OperationalInsightsManagementClient(getCredential(), instance.subscriptionId));
+}
+
+function getSqlClient(instance) {
+    const { SqlManagementClient } = require('@azure/arm-sql');
+    return cached(`sql:${instance.subscriptionId}`, () =>
+        new SqlManagementClient(getCredential(), instance.subscriptionId));
+}
+
 function getMonitorClient(instance) {
     const { MonitorClient } = require('@azure/arm-monitor');
     return cached(`monitor:${instance.subscriptionId}`, () =>
@@ -84,6 +96,8 @@ function _resetForTests() {
 }
 
 module.exports = {
+    getSqlClient,
+    getOperationalInsightsClient,
     getResourceClient,
     getWebSiteClient,
     getStorageMgmtClient,
