@@ -228,6 +228,16 @@ describe('Azure Estate static-web-apps family', () => {
         expect(createOrUpdateSpy).not.toHaveBeenCalled();
     });
 
+    it('azure-prod can modify Static Web App settings, but not create, change domains or link backends', () => {
+        const registryPath = path.join(__dirname, '..', 'config', 'azure-instances.yaml');
+        const registry = YAML.parse(fs.readFileSync(registryPath, 'utf-8'));
+        const grantedOps = registry.instances['azure-prod'].permissions['static-web-apps'];
+        expect(grantedOps).toEqual(expect.arrayContaining(['inspect', 'diagnose', 'compare', 'plan', 'modify']));
+        for (const withheld of ['create', 'network', 'deploy', 'destructive']) {
+            expect(grantedOps).not.toContain(withheld);
+        }
+    });
+
     it('azure_static_web_app_settings_plan computes add/change/unchanged and never surfaces the existing (current-side) value', async () => {
         const EXISTING_SECRET_VALUE = 'existing-super-secret-value';
         setupClients({
@@ -257,9 +267,8 @@ describe('Azure Estate static-web-apps family', () => {
     });
 
     it('azure_static_web_app_settings_apply merges with existing settings without ever returning existing values', async () => {
-        // static-web-apps has no "modify" grant on the real azure-prod config
-        // (see the create_plan/create test above) — use a fully-resolved
-        // instance object with the grant this write tool needs, mirroring the
+        // Use a fully-resolved instance object with the grant this write tool needs,
+        // so this test does not depend on the real azure-prod config, mirroring the
         // resource-groups compare test's pattern for a hand-built instance.
         const instance = {
             name: 'azure-prod', environment: 'production', subscriptionId: '00000000-0000-0000-0000-000000000000',
