@@ -1,8 +1,13 @@
 /**
  * Tool: azure_hosting_plan_create
  *
+<<<<<<< HEAD
  * Creates a hosting plan for Function Apps: classic Consumption (Y1, Linux
  * or Windows) or Flex Consumption (FC1, Linux only). Fails with CONFLICT if a plan of that name
+=======
+ * Creates a Linux hosting plan for Function Apps: classic Consumption (Y1)
+ * or Flex Consumption (FC1). Fails with CONFLICT if a plan of that name
+>>>>>>> origin/old
  * already exists in the resource group. No delete tool exists.
  */
 
@@ -26,6 +31,7 @@ async function execute(args = {}) {
         throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `sku must be one of ${Object.keys(SKUS).join(', ')} (got "${args.sku}")`, { validSkus: Object.keys(SKUS) });
     }
 
+<<<<<<< HEAD
     const osType = args.osType || 'Linux';
     if (osType !== 'Linux' && osType !== 'Windows') {
         throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, `osType must be Linux or Windows (got "${args.osType}")`);
@@ -34,6 +40,8 @@ async function execute(args = {}) {
         throw new AzureEstateError(ERROR_CODES.BAD_REQUEST, 'Flex Consumption (FC1) supports Linux only');
     }
 
+=======
+>>>>>>> origin/old
     const instance = assertPermitted(args.instance, 'function-apps', 'create');
     const client = getWebSiteClient(instance);
 
@@ -54,7 +62,11 @@ async function execute(args = {}) {
     const poller = await client.appServicePlans.createOrUpdate(args.resourceGroup, args.name, {
         location: args.location,
         kind: 'functionapp',
+<<<<<<< HEAD
         reserved: osType === 'Linux',
+=======
+        reserved: true, // Linux
+>>>>>>> origin/old
         sku,
         tags: args.tags || {},
     });
@@ -67,7 +79,11 @@ async function execute(args = {}) {
         location: plan.location || args.location,
         sku: (plan.sku && plan.sku.name) || sku.name,
         tier: (plan.sku && plan.sku.tier) || sku.tier,
+<<<<<<< HEAD
         osType,
+=======
+        osType: 'Linux',
+>>>>>>> origin/old
     };
 }
 
