@@ -24,6 +24,18 @@ describe('hosting plan and monitoring create tools', () => {
         expect(createOrUpdate.mock.calls[0][2].reserved).toBe(true);
     });
 
+    it('creates a Windows Y1 plan and refuses Windows Flex', async () => {
+        const createOrUpdate = jest.fn(async (rg, name, body) => ({ pollUntilDone: async () => ({ name, ...body }) }));
+        load({ getWebSiteClient: () => ({ appServicePlans: { get: async () => { throw notFound(); }, createOrUpdate } }) },
+            { 'function-apps': ['create'] });
+        const { execute } = require('../src/gcc-azure-estate/tools/function-apps/hosting-plan-create');
+        const base = { instance: 'azure-prod', resourceGroup: 'rg', name: 'plan', location: 'uksouth' };
+        const r = await execute({ ...base, sku: 'Y1', osType: 'Windows' });
+        expect(r.osType).toBe('Windows');
+        expect(createOrUpdate.mock.calls[0][2].reserved).toBe(false);
+        await expect(execute({ ...base, sku: 'FC1', osType: 'Windows' })).rejects.toThrow(/Linux only/);
+    });
+
     it('rejects an unknown plan sku and an existing plan', async () => {
         load({ getWebSiteClient: () => ({ appServicePlans: { get: async () => ({ sku: { name: 'Y1' } }) } }) },
             { 'function-apps': ['create'] });
