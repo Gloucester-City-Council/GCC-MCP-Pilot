@@ -40,6 +40,7 @@ instances:
         - diagnose
         - compare
         - plan
+        - modify
       sql:
         - inspect
         - create
